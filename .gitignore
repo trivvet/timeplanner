@@ -1,0 +1,13 @@
+.media/
+local_settings.py
+*.log
+*.mo
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+*.egg-info/
+*.egg
+__pycache__/
+*.py[cod]
+*$py.class
