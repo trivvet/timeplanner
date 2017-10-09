@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^$', freports.reports_list, name='forensic_reports_list'),
+    url(r'^freports/add/report/$', freports.add_report, name='forensic_add_report'),
 ]

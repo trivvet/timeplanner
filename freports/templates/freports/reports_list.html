@@ -17,8 +17,11 @@
         <div class="container">
 
             <div class="row" id="main-header">
-                <h1>Список висновків експерта</h1>
-                <button type="button" class="btn btn-primary" id="add-button">Додати</button>
+                <div class="col">
+                    <h1>Список відкритих проваджень</h1>
+                    <a type="button" class="btn btn-primary" id="add-button" href={% url "forensic_add_report" %}>Додати</a>
+                </div>
+
             </div>
 
             <div class="row" id="main-content">
