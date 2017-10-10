@@ -1,5 +1,6 @@
 .media/
 local_settings.py
+sensitive_data.py
 *.log
 *.mo
 htmlcov/

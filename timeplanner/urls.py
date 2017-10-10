@@ -23,4 +23,6 @@ urlpatterns = [
 
     url(r'^$', freports.reports_list, name='forensic_reports_list'),
     url(r'^freports/add/report/$', freports.add_report, name='forensic_add_report'),
+    url(r'^freports/(?P<rid>\d+)/edit/report/$', freports.edit_report, name='forensic_edit_report'),
+    url(r'^freports/(?P<rid>\d+)/delete/report/$', freports.delete_report, name='forensic_delete_report'),
 ]

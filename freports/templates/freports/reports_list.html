@@ -1,79 +1,57 @@
-{% load static %}
+{% extends "freports/base.html" %}
 
-<!DOCTYPE html>
+{% block title %}
+<h2>Список відкритих проваджень</h2>
+<a type="button" class="btn btn-primary" id="add-button" href={% url "forensic_add_report" %}>Додати</a>
+{% endblock title %}
 
-<html lang="uk">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Forensic Reports List</title>
+{% block content %}
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-            integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'main.css' %}" type="text/css">
-    </head>
+{% if reports %}
+<table class="table table-hover table-bordered">
 
-    <body>
+    <thead>
+        <th>№</th>
+        <th>Адреса</th>
+        <th>Позивач</th>
+        <th>Відповідач</th>
+        <th>Тип Об'єкту</th>
+        <th>Вид Дослідження</th>
+        <th>Дії</th>
+    </thead>
 
-        <div class="container">
+    <tbody>
 
-            <div class="row" id="main-header">
-                <div class="col">
-                    <h1>Список відкритих проваджень</h1>
-                    <a type="button" class="btn btn-primary" id="add-button" href={% url "forensic_add_report" %}>Додати</a>
+        {% for report in reports %}
+        <tr class="table-secondary">
+            <td>{{ report.number }}</td>
+            <td>{{ report.address }}</td>
+            <td>{{ report.plaintiff }}</td>
+            <td>{{ report.defendant }}</td>
+            <td>{{ report.object_name }}</td>
+            <td>{{ report.research_kind }}</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Дія
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url 'forensic_edit_report' report.id %}">Редагувати</a>
+                        <a class="dropdown-item" href="{% url 'forensic_delete_report' report.id %}">Видалити</a>
+                    </div>
                 </div>
-
-            </div>
-
-            <div class="row" id="main-content">
-                <div class="col">
-                    <table class="table table-hover table-bordered">
-
-                        <thead>
-                            <th>№</th>
-                            <th>Адреса</th>
-                            <th>Позивач</th>
-                            <th>Відповідач</th>
-                            <th>Тип Об'єкту</th>
-                            <th>Вид Дослідження</th>
-                        </thead>
-
-                        <tbody>
-
-                            <tr class="table-success">
-                                <td>455/017</td>
-                                <td>вул.Лупана</td>
-                                <td>Бондаренко</td>
-                                <td>Бондаренко</td>
-                                <td>домоволодіння</td>
-                                <td>розподіл</td>
-                            </tr>
-
-                            <tr class="table-secondary">
-                                <td>463/017</td>
-                                <td>вул.Гагаріна</td>
-                                <td>Остапюк</td>
-                                <td>ЖБК "Гагаріно"</td>
-                                <td>земельні ділянки, будівлі</td>
-                                <td>накладки, відповідність нормам</td>
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-                </div>
-            </div>
-            <!-- End Main Content -->
-
-            <div class="row" id="footer">
-                <div class="col">
-                    <hr />
-                    <p>Time Planner, 2017</p>
-                </div>
-            </div>
-
-        </div>
-
-    </body>
+            </td>
+        </tr>
+        {% endfor %}
 
 
-</html>
+    </tbody>
+
+</table>
+
+{% else %}
+<p>Ще немає проваджень</p>
+{% endif %}
+
+{% endblock content %}

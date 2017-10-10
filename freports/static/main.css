@@ -3,8 +3,18 @@
   margin-bottom: 20px;
 }
 
+#header-link {
+  text-decoration: none;
+  color: black;
+}
+
 h1 {
   font-family: cursive;
   font-weight: 600;
   font-style: italic;
+}
+
+.table-secondary>td {
+  font-size: 1.25em;
+  vertical-align: middle;
 }

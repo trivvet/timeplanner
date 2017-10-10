@@ -1,109 +1,72 @@
-{% load static %}
+{% extends "freports/base.html" %}
 
-<!DOCTYPE html>
+{% block title %}
+<h2>{{ header }}</h2>
+{% endblock title %}
 
-<html lang="uk">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Forensic Reports List</title>
-
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
-            integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'main.css' %}" type="text/css">
-    </head>
-
-    <body>
-
-        <div class="container">
-
-            <div class="row" id="main-header">
-                <div class="col">
-                    <h1>Add Report</h1>
-                </div>
-
-            </div>
-
-            <div class="row" id="main-content">
-                <div class="col">
-
-                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
-                        {% csrf_token %}
-                        <div class="form-group row">
-                            <label for="inputNumber" class="col-sm-2 col-form-label">Номер провадження</label>
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" id="inputNumber"
-                                    placeholder="Введіть номер провадження">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputAddress" class="col-sm-2 col-form-label">Адреса об'єкту</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="inputAddress"
-                                    placeholder="Введіть скорочену адресу об'єкту" aria-describedby="addressHelp">
-                                <small id="addressHelp" class="form-text text-muted">
-                                    напр. вул. Лупана або смт. Базалія
-                                </small>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputPlaintiffName" class="col-sm-2 col-form-label">Позивач</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="inputPlaintiffName"
-                                    placeholder="Введіть прізвище позивача">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputDefendantName" class="col-sm-2 col-form-label">Відповідач</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="inputDefendantName"
-                                    placeholder="Введіть прізвище відповідача">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputObjectName" class="col-sm-2 col-form-label">Об'єкт дослідження</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="inputObjectName"
-                                    placeholder="Введіть назву об'єкту дослідження" aria-describedby="objectHelp">
-                                <small id="objectHelp" class="form-text text-muted">
-                                    напр. квартира, домоволодіння, земельна ділянка
-                                </small>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="inputResearchKind" class="col-sm-2 col-form-label">Вид дослідження</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="inputResearchKind"
-                                    placeholder="Введіть вид дослідження" aria-describedby="defendantHelp">
-                                <small id="researchHelp" class="form-text text-muted">
-                                    напр. розподіл, накладка, залиття
-                                </small>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-6">
-                              <input type="submit" class="btn btn-primary" value="Зберегти"
-                                     name="save_button" />
-                              <input type="submit" class="btn btn-link" href=""
-                                     name="cancel_button" value="Скасувати" />
-                            </div>
-                          </div>
-                    </form>
-
-                </div>
-            </div>
-            <!-- End Main Content -->
-
-            <div class="row" id="footer">
-                <div class="col">
-                    <hr />
-                    <p>Time Planner, 2017</p>
-                </div>
-            </div>
-
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+    <div class="form-group row">
+        <label for="inputNumber" class="col-sm-2 col-form-label">Номер провадження</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" id="inputNumber"
+                placeholder="Введіть номер провадження" name="number" value="{{ content.number }}">
         </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputAddress" class="col-sm-2 col-form-label">Адреса об'єкту</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="inputAddress" name="address" value="{{ content.address }}"
+                placeholder="Введіть скорочену адресу об'єкту" aria-describedby="addressHelp">
+            <small id="addressHelp" class="form-text text-muted">
+                напр. вул. Лупана або смт. Базалія
+            </small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputPlaintiffName" class="col-sm-2 col-form-label">Позивач</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="inputPlaintiffName" value="{{ content.plaintiff }}"
+                placeholder="Введіть прізвище позивача" name="plaintiff">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputDefendantName" class="col-sm-2 col-form-label">Відповідач</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="inputDefendantName" value="{{ content.defendant }}"
+                placeholder="Введіть прізвище відповідача" name="defendant">
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputObjectName" class="col-sm-2 col-form-label">Об'єкт дослідження</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="inputObjectName" name="object_name" value="{{ content.object_name }}"
+                placeholder="Введіть назву об'єкту дослідження" aria-describedby="objectHelp">
+            <small id="objectHelp" class="form-text text-muted">
+                напр. квартира, домоволодіння, земельна ділянка
+            </small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputResearchKind" class="col-sm-2 col-form-label">Вид дослідження</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="inputResearchKind" name="research_kind"
+                placeholder="Введіть вид дослідження" aria-describedby="defendantHelp" value="{{ content.research_kind }}">
+            <small id="researchHelp" class="form-text text-muted">
+                напр. розподіл, накладка, залиття
+            </small>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-6">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link" href=""
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}
 
-    </body>
-
-
-</html>
