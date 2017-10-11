@@ -9,53 +9,86 @@
     {% csrf_token %}
     <div class="form-group row">
         <label for="inputNumber" class="col-sm-2 col-form-label">Номер провадження</label>
-        <div class="col-sm-3">
-            <input type="text" class="form-control" id="inputNumber"
-                placeholder="Введіть номер провадження" name="number" value="{{ content.number }}">
+        <div class="col-sm-1">
+            <input type="text" class="form-control {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
+            <div class="invalid-feedback">
+                {{ errors.number }}
+            </div>
         </div>
+        <p id="dual-number">/017</p>
     </div>
     <div class="form-group row">
         <label for="inputAddress" class="col-sm-2 col-form-label">Адреса об'єкту</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="inputAddress" name="address" value="{{ content.address }}"
+            <input type="text" class="form-control {% if errors.address %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputAddress" name="address" value="{{ content.address }}"
                 placeholder="Введіть скорочену адресу об'єкту" aria-describedby="addressHelp">
+            {% if errors.address %}
+            <div class="invalid-feedback">
+                {{ errors.address }}
+            </div>
+            {% else %}
             <small id="addressHelp" class="form-text text-muted">
                 напр. вул. Лупана або смт. Базалія
             </small>
+            {% endif %}
         </div>
     </div>
     <div class="form-group row">
         <label for="inputPlaintiffName" class="col-sm-2 col-form-label">Позивач</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="inputPlaintiffName" value="{{ content.plaintiff }}"
+            <input type="text" class="form-control {% if errors.plaintiff %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputPlaintiffName" value="{{ content.plaintiff }}"
                 placeholder="Введіть прізвище позивача" name="plaintiff">
+            <div class="invalid-feedback">
+                {{ errors.plaintiff }}
+            </div>
         </div>
     </div>
     <div class="form-group row">
         <label for="inputDefendantName" class="col-sm-2 col-form-label">Відповідач</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="inputDefendantName" value="{{ content.defendant }}"
-                placeholder="Введіть прізвище відповідача" name="defendant">
+            <input type="text" class="form-control {% if errors.defendant %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputDefendantName" placeholder="Введіть прізвище відповідача"
+                name="defendant" value="{{ content.defendant }}">
+            <div class="invalid-feedback">
+                {{ errors.defendant }}
+            </div>
         </div>
     </div>
     <div class="form-group row">
         <label for="inputObjectName" class="col-sm-2 col-form-label">Об'єкт дослідження</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="inputObjectName" name="object_name" value="{{ content.object_name }}"
+            <input type="text" class="form-control {% if errors.object_name %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputObjectName" name="object_name" value="{{ content.object_name }}"
                 placeholder="Введіть назву об'єкту дослідження" aria-describedby="objectHelp">
+            {% if errors.object_name %}
+            <div class="invalid-feedback">
+                {{ errors.object_name }}
+            </div>
+            {% else %}
             <small id="objectHelp" class="form-text text-muted">
                 напр. квартира, домоволодіння, земельна ділянка
             </small>
+            {% endif %}
         </div>
     </div>
     <div class="form-group row">
         <label for="inputResearchKind" class="col-sm-2 col-form-label">Вид дослідження</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" id="inputResearchKind" name="research_kind"
-                placeholder="Введіть вид дослідження" aria-describedby="defendantHelp" value="{{ content.research_kind }}">
+            <input type="text" class="form-control {% if errors.research_kind %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputResearchKind" name="research_kind" placeholder="Введіть вид дослідження"
+                aria-describedby="defendantHelp" value="{{ content.research_kind }}">
+            {% if errors.research_kind %}
+            <div class="invalid-feedback">
+                {{ errors.research_kind }}
+            </div>
+            {% else %}
             <small id="researchHelp" class="form-text text-muted">
                 напр. розподіл, накладка, залиття
             </small>
+            {% endif %}
         </div>
     </div>
     <div class="form-group row">

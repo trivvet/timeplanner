@@ -14,6 +14,11 @@ h1 {
   font-style: italic;
 }
 
+#dual-number {
+  font-size: 1.5em;
+  margin-bottom: 0;
+}
+
 .table-secondary>td {
   font-size: 1.25em;
   vertical-align: middle;

@@ -8,23 +8,32 @@
 {% block content %}
 
 {% if reports %}
+{% with order_by=request.GET.order_by %}
 <table class="table table-hover table-bordered">
-
     <thead>
-        <th>№</th>
+        <th>
+            <a href="{% url 'forensic_reports_list' %}?order_by=number">
+                № {% if order_by == 'number' %}&uarr;{% endif %}
+            </a>
+        </th>
         <th>Адреса</th>
         <th>Позивач</th>
         <th>Відповідач</th>
         <th>Тип Об'єкту</th>
-        <th>Вид Дослідження</th>
+        <th>
+            <a href="{% url 'forensic_reports_list' %}?order_by=research_kind">
+                Вид Дослідження {% if order_by == 'research_kind' %}&uarr;{% endif %}
+            </a>
+        </th>
         <th>Дії</th>
     </thead>
+{% endwith %}
 
     <tbody>
 
         {% for report in reports %}
         <tr class="table-secondary">
-            <td>{{ report.number }}</td>
+            <td>{{ report.number }}/017</td>
             <td>{{ report.address }}</td>
             <td>{{ report.plaintiff }}</td>
             <td>{{ report.defendant }}</td>

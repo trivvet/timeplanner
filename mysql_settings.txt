@@ -1,0 +1,18 @@
+mysql -u root -p
+CREATE DATABASE `timeplanner_db` CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE USER 'timeplanner_db_user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON timeplanner_db.* TO 'timeplanner_db_user'@'localhost';
+FLUSH PRIVILEGES;
+quit
+
+Зміни до settings.py:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': 'localhost',
+        'USER': 'timeplanner_db_user',
+        'PASSWORD': 'password',
+        'NAME': 'timeplanner_db',
+    }
+}
