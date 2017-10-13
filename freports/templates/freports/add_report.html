@@ -8,7 +8,18 @@
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
     <div class="form-group row">
-        <label for="inputNumber" class="col-sm-2 col-form-label">Номер провадження</label>
+        <label for="inputDate" class="col-sm-3 col-form-label">Дата надходження <strong>*</strong></label>
+        <div class="col-sm-4">
+            <input type="date" class="form-control {% if errors.date_arrived %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputDate" placeholder="напр. 01.01.2017" name="date_arrived"
+                value="{{ content.date_arrived }}">
+            <div class="invalid-feedback">
+                {{ errors.date_arrived }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputNumber" class="col-sm-3 col-form-label">Номер провадження <strong>*</strong></label>
         <div class="col-sm-1">
             <input type="text" class="form-control {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
@@ -19,7 +30,7 @@
         <p id="dual-number">/017</p>
     </div>
     <div class="form-group row">
-        <label for="inputAddress" class="col-sm-2 col-form-label">Адреса об'єкту</label>
+        <label for="inputAddress" class="col-sm-3 col-form-label">Адреса об'єкту <strong>*</strong></label>
         <div class="col-sm-4">
             <input type="text" class="form-control {% if errors.address %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputAddress" name="address" value="{{ content.address }}"
@@ -36,7 +47,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputPlaintiffName" class="col-sm-2 col-form-label">Позивач</label>
+        <label for="inputPlaintiffName" class="col-sm-3 col-form-label">Позивач <strong>*</strong></label>
         <div class="col-sm-4">
             <input type="text" class="form-control {% if errors.plaintiff %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputPlaintiffName" value="{{ content.plaintiff }}"
@@ -47,7 +58,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputDefendantName" class="col-sm-2 col-form-label">Відповідач</label>
+        <label for="inputDefendantName" class="col-sm-3 col-form-label">Відповідач <strong>*</strong></label>
         <div class="col-sm-4">
             <input type="text" class="form-control {% if errors.defendant %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputDefendantName" placeholder="Введіть прізвище відповідача"
@@ -58,7 +69,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputObjectName" class="col-sm-2 col-form-label">Об'єкт дослідження</label>
+        <label for="inputObjectName" class="col-sm-3 col-form-label">Об'єкт дослідження <strong>*</strong></label>
         <div class="col-sm-4">
             <input type="text" class="form-control {% if errors.object_name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputObjectName" name="object_name" value="{{ content.object_name }}"
@@ -75,7 +86,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputResearchKind" class="col-sm-2 col-form-label">Вид дослідження</label>
+        <label for="inputResearchKind" class="col-sm-3 col-form-label">Вид дослідження <strong>*</strong></label>
         <div class="col-sm-4">
             <input type="text" class="form-control {% if errors.research_kind %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputResearchKind" name="research_kind" placeholder="Введіть вид дослідження"
@@ -92,7 +103,44 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-2"></div>
+        <label class="col-sm-3 col-form-label">Статус провадження <strong>*</strong></label>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="active" id="inputActive"
+                        value="True" {% if content.active != False and content.executed != True %}checked{% endif %}>
+                    Провадження у виконанні
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="active" id="inputActive"
+                        value="False" {% if content.active == False and content.executed != True %}checked{% endif %}>
+                    Провадження зупинене
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="active" id="inputActive"
+                        value="executed" {% if content.executed %}checked{% endif %}>
+                    Провадження закрите
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="inputDateExecuted" class="col-sm-3 col-form-label">Дата виконання</label>
+        <div class="col-sm-4">
+            <input type="date" class="form-control {% if errors.date_executed %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputDateExecuted" placeholder="напр. 01.01.2017" name="date_executed"
+                value="{{ content.date_executed }}">
+            <div class="invalid-feedback">
+                {{ errors.date_executed }}
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-3"></div>
         <div class="col-sm-6">
           <input type="submit" class="btn btn-primary" value="Зберегти"
                  name="save_button" />

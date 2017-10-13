@@ -5,13 +5,13 @@
 
 #header-link {
   text-decoration: none;
-  color: black;
+  color: blue;
+  font-family: cursive;
+  font-style: italic;
 }
 
-h1 {
-  font-family: cursive;
-  font-weight: 600;
-  font-style: italic;
+#second-header {
+  margin-bottom: 20px;
 }
 
 #dual-number {
@@ -19,7 +19,7 @@ h1 {
   margin-bottom: 0;
 }
 
-.table-secondary>td {
+tbody>td {
   font-size: 1.25em;
   vertical-align: middle;
 }

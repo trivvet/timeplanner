@@ -1,44 +1,73 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<h2>Список відкритих проваджень</h2>
-<a type="button" class="btn btn-primary" id="add-button" href={% url "forensic_add_report" %}>Додати</a>
+<nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
+    <a class="navbar-brand" href="#">Список проваджень</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item {% if request.GET.executed != '1' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}">Відкриті
+                    {% if request.GET.executed == '' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            <li class="nav-item {% if request.GET.executed == '1' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}?executed=1">Архівні
+                    {% if request.GET.executed == '1' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 {% endblock title %}
 
 {% block content %}
 
 {% if reports %}
-{% with order_by=request.GET.order_by %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
 <table class="table table-hover table-bordered">
     <thead>
-        <th>
-            <a href="{% url 'forensic_reports_list' %}?order_by=number">
-                № {% if order_by == 'number' %}&uarr;{% endif %}
-            </a>
-        </th>
-        <th>Адреса</th>
-        <th>Позивач</th>
-        <th>Відповідач</th>
-        <th>Тип Об'єкту</th>
-        <th>
-            <a href="{% url 'forensic_reports_list' %}?order_by=research_kind">
-                Вид Дослідження {% if order_by == 'research_kind' %}&uarr;{% endif %}
-            </a>
-        </th>
-        <th>Дії</th>
+        <tr>
+            <th>
+                <a href="{% url 'forensic_reports_list' %}?order_by=number{% if reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
+                    № {% if order_by == 'number' and reverse != '1' %}&uarr;
+                    {% elif order_by == 'number' and reverse == '1' %}&darr;{% endif %}
+                </a>
+            </th>
+            <th>Адреса</th>
+            <th>Позивач</th>
+            <th>Відповідач</th>
+            <th>Тип Об'єкту</th>
+            <th>
+                <a href="{% url 'forensic_reports_list' %}?order_by=research_kind">
+                    Вид Дослідження {% if order_by == 'research_kind' %}&uarr;{% endif %}
+                </a>
+            </th>
+            <th>Дата надходження</th>
+            {% if request.GET.executed == '1' %}
+            <th>Дата виконання</th>
+            {% endif %}
+            <th>Днів у виконанні</th>
+            <th>Дії</th>
+        </tr>
     </thead>
 {% endwith %}
 
     <tbody>
 
         {% for report in reports %}
-        <tr class="table-secondary">
-            <td>{{ report.number }}/017</td>
+        <tr class="table-{% if report.active %}success{% elif report.executed == False %}secondary{% else %}info{% endif %}">
+            <th scope="row">{{ report.number }}/017</td>
             <td>{{ report.address }}</td>
             <td>{{ report.plaintiff }}</td>
             <td>{{ report.defendant }}</td>
             <td>{{ report.object_name }}</td>
             <td>{{ report.research_kind }}</td>
+            <td>{{ report.date_arrived }}</td>
+            {% if request.GET.executed == '1' %}
+            <td>{{ report.date_executed }}</td>
+            {% endif %}
+            <td>{{ report.days_amount }}</td>
             <td>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -60,7 +89,9 @@
 </table>
 
 {% else %}
-<p>Ще немає проваджень</p>
+<p>Ще немає даних</p>
 {% endif %}
+
+<a type="button" class="btn btn-primary" id="add-button" href={% url "forensic_add_report" %}>Додати провадження</a>
 
 {% endblock content %}
