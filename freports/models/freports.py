@@ -6,62 +6,52 @@ from django.utils import timezone
 
 # Create your models here.
 
-class ForensicReport(models.Model):
+class Report(models.Model):
     number = models.CharField(
         max_length=128,
         blank=False,
-        null=False,
-    )
+        null=False)
 
     address = models.CharField(
         max_length=128,
         blank=False,
-        null=False,
-    )
+        null=False)
 
     plaintiff = models.CharField(
         max_length=128,
         blank=False,
-        null=False,
-    )
+        null=False)
 
     defendant = models.CharField(
         max_length=128,
         blank=False,
-        null=False,
-    )
+        null=False)
 
     object_name = models.CharField(
         max_length=128,
         blank=False,
-        null=False,
-    )
+        null=False)
 
     research_kind = models.CharField(
         max_length=128,
         blank=False,
-        null=False,
-    )
+        null=False)
 
     active = models.BooleanField(
         blank=False,
-        default=True,
-    )
+        default=True)
 
     date_arrived = models.DateField(
         blank=False,
-        default=timezone.now,
-    )
+        default=timezone.now)
 
     executed = models.BooleanField(
         blank=False,
-        default=False,
-    )
+        default=False)
 
     date_executed = models.DateField(
         blank=True,
-        null=True,
-    )
+        null=True)
 
     def __unicode__(self):
         return u"%s/017-%s-%s" % (self.number, self.address, self.plaintiff)

@@ -8,13 +8,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
-from .models import ForensicReport
+from ..models import Report
 
 def reports_list(request):
     if request.GET.get('executed'):
-        reports = ForensicReport.objects.all().order_by('number').filter(executed=True)
+        reports = Report.objects.all().order_by('number').filter(executed=True)
     else:
-        reports = ForensicReport.objects.all().order_by('number').filter(executed=False)
+        reports = Report.objects.all().order_by('number').filter(executed=False)
     order_by = request.GET.get('order_by')
     reverse = request.GET.get('reverse')
     if order_by:
@@ -49,7 +49,7 @@ def add_report(request):
                     'content': new_report})
 
             else:
-                new_report = ForensicReport(**new_report)
+                new_report = Report(**new_report)
                 new_report.save()
                 messages.success(request, "Провадження №%s/017 успішно додане" % new_report.number)
 
@@ -64,7 +64,7 @@ def add_report(request):
 
 def edit_report(request, rid):
     header = 'Редагування провадження'
-    content = ForensicReport.objects.get(pk=rid)
+    content = Report.objects.get(pk=rid)
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -110,7 +110,7 @@ def edit_report(request, rid):
 
 def delete_report(request, rid):
     if request.method == 'GET':
-        report = ForensicReport.objects.get(pk=rid)
+        report = Report.objects.get(pk=rid)
         return render(request, 'freports/delete_report.html', {'report': report})
     elif request.method == 'POST':
         if request.POST.get('delete_button'):
@@ -189,5 +189,3 @@ def valid_report(data_post):
         new_report['date_executed'] = data_post.get('date_executed')
 
     return {'errors': errors, 'data_report': new_report}
-
-

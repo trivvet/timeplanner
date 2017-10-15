@@ -1,0 +1,63 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<a type="button" class="btn btn-light" id="back-button" href="{% url 'forensic_reports_list' %}">Повернутись до списку проваджень</a>
+<h2>Детальна інформація про провадження №{{ content.report }}</h2>
+<h3>Список подій</h3>
+{% endblock title %}
+
+{% block content %}
+
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Дата</th>
+            <th>Назва</th>
+            <th>Детальна інформація</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td>17 січня 2017р</td>
+            <td>Надходження з суду</td>
+            <td>надійшла ухвала від 27 грудня 2016 року судді Хмельницького міськрайонного суду Мазурок О.В. по цивільній справі №686/21205/16-ц</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Дія
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Редагувати</a>
+                        <a class="dropdown-item" href="#">Видалити</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>20 січня 2017р</td>
+            <td>Рахунок</td>
+            <td>рекомендованим листом направлений рахунок на оплату</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Дія
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Редагувати</a>
+                        <a class="dropdown-item" href="#">Видалити</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+    </tbody>
+
+</table>
+
+<a type="button" class="btn btn-primary" id="add-button" href="{% url 'report_add_detail' content.report %}">Додати подію</a>
+
+{% endblock content %}

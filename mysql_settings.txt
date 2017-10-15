@@ -5,7 +5,7 @@ GRANT ALL PRIVILEGES ON timeplanner_db.* TO 'timeplanner_db_user'@'localhost';
 FLUSH PRIVILEGES;
 quit
 
-Зміни до settings.py:
+Відомості для sensitive_data.py:
 
 DATABASES = {
     'default': {
