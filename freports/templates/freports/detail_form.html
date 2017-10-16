@@ -10,34 +10,30 @@
     <div class="form-group row">
         <label for="inputDate" class="col-sm-3 col-form-label">Дата події <strong>*</strong></label>
         <div class="col-sm-4">
-            <input type="date" class="form-control {% if errors.date_arrived %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputDate" placeholder="напр. 01.01.2017" name="date"
-                value="{{ content.date_arrived }}">
+            <input type="date" class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputDate" name="date" value="{{ content.date }}">
             <div class="invalid-feedback">
-                {{ errors.date_arrived }}
+                {{ errors.date }}
             </div>
         </div>
     </div>
     <div class="form-group row">
         <label for="inputName" class="col-sm-3 col-form-label">Назва події <strong>*</strong></label>
         <div class="col-sm-4">
-            <input type="text" class="form-control {% if errors.date_arrived %}is-invalid{% elif errors %}is-valid{% endif %}"
+            <input type="text" class="form-control {% if errors.name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputName" placeholder="Введіть назву події" name="name"
-                value="{{ content.date_arrived }}">
+                value="{{ content.name }}">
             <div class="invalid-feedback">
-                {{ errors.date_arrived }}
+                {{ errors.name }}
             </div>
         </div>
     </div>
     <div class="form-group row">
         <label for="inputInfo" class="col-sm-3 col-form-label">Детальна інформація <strong>*</strong></label>
         <div class="col-sm-4">
-            <textarea type="text" class="form-control {% if errors.date_arrived %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputInfo" name="info" rows="5" value="{{ content.date_arrived }}">Введіть детальну інформацію про подію
-            </textarea>
-            <div class="invalid-feedback">
-                {{ errors.date_arrived }}
-            </div>
+            <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
+                id="inputInfo" name="info" rows="5"
+                placeholder="Введіть детальну інформацію про подію">{{ content.info }}</textarea>
         </div>
     </div>
     <div class="form-group row">
@@ -45,7 +41,7 @@
         <div class="col-sm-6">
           <input type="submit" class="btn btn-primary" value="Зберегти"
                  name="save_button" />
-          <input type="submit" class="btn btn-link" href=""
+          <input type="submit" class="btn btn-link"
                  name="cancel_button" value="Скасувати" />
         </div>
     </div>

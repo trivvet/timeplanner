@@ -114,7 +114,7 @@ def delete_report(request, rid):
         return render(request, 'freports/delete_report.html', {'report': report})
     elif request.method == 'POST':
         if request.POST.get('delete_button'):
-            current_report = ForensicReport.objects.get(pk=rid)
+            current_report = Report.objects.get(pk=rid)
             current_report.delete()
             messages.success(request, "Провадження №%s/017 успішно видалено" % current_report.number)
         elif request.POST.get('cancel_button'):

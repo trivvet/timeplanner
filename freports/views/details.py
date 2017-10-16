@@ -6,31 +6,120 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
-from ..models import Report
+from ..models import Report, ReportDetails
 
 def details_list(request, rid):
-    content = {}
-    content['report'] = rid
-    
-    return render(request, 'freports/report_detail.html', {'content': content})
+    report = Report.objects.get(pk=rid)
+    details = ReportDetails.objects.filter(report=Report.objects.get(pk=rid)).order_by('date')
+
+    return render(request, 'freports/report_detail.html', {'details': details, 'report': report})
 
 def add_detail(request, rid):
+    report = Report.objects.get(pk=rid)
+    header = u'Додавання події до провадження №%s/017' % report.number
+
     if request.method == 'POST':
         if request.POST.get('save_button'):
-            errors = {}
+
+            valid_data = valid_detail(request.POST, rid)
+            errors = valid_data['errors']
+            new_element = valid_data['data']
 
             if errors:
-                messages.error(request, "Виправте наступні недоліки")
-                return render(request, 'freports/detail_form.html', {})
+                messages.error(request, u"Виправте наступні недоліки")
+                return render(request, 'freports/detail_form.html', {'content': new_element, 'errors': errors})
 
             else:
-                messages.success(request, "Подія '%s' успішно додана" % 'Додавання')
+                new_detail = ReportDetails(**new_element)
+                new_detail.save()
+                messages.success(request, u"Подія '%s' успішно додана" % new_detail.name)
 
         elif request.POST.get('cancel_button'):
-            messages.warning(request, "Додавання деталей провадження скасовано")
-            
+            messages.warning(request, u"Додавання деталей провадження скасовано")
+
         return HttpResponseRedirect(reverse('report_details_list', args=rid))
 
     else:
-        content = rid
-        return render(request, 'freports/detail_form.html', {'content': content})
+        return render(request, 'freports/detail_form.html', {'header': header})
+
+def edit_detail(request, rid, did):
+    report = Report.objects.get(pk=rid)
+    detail = ReportDetails.objects.get(pk=did)
+    header = u"Редагування події '%s' до провадження №%s/017" % (detail.name, report.number)
+
+    if request.method == 'POST':
+        if request.POST.get('save_button'):
+
+            valid_data = valid_detail(request.POST, rid)
+            errors = valid_data['errors']
+            new_data = valid_data['data']
+
+            if errors:
+                messages.error(request, u"Виправте наступні недоліки")
+                return render(request, 'freports/detail_form.html', {'content': new_data, 'errors': errors})
+
+            else:
+                edit_detail = detail
+                edit_detail.date = new_data['date']
+                edit_detail.name = new_data['name']
+                edit_detail.info = new_data['info']
+                edit_detail.save()
+                messages.success(request, u"Подія '%s' успішно змінена" % edit_detail.name)
+
+        elif request.POST.get('cancel_button'):
+            messages.warning(request, u"Редагування деталей провадження скасовано")
+
+        return HttpResponseRedirect(reverse('report_details_list', args=rid))
+
+    else:
+        content = detail
+        content.date = content.date.isoformat()
+        return render(request, 'freports/detail_form.html', {'content': content, 'header': header})
+
+def delete_detail(request, rid, did):
+    report = Report.objects.get(pk=rid)
+    detail = ReportDetails.objects.get(pk=did)
+    header = u"Видалення події '%s' до провадження №%s/017" % (detail.name, report.number)
+
+    if request.method == 'GET':
+        return render(request, 'freports/delete_detail.html', {'report': report, 'detail': detail, 'header': header})
+
+    elif request.method == 'POST':
+        if request.POST.get('delete_button'):
+            current_detail = detail
+            current_detail.delete()
+            messages.success(request, u"Подія '%s' до провадження №%s/017 успішно видалена" % (detail.name, report.number))
+        elif request.POST.get('cancel_button'):
+            messages.warning(request, u"Видалення події '%s' до провадження №%s/017 скасоване" % (detail.name, report.number))
+
+        return HttpResponseRedirect(reverse('report_details_list', args=rid))
+
+def valid_detail(request_info, report_id):
+    errors = {}
+    new_element = {}
+
+    report = Report.objects.filter(pk=report_id)
+    if len(report) != 1:
+        errors['report'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте пізніше'
+    else:
+        new_element['report'] = report[0]
+
+    date = request_info.get('date')
+    if not date:
+        errors['date'] = u"Дата події є обов'язковою"
+    else:
+        try:
+            new_element['date'] = date
+        except ValueError:
+            errors['date'] = u"Введіть коректний формат дати"
+
+    name = request_info.get('name')
+    if not name:
+        errors['name'] = u"Назва події є обов'язковою"
+    else:
+        new_element['name'] = name
+
+    new_element['info'] = request_info.get('info')
+
+    return {'errors': errors, 'data': new_element}
+

@@ -12,7 +12,7 @@ class ReportDetails(models.Model):
         verbose_name=u"Детальна інформація"
         verbose_name_plural=u"Детальна інформація"
 
-    report = models.OneToOneField('Report',
+    report = models.ForeignKey('Report',
         verbose_name=u"Висновок",
         blank=False,
         null=False)
@@ -28,8 +28,7 @@ class ReportDetails(models.Model):
         blank=False,
         null=False)
 
-    info = models.CharField(
-        max_length=256,
+    info = models.TextField(
         blank=True,
         verbose_name=u"Додаткова інформація")
 
