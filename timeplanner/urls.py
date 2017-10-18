@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^freports/(?P<rid>\d+)/edit/$', freports.edit_report, name='forensic_edit_report'),
     url(r'^freports/(?P<rid>\d+)/delete/$', freports.delete_report, name='forensic_delete_report'),
 
-    url(r'^freports/detail/(?P<rid>\d+)/$', freports.details_list, name='report_details_list'),
+    url(r'^freports/(?P<rid>\d+)/details/$', freports.details_list, name='report_details_list'),
     url(r'^freports/(?P<rid>\d+)/details/add/$', freports.add_detail, name='report_add_detail'),
     url(r'^freports/(?P<rid>\d+)/details/(?P<did>\d+)/edit/$', freports.edit_detail, name='report_edit_detail'),
     url(r'^freports/(?P<rid>\d+)/details/(?P<did>\d+)/delete/$', freports.delete_detail, name='report_delete_detail'),

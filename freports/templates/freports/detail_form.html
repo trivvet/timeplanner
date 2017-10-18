@@ -10,8 +10,14 @@
     <div class="form-group row">
         <label for="inputDate" class="col-sm-3 col-form-label">Дата події <strong>*</strong></label>
         <div class="col-sm-4">
-            <input type="date" class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputDate" name="date" value="{{ content.date }}">
+            <div class="input-group date">
+                <input type="text" id="inputDate" placeholder="напр. 01.01.2017" name="date"
+                    class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
+                    value="{{ content.date }}" data-provide="datepicker">
+                <div class="input-group-addon" id="calendar">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+            </div>
             <div class="invalid-feedback">
                 {{ errors.date }}
             </div>
@@ -29,11 +35,30 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputInfo" class="col-sm-3 col-form-label">Детальна інформація <strong>*</strong></label>
+        <label for="inputInfo" class="col-sm-3 col-form-label">Детальна інформація</label>
         <div class="col-sm-4">
             <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputInfo" name="info" rows="5"
                 placeholder="Введіть детальну інформацію про подію">{{ content.info }}</textarea>
+        </div>
+    </div>
+        <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Дія</label>
+        <div class="col-sm-4">
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="activate" id="inputActivate"
+                        value="True" {% if content.activate == True %}checked{% endif %}>
+                    Відновити провадження
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="radio" name="activate" id="inputActivate"
+                        value="False" {% if content.activate == False %}checked{% endif %}>
+                    Зупинити провадження
+                </label>
+            </div>
         </div>
     </div>
     <div class="form-group row">

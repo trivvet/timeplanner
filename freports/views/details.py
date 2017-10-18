@@ -32,12 +32,20 @@ def add_detail(request, rid):
             else:
                 new_detail = ReportDetails(**new_element)
                 new_detail.save()
+                print new_detail.activate
+                last_detail = ReportDetails.objects.filter(report=report).order_by('date').reverse()[0]
+                if last_detail.activate == True:
+                    report.active = True
+                    report.save()
+                elif last_detail.activate == False:
+                    report.active = False
+                    report.save()
                 messages.success(request, u"Подія '%s' успішно додана" % new_detail.name)
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання деталей провадження скасовано")
 
-        return HttpResponseRedirect(reverse('report_details_list', args=rid))
+        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
     else:
         return render(request, 'freports/detail_form.html', {'header': header})
@@ -69,7 +77,7 @@ def edit_detail(request, rid, did):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування деталей провадження скасовано")
 
-        return HttpResponseRedirect(reverse('report_details_list', args=rid))
+        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
     else:
         content = detail
@@ -92,7 +100,7 @@ def delete_detail(request, rid, did):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Видалення події '%s' до провадження №%s/017 скасоване" % (detail.name, report.number))
 
-        return HttpResponseRedirect(reverse('report_details_list', args=rid))
+        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
 def valid_detail(request_info, report_id):
     errors = {}
@@ -120,6 +128,10 @@ def valid_detail(request_info, report_id):
         new_element['name'] = name
 
     new_element['info'] = request_info.get('info')
+
+    activate = request_info.get('activate')
+    if activate:
+        new_element['activate'] = activate
 
     return {'errors': errors, 'data': new_element}
 

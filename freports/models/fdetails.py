@@ -32,5 +32,9 @@ class ReportDetails(models.Model):
         blank=True,
         verbose_name=u"Додаткова інформація")
 
+    activate = models.NullBooleanField(
+        blank=True,
+        null=True)
+
     def __unicode__(self):
         return u"Report %s: %s" % (self.report.number, self.info)

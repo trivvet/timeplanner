@@ -8,13 +8,20 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 
-from ..models import Report
+from ..models import Report, ReportDetails
 
 def reports_list(request):
+    content = {}
+
     if request.GET.get('executed'):
         reports = Report.objects.all().order_by('number').filter(executed=True)
     else:
         reports = Report.objects.all().order_by('number').filter(executed=False)
+
+    if reports:
+        content['full_length'] = len(reports)
+        content['active_length'] = len(reports.filter(active=True))
+
     order_by = request.GET.get('order_by')
     reverse = request.GET.get('reverse')
     if order_by:
@@ -26,13 +33,31 @@ def reports_list(request):
         reports_low = reports.filter(active=False)
         reports = list(chain(reports_top, reports_low))
     for report in reports:
-        if request.GET.get('executed'):
-            days_amount = report.date_executed - report.date_arrived
-            report.days_amount = days_amount.days
+        details = ReportDetails.objects.filter(report=report).order_by('date')
+        days_amount = 0
+        if details.count() > 0:
+            before_detail = details[0]
+            for detail in details:
+                if detail.activate == False:
+                    if before_detail.activate == True:
+                        time = detail.date - before_detail.date
+                        days_amount += time.days
+                if detail.activate is not None:
+                    before_detail = detail
+            last_date = detail.date
         else:
-            days_amount = date.today() - report.date_arrived
-            report.days_amount = days_amount.days
-    return render(request, 'freports/reports_list.html', {'reports': reports})
+            last_date = report.date_arrived
+
+        if request.GET.get('executed'):
+            time = report.date_executed - last_date
+            days_amount += time.days
+        elif detail.activate == True or details.count() == 0:
+            time = date.today() - last_date
+            days_amount += time.days
+
+        report.days_amount = days_amount
+
+    return render(request, 'freports/reports_list.html', {'reports': reports, 'content': content})
 
 def add_report(request):
     header = u'Додавання провадження'

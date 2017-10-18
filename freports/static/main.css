@@ -11,7 +11,11 @@
 }
 
 #second-header {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+}
+
+#add-button {
+  margin-bottom: 10px;
 }
 
 #dual-number {
@@ -27,3 +31,8 @@ tbody>td {
 #back-button {
   margin-bottom: 20px;
 }
+
+#calendar, #calendar1 {
+  border-right: 1px solid rgba(0,0,0,.15);
+}
+
