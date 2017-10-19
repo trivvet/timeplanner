@@ -36,3 +36,8 @@ tbody>td {
   border-right: 1px solid rgba(0,0,0,.15);
 }
 
+.card {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+

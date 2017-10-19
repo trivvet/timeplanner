@@ -32,7 +32,6 @@ def add_detail(request, rid):
             else:
                 new_detail = ReportDetails(**new_element)
                 new_detail.save()
-                print new_detail.activate
                 last_detail = ReportDetails.objects.filter(report=report).order_by('date').reverse()[0]
                 if last_detail.activate == True:
                     report.active = True
@@ -71,7 +70,15 @@ def edit_detail(request, rid, did):
                 edit_detail.date = new_data['date']
                 edit_detail.name = new_data['name']
                 edit_detail.info = new_data['info']
+                edit_detail.activate = new_data['activate']
                 edit_detail.save()
+                last_detail = ReportDetails.objects.filter(report=report).order_by('date').reverse()[0]
+                if last_detail.activate == True:
+                    report.active = True
+                    report.save()
+                elif last_detail.activate == False:
+                    report.active = False
+                    report.save()
                 messages.success(request, u"Подія '%s' успішно змінена" % edit_detail.name)
 
         elif request.POST.get('cancel_button'):
@@ -130,8 +137,7 @@ def valid_detail(request_info, report_id):
     new_element['info'] = request_info.get('info')
 
     activate = request_info.get('activate')
-    if activate:
-        new_element['activate'] = activate
+    new_element['activate'] = activate
 
     return {'errors': errors, 'data': new_element}
 

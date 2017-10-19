@@ -51,7 +51,7 @@ def reports_list(request):
         if request.GET.get('executed'):
             time = report.date_executed - last_date
             days_amount += time.days
-        elif detail.activate == True or details.count() == 0:
+        elif details.count() == 0 or detail.activate == True:
             time = date.today() - last_date
             days_amount += time.days
 

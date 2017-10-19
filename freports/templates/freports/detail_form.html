@@ -26,9 +26,16 @@
     <div class="form-group row">
         <label for="inputName" class="col-sm-3 col-form-label">Назва події <strong>*</strong></label>
         <div class="col-sm-4">
-            <input type="text" class="form-control {% if errors.name %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputName" placeholder="Введіть назву події" name="name"
-                value="{{ content.name }}">
+            <select class="form-control {% if errors.name %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputName" name="name" value="{{ content.name }}">
+                <option value=''>-----------</option>
+                <option {% if content.name == 'Надходження з суду' %}selected{% endif %}>Надходження з суду</option>
+                <option {% if content.name == 'Направлене клопотання' %}selected{% endif %}>Направлене клопотання</option>
+                <option {% if content.name == 'Направлений рахунок' %}selected{% endif %}>Направлений рахунок</option>
+                <option {% if content.name == 'Оплачено' %}selected{% endif %}>Оплачено</option>
+                <option {% if content.name == 'Призначено виїзд' %}selected{% endif %}>Призначено виїзд</option>
+                <option {% if content.name == 'Проведено огляд' %}selected{% endif %}>Проведено огляд</option>
+            </select>
             <div class="invalid-feedback">
                 {{ errors.name }}
             </div>
@@ -48,14 +55,15 @@
             <div class="form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" type="radio" name="activate" id="inputActivate"
-                        value="True" {% if content.activate == True %}checked{% endif %}>
+                        value="True" {% if content.activate|stringformat:'s' == 'True' or content.activate is None %}
+                            checked{% endif %}>
                     Відновити провадження
                 </label>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" type="radio" name="activate" id="inputActivate"
-                        value="False" {% if content.activate == False %}checked{% endif %}>
+                        value="False" {% if content.activate|stringformat:'s' == 'False' %}checked{% endif %}>
                     Зупинити провадження
                 </label>
             </div>
