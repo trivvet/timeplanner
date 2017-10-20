@@ -30,4 +30,7 @@ urlpatterns = [
     url(r'^freports/(?P<rid>\d+)/details/add/$', freports.add_detail, name='report_add_detail'),
     url(r'^freports/(?P<rid>\d+)/details/(?P<did>\d+)/edit/$', freports.edit_detail, name='report_edit_detail'),
     url(r'^freports/(?P<rid>\d+)/details/(?P<did>\d+)/delete/$', freports.delete_detail, name='report_delete_detail'),
+
+    url(r'^login/$', freports.login_auth, name='login_form'),
+    url(r'^logout/$', freports.logout_auth, name='logout_url'),
 ]

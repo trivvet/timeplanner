@@ -17,17 +17,35 @@
     </head>
 
     <body>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row" id="main-header">
-                <div class="col">
+                <div class="col-2"></div>
+                <div class="col-7">
                     <a id="header-link" href="{% url 'forensic_reports_list' %}"><h1>Wonderful Time Planner</h1></a>
                 </div>
+                {% if user.is_authenticated %}
+                <div class="col-sm-1">
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-success" href=""
+                            aria-haspopup="true" aria-expanded="false">{{ user }}</button>
+                        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            <a class="dropdown-item" href="{% url 'logout_url' %}">Вийти</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+                {% endif %}
             </div>
 
             <div class="row" id="second-header">
-                <div class="col">
+                <div class="col-2"></div>
+                <div class="col-8">
                     {% block title %}{% endblock title %}
                 </div>
+                <div class="col-2"></div>
             </div>
 
             <div class="row" id="message">
@@ -46,16 +64,22 @@
             </div>
 
             <div class="row" id="main-content">
+                <div class="col-2">
+                    {% block extra_content %}{% endblock extra_content %}
+                </div>
                 <div class="col">
                     {% block content %}{% endblock content %}
                 </div>
+                <div class="col-2"></div>
             </div>
 
             <div class="row" id="footer">
+                <div class="col-2"></div>
                 <div class="col">
                     <hr />
                     <p>Time Planner, 2017</p>
                 </div>
+                <div class="col-2"></div>
             </div>
 
         </div>

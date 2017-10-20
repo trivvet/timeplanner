@@ -10,6 +10,11 @@
   font-style: italic;
 }
 
+span.badge {
+  padding: 10px;
+  font-size: 1em;
+}
+
 #second-header {
   margin-bottom: 10px;
 }
@@ -39,5 +44,13 @@ tbody>td {
 .card {
   font-size: 1.1em;
   font-weight: bold;
+}
+
+.filter {
+  background-color: pink;
+  margin-left: 50px;
+  height: 100%;
+  max-height: 400px;
+  padding: 10%;
 }
 

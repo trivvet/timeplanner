@@ -7,9 +7,11 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from ..models import Report, ReportDetails
 
+@login_required(login_url='/login/')
 def reports_list(request):
     content = {}
 
@@ -59,6 +61,7 @@ def reports_list(request):
 
     return render(request, 'freports/reports_list.html', {'reports': reports, 'content': content})
 
+@login_required(login_url='/login/')
 def add_report(request):
     header = u'Додавання провадження'
 
@@ -86,7 +89,7 @@ def add_report(request):
     else:
         return render(request, 'freports/add_report.html', {'header': header})
 
-
+@login_required(login_url='/login/')
 def edit_report(request, rid):
     header = 'Редагування провадження'
     content = Report.objects.get(pk=rid)
@@ -119,10 +122,10 @@ def edit_report(request, rid):
                 except KeyError:
                     pass
                 current_report.save()
-                messages.success(request, "Провадження №%s/017 успішно відкориговане" % current_report.number)
+                messages.success(request, u"Провадження №%s/017 успішно відкориговане" % current_report.number)
 
         elif request.POST.get('cancel_button'):
-            messages.warning(request, "Редагування провадження скасовано")
+            messages.warning(request, u"Редагування провадження скасовано")
 
         return HttpResponseRedirect(reverse('forensic_reports_list'))
 
@@ -132,18 +135,20 @@ def edit_report(request, rid):
             content.date_executed = content.date_executed.isoformat()
         return render(request, 'freports/add_report.html', {'header': header, 'content': content})
 
-
+@login_required(login_url='/login/')
 def delete_report(request, rid):
     if request.method == 'GET':
         report = Report.objects.get(pk=rid)
-        return render(request, 'freports/delete_report.html', {'report': report})
+        content = u"Ви дійсно бажаєте видалите провадження №%s/017?" % report.number
+        header = u"Видалення провадження №%s/017" % report.number
+        return render(request, 'freports/delete_form.html', {'report': report, 'header': header, 'content': content})
     elif request.method == 'POST':
         if request.POST.get('delete_button'):
             current_report = Report.objects.get(pk=rid)
             current_report.delete()
-            messages.success(request, "Провадження №%s/017 успішно видалено" % current_report.number)
+            messages.success(request, u"Провадження №%s/017 успішно видалено" % current_report.number)
         elif request.POST.get('cancel_button'):
-            messages.warning(request, "Видалення провадження скасовано")
+            messages.warning(request, u"Видалення провадження скасовано")
 
         return HttpResponseRedirect(reverse('forensic_reports_list'))
 

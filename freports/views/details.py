@@ -5,15 +5,18 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 from ..models import Report, ReportDetails
 
+@login_required(login_url='/login/')
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
     details = ReportDetails.objects.filter(report=Report.objects.get(pk=rid)).order_by('date')
 
     return render(request, 'freports/report_detail.html', {'details': details, 'report': report})
 
+@login_required(login_url='/login/')
 def add_detail(request, rid):
     report = Report.objects.get(pk=rid)
     header = u'Додавання події до провадження №%s/017' % report.number
@@ -49,6 +52,7 @@ def add_detail(request, rid):
     else:
         return render(request, 'freports/detail_form.html', {'header': header})
 
+@login_required(login_url='/login/')
 def edit_detail(request, rid, did):
     report = Report.objects.get(pk=rid)
     detail = ReportDetails.objects.get(pk=did)
@@ -91,13 +95,15 @@ def edit_detail(request, rid, did):
         content.date = content.date.isoformat()
         return render(request, 'freports/detail_form.html', {'content': content, 'header': header})
 
+@login_required(login_url='/login/')
 def delete_detail(request, rid, did):
     report = Report.objects.get(pk=rid)
     detail = ReportDetails.objects.get(pk=did)
+    content = u"Ви дійсно бажаєте видалити подію '%s' до провадження №%s/017?" % (detail.name, report.number)
     header = u"Видалення події '%s' до провадження №%s/017" % (detail.name, report.number)
 
     if request.method == 'GET':
-        return render(request, 'freports/delete_detail.html', {'report': report, 'detail': detail, 'header': header})
+        return render(request, 'freports/delete_form.html', {'report': report, 'content': content, 'header': header})
 
     elif request.method == 'POST':
         if request.POST.get('delete_button'):
