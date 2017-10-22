@@ -14,6 +14,7 @@ from ..models import Report, ReportDetails
 @login_required(login_url='/login/')
 def reports_list(request):
     content = {}
+    days_count = ''
 
     if request.GET.get('executed'):
         reports = Report.objects.all().order_by('number').filter(executed=True)
@@ -24,16 +25,38 @@ def reports_list(request):
         content['full_length'] = len(reports)
         content['active_length'] = len(reports.filter(active=True))
 
+    if request.GET.get('filter_status') and request.GET.get('apply_button'):
+        active = request.GET.get('active')
+        if active == 'True':
+            reports = reports.filter(active=True)
+        elif active == 'False':
+            reports = reports.filter(active=False)
+
+        date_from = request.GET.get('date_from')
+        if date_from:
+            reports = reports.filter(date_arrived__gt=date_from)
+
+        date_until = request.GET.get('date_until')
+        if date_until:
+            reports = reports.filter(date_arrived__lt=date_until)
+
+        days_count = request.GET.get('day_count')
+
+    elif request.GET.get('filter_status') and request.GET.get('cancel_button'):
+        return HttpResponseRedirect(reverse('forensic_reports_list'))
+
     order_by = request.GET.get('order_by')
-    reverse = request.GET.get('reverse')
+    reverse_apply = request.GET.get('reverse')
     if order_by:
         reports = reports.order_by(order_by)
-        if reverse:
+        if reverse_apply:
             reports = reports.reverse()
     else:
         reports_top = reports.filter(active=True)
         reports_low = reports.filter(active=False)
         reports = list(chain(reports_top, reports_low))
+        
+    new_reports = []
     for report in reports:
         details = ReportDetails.objects.filter(report=report).order_by('date')
         days_amount = 0
@@ -59,7 +82,10 @@ def reports_list(request):
 
         report.days_amount = days_amount
 
-    return render(request, 'freports/reports_list.html', {'reports': reports, 'content': content})
+        if days_count == '' or int(days_amount) >= int(days_count):
+            new_reports.append(report)
+
+    return render(request, 'freports/reports_list.html', {'reports': new_reports, 'content': content})
 
 @login_required(login_url='/login/')
 def add_report(request):

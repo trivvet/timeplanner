@@ -3,7 +3,7 @@
   margin-bottom: 20px;
 }
 
-#header-link {
+h1 {
   text-decoration: none;
   color: blue;
   font-family: cursive;
@@ -47,10 +47,20 @@ tbody>td {
 }
 
 .filter {
-  background-color: pink;
+  border: 2px solid orange;
+  border-radius: 10px;
   margin-left: 50px;
   height: 100%;
-  max-height: 400px;
+  max-height: 500px;
   padding: 10%;
+}
+
+.input-date {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+#filter-button {
+  margin-top: 40px;
 }
 
