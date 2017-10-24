@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from ..models import Report, ReportDetails
+from ..models import Report, ReportEvents
 
 @login_required(login_url='/login/')
 def reports_list(request):
@@ -55,10 +55,10 @@ def reports_list(request):
         reports_top = reports.filter(active=True)
         reports_low = reports.filter(active=False)
         reports = list(chain(reports_top, reports_low))
-        
+
     new_reports = []
     for report in reports:
-        details = ReportDetails.objects.filter(report=report).order_by('date')
+        details = ReportEvents.objects.filter(report=report).order_by('date')
         days_amount = 0
         if details.count() > 0:
             before_detail = details[0]
@@ -74,8 +74,11 @@ def reports_list(request):
             last_date = report.date_arrived
 
         if request.GET.get('executed'):
-            time = report.date_executed - last_date
-            days_amount += time.days
+            try:
+                time = report.date_executed - last_date
+                days_amount += time.days
+            except TypeError:
+                pass
         elif details.count() == 0 or detail.activate == True:
             time = date.today() - last_date
             days_amount += time.days
@@ -105,7 +108,7 @@ def add_report(request):
             else:
                 new_report = Report(**new_report)
                 new_report.save()
-                messages.success(request, "Провадження №%s/017 успішно додане" % new_report.number)
+                messages.success(request, "Провадження №%s/%s успішно додане" % (new_report.number, new_report.number_year))
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, "Додавання провадження скасовано")
@@ -135,6 +138,7 @@ def edit_report(request, rid):
 
             else:
                 current_report.number = new_report['number']
+                current_report.number_year = new_report['number_year']
                 current_report.address = new_report['address']
                 current_report.plaintiff = new_report['plaintiff']
                 current_report.defendant = new_report['defendant']
@@ -147,8 +151,9 @@ def edit_report(request, rid):
                     current_report.date_executed = new_report['date_executed']
                 except KeyError:
                     pass
+
                 current_report.save()
-                messages.success(request, u"Провадження №%s/017 успішно відкориговане" % current_report.number)
+                messages.success(request, u"Провадження №%s/%s успішно відкориговане" % (current_report.number, current_report.number_year))
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування провадження скасовано")
@@ -201,6 +206,8 @@ def valid_report(data_post):
             new_report['number'] = report_number
             errors['number'] = u"Будь-ласка введіть число"
 
+    new_report['number_year'] = data_post.get('number_year')
+
     address = data_post.get('address')
     if not address:
         errors['address'] = u"Адреса об'єкту є обов'язковою"
@@ -236,10 +243,12 @@ def valid_report(data_post):
         if active == 'executed':
             new_report['active'] = False
             new_report['executed'] = True
-        else:
+        elif active:
             new_report['active'] = active
             new_report['executed'] = False
-
+        else:
+            new_report['active'] = True
+            new_report['executed'] = False
     date_executed = data_post.get('date_executed')
     if date_executed:
         new_report['date_executed'] = data_post.get('date_executed')

@@ -40,6 +40,28 @@
                 {% endif %}
             </div>
 
+            <div class="row" id="navbar">
+                <div class="col-2"></div>
+                <div class="col">
+                    {% url "forensic_reports_list" as url_reports %}
+                    {% url "forensic_participants_list" as url_participants %}
+                    <ul class="nav nav-tabs">
+                      <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_reports %}active{% endif %}"
+                            href="{{ url_reports }}">Список проваджень</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_participants %}active{% endif %}"
+                            href="{{ url_participants }}">Учасники</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Інші</a>
+                      </li>
+                    </ul>
+                </div>
+                <div class="col-2"></div>
+            </div>
+
             <div class="row" id="second-header">
                 <div class="col-2"></div>
                 <div class="col-8">
@@ -61,6 +83,8 @@
                         {% endfor %}
                         {% endif %}
                     {% endblock messages %}
+                    {% block extra_messages %}
+                    {% endblock extra_messages %}
                 </div>
                 <div class="col-2"></div>
             </div>
@@ -69,7 +93,7 @@
                 <div class="col-2">
                     {% block extra_content %}{% endblock extra_content %}
                 </div>
-                <div class="col">
+                <div class="col-8">
                     {% block content %}{% endblock content %}
                 </div>
                 <div class="col-2"></div>

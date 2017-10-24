@@ -7,14 +7,15 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from ..models import Report, ReportDetails
+from ..models import Report, ReportEvents, ReportParticipants
 
 @login_required(login_url='/login/')
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
-    details = ReportDetails.objects.filter(report=Report.objects.get(pk=rid)).order_by('date')
+    details = ReportEvents.objects.filter(report=Report.objects.get(pk=rid)).order_by('date')
+    participants = ReportParticipants.objects.filter(report=Report.objects.get(pk=rid))
 
-    return render(request, 'freports/report_detail.html', {'details': details, 'report': report})
+    return render(request, 'freports/report_detail.html', {'details': details, 'report': report, 'participants': participants})
 
 @login_required(login_url='/login/')
 def add_detail(request, rid):
@@ -33,9 +34,9 @@ def add_detail(request, rid):
                 return render(request, 'freports/detail_form.html', {'content': new_element, 'errors': errors})
 
             else:
-                new_detail = ReportDetails(**new_element)
+                new_detail = ReportEvents(**new_element)
                 new_detail.save()
-                last_detail = ReportDetails.objects.filter(report=report).order_by('date').reverse()[0]
+                last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
                 if last_detail.activate == True:
                     report.active = True
                     report.save()
@@ -55,7 +56,7 @@ def add_detail(request, rid):
 @login_required(login_url='/login/')
 def edit_detail(request, rid, did):
     report = Report.objects.get(pk=rid)
-    detail = ReportDetails.objects.get(pk=did)
+    detail = ReportEvents.objects.get(pk=did)
     header = u"Редагування події '%s' до провадження №%s/017" % (detail.name, report.number)
 
     if request.method == 'POST':
@@ -76,7 +77,7 @@ def edit_detail(request, rid, did):
                 edit_detail.info = new_data['info']
                 edit_detail.activate = new_data['activate']
                 edit_detail.save()
-                last_detail = ReportDetails.objects.filter(report=report).order_by('date').reverse()[0]
+                last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
                 if last_detail.activate == True:
                     report.active = True
                     report.save()
@@ -98,7 +99,7 @@ def edit_detail(request, rid, did):
 @login_required(login_url='/login/')
 def delete_detail(request, rid, did):
     report = Report.objects.get(pk=rid)
-    detail = ReportDetails.objects.get(pk=did)
+    detail = ReportEvents.objects.get(pk=did)
     content = u"Ви дійсно бажаєте видалити подію '%s' до провадження №%s/017?" % (detail.name, report.number)
     header = u"Видалення події '%s' до провадження №%s/017" % (detail.name, report.number)
 

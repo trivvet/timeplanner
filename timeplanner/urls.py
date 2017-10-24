@@ -31,6 +31,13 @@ urlpatterns = [
     url(r'^freports/(?P<rid>\d+)/details/(?P<did>\d+)/edit/$', freports.edit_detail, name='report_edit_detail'),
     url(r'^freports/(?P<rid>\d+)/details/(?P<did>\d+)/delete/$', freports.delete_detail, name='report_delete_detail'),
 
+    url(r'^partisipants/$', freports.participants_list, name='forensic_participants_list'),
+    url(r'^partisipants/(?P<rid>\d+)/detail/$', freports.participant_detail, name='forensic_participant_detail'),
+    url(r'^freports/(?P<rid>\d+)/partisipants/add/$', freports.add_participant, name='report_add_participant'),
+    url(r'^freports/(?P<rid>\d+)/partisipants/(?P<did>\d+)/edit/$', freports.edit_participant, name='report_edit_participant'),
+    url(r'^freports/(?P<rid>\d+)/partisipants/(?P<did>\d+)/delete/$', freports.delete_participant,
+        name='report_delete_participant'),
+
     url(r'^login/$', freports.login_auth, name='login_form'),
     url(r'^logout/$', freports.logout_auth, name='logout_url'),
 ]

@@ -19,9 +19,15 @@ function initDateFields() {
     });
 }
 
+function initRowMakeLink() {
+    $('.td-link').click(function(){
+        window.location = $(this).parent().data("href");
+    });
+}
 
 
 $(document).ready(function(){
     initDateFields();
+    initRowMakeLink();
 
 })

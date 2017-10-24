@@ -1,13 +1,31 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<a type="button" class="btn btn-light" id="back-button" href="{% url 'forensic_reports_list' %}">Повернутись до списку проваджень</a>
 <h2>Детальна інформація про провадження №{{ report.number }}/017</h2>
-<h3>Список подій</h3>
 {% endblock title %}
 
 {% block content %}
 
+{% if participants %}
+<div class="participants">
+    {% for participant in participants %}
+    <div>
+        <div class="participant">
+            <strong>{{ participant.status }} - </strong><a class="no-style-link"
+                href="{% url 'forensic_participant_detail' participant.id %}">{{ participant.surname }} {{ participant.name }}</a>
+        </div>
+        <a href="{% url 'report_edit_participant' report.id participant.id %}" class="badge badge-light">Редагувати</a>
+        <a href="{% url 'report_delete_participant' report.id participant.id %}" class="badge badge-danger">Видалити</a>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+
+<a type="button" class="btn btn-info" id="add-button"
+    href="{% url 'report_add_participant' report.id %}">Додати учасника провадження</a>
+
+{% if details %}
+<h3>Список подій</h3>
 <table class="table table-hover table-bordered">
     <thead>
         <tr>
@@ -42,6 +60,10 @@
     </tbody>
 
 </table>
+
+{% else %}
+<p>Інформація про події провадження ще не внесена</p>
+{% endif %}
 
 <a type="button" class="btn btn-primary" id="add-button" href="{% url 'report_add_detail' report.id %}">Додати подію</a>
 

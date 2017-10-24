@@ -4,10 +4,13 @@
 }
 
 h1 {
-  text-decoration: none;
   color: blue;
   font-family: cursive;
   font-style: italic;
+}
+
+#navbar {
+  margin-bottom: 20px;
 }
 
 span.badge {
@@ -23,9 +26,12 @@ span.badge {
   margin-bottom: 10px;
 }
 
+#divInputNumber {
+  display: flex;
+}
 #dual-number {
   font-size: 1.5em;
-  margin-bottom: 0;
+  margin: 0 10px 0 10px;
 }
 
 tbody>td {
@@ -53,6 +59,7 @@ tbody>td {
   height: 100%;
   max-height: 500px;
   padding: 10%;
+  min-width: 140px;
 }
 
 .input-date {
@@ -62,5 +69,18 @@ tbody>td {
 
 #filter-button {
   margin-top: 40px;
+}
+
+.participants {
+  margin-bottom: 15px;
+}
+
+.participant {
+  font-size: 1.25em;
+  display: inline-block;
+}
+
+.no-style-link:hover {
+  text-decoration: none;
 }
 

@@ -7,10 +7,14 @@ from django.utils import timezone
 # Create your models here.
 
 class Report(models.Model):
-    number = models.CharField(
-        max_length=128,
+    number = models.IntegerField(
         blank=False,
         null=False)
+
+    number_year = models.CharField(
+        max_length=128,
+        blank=False,
+        null=True)
 
     address = models.CharField(
         max_length=128,

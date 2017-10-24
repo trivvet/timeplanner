@@ -25,14 +25,19 @@
     </div>
     <div class="form-group row">
         <label for="inputNumber" class="col-sm-3 col-form-label">Номер провадження <strong>*</strong></label>
-        <div class="col-sm-1">
-            <input type="text" class="form-control {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
+        <div class="col-sm-3" id="divInputNumber">
+            <input type="text" class="form-control col-sm-5 {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
-            <div class="invalid-feedback">
-                {{ errors.number }}
-            </div>
+            <p id="dual-number">/</p>
+            <select class="form-control col-sm-5" name="number_year">
+                <option {% if content.number_year == '016' %}selected{% endif %}>016</option>
+                <option {% if content.number_year == '017' or content.number_year is None %}selected{% endif %}>017</option>
+                <option {% if content.number_year == '018' %}selected{% endif %}>018</option>
+            </select>
         </div>
-        <p id="dual-number">/017</p>
+        <div class="invalid-feedback">
+            {{ errors.number }}
+        </div>
     </div>
     <div class="form-group row">
         <label for="inputAddress" class="col-sm-3 col-form-label">Адреса об'єкту <strong>*</strong></label>
@@ -107,6 +112,7 @@
             {% endif %}
         </div>
     </div>
+    {% if content.active %}
     <div class="form-group row">
         <label class="col-sm-3 col-form-label">Статус провадження <strong>*</strong></label>
         <div class="col-sm-4">
@@ -133,12 +139,14 @@
             </div>
         </div>
     </div>
+    {% endif %}
+    {% if content.executed %}
     <div class="form-group row">
         <label for="inputDateExecuted" class="col-sm-3 col-form-label">Дата виконання</label>
         <div class="col-sm-4 input-group date">
             <input type="text" id="inputDateExecuted" placeholder="напр. 01.01.2017" name="date_executed"
                 class="form-control {% if errors.date_executed %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
-                value="{{ content.date_executed }}" data-provide="datepicker">
+                value="{% if content.date_executed %}{{ content.date_executed }}{% endif %}" data-provide="datepicker">
             <div class="input-group-addon" id="calendar1">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
             </div>
@@ -147,6 +155,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
     <div class="form-group row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">

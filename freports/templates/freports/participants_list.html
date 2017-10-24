@@ -1,0 +1,68 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<h2>{{ header }}</h2>
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+{% if participants %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Статус</th>
+            <th>Прізвище</th>
+            <th>Ім'я, ім'я по-батькові</th>
+            <th>Мобільний телефон</th>
+            <th>Провадження, де є учасником</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+{% endwith %}
+
+    <tbody>
+
+        {% for participant in participants %}
+        <tr>
+            <td>{{ participant.status }}</td>
+            <td>{{ participant.surname }}</td>
+            <td>{{ participant.name }}</td>
+            <td>{{ participant.phone }}</td>
+            <td>{{ participant.report.number }}/{{ participant.report.number_year }}
+                ({{ participant.report.address }}-{{ participant.report.plaintiff }}-{{ participant.report.defendant }})</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Дія
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            href="{% url 'forensic_participant_detail' participant.id %}">Детальна інформація</a>
+                        <a class="dropdown-item"
+                            href="{% url 'report_edit_participant' participant.report.id participant.id %}">Редагувати</a>
+                        <a class="dropdown-item"
+                            href="{% url 'report_delete_participant' participant.report.id participant.id %}">Видалити</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+
+
+    </tbody>
+
+</table>
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}
+
+{% block extra_content %}
+{% endblock extra_content %}
