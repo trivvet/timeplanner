@@ -17,12 +17,14 @@
                     {% if request.GET.executed == '1' %}<span class="sr-only">(current)</span>{% endif %}</a>
             </li>
         </ul>
+        <a class="btn btn-sm align-middle btn-outline-warning"
+                id="add-report" href="{% url 'forensic_add_report' %}">Додати провадження</a>
     </div>
 </nav>
 {% endblock title %}
 
 {% block extra_messages %}
-{% if request.GET.filter_status == 'success' %}
+{% if request.GET.filter_status == 'success' and request.GET.active %}
 <div class="alert alert-info"role="alert">
     <ul>Застосований фільтр:
     {% if request.GET.active == 'True' %}<li>тільки активні провадження</li>
@@ -36,8 +38,6 @@
 {% endblock extra_messages %}
 
 {% block content %}
-
-<a type="button" class="btn btn-success" id="add-button" href="{% url 'forensic_add_report' %}">Додати провадження</a>
 
 {% if reports %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse %}

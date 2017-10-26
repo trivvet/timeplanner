@@ -1,0 +1,66 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<h2>{{ header }}</h2>
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+{% if contacts %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Прізвище</th>
+            <th>Ім'я, ім'я по-батькові</th>
+            <th>Мобільний телефон</th>
+            <th>Статус</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+{% endwith %}
+
+    <tbody>
+
+        {% for contact in contacts %}
+        <tr>
+
+            <td>{{ contact.surname }}</td>
+            <td>{{ contact.name }}</td>
+            <td>{{ contact.phone }}</td>
+            <td>{{ contact.status }}</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Дія
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            href="">Детальна інформація</a>
+                        <a class="dropdown-item"
+                            href="">Редагувати</a>
+                        <a class="dropdown-item"
+                            href="">Видалити</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+
+
+    </tbody>
+
+</table>
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}
+
+{% block extra_content %}
+{% endblock extra_content %}

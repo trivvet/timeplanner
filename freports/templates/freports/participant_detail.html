@@ -8,6 +8,8 @@
 <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
+        <a type="button" class="btn btn-light" id="back-button"
+            href="{% url 'report_details_list' content.report.id %}">Повернутись до деталей провадження</a>
         <table class="table table-bordered table-hover">
             <thead></thead>
             <tbody>
@@ -19,27 +21,35 @@
                     <th scope="row">Прізвище учасника</td>
                     <td>{{ content.surname }}</td>
                 </tr>
+                {% if content.name %}
                 <tr>
                     <th scope="row">Ім'я учасника</td>
                     <td>{{ content.name }}</td>
                 </tr>
+                {% endif %}
+                {% if content.address %}
                 <tr>
                     <th scope="row">Адреса проживання</td>
                     <td>{{ content.address }}</td>
                 </tr>
+                {% endif %}
+                {% if content.phone %}
                 <tr>
                     <th scope="row">Контактний телефон</td>
                     <td>{{ content.phone }}</td>
                 </tr>
+                {% endif %}
+                {% if content.info %}
                 <tr>
                     <th scope="row">Додаткова інформація</td>
                     <td>{{ content.info }}</td>
                 </tr>
+                {% endif %}
             </tbody>
 
         </table>
-        <a type="button" class="btn btn-light" id="back-button"
-            href="{% url 'report_details_list' content.report.id %}">Повернутись до деталей провадження</a>
+        <a type="button" class="btn btn-info" href="{% url 'report_edit_participant' content.report.id content.id %}">Редагувати</a>
+        <a type="button" class="btn btn-danger" href="{% url 'report_delete_participant' content.report.id content.id %}">Видалити</a>
     </div>
 </div>
 {% endblock content %}

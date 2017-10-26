@@ -14,14 +14,12 @@
             <strong>{{ participant.status }} - </strong><a class="no-style-link"
                 href="{% url 'forensic_participant_detail' participant.id %}">{{ participant.surname }} {{ participant.name }}</a>
         </div>
-        <a href="{% url 'report_edit_participant' report.id participant.id %}" class="badge badge-light">Редагувати</a>
-        <a href="{% url 'report_delete_participant' report.id participant.id %}" class="badge badge-danger">Видалити</a>
     </div>
 {% endfor %}
 </div>
 {% endif %}
 
-<a type="button" class="btn btn-info" id="add-button"
+<a type="button" class="btn btn-info participants" id="add-button"
     href="{% url 'report_add_participant' report.id %}">Додати учасника провадження</a>
 
 {% if details %}
@@ -39,7 +37,7 @@
     <tbody>
         {% for detail in details %}
         <tr>
-            <td>{{ detail.date }}</td>
+            <th scope="row">{{ detail.date }}</td>
             <td>{{ detail.name }}</td>
             <td>{{ detail.info }}</td>
             <td>

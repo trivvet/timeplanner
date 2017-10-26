@@ -34,6 +34,11 @@ def add_detail(request, rid):
                 return render(request, 'freports/detail_form.html', {'content': new_element, 'errors': errors})
 
             else:
+                if new_element['activate'] == 'executed':
+                    new_element['activate'] = False
+                    report.executed = True
+                    report.date_executed = new_element['date']
+                    report.save()
                 new_detail = ReportEvents(**new_element)
                 new_detail.save()
                 last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
@@ -76,6 +81,13 @@ def edit_detail(request, rid, did):
                 edit_detail.name = new_data['name']
                 edit_detail.info = new_data['info']
                 edit_detail.activate = new_data['activate']
+                if new_data['activate'] == 'executed':
+                    edit_detail.activate = False
+                    report.executed = True
+                    report.date_executed = new_data['date']
+                    report.save()
+                else:
+                    edit_detail.activate = new_data['activate']
                 edit_detail.save()
                 last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
                 if last_detail.activate == True:
@@ -110,6 +122,19 @@ def delete_detail(request, rid, did):
         if request.POST.get('delete_button'):
             current_detail = detail
             current_detail.delete()
+            last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()
+            if len(last_detail) == 0 or last_detail[0].activate == True:
+                report.active = True
+                if report.executed == True:
+                    report.executed = False
+                    report.date_executed = None
+                report.save()
+            elif last_detail[0].activate == False:
+                report.active = False
+                if report.executed == True:
+                    report.executed = False
+                    report.date_executed = None
+                report.save()
             messages.success(request, u"Подія '%s' до провадження №%s/017 успішно видалена" % (detail.name, report.number))
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Видалення події '%s' до провадження №%s/017 скасоване" % (detail.name, report.number))
@@ -137,14 +162,19 @@ def valid_detail(request_info, report_id):
 
     name = request_info.get('name')
     if not name:
-        errors['name'] = u"Назва події є обов'язковою"
+        errors['name'] = u"Вид події є обов'язковим"
     else:
         new_element['name'] = name
 
     new_element['info'] = request_info.get('info')
 
-    activate = request_info.get('activate')
-    new_element['activate'] = activate
+    activate_true_list = [u'Надходження з суду', u'Оплачено', u'Проведено огляд']
+    if name in activate_true_list:
+        new_element['activate'] = True
+    elif name == u'Відправлення в суд':
+        new_element['activate'] = 'executed'
+    else:
+        new_element['activate'] = False
 
     return {'errors': errors, 'data': new_element}
 

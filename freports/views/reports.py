@@ -204,7 +204,7 @@ def valid_report(data_post):
             new_report['number'] = int(report_number)
         except ValueError:
             new_report['number'] = report_number
-            errors['number'] = u"Будь-ласка введіть число"
+            errors['number'] = u"Будь-ласка введіть ціле число"
 
     new_report['number_year'] = data_post.get('number_year')
 
@@ -239,18 +239,8 @@ def valid_report(data_post):
         new_report['research_kind'] = research_kind
 
     active = data_post.get('active')
-    if active:
-        if active == 'executed':
-            new_report['active'] = False
-            new_report['executed'] = True
-        elif active:
-            new_report['active'] = active
-            new_report['executed'] = False
-        else:
-            new_report['active'] = True
-            new_report['executed'] = False
-    date_executed = data_post.get('date_executed')
-    if date_executed:
-        new_report['date_executed'] = data_post.get('date_executed')
+    if active is None:
+        new_report['active'] = True
+        new_report['executed'] = False
 
     return {'errors': errors, 'data_report': new_report}

@@ -18,11 +18,16 @@
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                 </div>
             </div>
-            <div class="invalid-feedback">
-                {{ errors.date_arrived }}
-            </div>
         </div>
     </div>
+    {% if errors.date_arrived %}
+    <div class="form-group row form-error">
+        <div class="col-sm-3"></div>
+        <div class="col">
+            {{ errors.date_arrived }}
+        </div>
+    </div>
+    {% endif %}
     <div class="form-group row">
         <label for="inputNumber" class="col-sm-3 col-form-label">Номер провадження <strong>*</strong></label>
         <div class="col-sm-3" id="divInputNumber">
@@ -35,10 +40,15 @@
                 <option {% if content.number_year == '018' %}selected{% endif %}>018</option>
             </select>
         </div>
-        <div class="invalid-feedback">
+    </div>
+    {% if errors.number %}
+    <div class="form-group row form-error">
+        <div class="col-sm-3"></div>
+        <div class="col">
             {{ errors.number }}
         </div>
     </div>
+    {% endif %}
     <div class="form-group row">
         <label for="inputAddress" class="col-sm-3 col-form-label">Адреса об'єкту <strong>*</strong></label>
         <div class="col-sm-4">
@@ -112,50 +122,6 @@
             {% endif %}
         </div>
     </div>
-    {% if content.active %}
-    <div class="form-group row">
-        <label class="col-sm-3 col-form-label">Статус провадження <strong>*</strong></label>
-        <div class="col-sm-4">
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" type="radio" name="active" id="inputActive"
-                        value="True" {% if content.active != False and content.executed != True %}checked{% endif %}>
-                    Провадження у виконанні
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" type="radio" name="active" id="inputActive"
-                        value="False" {% if content.active == False and content.executed != True %}checked{% endif %}>
-                    Провадження зупинене
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" type="radio" name="active" id="inputActive"
-                        value="executed" {% if content.executed %}checked{% endif %}>
-                    Провадження закрите
-                </label>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-    {% if content.executed %}
-    <div class="form-group row">
-        <label for="inputDateExecuted" class="col-sm-3 col-form-label">Дата виконання</label>
-        <div class="col-sm-4 input-group date">
-            <input type="text" id="inputDateExecuted" placeholder="напр. 01.01.2017" name="date_executed"
-                class="form-control {% if errors.date_executed %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
-                value="{% if content.date_executed %}{{ content.date_executed }}{% endif %}" data-provide="datepicker">
-            <div class="input-group-addon" id="calendar1">
-                <i class="fa fa-calendar" aria-hidden="true"></i>
-            </div>
-            <div class="invalid-feedback">
-                {{ errors.date_executed }}
-            </div>
-        </div>
-    </div>
-    {% endif %}
     <div class="form-group row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">

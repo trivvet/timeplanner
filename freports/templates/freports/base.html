@@ -40,19 +40,25 @@
                 {% endif %}
             </div>
 
+            {% if user.is_authenticated %}
             <div class="row" id="navbar">
                 <div class="col-2"></div>
                 <div class="col">
                     {% url "forensic_reports_list" as url_reports %}
                     {% url "forensic_participants_list" as url_participants %}
+                    {% url "contacts_list" as url_contacts %}
                     <ul class="nav nav-tabs">
                       <li class="nav-item">
                         <a class="nav-link {% if request.path == url_reports %}active{% endif %}"
-                            href="{{ url_reports }}">Список проваджень</a>
+                            href="{{ url_reports }}">Провадження</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link {% if request.path == url_participants %}active{% endif %}"
                             href="{{ url_participants }}">Учасники</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_contacts %}active{% endif %}"
+                            href="{{ url_contacts }}">Контакти</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link disabled" href="#">Інші</a>
@@ -61,6 +67,7 @@
                 </div>
                 <div class="col-2"></div>
             </div>
+            {% endif %}
 
             <div class="row" id="second-header">
                 <div class="col-2"></div>

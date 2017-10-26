@@ -18,13 +18,18 @@
                     <i class="fa fa-calendar" aria-hidden="true"></i>
                 </div>
             </div>
-            <div class="invalid-feedback">
-                {{ errors.date }}
-            </div>
         </div>
     </div>
+    {% if errors.date %}
+    <div class="form-group row form-error">
+        <div class="col-sm-3"></div>
+        <div class="col">
+            {{ errors.date }}
+        </div>
+    </div>
+    {% endif %}
     <div class="form-group row">
-        <label for="inputName" class="col-sm-3 col-form-label">Назва події <strong>*</strong></label>
+        <label for="inputName" class="col-sm-3 col-form-label">Вид події <strong>*</strong></label>
         <div class="col-sm-4">
             <select class="form-control {% if errors.name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputName" name="name" value="{{ content.name }}">
@@ -35,6 +40,7 @@
                 <option {% if content.name == 'Оплачено' %}selected{% endif %}>Оплачено</option>
                 <option {% if content.name == 'Призначено виїзд' %}selected{% endif %}>Призначено виїзд</option>
                 <option {% if content.name == 'Проведено огляд' %}selected{% endif %}>Проведено огляд</option>
+                <option {% if content.name == 'Відправлення в суд' %}selected{% endif %}>Відправлення в суд</option>
             </select>
             <div class="invalid-feedback">
                 {{ errors.name }}
@@ -47,26 +53,6 @@
             <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputInfo" name="info" rows="5"
                 placeholder="Введіть детальну інформацію про подію">{{ content.info }}</textarea>
-        </div>
-    </div>
-        <div class="form-group row">
-        <label class="col-sm-3 col-form-label">Дія</label>
-        <div class="col-sm-4">
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" type="radio" name="activate" id="inputActivate"
-                        value="True" {% if content.activate|stringformat:'s' == 'True' or content.activate is None %}
-                            checked{% endif %}>
-                    Відновити провадження
-                </label>
-            </div>
-            <div class="form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" type="radio" name="activate" id="inputActivate"
-                        value="False" {% if content.activate|stringformat:'s' == 'False' %}checked{% endif %}>
-                    Зупинити провадження
-                </label>
-            </div>
         </div>
     </div>
     <div class="form-group row">

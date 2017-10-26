@@ -38,6 +38,8 @@ urlpatterns = [
     url(r'^freports/(?P<rid>\d+)/partisipants/(?P<did>\d+)/delete/$', freports.delete_participant,
         name='report_delete_participant'),
 
+    url(r'^contacts/$', freports.contacts_list, name='contacts_list'),
+
     url(r'^login/$', freports.login_auth, name='login_form'),
     url(r'^logout/$', freports.logout_auth, name='logout_url'),
 ]

@@ -1,3 +1,4 @@
+/* main page */
 #main-header {
   margin-top:50px;
   margin-bottom: 20px;
@@ -13,22 +14,20 @@ h1 {
   margin-bottom: 20px;
 }
 
-span.badge {
-  padding: 10px;
-  font-size: 1em;
-}
-
 #second-header {
   margin-bottom: 10px;
 }
 
-#add-button {
-  margin-bottom: 10px;
+/* report pages */
+#add-report {
+  padding: 0.5rem 0.75rem;
+  float: right;
 }
 
 #divInputNumber {
   display: flex;
 }
+
 #dual-number {
   font-size: 1.5em;
   margin: 0 10px 0 10px;
@@ -39,12 +38,14 @@ tbody>td {
   vertical-align: middle;
 }
 
-#back-button {
-  margin-bottom: 20px;
-}
-
 #calendar, #calendar1 {
   border-right: 1px solid rgba(0,0,0,.15);
+}
+
+.form-error {
+  margin-top: -0.75rem;
+  font-size: 0.875rem;
+  color: #dc3545;
 }
 
 .card {
@@ -71,16 +72,29 @@ tbody>td {
   margin-top: 40px;
 }
 
+.no-style-link:hover {
+  text-decoration: none;
+}
+
+/* participant pages */
+#back-button {
+  margin-bottom: 20px;
+}
+
 .participants {
   margin-bottom: 15px;
 }
 
 .participant {
-  font-size: 1.25em;
+  font-size: 1.25rem;
   display: inline-block;
 }
 
-.no-style-link:hover {
-  text-decoration: none;
+/* detail pages */
+h3 {
+  text-align: center;
+  margin-bottom: 1rem
 }
+
+
 

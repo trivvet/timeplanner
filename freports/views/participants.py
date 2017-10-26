@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from ..models import Report, ReportEvents, ReportParticipants
+from ..models import Report, ReportEvents, ReportParticipants, Contacts
 
 @login_required(login_url='/login/')
 def participants_list(request):
@@ -40,6 +40,9 @@ def add_participant(request, rid):
             else:
                 new_participant = ReportParticipants(**new_element)
                 new_participant.save()
+                updated_contact = find_contact(new_participant)
+                if updated_contact:
+                    updated_contact.save()
                 messages.success(request, u"Учасник '%s %s' успішно доданий" % (new_participant.status, new_participant.surname))
 
         elif request.POST.get('cancel_button'):
@@ -138,3 +141,37 @@ def valid_detail(request_info, report_id):
     new_element['info'] = request_info.get('info')
 
     return {'errors': errors, 'data': new_element}
+
+def find_contact(participant):
+    contact = False
+    if participant.address or participant.phone or participant.info:
+        current_contacts = Contacts.objects.filter(surname=participant.surname)
+        if current_contacts and current_contacts[0].status == participant.status:
+            current_contact = current_contacts[0]
+            if participant.name:
+                if current_contact.name and current_contact.name != participant.name:
+                    current_contact.name = current_contact.name + '; ' + participant.name
+                else:
+                    current_contact.name = participant.name
+            if participant.address:
+                if current_contact.address and current_contact.address != participant.address:
+                    current_contact.address = current_contact.address + '; ' + participant.address
+                else:
+                    current_contact.address = participant.address
+            if participant.phone:
+                if current_contact.phone and current_contact.phone != participant.phone:
+                    current_contact.phone = current_contact.phone + '; ' + participant.phone
+                else:
+                    current_contact.phone = participant.phone
+            if participant.info:
+                if current_contact.info and current_contact.info != participant.info:
+                    current_contact.info = current_contact.info + '; ' + participant.info
+                else:
+                    current_contact.info = participant.info
+            contact = current_contact
+
+        else:
+            contact = Contacts(surname=participant.surname, name=participant.name, status=participant.status,
+                address=participant.address, phone=participant.phone, info=participant.info)
+
+    return contact

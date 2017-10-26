@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'freports',
+    'axes',
 ]
 
 MIDDLEWARE = [
@@ -111,3 +112,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static  ')
+
+# settings for Django Axes
+#AXES_LOGIN_FAILURE_LIMIT = 5
