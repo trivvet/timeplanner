@@ -63,6 +63,22 @@
 <p>Інформація про події провадження ще не внесена</p>
 {% endif %}
 
-<a type="button" class="btn btn-primary" id="add-button" href="{% url 'report_add_detail' report.id %}">Додати подію</a>
+<div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="add-event"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Додати подію
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'first_arrived' %}">Надходження ухвали</a>
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'arrived' %}">Надходження з суду</a>
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'petition' %}">Направлене клопотання</a>
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'bill' %}">Направлений рахунок</a>
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'paid' %}">Оплачено</a>
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'schedule' %}">Призначено виїзд</a>
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'inspected' %}">Проведено огляд</a>
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'done' %}">Відправлення в суд</a>
+    </div>
+</div>
+
 
 {% endblock content %}

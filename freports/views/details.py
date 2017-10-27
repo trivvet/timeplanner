@@ -18,9 +18,20 @@ def details_list(request, rid):
     return render(request, 'freports/report_detail.html', {'details': details, 'report': report, 'participants': participants})
 
 @login_required(login_url='/login/')
-def add_detail(request, rid):
+def add_detail(request, rid, kind):
     report = Report.objects.get(pk=rid)
-    header = u'Додавання події до провадження №%s/017' % report.number
+    content = {}
+    kind_specific = {
+        'first_arrived': ['надходження ухвали про призначення експертизи', ['date', 'info', 'received', 'decision_date']],
+        'arrived': ['надходження з суду', ['date', 'info', 'received']],
+        'petition': ['направлення клопотання', ['date', 'info', 'petition_type', 'sending']],
+        'bill': ['направлення рахунку', ['date', 'info', 'cost', 'address', 'type']],
+        'paid': ['оплати', ['date', 'info', 'type']],
+        'schedule': ['призначення виїзду', ['date', 'info', 'type', 'decision_date', 'time']],
+        'inspected': ['проведення огляду', ['date', 'info', 'time', 'type']],
+        'done': ['відправлення до суду', ['date', 'info', 'sending', 'type']]}
+    header = u'Додавання %s до провадження №%s/%s' % (kind_specific[kind][0], report.number, report.number_year)
+    content['obvious_fields'] = kind_specific[kind][1]
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -56,7 +67,7 @@ def add_detail(request, rid):
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
     else:
-        return render(request, 'freports/detail_form.html', {'header': header})
+        return render(request, 'freports/detail_form.html', {'header': header, 'content': content})
 
 @login_required(login_url='/login/')
 def edit_detail(request, rid, did):

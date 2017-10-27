@@ -79,7 +79,7 @@ def edit_participant(request, rid, did):
                 edit_participant.phone = new_data['phone']
                 edit_participant.info = new_data['info']
                 edit_participant.save()
-                messages.success(request, u"Учасник '%s' успішно змінений" % (new_participant.status, new_participant.surname))
+                messages.success(request, u"Учасник '%s %s' успішно змінений" % (edit_participant.status, edit_participant.surname))
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування учасника провадження №%s/%s '%s %s' скасоване" %
@@ -144,7 +144,7 @@ def valid_detail(request_info, report_id):
 
 def find_contact(participant):
     contact = False
-    if participant.address or participant.phone or participant.info:
+    if participant.address or participant.phone:
         current_contacts = Contacts.objects.filter(surname=participant.surname)
         if current_contacts and current_contacts[0].status == participant.status:
             current_contact = current_contacts[0]
