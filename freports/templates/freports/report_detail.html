@@ -23,7 +23,7 @@
     href="{% url 'report_add_participant' report.id %}">Додати учасника провадження</a>
 
 {% if details %}
-<h3>Список подій</h3>
+<h3 class="event-header">Список подій</h3>
 <table class="table table-hover table-bordered">
     <thead>
         <tr>
@@ -68,7 +68,7 @@
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Додати подію
     </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <div class="dropdown-menu" id="add-event" aria-labelledby="dropdownMenuButton">
         <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'first_arrived' %}">Надходження ухвали</a>
         <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'arrived' %}">Надходження з суду</a>
         <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'petition' %}">Направлене клопотання</a>

@@ -36,8 +36,46 @@ class ReportEvents(models.Model):
         blank=True,
         null=True)
 
+    received = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=u"Отримані матеріали")
+
+    decision_date = models.DateField(
+        verbose_name = u"Дата ухвали",
+        blank=True,
+        null=True)
+
+    time = models.DateTimeField(
+        verbose_name = u"Дата та час огляду",
+        blank=True,
+        null=True)
+
+    subspecies = models.CharField(
+        verbose_name = u"Підвид події",
+        max_length=256,
+        blank=True)
+
+    necessary = models.TextField(
+        blank=True,
+        verbose_name=u"Зміст клопотання")
+
+    address = models.TextField(
+        blank=True,
+        verbose_name=u"Адреса направлення")
+
+    cost = models.IntegerField(
+        blank=True,
+        null=True,
+        verbose_name=u"Вартість висновку")
+
+    sending = models.TextField(
+        blank=True,
+        null=True,
+        verbose_name=u"Направлені матеріали")
+
     def __unicode__(self):
-        return u"Report %s: %s" % (self.report.number, self.info)
+        return u"Report %s: %s" % (self.report.number, self.name)
 
 class ReportParticipants(models.Model):
 

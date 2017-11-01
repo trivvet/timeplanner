@@ -38,7 +38,7 @@ tbody>td {
   vertical-align: middle;
 }
 
-#calendar, #calendar1 {
+#calendar, #calendar1, #calendar2 {
   border-right: 1px solid rgba(0,0,0,.15);
 }
 
@@ -91,9 +91,21 @@ tbody>td {
 }
 
 /* detail pages */
-h3 {
+h3.event-header {
   text-align: center;
-  margin-bottom: 1rem
+  margin-bottom: 1rem;
+}
+
+h3.event-second-header {
+  margin: 0.5em 0 1.5em 0;
+}
+
+input, textarea, select {
+  max-width: 350px;
+}
+
+.col-form-label {
+  text-align: right;
 }
 
 
