@@ -6,21 +6,71 @@
 
 {% block content %}
 
-{% if participants %}
-<div class="participants">
-    {% for participant in participants %}
-    <div>
-        <div class="participant">
-            <strong>{{ participant.status }} - </strong><a class="no-style-link"
-                href="{% url 'forensic_participant_detail' participant.id %}">{{ participant.surname }} {{ participant.name }}</a>
-        </div>
+<!-- Головні учасники справи -->
+<div class="row" id="main-participants">
+    <div class="col-sm-10">
+        <table class="table table-sm table-responsive">
+            <tbody>
+                <tr>
+                    <th scope="row">Суддя</th>
+                    <td>
+                        {% if participants.judge %}
+                        <a class="no-style-link" href="{% url 'forensic_participant_detail' participants.judge.id %}">
+                            {{ participants.judge.surname }} {{ participants.judge.name }}</a>
+                        {% else %}
+                        <a class="no-style-link" href="{% url 'report_add_participant' report.id 'judge' %}"
+                            style="color:red">Дані відсутні</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Позивач</th>
+                    <td>
+                        {% if participants.plaintiff %}
+                        <a class="no-style-link" href="{% url 'forensic_participant_detail' participants.plaintiff.id %}">
+                            {{ participants.plaintiff.surname }} {{ participants.plaintiff.name }}</a></br>
+                        <a href="#" class="badge badge-info">Додати представника</a>
+                        {% else %}
+                        <a class="no-style-link" href="{% url 'report_add_participant' report.id 'plaintiff' %}"
+                            style="color:red">Дані відсутні</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Відповідач</th>
+                    <td>
+                        {% if participants.defendant %}
+                        <a class="no-style-link" href="{% url 'forensic_participant_detail' participants.defendant.id %}">
+                            {{ participants.defendant.surname }} {{ participants.defendant.name }}</a></br>
+                        <a href="#" class="badge badge-info">Додати представника</a>
+                        {% else %}
+                        <a class="no-style-link" href="{% url 'report_add_participant' report.id 'defendant' %}"
+                            style="color:red">Дані відсутні</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% for participant in participants.other %}
+                <tr>
+                    <th scope="row">{{ participant.status }}</th>
+                    <td>
+                        <a class="no-style-link" href="{% url 'forensic_participant_detail' participant.id %}">
+                            {{ participant.surname }} {{ participant.name }}</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th scope="row"></th>
+                    <td>
+                        <a type="button" class="badge badge-info" id="add-button"
+                            href="{% url 'report_add_participant' report.id 'other' %}">Додати іншого учасника провадження</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-{% endfor %}
 </div>
-{% endif %}
 
-<a type="button" class="btn btn-info participants" id="add-button"
-    href="{% url 'report_add_participant' report.id %}">Додати учасника провадження</a>
+
 
 {% if details %}
 <h3 class="event-header">Список подій</h3>
@@ -46,7 +96,7 @@
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Дія
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu" id="edit-event" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="{% url 'report_edit_detail' report.id detail.id %}">Редагувати</a>
                         <a class="dropdown-item" href="{% url 'report_delete_detail' report.id detail.id %}">Видалити</a>
                     </div>
@@ -62,21 +112,15 @@
 {% else %}
 <p>Інформація про події провадження ще не внесена</p>
 {% endif %}
-
 <div class="dropdown">
     <button class="btn btn-primary dropdown-toggle" type="button" id="add-event"
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Додати подію
     </button>
     <div class="dropdown-menu" id="add-event" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'first_arrived' %}">Надходження ухвали</a>
-        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'arrived' %}">Надходження з суду</a>
-        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'petition' %}">Направлене клопотання</a>
-        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'bill' %}">Направлений рахунок</a>
-        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'paid' %}">Оплачено</a>
-        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'schedule' %}">Призначено виїзд</a>
-        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'inspected' %}">Проведено огляд</a>
-        <a class="dropdown-item" href="{% url 'report_add_detail' report.id 'done' %}">Відправлення в суд</a>
+        {% for key,specific in content.items %}
+        <a class="dropdown-item" href="{% url 'report_add_detail' report.id key %}">{{ specific.0|capfirst }}</a>
+        {% endfor %}
     </div>
 </div>
 

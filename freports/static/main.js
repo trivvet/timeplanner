@@ -46,7 +46,7 @@ function initRowMakeLink() {
 }
 
 function initFormPage() {
-    $('#add-event>a').click(function() {
+    $('#add-event>a, #edit-event a').click(function() {
         var link = $(this);
 
         $.ajax({
@@ -65,7 +65,7 @@ function initFormPage() {
                 var modal = $('#modalForm'), html = $(data), form = html.find('#main-content form');
                 modal.find('#first-header').html(html.find('#second-header h2')).val();
                 modal.find('.modal-body').html(form);
-                modal.find('.modal-body').prepend(html.find('#second-header h3'));
+                modal.find('.modal-body').prepend(html.find('#second-header .row'));
 
                 initForm(form, modal, link.attr('href'));
 
@@ -97,10 +97,13 @@ function initForm(form, modal, link) {
 
             if (newform.length > 0) {
                 modal.find('.modal-body').html(newform);
+                modal.find('.modal-body').prepend(html.find('.alert'));
                 modal.find('.modal-body').prepend(html.find('#second-header h3'));
                 initForm(newform, modal, link);
             } else {
+                $('#message .col').html(html.find('.alert'));
                 $('#main-content').html(html.find('#main-content').html());
+                initFormPage();
                 $('#modalForm').modal('hide');
             }
         }

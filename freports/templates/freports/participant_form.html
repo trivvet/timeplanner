@@ -7,15 +7,13 @@
 {% block content %}
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
+    {% if status == 'other' %}
     <div class="form-group row">
         <label for="inputStatus" class="col-sm-3 col-form-label">Статус учасника <strong>*</strong></label>
         <div class="col-sm-4">
             <select class="form-control {% if errors.status %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputStatus" name="status" value="{{ content.status }}">
                 <option value=''>-----------</option>
-                <option {% if content.status == 'Головуючий суддя' %}selected{% endif %}>Головуючий суддя</option>
-                <option {% if content.status == 'Позивач' %}selected{% endif %}>Позивач</option>
-                <option {% if content.status == 'Відповідач' %}selected{% endif %}>Відповідач</option>
                 <option {% if content.status == 'Представник позивача' %}selected{% endif %}>Представник позивача</option>
                 <option {% if content.status == 'Представник відповідача' %}selected{% endif %}>Представник відповідача</option>
                 <option {% if content.status == 'Замовник' %}selected{% endif %}>Замовник</option>
@@ -26,6 +24,10 @@
             </div>
         </div>
     </div>
+    {% else %}
+    <input type="hidden" name="status" value={{ status }} />
+    {% endif %}
+
     <div class="form-group row">
         <label for="inputSurname" class="col-sm-3 col-form-label">Прізвище учасника <strong>*</strong></label>
         <div class="col-sm-4">
@@ -37,6 +39,7 @@
             </div>
         </div>
     </div>
+
     <div class="form-group row">
         <label for="inputName" class="col-sm-3 col-form-label">Ім'я учасника</label>
         <div class="col-sm-4">
@@ -48,6 +51,7 @@
             </div>
         </div>
     </div>
+
     <div class="form-group row">
         <label for="inputAddress" class="col-sm-3 col-form-label">Адреса проживання</label>
         <div class="col-sm-4">
@@ -59,6 +63,7 @@
             </div>
         </div>
     </div>
+
     <div class="form-group row">
         <label for="inputPhone" class="col-sm-3 col-form-label">Контактний телефон</label>
         <div class="col-sm-4">
@@ -70,6 +75,7 @@
             </div>
         </div>
     </div>
+
     <div class="form-group row">
         <label for="inputInfo" class="col-sm-3 col-form-label">Додаткова інформація</label>
         <div class="col-sm-4">
@@ -78,6 +84,7 @@
                 placeholder="Введіть додаткову інформацію про участика">{{ content.info }}</textarea>
         </div>
     </div>
+
     <div class="form-group row">
         <div class="col-sm-3"></div>
         <div class="col-sm-6">

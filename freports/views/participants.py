@@ -22,14 +22,15 @@ def participant_detail(request, rid):
     return render(request, 'freports/participant_detail.html', {'content': participant, 'header': header})
 
 @login_required(login_url='/login/')
-def add_participant(request, rid):
+def add_participant(request, rid, status):
     report = Report.objects.get(pk=rid)
-    header = u'Додавання учасника провадження №%s/017' % report.number
+    status_list = {'judge': 'Суддя', 'plaintiff': 'Позивач', 'defendant': 'Відповідач'}
+    header = u'Додавання учасника "%s" до провадження №%s/%s' % (status_list[status], report.number, report.number_year)
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
 
-            valid_data = valid_detail(request.POST, rid)
+            valid_data = valid_detail(request.POST, rid, status)
             errors = valid_data['errors']
             new_element = valid_data['data']
 
@@ -51,7 +52,7 @@ def add_participant(request, rid):
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
     else:
-        return render(request, 'freports/participant_form.html', {'header': header})
+        return render(request, 'freports/participant_form.html', {'header': header, 'status': status})
 
 @login_required(login_url='/login/')
 def edit_participant(request, rid, did):
@@ -113,7 +114,7 @@ def delete_participant(request, rid, did):
 
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
-def valid_detail(request_info, report_id):
+def valid_detail(request_info, report_id, main_status):
     errors = {}
     new_element = {}
 
@@ -129,11 +130,14 @@ def valid_detail(request_info, report_id):
     else:
         new_element['surname'] = surname
 
-    status = request_info.get('status')
-    if not status:
-        errors['status'] = u"Виберіть статус учасника"
+    if main_status:
+        new_element['status'] = main_status
     else:
-        new_element['status'] = status
+        status = request_info.get('status')
+        if not status:
+            errors['status'] = u"Виберіть статус учасника"
+        else:
+            new_element['status'] = status
 
     new_element['name'] = request_info.get('name')
     new_element['address'] = request_info.get('address')

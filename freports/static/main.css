@@ -90,6 +90,16 @@ tbody>td {
   display: inline-block;
 }
 
+#main-participants table {
+  font-size: 1.3rem;
+}
+
+#main-participants th {
+  text-align: right;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
 /* detail pages */
 h3.event-header {
   text-align: center;
@@ -98,6 +108,7 @@ h3.event-header {
 
 h3.event-second-header {
   margin: 0.5em 0 1.5em 0;
+  color: #008B8B;
 }
 
 input, textarea, select {
@@ -106,6 +117,10 @@ input, textarea, select {
 
 .col-form-label {
   text-align: right;
+}
+
+.button-group {
+  margin-top: 50px;
 }
 
 

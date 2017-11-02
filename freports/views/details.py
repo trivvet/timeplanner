@@ -15,7 +15,7 @@ inspected_type = ['Проведено успішно', 'Не надано дос
 bill_type = ['Направлено рекомендованого листа', 'Вручено особисто', 'Вручено представнику', 'Направлено електронного листа']
 paid_type = ['На банківський рахунок', 'Готівкою']
 kind_specific = {
-        'first_arrived': ['надходження ухвали про призначення експертизи', ['date', 'info', 'received', 'decision_date']],
+        'first_arrived': ['надходження ухвали', ['date', 'info', 'received', 'decision_date']],
         'arrived': ['надходження з суду', ['date', 'info', 'received']],
         'petition': ['направлення клопотання', ['date', 'info', 'type', 'necessary', 'sending'], petition_type],
         'bill': ['направлення рахунку', ['date', 'info', 'cost', 'address', 'type'], bill_type],
@@ -28,9 +28,17 @@ kind_specific = {
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
     details = ReportEvents.objects.filter(report=Report.objects.get(pk=rid)).order_by('date')
-    participants = ReportParticipants.objects.filter(report=Report.objects.get(pk=rid))
+    participants_list = ReportParticipants.objects.filter(report=Report.objects.get(pk=rid))
+    participants = {'other': []}
+    for participant in participants_list:
+        if participant.status in ['judge', 'plaintiff', 'defendant']:
+            participants[participant.status] = participant
+        else:
+            participants['other'].append(participant)
+    content = kind_specific
 
-    return render(request, 'freports/report_detail.html', {'details': details, 'report': report, 'participants': participants})
+    return render(request, 'freports/report_detail.html',
+        {'details': details, 'report': report, 'participants': participants, 'content': content})
 
 @login_required(login_url='/login/')
 def add_detail(request, rid, kind):
@@ -141,7 +149,7 @@ def delete_detail(request, rid, did):
     report = Report.objects.get(pk=rid)
     detail = ReportEvents.objects.get(pk=did)
     content = u"Ви дійсно бажаєте видалити подію '%s' до провадження №%s/017?" % (detail.name, report.number)
-    header = u"Видалення події '%s' до провадження №%s/017" % (detail.name, report.number)
+    header = u"Видалення події провадження №%s/%s" % (report.number, report.number_year)
 
     if request.method == 'GET':
         return render(request, 'freports/delete_form.html', {'report': report, 'content': content, 'header': header})
