@@ -1,4 +1,5 @@
 {% extends "freports/base.html" %}
+{% load get_item %}
 
 {% block title %}
 <h2>Детальна інформація про провадження №{{ report.number }}/017</h2>
@@ -15,8 +16,10 @@
                     <th scope="row">Суддя</th>
                     <td>
                         {% if participants.judge %}
-                        <a class="no-style-link" href="{% url 'forensic_participant_detail' participants.judge.id %}">
-                            {{ participants.judge.surname }} {{ participants.judge.name }}</a>
+                        {% for judge in participants.judge %}
+                        <a class="no-style-link" href="{% url 'forensic_participant_detail' judge.id %}">
+                            {{ judge.surname }} {{ judge.name }}</a>
+                        {% endfor %}
                         {% else %}
                         <a class="no-style-link" href="{% url 'report_add_participant' report.id 'judge' %}"
                             style="color:red">Дані відсутні</a>
@@ -24,12 +27,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">Позивач</th>
+                    <th scope="row">{% if participants.plaintiff|length > 1 %}Позивачі{% else %}Позивач{% endif %}</th>
                     <td>
                         {% if participants.plaintiff %}
-                        <a class="no-style-link" href="{% url 'forensic_participant_detail' participants.plaintiff.id %}">
-                            {{ participants.plaintiff.surname }} {{ participants.plaintiff.name }}</a></br>
-                        <a href="#" class="badge badge-info">Додати представника</a>
+                        {% for plaintiff in participants.plaintiff %}
+                        <a class="no-style-link" href="{% url 'forensic_participant_detail' plaintiff.id %}">
+                            {{ plaintiff.surname }} {{ plaintiff.name }}</a></br>
+                        {% endfor %}
+                        <a href="{% url 'report_add_participant' report.id 'plaintiff' %}" class="badge badge-info">Додати іншого позивача</a>
                         {% else %}
                         <a class="no-style-link" href="{% url 'report_add_participant' report.id 'plaintiff' %}"
                             style="color:red">Дані відсутні</a>
@@ -37,12 +42,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">Відповідач</th>
+                    <th scope="row">{% if participants.defendant|length > 1 %}Відповідачі{% else %}Відповідач{% endif %}</th>
                     <td>
                         {% if participants.defendant %}
-                        <a class="no-style-link" href="{% url 'forensic_participant_detail' participants.defendant.id %}">
-                            {{ participants.defendant.surname }} {{ participants.defendant.name }}</a></br>
-                        <a href="#" class="badge badge-info">Додати представника</a>
+                        {% for defendant in participants.defendant %}
+                        <a class="no-style-link" href="{% url 'forensic_participant_detail' defendant.id %}">
+                            {{ defendant.surname }} {{ defendant.name }}</a></br>
+                        {% endfor %}
+                        <a href="{% url 'report_add_participant' report.id 'defendant' %}" class="badge badge-info">Додати іншого відповідача</a>
                         {% else %}
                         <a class="no-style-link" href="{% url 'report_add_participant' report.id 'defendant' %}"
                             style="color:red">Дані відсутні</a>
@@ -88,8 +95,8 @@
         {% for detail in details %}
         <tr>
             <th scope="row">{{ detail.date }}</td>
-            <td>{{ detail.name }}</td>
-            <td>{{ detail.info }}</td>
+            <td>{{ content|get_item:detail.name }}</td>
+            <td>{{ detail.detail_info }}</td>
             <td>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"

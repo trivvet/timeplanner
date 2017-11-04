@@ -9,22 +9,34 @@ from django.contrib.auth.decorators import login_required
 
 from ..models import Report, ReportEvents, ReportParticipants, Contacts
 
+status_list = {
+    'judge': 'Суддя',
+    'plaintiff': 'Позивач',
+    'defendant': 'Відповідач',
+    'plaintiff_agent': 'Представник позивача',
+    'defendant_agent': 'Представник відповідача',
+    'other_participant': 'Інший учасник'}
+
 @login_required(login_url='/login/')
 def participants_list(request):
     participants = ReportParticipants.objects.all()
-    header = 'Список учасників проваджень'
+    for participant in participants:
+        participant.status = status_list[participant.status]
+    header = u'Список учасників проваджень'
     return render(request, 'freports/participants_list.html', {'participants': participants, 'header': header})
 
 @login_required(login_url='/login/')
 def participant_detail(request, rid):
     participant = ReportParticipants.objects.get(pk=rid)
-    header = 'Детальна інформація про учасника провадження №%s/%s' % (participant.report.number, participant.report.number_year)
+    participant.status = status_list[participant.status]
+    header = u'Детальна інформація про учасника провадження №%s/%s' % (participant.report.number, participant.report.number_year)
     return render(request, 'freports/participant_detail.html', {'content': participant, 'header': header})
 
 @login_required(login_url='/login/')
 def add_participant(request, rid, status):
     report = Report.objects.get(pk=rid)
-    status_list = {'judge': 'Суддя', 'plaintiff': 'Позивач', 'defendant': 'Відповідач'}
+    if status == 'other':
+        status = 'other_participant'
     header = u'Додавання учасника "%s" до провадження №%s/%s' % (status_list[status], report.number, report.number_year)
 
     if request.method == 'POST':
@@ -44,7 +56,7 @@ def add_participant(request, rid, status):
                 updated_contact = find_contact(new_participant)
                 if updated_contact:
                     updated_contact.save()
-                messages.success(request, u"Учасник '%s %s' успішно доданий" % (new_participant.status, new_participant.surname))
+                messages.success(request, u"%s '%s' успішно доданий" % (status_list[new_participant.status], new_participant.surname))
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання учасника провадження скасовано")
@@ -58,12 +70,13 @@ def add_participant(request, rid, status):
 def edit_participant(request, rid, did):
     report = Report.objects.get(pk=rid)
     participant = ReportParticipants.objects.get(pk=did)
-    header = u"Редагування учасника '%s %s' провадження №%s/%s" % (participant.status, participant.surname, report.number, report.number_year)
+    header = u"Редагування учасника '%s %s' провадження №%s/%s" % (
+        status_list[participant.status], participant.surname, report.number, report.number_year)
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
 
-            valid_data = valid_detail(request.POST, rid)
+            valid_data = valid_detail(request.POST, rid, participant.status)
             errors = valid_data['errors']
             new_data = valid_data['data']
 
@@ -80,11 +93,15 @@ def edit_participant(request, rid, did):
                 edit_participant.phone = new_data['phone']
                 edit_participant.info = new_data['info']
                 edit_participant.save()
-                messages.success(request, u"Учасник '%s %s' успішно змінений" % (edit_participant.status, edit_participant.surname))
+                updated_contact = find_contact(edit_participant)
+                if updated_contact:
+                    updated_contact.save()
+                messages.success(request, u"%s '%s' успішно змінений" % (
+                    status_list[edit_participant.status], edit_participant.surname))
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування учасника провадження №%s/%s '%s %s' скасоване" %
-                (report.number, report.number_year, participant.status, participant.surname))
+                (report.number, report.number_year, status_list[participant.status], participant.surname))
 
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
@@ -96,8 +113,10 @@ def edit_participant(request, rid, did):
 def delete_participant(request, rid, did):
     report = Report.objects.get(pk=rid)
     participant = ReportParticipants.objects.get(pk=did)
-    content = u"Ви дійсно бажаєте видалити '%s %s' провадження №%s/%s?" % (participant.status, participant.surname, report.number, report.number_year)
-    header = u"Видалення '%s %s' провадження №%s/%s" % (participant.status, participant.surname, report.number, report.number_year)
+    content = u"Ви дійсно бажаєте видалити '%s %s' провадження №%s/%s?" % (
+        status_list[participant.status], participant.surname, report.number, report.number_year)
+    header = u"Видалення '%s %s' провадження №%s/%s" % (
+        status_list[participant.status], participant.surname, report.number, report.number_year)
 
     if request.method == 'GET':
         return render(request, 'freports/delete_form.html', {'report': report, 'content': content, 'header': header})
@@ -106,11 +125,11 @@ def delete_participant(request, rid, did):
         if request.POST.get('delete_button'):
             participant_delete = participant
             participant_delete.delete()
-            messages.success(request, u"Учасник провадження №%s/%s '%s %s' успішно видалений" %
-                (report.number, report.number_year, participant.status, participant.surname))
+            messages.success(request, u"%s '%s' провадження №%s/%s успішно видалений" % (
+                status_list[participant.status], participant.surname, report.number, report.number_year))
         elif request.POST.get('cancel_button'):
-            messages.warning(request, u"Видалення учасника провадження №%s/%s '%s %s' скасоване" %
-                (report.number, report.number_year, participant.status, participant.surname))
+            messages.warning(request, u"Видалення учасника провадження №%s/%s '%s %s' скасоване" % (
+                report.number, report.number_year, status_list[participant.status], participant.surname))
 
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
@@ -130,7 +149,7 @@ def valid_detail(request_info, report_id, main_status):
     else:
         new_element['surname'] = surname
 
-    if main_status:
+    if main_status != 'other_participant':
         new_element['status'] = main_status
     else:
         status = request_info.get('status')

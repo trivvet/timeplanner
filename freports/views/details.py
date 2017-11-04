@@ -24,6 +24,14 @@ kind_specific = {
         'inspected': ['проведення огляду', ['date', 'info', 'type'], inspected_type],
         'done': ['відправлення до суду', ['date', 'info', 'sending', 'type'], done_type]}
 
+status_list = {
+    'judge': 'Суддя',
+    'plaintiff': 'Позивач',
+    'defendant': 'Відповідач',
+    'plaintiff_agent': 'Представник позивача',
+    'defendant_agent': 'Представник відповідача',
+    'other_participant': 'Інший учасник'}
+
 @login_required(login_url='/login/')
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
@@ -32,8 +40,13 @@ def details_list(request, rid):
     participants = {'other': []}
     for participant in participants_list:
         if participant.status in ['judge', 'plaintiff', 'defendant']:
-            participants[participant.status] = participant
+            try:
+                participants[participant.status]
+            except KeyError:
+                participants[participant.status] = []
+            participants[participant.status].append(participant)
         else:
+            participant.status = status_list[participant.status]
             participants['other'].append(participant)
     content = kind_specific
 
@@ -79,7 +92,7 @@ def add_detail(request, rid, kind):
                 elif last_detail.activate == False:
                     report.active = False
                     report.save()
-                messages.success(request, u"Подія '%s' успішно додана" % new_detail.name)
+                messages.success(request, u"Подія '%s' успішно додана" % kind_specific[new_detail.name][0])
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання деталей провадження скасовано")
@@ -132,7 +145,7 @@ def edit_detail(request, rid, did):
                 elif last_detail.activate == False:
                     report.active = False
                     report.save()
-                messages.success(request, u"Подія '%s' успішно змінена" % edit_detail.name)
+                messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування деталей провадження скасовано")
@@ -142,13 +155,15 @@ def edit_detail(request, rid, did):
     else:
         new_content = detail
         new_content.date = new_content.date.isoformat()
+        if new_content.decision_date:
+            new_content.decision_date = new_content.decision_date.isoformat()
         return render(request, 'freports/detail_form.html', {'new_content': new_content, 'content': content, 'header': header})
 
 @login_required(login_url='/login/')
 def delete_detail(request, rid, did):
     report = Report.objects.get(pk=rid)
     detail = ReportEvents.objects.get(pk=did)
-    content = u"Ви дійсно бажаєте видалити подію '%s' до провадження №%s/017?" % (detail.name, report.number)
+    content = u"Ви дійсно бажаєте видалити подію '%s' до провадження №%s/017?" % (kind_specific[detail.name][0], report.number)
     header = u"Видалення події провадження №%s/%s" % (report.number, report.number_year)
 
     if request.method == 'GET':
@@ -171,9 +186,11 @@ def delete_detail(request, rid, did):
                     report.executed = False
                     report.date_executed = None
                 report.save()
-            messages.success(request, u"Подія '%s' до провадження №%s/017 успішно видалена" % (detail.name, report.number))
+            messages.success(request,
+                u"Подія '%s' до провадження №%s/%s успішно видалена" % (kind_specific[detail.name][0], report.number, report.number_year))
         elif request.POST.get('cancel_button'):
-            messages.warning(request, u"Видалення події '%s' до провадження №%s/017 скасоване" % (detail.name, report.number))
+            messages.warning(request,
+                u"Видалення події '%s' до провадження №%s/%s скасоване" % (kind_specific[detail.name][0], report.number, report.number_year))
 
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 

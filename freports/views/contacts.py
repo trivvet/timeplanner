@@ -8,8 +8,12 @@ from django.contrib.auth.decorators import login_required
 
 from ..models import Contacts
 
+status_list = {'judge': 'Суддя', 'plaintiff': 'Позивач', 'defendant': 'Відповідач', 'other': 'Інший учасник'}
+
 @login_required(login_url='/login/')
 def contacts_list(request):
     contacts = Contacts.objects.all().order_by('surname')
     header = 'Список контактів'
+    for contact in contacts:
+        contact.status = status_list[contact.status]
     return render(request, 'freports/contacts_list.html', {'contacts': contacts, 'header': header})

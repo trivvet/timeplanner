@@ -7,17 +7,19 @@
 {% block content %}
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
-    {% if status == 'other' %}
+    {% if status == 'other_participant' %}
     <div class="form-group row">
         <label for="inputStatus" class="col-sm-3 col-form-label">Статус учасника <strong>*</strong></label>
         <div class="col-sm-4">
             <select class="form-control {% if errors.status %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputStatus" name="status" value="{{ content.status }}">
                 <option value=''>-----------</option>
-                <option {% if content.status == 'Представник позивача' %}selected{% endif %}>Представник позивача</option>
-                <option {% if content.status == 'Представник відповідача' %}selected{% endif %}>Представник відповідача</option>
-                <option {% if content.status == 'Замовник' %}selected{% endif %}>Замовник</option>
-                <option {% if content.status == 'Інший учасник' %}selected{% endif %}>Інший учасник</option>
+                <option value='plaintiff_agent'
+                    {% if content.status == 'plaintiff_agent' %}selected{% endif %}>Представник позивача</option>
+                <option value='defendant_agent'
+                    {% if content.status == 'defendant_agent' %}selected{% endif %}>Представник відповідача</option>
+                <option value='other_participant'
+                    {% if content.status == 'other_participant' %}selected{% endif %}>Інший учасник</option>
             </select>
             <div class="invalid-feedback">
                 {{ errors.status }}

@@ -77,6 +77,36 @@ class ReportEvents(models.Model):
     def __unicode__(self):
         return u"Report %s: %s" % (self.report.number, self.name)
 
+    def detail_info(self):
+        description = ""
+        if self.name == 'first_arrived':
+            if self.received:
+                description = 'Надійшла ухвала суду від %s року. Разом з ухвалою надійшли: %s' % (self.decision_date.strftime('%d-%m-%Y'), self.received)
+            else:
+                description = 'Надійшла ухвала суду від %s року без додаткових матеріалів' % self.decision_date.strftime('%d-%m-%Y')
+        elif self.name == 'arrived':
+            description = 'Надійшли матеріали: %s' % self.received
+        elif self.name == 'petition':
+            if self.sending:
+                description = 'Направлено клопотання %s, а саме: %s. Разом з клопотанням повернено: %s' % (self.subspecies, self.necessary, self.sending)
+            else:
+                description = 'Направлено клопотання %s, а саме: %s' % (self.subspecies, self.necessary)
+        elif self.name == 'bill':
+            if self.address:
+                description = '%s на адресу %s на суму %s грн' % (self.subspecies, self.address, self.cost)
+            else:
+                description = '%s на суму %s грн' % (self.subspecies, self.cost)
+        elif self.name == 'paid':
+            description = self.subspecies
+        elif self.name == 'schedule':
+            description = 'Призначено виїзд о %s на %s' % (self.time.strftime('%H:%M'), self.time.strftime('%d-%m-%Y'))
+        elif self.name == 'inspected':
+            description = self.subspecies
+        elif self.name == 'done':
+            description = 'Направлено %s. Додатки: %s' % (self.subspecies, self.sending)
+
+        return description + '. ' + self.info
+
 class ReportParticipants(models.Model):
 
     class Meta(object):
