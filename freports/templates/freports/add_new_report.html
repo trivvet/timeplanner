@@ -1,0 +1,47 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col">
+        <h2>{{ header }}</h2>
+    </div>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+    <div class="form-group row">
+        <label for="inputNumber" class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-3" id="divInputNumber">
+            <input type="text" class="form-control col-sm-5 {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
+            <p id="dual-number">/</p>
+            <select class="form-control col-sm-5" name="number_year">
+                <option {% if content.number_year == '016' %}selected{% endif %}>016</option>
+                <option {% if content.number_year == '017' or content.number_year is None %}selected{% endif %}>017</option>
+                <option {% if content.number_year == '018' %}selected{% endif %}>018</option>
+            </select>
+        </div>
+    </div>
+    {% if errors.number %}
+    <div class="form-group row form-error">
+        <div class="col-sm-3"></div>
+        <div class="col">
+            {{ errors.number }}
+        </div>
+    </div>
+    {% endif %}
+    <div class="form-group row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <input type="submit" class="btn btn-primary" value="Створити"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link" href=""
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}
+

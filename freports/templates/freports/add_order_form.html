@@ -1,0 +1,111 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col">
+        <h2>Ухвала про призначення експертизи</h2>
+        <h3>{{ header }}</h3>
+    </div>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+    <input type="hidden" name="name" value="first_arrived" />
+
+    <!-- Дата події -->
+    <div class="form-group row">
+        <label for="inputDate" class="col-sm-4 col-form-label">Дата події <strong>*</strong></label>
+        <div class="col-sm-8">
+            <div class="input-group date">
+                <input type="text" id="inputDate" placeholder="напр. 01.01.2017" name="date"
+                    class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
+                    value="{{ new_content.date }}">
+                <div class="input-group-addon" id="calendar">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if errors.date %}
+    <div class="form-group row form-error">
+        <div class="col-sm-4"></div>
+        <div class="col">
+            {{ errors.date }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Дата винесення ухвали -->
+    <div class="form-group row">
+        <label for="inputDateDecision" class="col-sm-4 col-form-label">Дата винесення ухвали <strong>*</strong></label>
+        <div class="col-sm-8">
+            <div class="input-group date">
+                <input type="text" id="inputDateDecision" placeholder="напр. 10.12.2016" name="decision_date"
+                    class="form-control {% if errors.decision_date %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
+                    value="{{ new_content.decision_date }}">
+                <div class="input-group-addon" id="calendar2">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if errors.decision_date %}
+    <div class="form-group row form-error">
+        <div class="col-sm-4"></div>
+        <div class="col">
+            {{ errors.decision_date }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Номер цивільної справи -->
+    <div class="form-group row">
+        <label for="inputCase" class="col-sm-4 col-form-label">Номер справи <strong>*</strong></label>
+        <div class="col-sm-8">
+            <input type="text" id="inputCase" placeholder="Введіть номер судової справи" name="case"
+                    class="form-control {% if errors.case %}is-invalid{% elif errors %}is-valid{% endif %}"
+                    value="{{ new_content.case }}">
+            <div class="invalid-feedback">
+                {{ errors.case }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Отримані матеріали -->
+    <div class="form-group row">
+        <label for="inputReceived" class="col-sm-4 col-form-label">Отримані матеріали <strong>*</strong></label>
+        <div class="col-sm-8">
+            <textarea type="text" class="form-control {% if errors.received %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputReceived" name="received" rows="4"
+                placeholder="Введіть матеріали справи, що надійшли з суду">{{ new_content.received }}</textarea>
+            <div class="invalid-feedback">
+                {{ errors.received }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Додаткова інформація -->
+    <div class="form-group row">
+        <label for="inputInfo" class="col-sm-4 col-form-label">Додаткова інформація</label>
+        <div class="col-sm-8">
+            <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
+                id="inputInfo" name="info" rows="2"
+                placeholder="Введіть додаткову інформацію (у разі наявності)">{{ new_content.info }}</textarea>
+        </div>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="form-group row button-group">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-8">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" data-dismiss="modal" />
+        </div>
+    </div>
+</form>
+{% endblock content %}

@@ -1,0 +1,73 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
+    <a class="navbar-brand" href="">{{ header }}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <a class="btn btn-sm align-middle btn-outline-warning"
+                id="add-report" href="{% url 'forensic_add_court' %}">Додати суддю</a>
+    </div>
+</nav>
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+{% if contacts %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Прізвище, ім'я, ім'я по батькові</th>
+            <th>Суд</th>
+            <th>Контакти</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+{% endwith %}
+
+    <tbody>
+
+        {% for judge in judges %}
+        <tr>
+
+            <td>{{ judge.surname }} {{ judge.first_name }} {{ judge.second_name }}</td>
+            <td>{{ judge.court_name }}</td>
+            <td>{{ judge.personal_phone }} {{ judge.work_phone }} {{ judge.address }}</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Дія
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            href="">Детальна інформація</a>
+                        <a class="dropdown-item"
+                            href="">Редагувати</a>
+                        <a class="dropdown-item"
+                            href="">Видалити</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+
+
+    </tbody>
+
+</table>
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}
+
+{% block extra_content %}
+{% endblock extra_content %}

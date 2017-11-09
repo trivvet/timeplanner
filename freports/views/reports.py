@@ -91,32 +91,45 @@ def reports_list(request):
     return render(request, 'freports/reports_list.html', {'reports': new_reports, 'content': content})
 
 @login_required(login_url='/login/')
-def add_report(request):
-    header = u'Додавання провадження'
+def add_new_report(request):
+    header = u'Зазначте номер нового провадження'
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
-            validate_data = valid_report(request.POST)
-            errors = validate_data['errors']
-            new_report = validate_data['data_report']
+            data = request.POST
+            errors, new_data = {}, {}
+
+            if data['number']:
+                try:
+                    new_data['number'] = int(data['number'])
+                except ValueError:
+                    error['number'] = u"Будь-ласка введіть ціле число"
+                    new_data['number'] = data['number']
+            else:
+                error['number'] = u"Номер висновку є обов'язковим"
 
             if errors:
                 messages.error(request, "Виправте наступні недоліки")
-                return render(request, 'freports/add_report.html', {'header': header, 'errors': errors,
+                return render(request, 'freports/add_new_report.html', {'header': header, 'errors': errors,
                     'content': new_report})
-
             else:
-                new_report = Report(**new_report)
+                new_data['number_year'] = data['number_year']
+                new_data['address'] = u"-"
+                new_data['plaintiff'] = u"-"
+                new_data['defendant'] = u"-"
+                new_data['object_name'] = u"-"
+                new_data['research_kind'] = u"-"
+                new_report = Report(**new_data)
                 new_report.save()
-                messages.success(request, "Провадження №%s/%s успішно додане" % (new_report.number, new_report.number_year))
 
+                messages.success(request, "Провадження №%s/%s успішно створене" % (
+                    new_report.number, new_report.number_year))
         elif request.POST.get('cancel_button'):
-            messages.warning(request, "Додавання провадження скасовано")
-
+            messages.warning(request, "Створення нового провадження скасовано")
         return HttpResponseRedirect(reverse('forensic_reports_list'))
 
     else:
-        return render(request, 'freports/add_report.html', {'header': header})
+        return render(request, 'freports/add_new_report.html', {'header': header})
 
 @login_required(login_url='/login/')
 def edit_report(request, rid):
@@ -137,20 +150,8 @@ def edit_report(request, rid):
                     'errors': errors})
 
             else:
-                current_report.number = new_report['number']
-                current_report.number_year = new_report['number_year']
-                current_report.address = new_report['address']
-                current_report.plaintiff = new_report['plaintiff']
-                current_report.defendant = new_report['defendant']
-                current_report.object_name = new_report['object_name']
-                current_report.research_kind = new_report['research_kind']
-                current_report.active = new_report['active']
-                current_report.date_arrived = new_report['date_arrived']
-                current_report.executed = new_report['executed']
-                try:
-                    current_report.date_executed = new_report['date_executed']
-                except KeyError:
-                    pass
+                current_report = Report(**new_report)
+                current_report.id = rid
 
                 current_report.save()
                 messages.success(request, u"Провадження №%s/%s успішно відкориговане" % (current_report.number, current_report.number_year))
@@ -207,6 +208,12 @@ def valid_report(data_post):
             errors['number'] = u"Будь-ласка введіть ціле число"
 
     new_report['number_year'] = data_post.get('number_year')
+
+    case_number = data_post.get('case_number')
+    if not case_number:
+        errors['case_number'] = u"Номер справи є обов'язковим"
+    else:
+        new_report['case_number'] = case_number
 
     address = data_post.get('address')
     if not address:

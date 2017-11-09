@@ -21,24 +21,45 @@ from freports import views as freports
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
+    # report urls
     url(r'^$', freports.reports_list, name='forensic_reports_list'),
-    url(r'^freports/add/report/$', freports.add_report, name='forensic_add_report'),
+    url(r'^freports/add/new_report/$', freports.add_new_report, name='forensic_add_new_report'),
     url(r'^freports/(?P<rid>\d+)/edit/$', freports.edit_report, name='forensic_edit_report'),
     url(r'^freports/(?P<rid>\d+)/delete/$', freports.delete_report, name='forensic_delete_report'),
 
+    # event urls
     url(r'^freports/(?P<rid>\d+)/details/$', freports.details_list, name='report_details_list'),
+    url(r'^freports/(?P<rid>\d+)/details/order/add/$', freports.add_order, name='report_add_order'),
     url(r'^freports/(?P<rid>\d+)/details/add/(?P<kind>\w+)/$', freports.add_detail, name='report_add_detail'),
     url(r'^freports/(?P<rid>\d+)/details/(?P<did>\d+)/edit/$', freports.edit_detail, name='report_edit_detail'),
     url(r'^freports/(?P<rid>\d+)/details/(?P<did>\d+)/delete/$', freports.delete_detail, name='report_delete_detail'),
 
-    url(r'^partisipants/$', freports.participants_list, name='forensic_participants_list'),
-    url(r'^partisipants/(?P<rid>\d+)/detail/$', freports.participant_detail, name='forensic_participant_detail'),
+    # participant urls
+    url(r'^freports/partisipants/$', freports.participants_list, name='forensic_participants_list'),
+    url(r'^freports/partisipants/(?P<rid>\d+)/detail/$', freports.participant_detail, name='forensic_participant_detail'),
     url(r'^freports/(?P<rid>\d+)/partisipants/add/(?P<status>\w+)/$', freports.add_participant, name='report_add_participant'),
     url(r'^freports/(?P<rid>\d+)/partisipants/(?P<did>\d+)/edit/$', freports.edit_participant, name='report_edit_participant'),
     url(r'^freports/(?P<rid>\d+)/partisipants/(?P<did>\d+)/delete/$', freports.delete_participant,
         name='report_delete_participant'),
 
+    # subject urls
+    url(r'^freports/subjects/$', freports.subjects_list, name='report_subjects_list'),
+    url(r'^freports/subjects/(?P<sid>\d+)/detail/$', freports.subject_detail, name='forensic_subject_detail'),
+    url(r'^freports/(?P<rid>\d+)/subjects/add/$', freports.add_subject, name='report_add_subject'),
+    url(r'^freports/(?P<rid>\d+)/subjects/(?P<sid>\d+)/edit/$', freports.edit_subject, name='report_edit_subject'),
+    url(r'^freports/(?P<rid>\d+)/subjects/(?P<sid>\d+)/delete/$', freports.delete_subject,
+        name='report_delete_subject'),
+
+    # contact urls
     url(r'^contacts/$', freports.contacts_list, name='contacts_list'),
+
+    # court urls
+    url(r'^courts/$', freports.courts_list, name='courts_list'),
+    url(r'^freports/courts/add/$', freports.add_court, name='forensic_add_court'),
+    url(r'^freports/courts/(?P<cid>\d+)/delete/$', freports.delete_court, name='forensic_delete_court'),
+
+    # judge urls
+    url(r'^judges/$', freports.judges_list, name='judges_list'),
 
     url(r'^login/$', freports.login_auth, name='login_form'),
     url(r'^logout/$', freports.logout_auth, name='logout_url'),

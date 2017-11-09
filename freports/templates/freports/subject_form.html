@@ -1,0 +1,152 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<h2>{{ header }}</h2>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+
+    <!-- Вид об'єкту дослідження -->
+    <div class="form-group row">
+        <label for="inputType" class="col-sm-4 col-form-label">Вид об'єкту <strong>*</strong></label>
+        <div class="col-sm-8">
+            <select class="form-control {% if errors.subject_type %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputType" name="subject_type" value="{{ new_content.subject_type }}">
+                <option value=''>-----------</option>
+                <option {% if new_content.subject_type == 'квартира' %}selected{% endif %}>квартира</option>
+                <option {% if new_content.subject_type == 'житловий будинок' %}selected{% endif %}>житловий будинок</option>
+                <option {% if new_content.subject_type == 'земельна ділянка' %}selected{% endif %}>земельна ділянка</option>
+                <option {% if new_content.subject_type == 'нежитлове приміщення' %}selected{% endif %}>нежитлове приміщення</option>
+                <option {% if new_content.subject_type == 'гараж' %}selected{% endif %}>гараж</option>
+                <option {% if new_content.subject_type == 'інший' %}selected{% endif %}>інший</option>
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.subject_type }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Населений пункт -->
+    <div class="row">
+        <div class="form-group col-sm-4 col-form-label">
+            <label for="inputTypeSettlement">Населений пункт <strong>*</strong></label>
+        </div>
+        <div class="form-group col-sm-1">
+            <select class="form-control {% if errors %}is-valid{% endif %}" style="min-width:70px"
+                name="settlement_type" value="{{ new_content.settlement_type }}">
+                <option {% if new_content.settlement_type == 'м.' %}selected{% endif %}>м.</option>
+                <option {% if new_content.settlement_type == 'с.' %}selected{% endif %}>с.</option>
+                <option {% if new_content.settlement_type == 'см' %}selected{% endif %}>смт.</option>
+                <option {% if new_content.settlement_type == '' %}selected{% endif %} value=''>-</option>
+            </select>
+        </div>
+        <div class="form-group col-sm-6" style="max-width:270px">
+            <input type="text" id="inputSettlement" placeholder="Назва населеного пункту" name="settlement_name"
+                class="form-control {% if errors.settlement %}is-invalid{% elif errors %}is-valid{% endif %}"
+                value="{{ new_content.settlement_name }}">
+            <div class="invalid-feedback">
+                {{ errors.settlement }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Населений пункт -->
+    <div class="form-group row">
+        <label for="inputRegion" class="col-sm-4 col-form-label">Район Хмельницької області</label>
+        <div class="col-sm-8">
+            <input type="text" id="inputRegion" placeholder="Введіть район розташування населеного пункту" name="region"
+                    class="form-control {% if errors %}is-valid{% endif %}"
+                    value="{{ new_content.region }}">
+            <div class="invalid-feedback">
+                {{ errors.region }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Вулиця -->
+    <div class="row">
+        <div class="form-group col-sm-4 col-form-label">
+            <label for="inputStreet">Вулиця <strong>*</strong></label>
+        </div>
+        <div class="form-group col-sm-1">
+            <select class="form-control {% if errors %}is-valid{% endif %}" style="min-width:100px"
+                name="street_type" value="{{ new_content.street_type }}">
+                <option {% if new_content.street_type == '' %}selected{% endif %} value=''>-</option>
+                <option {% if new_content.street_type == 'вул.' %}selected{% endif %}>вул.</option>
+                <option {% if new_content.street_type == 'пров' %}selected{% endif %}>пров.</option>
+                <option {% if new_content.street_type == 'прос' %}selected{% endif %}>просп.</option>
+                <option {% if new_content.street_type == 'прої' %}selected{% endif %}>проїзд.</option>
+            </select>
+        </div>
+        <div class="form-group col-sm-6" style="max-width:270px">
+            <input type="text" id="inputStreet" placeholder="Назва" name="street_name"
+                class="form-control {% if errors.street %}is-invalid{% elif errors %}is-valid{% endif %}"
+                value="{{ new_content.street_name }}">
+            <div class="invalid-feedback">
+                {{ errors.street }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Номер будинку -->
+    <div class="form-group row">
+        <label for="inputBuilding" class="col-sm-4 col-form-label">Номер будинку</label>
+        <div class="col-sm-8">
+            <input type="text" id="inputBuilding" placeholder="Введіть номер будинку у разі наявності" name="building"
+                    class="form-control {% if errors %}is-valid{% endif %}"
+                    value="{{ new_content.building }}">
+            <div class="invalid-feedback">
+                {{ errors.building }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Номер квартири -->
+    <div class="form-group row">
+        <label for="inputFlat" class="col-sm-4 col-form-label">Номер квартири</label>
+        <div class="col-sm-8">
+            <input type="text" id="inputFlat" placeholder="Введіть номер квартири у разі наявності" name="flat"
+                    class="form-control {% if errors.flat %}is-invalid{% elif errors %}is-valid{% endif %}"
+                    value="{{ new_content.flat }}">
+            <div class="invalid-feedback">
+                {{ errors.flat }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Тип дослідження -->
+    <div class="form-group row">
+        <label for="inputResearchType" class="col-sm-4 col-form-label">Тип дослідження <strong>*</strong></label>
+        <div class="col-sm-8">
+            <select class="form-control {% if errors.research_type %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputResearchType" name="research_type" value="{{ new_content.research_type }}">
+                <option value=''>-----------</option>
+                <option {% if new_content.research_type == 'накладка' %}selected{% endif %}>накладка</option>
+                <option {% if new_content.research_type == 'розподіл' %}selected{% endif %}>розподіл</option>
+                <option {% if new_content.research_type == 'виділ' %}selected{% endif %}>виділ</option>
+                <option {% if new_content.research_type == 'затоплення' %}selected{% endif %}>затоплення</option>
+                <option {% if new_content.research_type == 'оцінка' %}selected{% endif %}>оцінка</option>
+                <option {% if new_content.research_type == 'відповідність нормам' %}selected{% endif %}>відповідність нормам</option>
+                <option {% if new_content.research_type == 'інше' %}selected{% endif %}>інше</option>
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.research_type }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="form-group row button-group">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-8">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" data-dismiss="modal" />
+        </div>
+    </div>
+
+</form>
+{% endblock %}

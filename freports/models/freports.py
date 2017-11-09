@@ -16,6 +16,11 @@ class Report(models.Model):
         blank=False,
         null=True)
 
+    case_number = models.CharField(
+        max_length=128,
+        blank=True,
+        null=True)
+
     address = models.CharField(
         max_length=128,
         blank=False,

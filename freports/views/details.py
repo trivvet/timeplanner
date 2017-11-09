@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from ..models import Report, ReportEvents, ReportParticipants
+from ..models import Report, ReportEvents, ReportParticipants, ReportSubject
 
 petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи']
 done_type = ['Висновок експерта', 'Повідомлення про неможливість', 'Залишення без виконання']
@@ -35,9 +35,14 @@ status_list = {
 @login_required(login_url='/login/')
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
-    details = ReportEvents.objects.filter(report=Report.objects.get(pk=rid)).order_by('date')
-    participants_list = ReportParticipants.objects.filter(report=Report.objects.get(pk=rid))
+    details = ReportEvents.objects.filter(report=report).order_by('date')
+
+    if len(details.filter(name='first_arrived')) < 1:
+        return HttpResponseRedirect(reverse('report_add_order', args=[rid]))
+
+    participants_list = ReportParticipants.objects.filter(report=report)
     participants = {'other': []}
+    subjects = ReportSubject.objects.filter(report=report)
     for participant in participants_list:
         if participant.status in ['judge', 'plaintiff', 'defendant']:
             try:
@@ -51,7 +56,48 @@ def details_list(request, rid):
     content = kind_specific
 
     return render(request, 'freports/report_detail.html',
-        {'details': details, 'report': report, 'participants': participants, 'content': content})
+        {'details': details, 'report': report, 'participants': participants, 'content': content, 'subjects': subjects })
+
+@login_required(login_url='/login/')
+def add_order(request, rid):
+    report = Report.objects.get(pk=rid)
+    kind = 'first_arrived'
+    content = {}
+    header = u'Провадження №%s/%s' % (report.number, report.number_year)
+    content['obvious_fields'] = kind_specific[kind][1]
+    content['kind'] = kind
+
+    if request.method == 'POST':
+        if request.POST.get('save_button'):
+
+            valid_data = valid_detail(request.POST, rid)
+            errors = valid_data['errors']
+            new_element = valid_data['data']
+            new_element['name'] = 'first_arrived'
+
+            case_number = request.POST.get('case')
+            if not case_number:
+                errors['case'] = u"Номер судової справи є обов'язковим"
+
+            if errors:
+                print errors
+                messages.error(request, u"Виправте наступні недоліки")
+                return render(request, 'freports/add_order_form.html',
+                    {'header': header, 'content': content, 'new_content': new_element, 'errors': errors})
+            else:
+                new_detail = ReportEvents(**new_element)
+                new_detail.save()
+                report.case_number = case_number
+                report.date_arrived = new_detail.date
+                report.save()
+                messages.success(request, u"Ухвала про призначення експертизи успішно додана")
+                return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+
+        elif request.POST.get('cancel_button'):
+            messages.warning(request, u"Додавання ухвали про призначення експертизи скасовано")
+            return HttpResponseRedirect(reverse('forensic_reports_list'))
+
+    return render(request, 'freports/add_order_form.html', {'header': header, 'content': content})
 
 @login_required(login_url='/login/')
 def add_detail(request, rid, kind):

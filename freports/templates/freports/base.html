@@ -48,7 +48,10 @@
                 <div class="col">
                     {% url "forensic_reports_list" as url_reports %}
                     {% url "forensic_participants_list" as url_participants %}
+                    {% url "report_subjects_list" as url_subjects %}
                     {% url "contacts_list" as url_contacts %}
+                    {% url "judges_list" as url_judges %}
+                    {% url "courts_list" as url_courts %}
                     <ul class="nav nav-tabs">
                       <li class="nav-item">
                         <a class="nav-link {% if request.path == url_reports %}active{% endif %}"
@@ -59,8 +62,20 @@
                             href="{{ url_participants }}">Учасники</a>
                       </li>
                       <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_subjects %}active{% endif %}"
+                            href="{{ url_subjects }}">Об'єкти</a>
+                      </li>
+                      <li class="nav-item">
                         <a class="nav-link {% if request.path == url_contacts %}active{% endif %}"
                             href="{{ url_contacts }}">Контакти</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_judges %}active{% endif %}"
+                            href="{{ url_judges }}">Судді</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_courts %}active{% endif %}"
+                            href="{{ url_courts }}">Суди</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link disabled" href="#">Інші</a>
