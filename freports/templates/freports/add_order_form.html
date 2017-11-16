@@ -14,7 +14,6 @@
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
     <input type="hidden" name="name" value="first_arrived" />
-
     <!-- Дата події -->
     <div class="form-group row">
         <label for="inputDate" class="col-sm-4 col-form-label">Дата події <strong>*</strong></label>
@@ -60,6 +59,42 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Вибір суду -->
+    <div class="form-group row">
+        <label for="inputCourtForOrder" class="col-sm-4 col-form-label">Назва суду <strong>*</strong></label>
+        <div class="col-sm-4">
+            <select class="form-control {% if errors.court_name %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputCourtForOrder" name="court" value="{{ new_content.court }}">
+                <option value=''>-----------</option>
+                {% for court in courts %}
+                <option value='{{ court.id }}'
+                    {% if new_content.court|stringformat:"s" == court.id|stringformat:"s" %}selected{% endif %}>{{ court }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.court }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Вибір судді -->
+    <div class="form-group row" {% if new_content.judge is None %}hidden{% endif %}>
+        <label for="inputJudge" class="col-sm-4 col-form-label">Суддя <strong>*</strong></label>
+        <div class="col-sm-4">
+            <select class="form-control {% if errors.judge %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputJudge" name="judge" value="{{ new_content.judge }}">
+                <option value=''>-----------</option>
+                {% for judge in judges %}
+                <option value='{{ judge.id }}'
+                    {% if new_content.judge|stringformat:"s" == judge.id|stringformat:"s" %}selected{% endif %}>{{ judge.short_name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.judge }}
+            </div>
+        </div>
+    </div>
 
     <!-- Номер цивільної справи -->
     <div class="form-group row">

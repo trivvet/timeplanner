@@ -1,0 +1,83 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col">
+        <h2>{{ header }}</h2>
+    </div>
+</div>
+{% endblock title %}
+
+{% block messages %}
+{% if messages %}
+    {% for message in messages %}
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col alert alert-{% if message.tags == 'error' %}danger
+             {% else %}{{ message.tags }}{% endif %}
+             "
+             role="alert">{{ message }}</div>
+    </div>
+    {% endfor %}
+{% endif %}
+{% endblock messages %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <table class="table table-bordered table-hover">
+            <thead></thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Назва суду</th>
+                    <td>{{ content.name }}</td>
+                </tr>
+                {% if content.address %}
+                <tr>
+                    <th scope="row">Адреса</th>
+                    <td>{{ content.address }}</td>
+                </tr>
+                {% endif %}
+                {% if content.number %}
+                <tr>
+                    <th scope="row">Код суду</th>
+                    <td>{{ content.number }}</td>
+                </tr>
+                {% endif %}
+                {% if content.chair %}
+                <tr>
+                    <th scope="row">Голова суду</th>
+                    <td>{{ content.chair.full_name }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th scope="row">Кількість призначених справ</th>
+                    <td>{{ cases_amount }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Судді</th>
+                    <td>
+                        {% if judges %}
+                        <ul class="list-group">
+                            {% for judge in judges %}
+                            <li class="list-group-item">
+                                <a class="no-style-link" href="">{{ judge.full_name }}</a></br>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <a class="no-style-link" href="{% url 'forensic_add_judge' %}?court={{ content.id }}"
+                            style="color:red">Дані відсутні</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+        <a type="button" class="btn btn-info" href="{% url 'forensic_edit_court' content.id %}?next=forensic_court_detail">Редагувати</a>
+        <a type="button" class="btn btn-danger" href="{% url 'forensic_delete_court' content.id %}?next=forensic_court_detail">Видалити</a>
+    </div>
+</div>
+{% endblock content %}

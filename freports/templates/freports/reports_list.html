@@ -72,7 +72,8 @@
     <tbody>
 
         {% for report in reports %}
-        <tr class="table-{% if report.active %}success{% elif report.executed == False %}secondary{% else %}info{% endif %}"
+        <tr class="table-{% if report.active is None %}danger{% elif report.filled_info == False %}warning{% elif report.active %}success
+            {% elif report.executed == False %}secondary{% else %}info{% endif %}"
             data-href="{% url 'report_details_list' report.id %}">
             <th scope="row">{{ report.number }}/{% if report.number_year %}{{ report.number_year }}{% else %}017{% endif %}</td>
             <td class="td-link">{{ report.address }}</td>

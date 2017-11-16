@@ -54,12 +54,18 @@ urlpatterns = [
     url(r'^contacts/$', freports.contacts_list, name='contacts_list'),
 
     # court urls
-    url(r'^courts/$', freports.courts_list, name='courts_list'),
+    url(r'^freports/courts/$', freports.courts_list, name='courts_list'),
+    url(r'^freports/courts/(?P<cid>\d+)/detail/$', freports.court_detail, name='forensic_court_detail'),
     url(r'^freports/courts/add/$', freports.add_court, name='forensic_add_court'),
+    url(r'^freports/courts/(?P<cid>\d+)/edit/$', freports.edit_court, name='forensic_edit_court'),
     url(r'^freports/courts/(?P<cid>\d+)/delete/$', freports.delete_court, name='forensic_delete_court'),
 
     # judge urls
     url(r'^judges/$', freports.judges_list, name='judges_list'),
+    url(r'^freports/judges/(?P<jid>\d+)/detail/$', freports.judge_detail, name='forensic_judge_detail'),
+    url(r'^freports/judges/add/$', freports.add_judge, name='forensic_add_judge'),
+    url(r'^freports/judges/(?P<jid>\d+)/edit/$', freports.edit_judge, name='forensic_edit_judge'),
+    url(r'^freports/judges/(?P<jid>\d+)/delete/$', freports.delete_judge, name='forensic_delete_judge'),
 
     url(r'^login/$', freports.login_auth, name='login_form'),
     url(r'^logout/$', freports.logout_auth, name='logout_url'),

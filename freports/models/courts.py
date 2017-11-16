@@ -15,7 +15,7 @@ class Court(models.Model):
     number = models.IntegerField(
         blank=True,
         null=True,
-        verbose_name=u"Код справ")
+        verbose_name=u"Код суду")
 
     address = models.CharField(
         max_length=256,
@@ -76,6 +76,12 @@ class Judge(models.Model):
         verbose_name=u"Домашня адреса")
 
     def __unicode__(self):
-        return u"%s %s. %s. (%s)" %(self.surname, self.first_name[0], self.second_name[0], self.court)
+        return u"%s %s. %s. (%s)" %(self.surname, self.first_name[0], self.second_name[0], self.court_name)
+
+    def short_name(self):
+        return u"%s %s. %s." %(self.surname, self.first_name[0], self.second_name[0])
+
+    def full_name(self):
+        return u"%s %s %s" %(self.surname, self.first_name, self.second_name)
 
 

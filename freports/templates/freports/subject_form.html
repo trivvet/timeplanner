@@ -20,6 +20,7 @@
                 <option {% if new_content.subject_type == 'земельна ділянка' %}selected{% endif %}>земельна ділянка</option>
                 <option {% if new_content.subject_type == 'нежитлове приміщення' %}selected{% endif %}>нежитлове приміщення</option>
                 <option {% if new_content.subject_type == 'гараж' %}selected{% endif %}>гараж</option>
+                <option {% if new_content.subject_type == 'садовий будинок' %}selected{% endif %}>садовий будинок</option>
                 <option {% if new_content.subject_type == 'інший' %}selected{% endif %}>інший</option>
             </select>
             <div class="invalid-feedback">
@@ -78,6 +79,7 @@
                 <option {% if new_content.street_type == 'пров' %}selected{% endif %}>пров.</option>
                 <option {% if new_content.street_type == 'прос' %}selected{% endif %}>просп.</option>
                 <option {% if new_content.street_type == 'прої' %}selected{% endif %}>проїзд.</option>
+                <option {% if new_content.street_type == 'сад.' %}selected{% endif %}>сад.тов.</option>
             </select>
         </div>
         <div class="form-group col-sm-6" style="max-width:270px">

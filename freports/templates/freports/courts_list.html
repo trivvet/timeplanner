@@ -35,7 +35,7 @@
         <tr>
             <td>{{ court.name }}</td>
             <td>{{ court.address }}</td>
-            <td>{% if court.chair %}{{ court.chair }}{% endif %}</td>
+            <td>{{ court.chair.short_name }}</td>
             <td>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -44,9 +44,9 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                            href="">Детальна інформація</a>
+                            href="{% url 'forensic_court_detail' court.id %}">Детальна інформація</a>
                         <a class="dropdown-item"
-                            href="">Редагувати</a>
+                            href="{% url 'forensic_edit_court' court.id %}">Редагувати</a>
                         <a class="dropdown-item"
                             href="{% url 'forensic_delete_court' court.id %}">Видалити</a>
                     </div>

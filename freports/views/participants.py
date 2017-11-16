@@ -56,6 +56,8 @@ def add_participant(request, rid, status):
                 updated_contact = find_contact(new_participant)
                 if updated_contact:
                     updated_contact.save()
+                report = edit_report(new_participant.status, report, new_participant.surname)
+                report.save()
                 messages.success(request, u"%s '%s' успішно доданий" % (status_list[new_participant.status], new_participant.surname))
 
         elif request.POST.get('cancel_button'):
@@ -85,17 +87,14 @@ def edit_participant(request, rid, did):
                 return render(request, 'freports/participant_form.html', {'content': new_data, 'errors': errors})
 
             else:
-                edit_participant = participant
-                edit_participant.status = new_data['status']
-                edit_participant.surname = new_data['surname']
-                edit_participant.name = new_data['name']
-                edit_participant.address = new_data['address']
-                edit_participant.phone = new_data['phone']
-                edit_participant.info = new_data['info']
+                edit_participant = ReportParticipants(**new_data)
+                edit_participant.id = participant.id
                 edit_participant.save()
                 updated_contact = find_contact(edit_participant)
                 if updated_contact:
                     updated_contact.save()
+                report = edit_report(edit_participant.status, report, edit_participant.surname)
+                report.save()
                 messages.success(request, u"%s '%s' успішно змінений" % (
                     status_list[edit_participant.status], edit_participant.surname))
 
@@ -125,6 +124,8 @@ def delete_participant(request, rid, did):
         if request.POST.get('delete_button'):
             participant_delete = participant
             participant_delete.delete()
+            report = edit_report(participant_delete.status, report, '-')
+            report.save()
             messages.success(request, u"%s '%s' провадження №%s/%s успішно видалений" % (
                 status_list[participant.status], participant.surname, report.number, report.number_year))
         elif request.POST.get('cancel_button'):
@@ -198,3 +199,10 @@ def find_contact(participant):
                 address=participant.address, phone=participant.phone, info=participant.info)
 
     return contact
+
+def edit_report(status, report, value):
+    if status == 'plaintiff':
+        report.plaintiff = value
+    elif status == 'defendant':
+        report.defendant = value
+    return report

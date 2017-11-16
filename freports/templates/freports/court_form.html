@@ -13,6 +13,8 @@
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
 
+    <input type="hidden" name="next_url" value="{{ next_url }}">
+
     <div class="form-group row">
         <label for="inputName" class="col-sm-3 col-form-label">Назва <strong>*</strong></label>
         <div class="col-sm-4">
@@ -41,7 +43,7 @@
         <label for="inputNumber" class="col-sm-3 col-form-label">Номер</label>
         <div class="col-sm-4">
             <input type="text" class="form-control {% if errors %}is-valid{% endif %}"
-                id="inputNumber" value="{{ content.number }}"
+                id="inputNumber" value="{% if content.number %}{{ content.number }}{% endif %}"
                 placeholder="Введіть номер справ суду" name="number">
             <div class="invalid-feedback">
                 {{ errors.number }}
@@ -58,7 +60,7 @@
                 <option value=''>-----------</option>
                 {% for judge in judges %}
                 <option value='{{ judge.id }}'
-                    {% if content.chair.id == judge.id %}selected{% endif %}>{{ judge }}</option>
+                    {% if content.chair.id == judge.id %}selected{% endif %}>{{ judge.full_name }}</option>
                 {% endfor %}
             </select>
             <div class="invalid-feedback">

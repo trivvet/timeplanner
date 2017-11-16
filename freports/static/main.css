@@ -101,9 +101,12 @@ tbody>td {
 }
 
 /* detail pages */
-h3.event-header {
-  text-align: center;
-  margin-bottom: 1rem;
+#report-detail-header {
+
+}
+
+.card {
+  font-weight: normal;
 }
 
 h3.event-second-header {

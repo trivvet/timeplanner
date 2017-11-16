@@ -8,7 +8,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <a class="btn btn-sm align-middle btn-outline-warning"
-                id="add-report" href="{% url 'forensic_add_court' %}">Додати суддю</a>
+                id="add-report" href="{% url 'forensic_add_judge' %}">Додати суддю</a>
     </div>
 </nav>
 {% endblock title %}
@@ -18,7 +18,7 @@
 
 {% block content %}
 
-{% if contacts %}
+{% if judges %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
 <table class="table table-hover table-bordered">
     <thead>
@@ -38,7 +38,16 @@
 
             <td>{{ judge.surname }} {{ judge.first_name }} {{ judge.second_name }}</td>
             <td>{{ judge.court_name }}</td>
-            <td>{{ judge.personal_phone }} {{ judge.work_phone }} {{ judge.address }}</td>
+            <td>
+                {% if judge.personal_phone %}
+                    Тел. {{ judge.personal_phone }}</br>
+                {% endif %}
+                {% if judge.work_phone %}
+                    Роб.тел. {{ judge.work_phone }}</br>
+                {% endif %}
+                {% if judge.address %}
+                   Адреса: {{ judge.address }}
+                {% endif %}
             <td>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -47,11 +56,11 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                            href="">Детальна інформація</a>
+                            href="{% url 'forensic_judge_detail' judge.id %}">Детальна інформація</a>
                         <a class="dropdown-item"
-                            href="">Редагувати</a>
+                            href="{% url 'forensic_edit_judge' judge.id %}">Редагувати</a>
                         <a class="dropdown-item"
-                            href="">Видалити</a>
+                            href="{% url 'forensic_delete_judge' judge.id %}">Видалити</a>
                     </div>
                 </div>
             </td>

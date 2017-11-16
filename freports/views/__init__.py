@@ -4,5 +4,5 @@ from .participants import participants_list, participant_detail, add_participant
 from .login import login_auth, logout_auth
 from .contacts import contacts_list
 from .subjects import subjects_list, subject_detail, add_subject, edit_subject, delete_subject
-from .courts import courts_list, add_court, delete_court
-from .judges import judges_list
+from .courts import courts_list, court_detail, add_court, edit_court, delete_court
+from .judges import judges_list, judge_detail, add_judge, edit_judge, delete_judge

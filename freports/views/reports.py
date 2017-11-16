@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from ..models import Report, ReportEvents
+from ..models import Report, ReportEvents, Judge
 
 @login_required(login_url='/login/')
 def reports_list(request):
@@ -52,9 +52,10 @@ def reports_list(request):
         if reverse_apply:
             reports = reports.reverse()
     else:
+        reports_no_active = reports.filter(active=None)
         reports_top = reports.filter(active=True)
         reports_low = reports.filter(active=False)
-        reports = list(chain(reports_top, reports_low))
+        reports = list(chain(reports_no_active, reports_top, reports_low))
 
     new_reports = []
     for report in reports:
@@ -98,20 +99,21 @@ def add_new_report(request):
         if request.POST.get('save_button'):
             data = request.POST
             errors, new_data = {}, {}
+            judge_id = request.POST.get('judge_id', '')
 
             if data['number']:
                 try:
                     new_data['number'] = int(data['number'])
                 except ValueError:
-                    error['number'] = u"Будь-ласка введіть ціле число"
+                    errors['number'] = u"Будь-ласка введіть ціле число"
                     new_data['number'] = data['number']
             else:
-                error['number'] = u"Номер висновку є обов'язковим"
+                errors['number'] = u"Номер висновку є обов'язковим"
 
             if errors:
                 messages.error(request, "Виправте наступні недоліки")
                 return render(request, 'freports/add_new_report.html', {'header': header, 'errors': errors,
-                    'content': new_report})
+                    'content': new_data, 'judge_id': judge_id})
             else:
                 new_data['number_year'] = data['number_year']
                 new_data['address'] = u"-"
@@ -119,6 +121,9 @@ def add_new_report(request):
                 new_data['defendant'] = u"-"
                 new_data['object_name'] = u"-"
                 new_data['research_kind'] = u"-"
+                new_data['active'] = None
+                if judge_id:
+                    new_data['judge_name'] = Judge.objects.get(pk=judge_id)
                 new_report = Report(**new_data)
                 new_report.save()
 
@@ -129,7 +134,8 @@ def add_new_report(request):
         return HttpResponseRedirect(reverse('forensic_reports_list'))
 
     else:
-        return render(request, 'freports/add_new_report.html', {'header': header})
+        judge_id = request.GET.get('judge', '')
+        return render(request, 'freports/add_new_report.html', {'header': header, 'judge_id': judge_id })
 
 @login_required(login_url='/login/')
 def edit_report(request, rid):

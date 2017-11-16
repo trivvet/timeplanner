@@ -2,12 +2,14 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
-from ..models import Report, ReportEvents, ReportParticipants, ReportSubject
+
+from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge
 
 petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи']
 done_type = ['Висновок експерта', 'Повідомлення про неможливість', 'Залишення без виконання']
@@ -61,6 +63,7 @@ def details_list(request, rid):
 @login_required(login_url='/login/')
 def add_order(request, rid):
     report = Report.objects.get(pk=rid)
+    courts = Court.objects.all()
     kind = 'first_arrived'
     content = {}
     header = u'Провадження №%s/%s' % (report.number, report.number_year)
@@ -79,16 +82,30 @@ def add_order(request, rid):
             if not case_number:
                 errors['case'] = u"Номер судової справи є обов'язковим"
 
+            judge = request.POST.get('judge')
+            if judge:
+                try:
+                    judge_name = Judge.objects.get(pk=judge)
+                except ObjectDoesNotExist:
+                    errors['judge'] = u"Будь ласка, виберіть суддю зі списку"
+            else:
+                errors['judge'] = u"Вибір судді є обов'язковим"
+
             if errors:
-                print errors
                 messages.error(request, u"Виправте наступні недоліки")
+                new_element['case'] = case_number
+                new_element['judge'] = judge
+                new_element['court'] = request.POST.get('court')
                 return render(request, 'freports/add_order_form.html',
-                    {'header': header, 'content': content, 'new_content': new_element, 'errors': errors})
+                    {'header': header, 'content': content, 'new_content': new_element, 'errors': errors,
+                    'courts': courts, 'judges': judges})
             else:
                 new_detail = ReportEvents(**new_element)
                 new_detail.save()
+                report.judge_name = judge_name
                 report.case_number = case_number
                 report.date_arrived = new_detail.date
+                report.active = True
                 report.save()
                 messages.success(request, u"Ухвала про призначення експертизи успішно додана")
                 return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
@@ -97,7 +114,25 @@ def add_order(request, rid):
             messages.warning(request, u"Додавання ухвали про призначення експертизи скасовано")
             return HttpResponseRedirect(reverse('forensic_reports_list'))
 
-    return render(request, 'freports/add_order_form.html', {'header': header, 'content': content})
+    elif request.method == 'GET':
+        if request.is_ajax():
+            court = Court.objects.get(pk=request.GET.get('court'))
+            judges = Judge.objects.filter(court_name=court)
+            new_list = []
+            for judge in judges:
+                new_item = {'id': judge.id, 'short_name': judge.short_name()}
+                new_list.append(new_item)
+            return JsonResponse({'status': 'success', 'judges': new_list, 'court_number': court.number})
+        else:
+            new_content = {}
+            if report.judge_name:
+                judge = report.judge_name
+                new_content['court'] = judge.court_name.id
+                new_content['judge'] = judge.id
+                judges = Judge.objects.filter(court_name=judge.court_name)
+
+        return render(request, 'freports/add_order_form.html', {'header': header, 'content': content, 'courts': courts,
+            'new_content': new_content, 'judges': judges})
 
 @login_required(login_url='/login/')
 def add_detail(request, rid, kind):

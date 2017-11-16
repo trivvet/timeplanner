@@ -117,10 +117,60 @@ function initForm(form, modal, link) {
     });
 }
 
+function initSelectCourt() {
+    $('#inputCourtForOrder').change(function() {
+        $.ajax('', {
+            'type': 'GET',
+            'async': true,
+            'dataType': 'json',
+            'data': {'court': $(this).val()},
+            'error': function(xhr, status, error) {
+                alert(error);
+            },
+            'success': function(data, status, xhr) {
+                $('#inputJudge').parent().parent().removeAttr('hidden');
+                $('#inputJudge').html('<option value="">-----</option>');
+                for (i=0, len=data.judges.length; i<len; i++) {
+                    option = '<option value=' + data.judges[i].id + '>' + data.judges[i].short_name + '</option>'
+                    $('#inputJudge').append(option);
+                }
+                if (data.court_number) {
+                    case_number = data.court_number + '/';
+                    $('#inputCase').val(case_number);
+                    inputNumberField();
+                }
+            },
+        });
+    });
+}
+
+function inputNumberField() {
+    $('#inputCase').focus(function() {
+        current_value = $(this).val();
+        if (current_value.includes('-ц')) {
+            end_of_array = current_value.indexOf('/', 5);
+            $(this).get(0).setSelectionRange(4,end_of_array);
+        } else {
+            $('#inputCase').val(current_value + ' /17-ц');
+            $(this).get(0).setSelectionRange(4,5);
+        }
+    });
+}
+
+function addPlusButton() {
+    $('.report-detail-item').parent().parent().mouseenter(function() {
+        $(this).find('.btn-outline-success').removeAttr('hidden');
+        $(this).mouseleave(function() {
+            $(this).find('.btn-outline-success').attr('hidden', '1');
+        });
+    });
+}
+
 $(document).ready(function(){
     initDateFields();
     initDateTimeFields();
     initRowMakeLink();
     initFormPage();
-
+    initSelectCourt();
+    addPlusButton();
 })

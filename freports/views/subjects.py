@@ -43,6 +43,8 @@ def add_subject(request, rid):
             else:
                 new_subject = ReportSubject(**new_element)
                 new_subject.save()
+                report = edit_report(new_subject, report)
+                report.save()
                 messages.success(request, u"Об'єкт '%s' успішно доданий" % new_subject.subject_type)
 
         elif request.POST.get('cancel_button'):
@@ -78,6 +80,9 @@ def edit_subject(request, rid, sid):
                 edit_subject = ReportSubject(**new_data)
                 edit_subject.id = sid
                 edit_subject.save()
+                report = edit_report(edit_subject, report)
+                report.save()
+                messages.success(request, u"Об'єкт '%s' успішно змінений" % edit_subject.subject_type)
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування об'єкту '%s' провадження №%s/%s  скасоване" %
@@ -103,6 +108,8 @@ def delete_subject(request, rid, sid):
         if request.POST.get('delete_button'):
             subject_delete = subject
             subject_delete.delete()
+            report = edit_report(False, report)
+            report.save()
             messages.success(request, u"Об'єкт '%s' провадження №%s/%s успішно видалений" % (
                 subject.subject_type, report.number, report.number_year))
         elif request.POST.get('cancel_button'):
@@ -159,3 +166,23 @@ def valid_detail(request_info, report_id):
         new_element['research_type'] = research_type
 
     return {'errors': errors, 'data': new_element}
+
+def edit_report(subject, report):
+    report_subjects = ReportSubject.objects.filter(report=report)
+    if subject is False and report_subjects.count() != 0:
+        pass
+    elif subject is False:
+        report.address = '-'
+        report.object_name = '-'
+        report.research_kind = '-'
+    else:
+        if report_subjects.count() > 1:
+            report.address == "{}, {}".format(report.address, subject.short_address())
+            report.object_name = "{}, {}".format(report.object_name, subject.subject_type)
+            report.research_kind = "{}, {}".format(report.research_kind, subject.research_type)
+        else:
+            report.address = subject.short_address()
+            report.object_name = subject.subject_type
+            report.research_kind = subject.research_type
+
+    return report

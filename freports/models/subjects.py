@@ -62,8 +62,10 @@ class ReportSubject(models.Model):
         return u"Subject %s of the report %s/%s" % (self.subject_type, self.report.number, self.report.number_year)
 
     def short_address(self):
-        if self.settlement == 'м. Хмельницький':
+        if self.settlement == 'м. Хмельницький' or 'с.т.' in self.street and self.region == 'Хмельницький':
             short_address = self.street
+        elif 'с.т.' in self.street:
+            short_address = self.region + 'р-н'
         else:
             short_address = self.settlement
         return short_address
@@ -84,7 +86,11 @@ class ReportSubject(models.Model):
         return full_address
 
     def settlement_type(self):
-        s_type = self.settlement[0:2]
+        s_type = self.settlement[0:4]
+        if '.' not in s_type:
+            s_type = ''
+        else:
+            s_type = s_type[0:2]
         return s_type
 
     def settlement_name(self):
