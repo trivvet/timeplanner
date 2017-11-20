@@ -167,6 +167,17 @@ def valid_detail(request_info, report_id):
 
     return {'errors': errors, 'data': new_element}
 
+def object_name_replace(report_subject_name, subject_name):
+    replace_dict = {
+        'земельна ділянка': 'земельні ділянки',
+        'квартира': 'квартири',
+        'житловий будинок': 'житлові будинки',
+        'нежитлове приміщення': 'нежитлові приміщення',
+        'гараж': 'гаражі'
+    }
+    report_subject_name = report_subject_name.replace(subject_name, replace_dict[subject_name])
+    return report_subject_name
+
 def edit_report(subject, report):
     report_subjects = ReportSubject.objects.filter(report=report)
     if subject is False and report_subjects.count() != 0:
@@ -177,9 +188,13 @@ def edit_report(subject, report):
         report.research_kind = '-'
     else:
         if report_subjects.count() > 1:
+            if subject.subject_type not in report.object_name:
+                report.object_name = "{}, {}".format(report.object_name, subject.subject_type)
+            else:
+                report.object_name = object_name_replace(report.object_name, subject.subject_type)
             report.address == "{}, {}".format(report.address, subject.short_address())
-            report.object_name = "{}, {}".format(report.object_name, subject.subject_type)
-            report.research_kind = "{}, {}".format(report.research_kind, subject.research_type)
+            if subject.research_type not in report.research_kind:
+                report.research_kind = "{}, {}".format(report.research_kind, subject.research_type)
         else:
             report.address = subject.short_address()
             report.object_name = subject.subject_type

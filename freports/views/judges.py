@@ -20,14 +20,20 @@ def judges_list(request):
 def judge_detail(request, jid):
     judge = Judge.objects.get(pk=jid)
     cases = Report.objects.filter(judge_name=judge)
+    next_url = request.GET.get('next')
     header = u'Детальна інформація про суддю {}'.format(judge.full_name())
-    return render(request, 'freports/judge_detail.html', {'content': judge, 'header': header, 'cases': cases})
+    return render(request, 'freports/judge_detail.html', {'content': judge, 'header': header, 'cases': cases,
+        'next_url': next_url})
 
 @login_required(login_url='/login/')
 def add_judge(request):
     header = u'Додавання судді'
     courts = Court.objects.all()
     if request.method == 'POST':
+        if request.POST.get('cancel_next'):
+            next_url = reverse(request.POST.get('cancel_next'), args=[request.POST.get('next_id')])
+        else:
+            next_url = reverse('judges_list')
         if request.POST.get('save_button'):
             valid_data = valid_judge(request.POST)
             errors = valid_data['errors']
@@ -43,14 +49,16 @@ def add_judge(request):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання судді скасовано")
 
-        return HttpResponseRedirect(reverse('judges_list'))
+        return HttpResponseRedirect(next_url)
 
     else:
+        next_url = request.GET.get('next', '')
         court_id = request.GET.get('court', '')
         content = {}
         if court_id:
             content['court_name'] = Court.objects.get(pk=court_id)
-        return render(request, 'freports/judge_form.html', {'header': header, 'courts': courts, 'content': content})
+        return render(request, 'freports/judge_form.html', {'header': header, 'courts': courts, 'content': content,
+            'cancel_url': next_url})
 
 def edit_judge(request, jid):
     judge = Judge.objects.get(pk=jid)

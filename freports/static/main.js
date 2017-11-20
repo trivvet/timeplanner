@@ -147,6 +147,7 @@ function initSelectCourt() {
 function inputNumberField() {
     $('#inputCase').focus(function() {
         current_value = $(this).val();
+        console.log('OK');
         if (current_value.includes('-ц')) {
             end_of_array = current_value.indexOf('/', 5);
             $(this).get(0).setSelectionRange(4,end_of_array);

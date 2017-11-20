@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from ..models import Report, ReportEvents, Judge
+from ..models import Report, ReportEvents, Judge, Court
 
 @login_required(login_url='/login/')
 def reports_list(request):
@@ -92,14 +92,26 @@ def reports_list(request):
     return render(request, 'freports/reports_list.html', {'reports': new_reports, 'content': content})
 
 @login_required(login_url='/login/')
+def add_new_report_first(request):
+    header = u'Спочатку виберіть замовника дослідження'
+    courts = Court.objects.all()
+    for court in courts:
+        court.judges = Judge.objects.filter(court_name=court)
+    return render(request, 'freports/add_new_report_first.html', {'header': header, 'courts': courts})
+
+@login_required(login_url='/login/')
 def add_new_report(request):
     header = u'Зазначте номер нового провадження'
 
     if request.method == 'POST':
+        judge_id = request.POST.get('judge_id', '')
+        if request.POST.get('cancel_next'):
+            next_url = reverse(request.POST.get('cancel_next'), args=[judge_id])
+        else:
+            next_url = reverse('forensic_reports_list')
         if request.POST.get('save_button'):
             data = request.POST
             errors, new_data = {}, {}
-            judge_id = request.POST.get('judge_id', '')
 
             if data['number']:
                 try:
@@ -131,11 +143,13 @@ def add_new_report(request):
                     new_report.number, new_report.number_year))
         elif request.POST.get('cancel_button'):
             messages.warning(request, "Створення нового провадження скасовано")
-        return HttpResponseRedirect(reverse('forensic_reports_list'))
+        return HttpResponseRedirect(next_url)
 
     else:
         judge_id = request.GET.get('judge', '')
-        return render(request, 'freports/add_new_report.html', {'header': header, 'judge_id': judge_id })
+        next_url = request.GET.get('next', '')
+        return render(request, 'freports/add_new_report.html', {'header': header, 'judge_id': judge_id,
+            'cancel_url': next_url})
 
 @login_required(login_url='/login/')
 def edit_report(request, rid):

@@ -63,12 +63,17 @@
                         <ul class="list-group">
                             {% for judge in judges %}
                             <li class="list-group-item">
-                                <a class="no-style-link" href="">{{ judge.full_name }}</a></br>
+                                <a class="no-style-link report-detail-item"
+                                    href="{% url 'forensic_judge_detail' judge.id %}?next=forensic_court_detail">
+                                    {{ judge.full_name }}</a>
                             </li>
                             {% endfor %}
+                            <a class="btn btn-outline-success badge" style="margin-top: 10px;"
+                                href="{% url 'forensic_add_judge' %}?court={{ content.id }}&next=forensic_court_detail"
+                                hidden>Додати суддю</a>
                         </ul>
                         {% else %}
-                        <a class="no-style-link" href="{% url 'forensic_add_judge' %}?court={{ content.id }}"
+                        <a class="no-style-link" href="{% url 'forensic_add_judge' %}?next_id={{ content.id }}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>

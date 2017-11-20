@@ -65,7 +65,7 @@ def add_order(request, rid):
     report = Report.objects.get(pk=rid)
     courts = Court.objects.all()
     kind = 'first_arrived'
-    content = {}
+    content, judges = {}, {}
     header = u'Провадження №%s/%s' % (report.number, report.number_year)
     content['obvious_fields'] = kind_specific[kind][1]
     content['kind'] = kind
@@ -86,6 +86,7 @@ def add_order(request, rid):
             if judge:
                 try:
                     judge_name = Judge.objects.get(pk=judge)
+                    judges = Judge.objects.filter(court_name=judge_name.court_name)
                 except ObjectDoesNotExist:
                     errors['judge'] = u"Будь ласка, виберіть суддю зі списку"
             else:
@@ -129,6 +130,7 @@ def add_order(request, rid):
                 judge = report.judge_name
                 new_content['court'] = judge.court_name.id
                 new_content['judge'] = judge.id
+                new_content['case'] = u"{}/".format(judge.court_name.number)
                 judges = Judge.objects.filter(court_name=judge.court_name)
 
         return render(request, 'freports/add_order_form.html', {'header': header, 'content': content, 'courts': courts,

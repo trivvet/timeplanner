@@ -13,6 +13,7 @@
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
     <input type="hidden" name="cancel_next" value="{{ cancel_url }}">
+    <input type="hidden" name="next_id" value="{{ content.court_name.id }}">
 
     <!-- Прізвище * -->
     <div class="form-group row">

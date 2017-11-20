@@ -56,7 +56,7 @@ def add_participant(request, rid, status):
                 updated_contact = find_contact(new_participant)
                 if updated_contact:
                     updated_contact.save()
-                report = edit_report(new_participant.status, report, new_participant.surname)
+                report = edit_report(new_participant, report)
                 report.save()
                 messages.success(request, u"%s '%s' успішно доданий" % (status_list[new_participant.status], new_participant.surname))
 
@@ -93,7 +93,7 @@ def edit_participant(request, rid, did):
                 updated_contact = find_contact(edit_participant)
                 if updated_contact:
                     updated_contact.save()
-                report = edit_report(edit_participant.status, report, edit_participant.surname)
+                report = edit_report(edit_participant, report)
                 report.save()
                 messages.success(request, u"%s '%s' успішно змінений" % (
                     status_list[edit_participant.status], edit_participant.surname))
@@ -124,7 +124,7 @@ def delete_participant(request, rid, did):
         if request.POST.get('delete_button'):
             participant_delete = participant
             participant_delete.delete()
-            report = edit_report(participant_delete.status, report, '-')
+            report = edit_report(participant_delete, report, 'delete')
             report.save()
             messages.success(request, u"%s '%s' провадження №%s/%s успішно видалений" % (
                 status_list[participant.status], participant.surname, report.number, report.number_year))
@@ -200,9 +200,26 @@ def find_contact(participant):
 
     return contact
 
-def edit_report(status, report, value):
-    if status == 'plaintiff':
-        report.plaintiff = value
-    elif status == 'defendant':
-        report.defendant = value
+def edit_report(participant, report, *args):
+    participants = ReportParticipants.objects.filter(report=report)
+    plaintiffs = participants.filter(report=report, status='plaintiff')
+    defendants = participants.filter(report=report, status='defendent')
+    if participant.status == 'plaintiff':
+        if 'delete' in args and participant.surname in report.plaintiff:
+            if plaintiffs.count() != 0:
+                report.plaintiff = plaintiffs[0].surname
+            else:
+                report.plaintiff = '-'
+        elif plaintiffs.count() == 0:
+            report.plaintiff = '-'
+        elif plaintiffs.count() == 1:
+            report.plaintiff = plaintiffs[0].surname
+    elif participant.status == 'defendant':
+        if 'delete' in args and participant.surname in report.defendant:
+            if defendants.count != 0:
+                report.defendant = defendants[0].surname
+            else:
+                report.defendant = '-'
+        elif defendants.count() == 1:
+            report.defendants = defendants[0].surname
     return report

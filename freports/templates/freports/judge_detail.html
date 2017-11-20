@@ -26,6 +26,10 @@
 <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
+        {% if next_url %}
+        <a type="button" class="btn btn-light" id="back-button"
+            href="{% url next_url content.court_name.id %}">Повернутись до сторінки суду</a>
+        {% endif %}
         <table class="table table-bordered table-hover">
             <thead></thead>
             <tbody>
@@ -66,12 +70,17 @@
                         <ul class="list-group">
                             {% for case in cases %}
                             <li class="list-group-item">
-                                <a class="no-style-link" href="">{{ case.short_name }}</a></br>
+                                <a class="no-style-link report-detail-item"
+                                    href="{% url 'report_details_list' case.id %}">{{ case.short_name }}</a></br>
                             </li>
                             {% endfor %}
+                            <a class="btn btn-outline-success badge" style="margin-top: 10px;"
+                                href="{% url 'forensic_add_new_report' %}?judge={{ content.id }}&next=forensic_judge_detail"
+                                hidden>Додати справу</a>
                         </ul>
                         {% else %}
-                        <a class="no-style-link" href="{% url 'forensic_add_new_report' %}?judge={{ content.id }}"
+                        <a class="no-style-link"
+                            href="{% url 'forensic_add_new_report' %}?judge={{ content.id }}&next=forensic_judge_detail"
                             style="color:black">Немає призначених справ</a>
                         {% endif %}
                     </td>
