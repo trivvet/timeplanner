@@ -55,8 +55,8 @@
         <label for="inputCase" class="col-sm-3 col-form-label">Номер справи <strong>*</strong></label>
         <div class="col-sm-4">
             <input type="text" id="inputCase" placeholder="Введіть номер судової справи" name="case_number"
-                    class="form-control {% if errors.case %}is-invalid{% elif errors %}is-valid{% endif %}"
-                    value="{{ new_content.case_number }}">
+                    class="form-control {% if errors.case_number %}is-invalid{% elif errors %}is-valid{% endif %}"
+                    value="{{ content.case_number }}">
             <div class="invalid-feedback">
                 {{ errors.case_number }}
             </div>

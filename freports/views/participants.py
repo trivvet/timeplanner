@@ -203,7 +203,7 @@ def find_contact(participant):
 def edit_report(participant, report, *args):
     participants = ReportParticipants.objects.filter(report=report)
     plaintiffs = participants.filter(report=report, status='plaintiff')
-    defendants = participants.filter(report=report, status='defendent')
+    defendants = participants.filter(report=report, status='defendant')
     if participant.status == 'plaintiff':
         if 'delete' in args and participant.surname in report.plaintiff:
             if plaintiffs.count() != 0:
@@ -216,10 +216,11 @@ def edit_report(participant, report, *args):
             report.plaintiff = plaintiffs[0].surname
     elif participant.status == 'defendant':
         if 'delete' in args and participant.surname in report.defendant:
-            if defendants.count != 0:
+            if defendants.count() != 0:
                 report.defendant = defendants[0].surname
             else:
                 report.defendant = '-'
+            report.defendant = '-'
         elif defendants.count() == 1:
-            report.defendants = defendants[0].surname
+            report.defendant = defendants[0].surname
     return report

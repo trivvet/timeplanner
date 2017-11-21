@@ -139,7 +139,8 @@ def add_order(request, rid):
 @login_required(login_url='/login/')
 def add_detail(request, rid, kind):
     report = Report.objects.get(pk=rid)
-    content = {}
+    details = ReportEvents.objects.filter(report=report).order_by('date').reverse()
+    content, new_content = {}, {}
     header = {}
     header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
     header['second'] = kind_specific[kind][0].capitalize()
@@ -147,6 +148,13 @@ def add_detail(request, rid, kind):
     if 'type' in content['obvious_fields']:
         content['select_type'] = kind_specific[kind][2]
     content['kind'] = kind
+    for detail in details:
+        if detail.name in ('arrived', 'first_arrived'):
+            new_content['sending'] = detail.received
+            break
+        if detail.name == 'petition':
+            new_content['received'] = detail.sending
+            break
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -168,13 +176,8 @@ def add_detail(request, rid, kind):
                     report.save()
                 new_detail = ReportEvents(**new_element)
                 new_detail.save()
-                last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
-                if last_detail.activate == True:
-                    report.active = True
-                    report.save()
-                elif last_detail.activate == False:
-                    report.active = False
-                    report.save()
+                report = check_active(report)
+                report.save()
                 messages.success(request, u"Подія '%s' успішно додана" % kind_specific[new_detail.name][0])
 
         elif request.POST.get('cancel_button'):
@@ -183,7 +186,7 @@ def add_detail(request, rid, kind):
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
     else:
-        return render(request, 'freports/detail_form.html', {'header': header, 'content': content})
+        return render(request, 'freports/detail_form.html', {'header': header, 'content': content, 'new_content': new_content})
 
 @login_required(login_url='/login/')
 def edit_detail(request, rid, did):
@@ -221,13 +224,8 @@ def edit_detail(request, rid, did):
                 else:
                     edit_detail.activate = new_data['activate']
                 edit_detail.save()
-                last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
-                if last_detail.activate == True:
-                    report.active = True
-                    report.save()
-                elif last_detail.activate == False:
-                    report.active = False
-                    report.save()
+                report = check_active(report)
+                report.save()
                 messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])
 
         elif request.POST.get('cancel_button'):
@@ -238,6 +236,8 @@ def edit_detail(request, rid, did):
     else:
         new_content = detail
         new_content.date = new_content.date.isoformat()
+        if new_content.time:
+            new_content.time = new_content.time.isoformat()
         if new_content.decision_date:
             new_content.decision_date = new_content.decision_date.isoformat()
         return render(request, 'freports/detail_form.html', {'new_content': new_content, 'content': content, 'header': header})
@@ -276,6 +276,23 @@ def delete_detail(request, rid, did):
                 u"Видалення події '%s' до провадження №%s/%s скасоване" % (kind_specific[detail.name][0], report.number, report.number_year))
 
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+
+
+def check_active(report):
+    details = ReportEvents.objects.filter(report=report).order_by('date').reverse()
+    if details[0].date == details[1].date:
+        if True in (details[0].activate, details[1].activate) and details[2].activate == True:
+            report.active = True
+        else:
+            report.active = False
+    else:
+        last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
+        if last_detail.activate == True:
+            report.active = True
+        elif last_detail.activate == False:
+            report.active = False
+    return report
+
 
 def valid_detail(request_info, report_id):
     errors = {}

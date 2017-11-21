@@ -1,6 +1,5 @@
 function initDateFields() {
-    var startDate = $('input.dateinput').val(), currentDate = new Date(),
-        calendarButton = "<i class='fa fa-calendar' aria-hidden='true'></i>";
+    var startDate = $('input.dateinput').val(), currentDate = new Date();
     if (!startDate) {
         var startDate = currentDate;
     }
@@ -27,6 +26,10 @@ function initDateFields() {
 }
 
 function initDateTimeFields() {
+    var startDate = $('input.datetimeinput').val(), currentDate = new Date();
+    if (!startDate) {
+        var startDate = currentDate;
+    }
     $('input.datetimeinput').datetimepicker({
       format: 'YYYY-MM-DD HH:mm',
       icons: {
@@ -42,6 +45,7 @@ function initDateTimeFields() {
       sideBySide: true,
       stepping: 30,
       locale: 'uk',
+      useCurrent: false,
       daysOfWeekDisabled: [0,6]
     });
 }
@@ -142,6 +146,9 @@ function initSelectCourt() {
             },
         });
     });
+    if ($('#inputCourtForOrder').val()) {
+        inputNumberField();
+    }
 }
 
 function inputNumberField() {

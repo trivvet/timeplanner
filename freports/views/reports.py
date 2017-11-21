@@ -158,7 +158,6 @@ def edit_report(request, rid):
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
-            current_report = content
 
             validate_data = valid_report(request.POST)
             errors = validate_data['errors']
@@ -172,6 +171,7 @@ def edit_report(request, rid):
             else:
                 current_report = Report(**new_report)
                 current_report.id = rid
+                current_report.judge_name = content.judge_name
 
                 current_report.save()
                 messages.success(request, u"Провадження №%s/%s успішно відкориговане" % (current_report.number, current_report.number_year))
