@@ -17,12 +17,17 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from freports import views as freports
+from business_card import views as business_card
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
+    # business card urls
+    url(r'^$', business_card.first_page, name='business_card_first_page'),
+    url(r'^info/$', business_card.info_page, name='business_card_info_page'),
+
     # report urls
-    url(r'^$', freports.reports_list, name='forensic_reports_list'),
+    url(r'^freports/$', freports.reports_list, name='forensic_reports_list'),
     url(r'^freports/add/new_report/first/$', freports.add_new_report_first, name='forensic_add_new_report_first'),
     url(r'^freports/add/new_report/$', freports.add_new_report, name='forensic_add_new_report'),
     url(r'^freports/(?P<rid>\d+)/edit/$', freports.edit_report, name='forensic_edit_report'),

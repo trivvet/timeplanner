@@ -13,6 +13,11 @@ from ..models import Court, Judge, Report
 @login_required(login_url='/login/')
 def courts_list(request):
     courts = Court.objects.all().order_by('name')
+    for court in courts:
+        judges = Judge.objects.filter(court_name=court)
+        court.cases_amount = 0
+        for judge in judges:
+            court.cases_amount += Report.objects.filter(judge_name=judge, executed=False).count()
     header = 'Список судів'
     return render(request, 'freports/courts_list.html', {'courts': courts, 'header': header})
 
@@ -22,7 +27,7 @@ def court_detail(request, cid):
     judges = Judge.objects.filter(court_name=court)
     cases_amount = 0
     for judge in judges:
-        cases_amount += Report.objects.filter(judge_name=judge).count()
+        cases_amount += Report.objects.filter(judge_name=judge, executed=False).count()
     header = u'Детальна інформація про {}'.format(court.name)
     return render(request, 'freports/court_detail.html', {'content': court, 'header': header, 'judges': judges,
         'cases_amount': cases_amount})
@@ -84,7 +89,7 @@ def edit_court(request, cid):
         return render(request, 'freports/court_form.html', {'header': header, 'content': court, 'judges': judges,
             'next_url':next_url})
 
-
+@login_required(login_url='/login/')
 def delete_court(request, cid):
     court = Court.objects.get(pk=cid)
     header = u"Видалення інформації про %s" % court

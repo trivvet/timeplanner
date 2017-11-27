@@ -1,0 +1,38 @@
+{% load static %}
+
+<html lang="uk">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Судова експертиза</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+        <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.standalone.min.css" />
+         <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
+        <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'main.css' %}" type="text/css">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row" id="main-header">
+                <div class="col">
+                    <p><b>Судовий експерт</b></p>
+                    <p><b>Власюк Володимир Володимирович</b></p>
+                    <p>Адреса: 29013, м. Хмельницький, вул. Проскурівського підпілля, 25</p>
+                    <p>Моб.тел. 097-749-28-34</p>
+                    <a class="btn btn-outline-info" href="{% url 'business_card_info_page' %}">Детальніше...</a>
+                </div>
+            </div>
+
+            <hr />
+            <div class="row">
+                <div class="col-11">Далі буде...</div>
+                <div class="col-1"><a href="{% url 'forensic_reports_list' %}">&#x21F2</a></div>
+            </div>
+        </div>
+
+    </body>
+</html>

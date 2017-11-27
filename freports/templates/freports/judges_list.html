@@ -36,7 +36,7 @@
         {% for judge in judges %}
         <tr>
 
-            <td>{{ judge.surname }} {{ judge.first_name }} {{ judge.second_name }}</td>
+            <td>{{ judge.surname }} {{ judge.first_name }} {{ judge.second_name }} <span class="badge badge-success">{{ judge.cases_amount }}</span></td>
             <td>{{ judge.court_name }}</td>
             <td>
                 {% if judge.personal_phone %}
