@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from ..models import Report, ReportEvents, Judge, Court
+from ..models import Report, ReportEvents, Judge, Court, ReportParticipants, ReportSubject
 
 @login_required(login_url='/login/')
 def reports_list(request):
@@ -171,6 +171,7 @@ def edit_report(request, rid):
             else:
                 current_report = Report(**new_report)
                 current_report.id = rid
+                current_report.active = content.active
                 current_report.judge_name = content.judge_name
 
                 current_report.save()
@@ -197,8 +198,15 @@ def delete_report(request, rid):
     elif request.method == 'POST':
         if request.POST.get('delete_button'):
             current_report = Report.objects.get(pk=rid)
-            current_report.delete()
-            messages.success(request, u"Провадження №%s/017 успішно видалено" % current_report.number)
+            participants = ReportParticipants.objects.filter(report=current_report)
+            subjects = ReportSubject.objects.filter(report=current_report)
+            if participants.count() > 0:
+                messages.error(request, u"Видалення неможливе. За даним провадженням рахуються учасники справи!")
+            elif subjects.count() > 0:
+                messages.error(request, u"Видалення неможливе. За даним провадженням рахуються об'єкти дослідження!")
+            else:
+                current_report.delete()
+                messages.success(request, u"Провадження №%s/017 успішно видалено" % current_report.number)
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Видалення провадження скасовано")
 
@@ -264,10 +272,5 @@ def valid_report(data_post):
         errors['research_kind'] = u"Вид дослідження є обов'язковим"
     else:
         new_report['research_kind'] = research_kind
-
-    active = data_post.get('active')
-    if active is None:
-        new_report['active'] = True
-        new_report['executed'] = False
 
     return {'errors': errors, 'data_report': new_report}

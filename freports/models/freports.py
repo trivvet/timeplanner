@@ -67,7 +67,8 @@ class Report(models.Model):
         null=True)
 
     def __unicode__(self):
-        return u"%s/017-%s-%s" % (self.number, self.address, self.plaintiff)
+        return u"{number}/{number_year} ({address}-{plaintiff}-{defendant})".format(number=self.number,
+            number_year=self.number_year, address=self.address, plaintiff=self.plaintiff, defendant=self.defendant)
 
     def filled_info(self):
         if self.address == '-' or self.judge_name == '-' or self.plaintiff == '-' or self.defendant == '-' or self.object_name == '-' or self.research_kind == '-':
@@ -80,3 +81,7 @@ class Report(models.Model):
         return u"{number}/{number_year}-{address}-{plaintiff}-{defendant}-{object_name}-{research_kind}".format(
             number=self.number, number_year=self.number_year, address=self.address, plaintiff=self.plaintiff,
             defendant=self.defendant, object_name=self.object_name, research_kind=self.research_kind)
+
+
+    def full_number(self):
+        return u"{}/{}".format(self.number, self.number_year)

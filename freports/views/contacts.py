@@ -8,7 +8,13 @@ from django.contrib.auth.decorators import login_required
 
 from ..models import Contacts
 
-status_list = {'judge': 'Суддя', 'plaintiff': 'Позивач', 'defendant': 'Відповідач', 'other': 'Інший учасник'}
+status_list = {
+    'judge': 'Суддя',
+    'plaintiff': 'Позивач',
+    'defendant': 'Відповідач',
+    'plaintiff_agent': 'Представник позивача',
+    'defendant_agent': 'Представник відповідача',
+    'other_participant': 'Інший учасник'}
 
 @login_required(login_url='/login/')
 def contacts_list(request):

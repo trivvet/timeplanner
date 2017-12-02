@@ -36,7 +36,10 @@ def add_subject(request, rid):
             new_element = valid_data['data']
 
             if errors:
+                new_element['settlement_type'] = request.POST.get('settlement_type')[0:2]
                 new_element['settlement_name'] = request.POST.get('settlement_name')
+                new_element['street_type'] = request.POST.get('street_type')[0:4]
+                new_element['street_name'] = request.POST.get('street_name')
                 messages.error(request, u"Виправте наступні недоліки")
                 return render(request, 'freports/subject_form.html',
                     {'header': header, 'new_content': new_element, 'errors': errors})
@@ -70,9 +73,9 @@ def edit_subject(request, rid, sid):
 
             if errors:
                 messages.error(request, u"Виправте наступні недоліки")
-                new_data['settlement_type'] = request.POST.get('settlement_type')
+                new_data['settlement_type'] = request.POST.get('settlement_type')[0:2]
                 new_data['settlement_name'] = request.POST.get('settlement_name')
-                new_data['street_type'] = request.POST.get('street_type')
+                new_data['street_type'] = request.POST.get('street_type')[0:4]
                 new_data['street_name'] = request.POST.get('street_name')
                 return render(request, 'freports/subject_form.html', {'new_content': new_data, 'errors': errors, 'header': header})
 
@@ -143,15 +146,15 @@ def valid_detail(request_info, report_id):
     region = request_info.get('region')
     new_element['region'] = region
 
-    street = request_info.get('street_name')
+    street_name = request_info.get('street_name')
     street_type = request_info.get('street_type')
-    if not street:
+    if not street_name:
         errors['street'] = u"Назва вулиці є обов'язковою"
     else:
         if street_type:
-            new_element['street'] = u"%s %s" % (street_type, street)
+            new_element['street'] = u"%s %s" % (street_type, street_name)
         else:
-            new_element['street'] = street
+            new_element['street'] = street_name
 
     building = request_info.get('building')
     new_element['building'] = building

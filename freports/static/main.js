@@ -159,7 +159,7 @@ function inputNumberField() {
             end_of_array = current_value.indexOf('/', 5);
             $(this).get(0).setSelectionRange(4,end_of_array);
         } else {
-            $('#inputCase').val(current_value + ' /17-ц');
+            $('#inputCase').val(current_value + ' /17');
             $(this).get(0).setSelectionRange(4,5);
         }
     });

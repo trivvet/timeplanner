@@ -21,6 +21,7 @@
                 <option {% if new_content.subject_type == 'нежитлове приміщення' %}selected{% endif %}>нежитлове приміщення</option>
                 <option {% if new_content.subject_type == 'гараж' %}selected{% endif %}>гараж</option>
                 <option {% if new_content.subject_type == 'садовий будинок' %}selected{% endif %}>садовий будинок</option>
+                <option {% if new_content.subject_type == 'незавершене будівництво' %}selected{% endif %}>незавершене будівництво</option>
                 <option {% if new_content.subject_type == 'інший' %}selected{% endif %}>інший</option>
             </select>
             <div class="invalid-feedback">
@@ -129,6 +130,7 @@
                 <option {% if new_content.research_type == 'розподіл' %}selected{% endif %}>розподіл</option>
                 <option {% if new_content.research_type == 'виділ' %}selected{% endif %}>виділ</option>
                 <option {% if new_content.research_type == 'затоплення' %}selected{% endif %}>затоплення</option>
+                <option {% if new_content.research_type == 'вартість будматеріалів' %}selected{% endif %}>вартість будматеріалів</option>
                 <option {% if new_content.research_type == 'оцінка' %}selected{% endif %}>оцінка</option>
                 <option {% if new_content.research_type == 'відповідність нормам' %}selected{% endif %}>відповідність нормам</option>
                 <option {% if new_content.research_type == 'інше' %}selected{% endif %}>інше</option>

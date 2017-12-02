@@ -69,6 +69,7 @@ def edit_judge(request, jid):
     header = u"Редагування інформацію про суддю {}".format(judge.short_name())
     if request.method == 'POST':
         if request.POST.get('cancel_next'):
+            print "not way"
             next_url = reverse(request.POST.get('cancel_next'), args=[jid])
         else:
             next_url = reverse('judges_list')
@@ -90,7 +91,7 @@ def edit_judge(request, jid):
 
         return HttpResponseRedirect(next_url)
     else:
-        next_url = request.GET.get('next')
+        next_url = request.GET.get('next', '')
         return render(request, 'freports/judge_form.html', {'header': header, 'courts': courts, 'content': judge,
             'cancel_url': next_url})
 
@@ -100,7 +101,7 @@ def delete_judge(request, jid):
     header = u"Видалення інформації про суддю %s" % judge.short_name()
     content = u"Ви дійсно бажаєте видалити інформацію про суддю %s" % judge
     if request.method == "GET":
-        next_url = request.GET.get('next')
+        next_url = request.GET.get('next', '')
         return render(request, 'freports/delete_form.html', {'content': content, 'header': header, 'cancel_url': next_url})
     else:
         next_url = reverse('judges_list')
@@ -109,10 +110,19 @@ def delete_judge(request, jid):
                 next_url = reverse(request.POST.get('cancel_next'), args=[jid])
             messages.warning(request, u"Видалення судді {} скасовано".format(judge.short_name()))
         elif request.POST.get('delete_button'):
-            judge.delete()
-            messages.success(request, u"Інформація про суддю %s успішно видалена" % judge)
+            reports = Report.objects.filter(judge_name=judge)
+            if reports.count() > 0:
+                messages.error(request, u"Видалення неможливе. За даним суддею рахуються експертизи!")
+                next_url = request.POST.get('cancel_next')
+            else:
+                next_url = ''
+                judge.delete()
+                messages.success(request, u"Інформація про суддю %s успішно видалена" % judge)
 
-        return HttpResponseRedirect(next_url)
+        if next_url:
+            return HttpResponseRedirect(next_url)
+        else:
+            return HttpResponseRedirect(reverse('judges_list'))
 
 
 def valid_judge(request_info):

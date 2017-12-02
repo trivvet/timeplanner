@@ -280,9 +280,10 @@ def delete_detail(request, rid, did):
 
 def check_active(report):
     details = ReportEvents.objects.filter(report=report).order_by('date').reverse()
-    if details[0].date == details[1].date:
-        if True in (details[0].activate, details[1].activate) and details[2].activate == True:
-            report.active = True
+    if details.count() > 1 and details[0].date == details[1].date:
+        if True in (details[0].activate, details[1].activate):
+            if details.count() > 2 and details[2].activate == True:
+                report.active = True
         else:
             report.active = False
     else:
