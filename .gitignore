@@ -1,6 +1,7 @@
 .media/
 local_settings.py
 sensitive_data.py
+env_settings.py
 *.log
 *.mo
 htmlcov/
