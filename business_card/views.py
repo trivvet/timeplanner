@@ -7,6 +7,3 @@ from django.shortcuts import render
 
 def first_page(request):
     return render(request, 'business_card/home.html', {})
-
-def info_page(request):
-    return render(request, 'business_card/info.html', {})

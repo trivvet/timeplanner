@@ -24,7 +24,6 @@ urlpatterns = [
 
     # business card urls
     url(r'^$', business_card.first_page, name='business_card_first_page'),
-    url(r'^info/$', business_card.info_page, name='business_card_info_page'),
 
     # report urls
     url(r'^freports/$', freports.reports_list, name='forensic_reports_list'),

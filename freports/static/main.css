@@ -1,3 +1,44 @@
+/* home page */
+#home-header {
+  padding-top:50px;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+#contentList {
+  padding: 20px;
+}
+
+#homeContainer {
+  background-color: white;
+}
+
+#mainInfo {
+  border: 2px solid #007bff;
+  border-radius: 15px;
+  padding: 20px;
+  font-family: cursive;
+  font-style: italic;
+  font-size: 1.5em;
+}
+
+#home-buttons {
+  margin-top: 20px;
+}
+
+#login-url {
+  color: black;
+}
+
+#questionsHeader {
+  font-style: italic;
+  margin: 25px 0;
+}
+
+#myList {
+  font-size: 1.25em;
+}
+
 /* main page */
 #main-header {
   margin-top:50px;
@@ -5,7 +46,7 @@
 }
 
 h1 {
-  color: blue;
+  color: #007bff;
   font-family: cursive;
   font-style: italic;
 }
