@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from .sensitive_data import DATABASES
-from .env_settings import SECRET_KEY, DEBUG, TEMPLATE_DEBUG, PORTAL_URL, ALLOWED_HOSTS
+from .env_settings import SECRET_KEY, DEBUG, TEMPLATE_DEBUG, PORTAL_URL, ALLOWED_HOSTS, STATIC_ROOT
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -104,7 +104,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '..', 'static  ')
 
 # settings for Django Axes
 #AXES_LOGIN_FAILURE_LIMIT = 5
