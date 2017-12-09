@@ -35,8 +35,6 @@ def participant_detail(request, rid):
 @login_required(login_url='/login/')
 def add_participant(request, rid, status):
     report = Report.objects.get(pk=rid)
-    if status == 'other':
-        status = 'other_participant'
     header = u'Додавання учасника "%s" до провадження №%s/%s' % (status_list[status], report.number, report.number_year)
 
     if request.method == 'POST':
@@ -48,7 +46,8 @@ def add_participant(request, rid, status):
 
             if errors:
                 messages.error(request, u"Виправте наступні недоліки")
-                return render(request, 'freports/participant_form.html', {'content': new_element, 'errors': errors})
+                return render(request, 'freports/participant_form.html',
+                    {'content': new_element, 'errors': errors, 'header': header, 'status': status})
 
             else:
                 new_participant = ReportParticipants(**new_element)
@@ -206,7 +205,7 @@ def edit_report(participant, report, *args):
     defendants = participants.filter(report=report, status='defendant')
     if participant.status == 'plaintiff':
         if 'delete' in args and participant.surname in report.plaintiff:
-            if plaintiffs.count() != 0:
+            if plaintiffs.count() > 0:
                 report.plaintiff = plaintiffs[0].surname
             else:
                 report.plaintiff = '-'
@@ -216,11 +215,10 @@ def edit_report(participant, report, *args):
             report.plaintiff = plaintiffs[0].surname
     elif participant.status == 'defendant':
         if 'delete' in args and participant.surname in report.defendant:
-            if defendants.count() != 0:
+            if defendants.count() > 0:
                 report.defendant = defendants[0].surname
             else:
                 report.defendant = '-'
-            report.defendant = '-'
         elif defendants.count() == 1:
             report.defendant = defendants[0].surname
     return report

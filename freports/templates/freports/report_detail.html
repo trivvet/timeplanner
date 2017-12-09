@@ -75,7 +75,8 @@
                         {% if subjects %}
                         {% for subject in subjects %}
                         <a class="no-style-link report-detail-item" href="{% url 'forensic_subject_detail' subject.id %}">
-                            {{ subject.subject_type }}, {{ subject.short_address }}</a>
+                            {{ subject.subject_type }}, {% if subject.full_address|length < 50 %}{{ subject.full_address }}
+                                {% else %}{{ subject.short_address }}{% endif %}</a>
                         {% if forloop.last %}
                         <a class="btn btn-outline-success badge" href="{% url 'report_add_subject' report.id %}"
                             hidden>Додати об'єкт дослідження</a></br>
@@ -102,7 +103,7 @@
                     <th scope="row"></th>
                     <td>
                         <a type="button" class="badge badge-info" id="add-button"
-                            href="{% url 'report_add_participant' report.id 'other' %}">Додати іншого учасника провадження</a>
+                            href="{% url 'report_add_participant' report.id 'other_participant' %}">Додати іншого учасника провадження</a>
                     </td>
                 </tr>
             </tbody>

@@ -73,7 +73,7 @@
                                 hidden>Додати суддю</a>
                         </ul>
                         {% else %}
-                        <a class="no-style-link" href="{% url 'forensic_add_judge' %}?next_id={{ content.id }}"
+                        <a class="no-style-link" href="{% url 'forensic_add_judge' %}?court={{ content.id }}&next_id={{ content.id }}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>

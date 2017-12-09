@@ -130,7 +130,8 @@ def add_order(request, rid):
                 judge = report.judge_name
                 new_content['court'] = judge.court_name.id
                 new_content['judge'] = judge.id
-                new_content['case'] = u"{}/".format(judge.court_name.number)
+                if judge.court_name.number:
+                    new_content['case'] = u"{}/".format(judge.court_name.number)
                 judges = Judge.objects.filter(court_name=judge.court_name)
 
         return render(request, 'freports/add_order_form.html', {'header': header, 'content': content, 'courts': courts,
@@ -192,14 +193,12 @@ def add_detail(request, rid, kind):
 def edit_detail(request, rid, did):
     report = Report.objects.get(pk=rid)
     detail = ReportEvents.objects.get(pk=did)
-    content = {}
-    header = {}
-    header['main'] = u'Редагування події провадження №%s/%s' % (report.number, report.number_year)
-    header['second'] = kind_specific[detail.name][0].capitalize()
-    content['obvious_fields'] = kind_specific[detail.name][1]
+    header = {
+        'main': u'Редагування події провадження №%s/%s' % (report.number, report.number_year),
+        'second': kind_specific[detail.name][0].capitalize()}
+    content = {'obvious_fields': kind_specific[detail.name][1], 'kind': detail.name}
     if 'type' in content['obvious_fields']:
         content['select_type'] = kind_specific[detail.name][2]
-    content['kind'] = detail.name
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -225,6 +224,8 @@ def edit_detail(request, rid, did):
                     edit_detail.activate = new_data['activate']
                 edit_detail.save()
                 report = check_active(report)
+                if edit_detail.name == 'first_arrived':
+                    report.date_arrived = edit_detail.date
                 report.save()
                 messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])
 

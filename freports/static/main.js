@@ -115,6 +115,7 @@ function initForm(form, modal, link) {
                 $('#message .col').html(html.find('.alert'));
                 $('#main-content').html(html.find('#main-content').html());
                 initFormPage();
+                addPlusButton();
                 $('#modalForm').modal('hide');
             }
         }
@@ -154,8 +155,7 @@ function initSelectCourt() {
 function inputNumberField() {
     $('#inputCase').focus(function() {
         current_value = $(this).val();
-        console.log('OK');
-        if (current_value.includes('-ц')) {
+        if (current_value.includes('/17') || current_value.includes('/16')) {
             end_of_array = current_value.indexOf('/', 5);
             $(this).get(0).setSelectionRange(4,end_of_array);
         } else {

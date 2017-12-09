@@ -95,7 +95,9 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="{% url 'report_details_list' report.id %}">Хід провадження</a>
+                        {% if report.filled_info %}
                         <a class="dropdown-item" href="{% url 'forensic_edit_report' report.id %}">Редагувати</a>
+                        {% endif %}
                         <a class="dropdown-item" href="{% url 'forensic_delete_report' report.id %}">Видалити</a>
                     </div>
                 </div>
