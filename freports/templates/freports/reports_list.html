@@ -25,7 +25,7 @@
 {% endblock title %}
 
 {% block extra_messages %}
-{% if request.GET.filter_status == 'success' and request.GET.active %}
+{% if request.GET.filter_status == 'success' %}
 <div class="alert alert-info"role="alert">
     <ul>Застосований фільтр:
     {% if request.GET.active == 'True' %}<li>тільки активні провадження</li>
