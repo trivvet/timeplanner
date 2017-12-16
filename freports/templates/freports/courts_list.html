@@ -33,7 +33,8 @@
 
         {% for court in courts %}
         <tr>
-            <td>{{ court.name }} <span class="badge badge-success">{{ court.cases_amount }}</span></td>
+            <td>{{ court.name }} <span class="badge badge-success">{{ court.cases_amount }}</span>
+                <span class="badge badge-info">{{ court.executed_amount }}</span></td>
             <td>{{ court.address }}</td>
             <td>{{ court.chair.short_name }}</td>
             <td>

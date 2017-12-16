@@ -66,7 +66,8 @@
                 <tr>
                     <th scope="row">Суддя</th>
                     <td>
-                        {{ report.judge_name }}</a>
+                        <a class="no-style-link report-detail-item" href="{% url 'forensic_judge_detail' report.judge_name.id %}">
+                            {{ report.judge_name }}</a>
                     </td>
                 </tr>
                 <tr>

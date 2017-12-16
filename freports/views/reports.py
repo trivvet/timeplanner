@@ -4,10 +4,11 @@ from itertools import chain
 from datetime import date
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Report, ReportEvents, Judge, Court, ReportParticipants, ReportSubject
 
@@ -155,6 +156,8 @@ def add_new_report(request):
 def edit_report(request, rid):
     header = 'Редагування провадження'
     content = Report.objects.get(pk=rid)
+    courts = Court.objects.all()
+    judges = Judge.objects.filter(court_name=content.judge_name.court_name)
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -165,14 +168,14 @@ def edit_report(request, rid):
 
             if errors:
                 messages.error(request, "Виправте наступні недоліки")
+                new_report['judge_name'] = content.judge_name
                 return render(request, 'freports/add_report.html', {'header': header, 'content': new_report,
-                    'errors': errors})
+                    'errors': errors, 'courts': courts, 'judges': judges})
 
             else:
                 current_report = Report(**new_report)
                 current_report.id = rid
                 current_report.active = content.active
-                current_report.judge_name = content.judge_name
 
                 current_report.save()
                 messages.success(request, u"Провадження №%s/%s успішно відкориговане" % (current_report.number, current_report.number_year))
@@ -183,10 +186,20 @@ def edit_report(request, rid):
         return HttpResponseRedirect(reverse('forensic_reports_list'))
 
     else:
-        content.date_arrived = content.date_arrived.isoformat()
-        if content.executed:
-            content.date_executed = content.date_executed.isoformat()
-        return render(request, 'freports/add_report.html', {'header': header, 'content': content})
+        if request.is_ajax():
+            court = Court.objects.get(pk=request.GET.get('court'))
+            judges = Judge.objects.filter(court_name=court)
+            new_list = []
+            for judge in judges:
+                new_item = {'id': judge.id, 'short_name': judge.short_name()}
+                new_list.append(new_item)
+            return JsonResponse({'status': 'success', 'judges': new_list, 'court_number': court.number})
+        else:
+            content.date_arrived = content.date_arrived.isoformat()
+            if content.executed:
+                content.date_executed = content.date_executed.isoformat()
+            return render(request, 'freports/add_report.html', {'header': header, 'content': content, 'courts': courts,
+                'judges': judges})
 
 @login_required(login_url='/login/')
 def delete_report(request, rid):
@@ -236,6 +249,15 @@ def valid_report(data_post):
             errors['number'] = u"Будь-ласка введіть ціле число"
 
     new_report['number_year'] = data_post.get('number_year')
+
+    judge_name = data_post.get('judge')
+    if not judge_name:
+        errors['judge'] = u"Вибір судді є обов'язковим"
+    else:
+        try:
+            new_report['judge_name'] = Judge.objects.get(pk=judge_name)
+        except ObjectDoesNotExist:
+            errors['judge'] = u"Будь-ласка виберіть суддю зі списку"
 
     case_number = data_post.get('case_number')
     if not case_number:

@@ -75,7 +75,7 @@ class ReportSubject(models.Model):
             full_address = u"м. Хмельницький, %s" % self.street
         else:
             if self.region:
-                full_address = u"%s, %s, %s" % (self.region, self.settlement, self.street)
+                full_address = u"%s р-н, %s, %s" % (self.region, self.settlement, self.street)
             else:
                 full_address = u"%s, %s" % (self.settlement, self.street)
         if self.building:

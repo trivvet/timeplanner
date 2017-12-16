@@ -150,6 +150,25 @@ function initSelectCourt() {
     if ($('#inputCourtForOrder').val()) {
         inputNumberField();
     }
+    $('#inputCourt').change(function() {
+        $.ajax('', {
+            'type': 'GET',
+            'async': true,
+            'dataType': 'json',
+            'data': {'court': $(this).val()},
+            'error': function(xhr, status, error) {
+                alert(error);
+            },
+            'success': function(data, status, xhr) {
+                $('#inputJudge').parent().parent().removeAttr('hidden');
+                $('#inputJudge').html('<option value="">-----</option>');
+                for (i=0, len=data.judges.length; i<len; i++) {
+                    option = '<option value=' + data.judges[i].id + '>' + data.judges[i].short_name + '</option>'
+                    $('#inputJudge').append(option);
+                }
+            },
+        });
+    });
 }
 
 function inputNumberField() {

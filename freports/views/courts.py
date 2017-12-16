@@ -16,8 +16,10 @@ def courts_list(request):
     for court in courts:
         judges = Judge.objects.filter(court_name=court)
         court.cases_amount = 0
+        court.executed_amount = 0
         for judge in judges:
             court.cases_amount += Report.objects.filter(judge_name=judge, executed=False).count()
+            court.executed_amount += Report.objects.filter(judge_name=judge, executed=True).count()
     header = 'Список судів'
     return render(request, 'freports/courts_list.html', {'courts': courts, 'header': header})
 

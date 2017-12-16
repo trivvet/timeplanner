@@ -63,6 +63,45 @@
         </div>
     </div>
 
+    <!-- Вибір суду -->
+    <div class="form-group row">
+        <label for="inputCourt" class="col-sm-3 col-form-label">Назва суду <strong>*</strong></label>
+        <div class="col-sm-4">
+            <select class="form-control {% if errors.court_name %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputCourt" name="court" value="{{ content.court }}">
+                <option value=''>-----------</option>
+                {% for court in courts %}
+                <option value='{{ court.id }}'
+                    {% if content.judge_name.court_name.id|stringformat:"s" == court.id|stringformat:"s" %}selected{% endif %}>{{ court }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.court }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Вибір судді -->
+    <div class="form-group row">
+        <label for="inputJudge" class="col-sm-3 col-form-label">Суддя <strong>*</strong></label>
+        <div class="col-sm-4">
+            <select class="form-control {% if errors.judge %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputJudge" name="judge" value="{{ content.judge_name.id }}">
+                <option value='' {% if errors.judge %}selected{% endif %}>-----------</option>
+                {% for judge in judges %}
+                <option value='{{ judge.id }}'
+                    {% if not errors.judge %}
+                    {% if content.judge_name.id|stringformat:"s" == judge.id|stringformat:"s" %}selected{% endif %}
+                    {% endif %}>{{ judge.short_name }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.judge }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Адреса об'єкту -->
     <div class="form-group row">
         <label for="inputAddress" class="col-sm-3 col-form-label">Адреса об'єкту <strong>*</strong></label>
         <div class="col-sm-4">

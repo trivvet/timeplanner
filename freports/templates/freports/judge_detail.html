@@ -60,10 +60,6 @@
                 </tr>
                 {% endif %}
                 <tr>
-                    <th scope="row">Кількість призначених справ</th>
-                    <td>{{ cases.count }}</td>
-                </tr>
-                <tr>
                     <th scope="row">Справи на виконанні</th>
                     <td>
                         {% if cases %}
@@ -82,6 +78,23 @@
                         <a class="no-style-link"
                             href="{% url 'forensic_add_new_report' %}?judge={{ content.id }}&next=forensic_judge_detail"
                             style="color:black">Немає призначених справ</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Закриті справи</th>
+                    <td>
+                        {% if cases_executed %}
+                        <ul class="list-group">
+                            {% for case in cases_executed %}
+                            <li class="list-group-item">
+                                <a class="no-style-link report-detail-item"
+                                    href="{% url 'report_details_list' case.id %}">{{ case.short_name }}</a></br>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        Ще немає закритих справ
                         {% endif %}
                     </td>
                 </tr>

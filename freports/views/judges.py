@@ -14,18 +14,20 @@ from ..models import Court, Judge, Report
 def judges_list(request):
     judges = Judge.objects.all().order_by('surname')
     for judge in judges:
-        judge.cases_amount = Report.objects.filter(judge_name=judge).count()
+        judge.cases_amount = Report.objects.filter(judge_name=judge, executed=False).count()
+        judge.executed_amount = Report.objects.filter(judge_name=judge, executed=True).count()
     header = 'Список суддів'
     return render(request, 'freports/judges_list.html', {'judges': judges, 'header': header})
 
 @login_required(login_url='/login/')
 def judge_detail(request, jid):
     judge = Judge.objects.get(pk=jid)
-    cases = Report.objects.filter(judge_name=judge)
+    cases = Report.objects.filter(judge_name=judge, executed=False)
+    cases_executed = Report.objects.filter(judge_name=judge, executed=True)
     next_url = request.GET.get('next')
     header = u'Детальна інформація про суддю {}'.format(judge.full_name())
     return render(request, 'freports/judge_detail.html', {'content': judge, 'header': header, 'cases': cases,
-        'next_url': next_url})
+        'next_url': next_url, 'cases_executed': cases_executed})
 
 @login_required(login_url='/login/')
 def add_judge(request):
