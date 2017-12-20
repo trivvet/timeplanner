@@ -101,9 +101,31 @@
                 </tr>
                 {% endfor %}
                 <tr>
+                    <th scope="row">Днів у виконанні</th>
+                    <td>
+                        {{ report.days_amount }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Статус провадження</th>
+                    <td>
+                        {% if report.executed %}<span style="color:blue">Закрите</span>
+                        {% elif report.active %}<span style="color:green">Активне</span>
+                        {% else %}<span style="color:grey">Призупинене {{ report.waiting_time }} днів тому</span>{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Остання подія</th>
+                    <td>
+                        {{ report.last_event.date }}, {{ content|get_item:report.last_event.name }}
+                    </td>
+                </tr>
+                <tr>
                     <th scope="row"></th>
                     <td>
-                        <a type="button" class="badge badge-info" id="add-button"
+                        <a type="button" class="btn btn-info"
+                           href="{% url 'forensic_edit_report' report.id %}?next=report_details_list">Редагувати основну інформацію</a>
+                        <a type="button" class="btn btn-success"
                             href="{% url 'report_add_participant' report.id 'other_participant' %}">Додати іншого учасника провадження</a>
                     </td>
                 </tr>

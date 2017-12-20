@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from datetime import date
 
 from django.db import models
 from django.utils import timezone
+
+from .fdetails import ReportEvents
 
 # Create your models here.
 
@@ -51,8 +54,9 @@ class Report(models.Model):
         blank=False,
         null=False)
 
-    active = models.NullBooleanField(
-        blank=True)
+    active = models.BooleanField(
+        blank=False,
+        default=True)
 
     date_arrived = models.DateField(
         blank=False,
@@ -85,3 +89,27 @@ class Report(models.Model):
 
     def full_number(self):
         return u"{}/{}".format(self.number, self.number_year)
+
+    def active_days(self):
+        details = ReportEvents.objects.filter(report=self).order_by('date')
+        days_amount = 0
+        last_event = details.reverse()[0]
+        if details.count() > 0:
+            before_detail = details[0]
+            for detail in details:
+                if detail.activate == False and before_detail.activate == True:
+                    time = detail.date - before_detail.date
+                    days_amount += time.days
+                if detail.activate is not None:
+                    before_detail = detail
+
+        try:
+            time = self.date_executed - last_event.date
+            days_amount += time.days
+        except TypeError:
+            pass
+        if details.count() == 0 or detail.activate == True:
+            time = date.today() - last_event.date
+            days_amount += time.days
+
+        return days_amount

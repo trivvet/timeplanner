@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
+from .days_counter import days_amount
 from ..models import Report, ReportEvents, Judge, Court, ReportParticipants, ReportSubject
 
 @login_required(login_url='/login/')
@@ -17,21 +18,25 @@ def reports_list(request):
     content = {}
     days_count = ''
 
-    if request.GET.get('executed'):
-        reports = Report.objects.all().order_by('number').filter(executed=True)
-    else:
-        reports = Report.objects.all().order_by('number').filter(executed=False)
 
-    if reports:
-        content['full_length'] = len(reports)
-        content['active_length'] = len(reports.filter(active=True))
+    if request.GET.get('executed'):
+        reports = Report.objects.filter(executed=True)
+        content['reports_count'] = reports.count()
+    elif request.GET.get('deactivate'):
+        reports = Report.objects.filter(executed=False, active=False)
+        content['reports_count'] = reports.count()
+    elif request.GET.get('activate'):
+        reports = Report.objects.filter(executed=False, active=True)
+        content['reports_count'] = reports.count()
+    else:
+        reports = Report.objects.all()
+        content['open_reports'] = reports.filter(executed=False).count()
+        content['closed_reports'] = reports.filter(executed=True).count()
+        content['active_reports'] = reports.filter(executed=False, active=True).count()
+
+    reports = reports.order_by('number')
 
     if request.GET.get('filter_status') and request.GET.get('apply_button'):
-        active = request.GET.get('active')
-        if active == 'True':
-            reports = reports.filter(active=True)
-        elif active == 'False':
-            reports = reports.filter(active=False)
 
         date_from = request.GET.get('date_from')
         if date_from:
@@ -46,51 +51,32 @@ def reports_list(request):
     elif request.GET.get('filter_status') and request.GET.get('cancel_button'):
         return HttpResponseRedirect(reverse('forensic_reports_list'))
 
-    order_by = request.GET.get('order_by')
-    reverse_apply = request.GET.get('reverse')
-    if order_by:
+    order_by = request.GET.get('order_by', '')
+    reverse_apply = request.GET.get('reverse', '')
+    if order_by in ('research_kind', 'number'):
         reports = reports.order_by(order_by)
         if reverse_apply:
             reports = reports.reverse()
+        reports_out = reports
+    elif order_by == 'days_amount':
+        reports_out = []
+        for report in reports:
+            if len(reports_out) > 0:
+                index = 0
+                for report_out in reports_out:
+                    if report.active_days() < report_out.active_days():
+                        reports_out.insert(index, report)
+                        break
+                    elif index < len(reports_out)-1:
+                        index += 1
+                    else:
+                        reports_out.append(report)
+            else:
+                reports_out.append(report)
     else:
-        reports_no_active = reports.filter(active=None)
-        reports_top = reports.filter(active=True)
-        reports_low = reports.filter(active=False)
-        reports = list(chain(reports_no_active, reports_top, reports_low))
+        reports_out = reports
 
-    new_reports = []
-    for report in reports:
-        details = ReportEvents.objects.filter(report=report).order_by('date')
-        days_amount = 0
-        if details.count() > 0:
-            before_detail = details[0]
-            for detail in details:
-                if detail.activate == False:
-                    if before_detail.activate == True:
-                        time = detail.date - before_detail.date
-                        days_amount += time.days
-                if detail.activate is not None:
-                    before_detail = detail
-            last_date = detail.date
-        else:
-            last_date = report.date_arrived
-
-        if request.GET.get('executed'):
-            try:
-                time = report.date_executed - last_date
-                days_amount += time.days
-            except TypeError:
-                pass
-        elif details.count() == 0 or detail.activate == True:
-            time = date.today() - last_date
-            days_amount += time.days
-
-        report.days_amount = days_amount
-
-        if days_count == '' or int(days_amount) >= int(days_count):
-            new_reports.append(report)
-
-    return render(request, 'freports/reports_list.html', {'reports': new_reports, 'content': content})
+    return render(request, 'freports/reports_list.html', {'reports': reports_out, 'content': content})
 
 @login_required(login_url='/login/')
 def add_new_report_first(request):
@@ -160,6 +146,11 @@ def edit_report(request, rid):
     judges = Judge.objects.filter(court_name=content.judge_name.court_name)
 
     if request.method == 'POST':
+        if request.POST.get('next'):
+            next_url = reverse(request.POST.get('next'), args=[rid])
+        else:
+            next_url = reverse('forensic_reports_list')
+
         if request.POST.get('save_button'):
 
             validate_data = valid_report(request.POST)
@@ -183,7 +174,7 @@ def edit_report(request, rid):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування провадження скасовано")
 
-        return HttpResponseRedirect(reverse('forensic_reports_list'))
+        return HttpResponseRedirect(next_url)
 
     else:
         if request.is_ajax():
@@ -198,8 +189,9 @@ def edit_report(request, rid):
             content.date_arrived = content.date_arrived.isoformat()
             if content.executed:
                 content.date_executed = content.date_executed.isoformat()
+            next_url = request.GET.get('next', '')
             return render(request, 'freports/add_report.html', {'header': header, 'content': content, 'courts': courts,
-                'judges': judges})
+                'judges': judges, 'next_url': next_url})
 
 @login_required(login_url='/login/')
 def delete_report(request, rid):

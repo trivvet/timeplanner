@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
-
+from .days_counter import active_days, waiting_days
 from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge
 
 petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи', 'Про призначення виїзду']
@@ -38,6 +38,9 @@ status_list = {
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
     details = ReportEvents.objects.filter(report=report).order_by('date')
+    report.last_event = details.reverse()[0]
+    report.days_amount = active_days(report, details)
+    report.waiting_time = waiting_days(report)
 
     if len(details.filter(name='first_arrived')) < 1:
         return HttpResponseRedirect(reverse('report_add_order', args=[rid]))
@@ -201,6 +204,11 @@ def edit_detail(request, rid, did):
         content['select_type'] = kind_specific[detail.name][2]
 
     if request.method == 'POST':
+        if request.POST.get('next'):
+            next_url = reverse(request.POST.get('next'), args=[rid])
+        else:
+            next_url = reverse('forensic_reports_list')
+
         if request.POST.get('save_button'):
 
             valid_data = valid_detail(request.POST, rid)
@@ -232,7 +240,7 @@ def edit_detail(request, rid, did):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування деталей провадження скасовано")
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(next_url)
 
     else:
         new_content = detail

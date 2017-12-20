@@ -71,7 +71,6 @@ def edit_judge(request, jid):
     header = u"Редагування інформацію про суддю {}".format(judge.short_name())
     if request.method == 'POST':
         if request.POST.get('cancel_next'):
-            print "not way"
             next_url = reverse(request.POST.get('cancel_next'), args=[jid])
         else:
             next_url = reverse('judges_list')

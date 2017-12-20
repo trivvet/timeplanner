@@ -1,20 +1,29 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
+<!-- Navbar with select lists -->
 <nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
-    <a class="navbar-brand" href="#">Список проваджень</a>
+    <a class="navbar-brand" href="{% url 'forensic_reports_list' %}">Список проваджень</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item {% if request.GET.executed != '1' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}">Відкриті
-                    {% if request.GET.executed == '' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            <li class="nav-item {% if request.GET.executed != '1' and request.GET.deactivate != '1' and request.GET.activate != '1' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}">Усі
+                    {% if request.GET.executed == '' and request.GET.deactivate == '' and request.GET.activate == '' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            <li class="nav-item {% if request.GET.activate == '1' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}?activate=1">Активні
+                {% if request.GET.activate == '1' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            </li>
+            <li class="nav-item {% if request.GET.deactivate == '1' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}?deactivate=1">Призупинені
+                    {% if request.GET.deactivate == '1' %}<span class="sr-only">(current)</span>{% endif %}</a>
             </li>
             <li class="nav-item {% if request.GET.executed == '1' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}?executed=1">Архівні
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}?executed=1">Закриті
                     {% if request.GET.executed == '1' %}<span class="sr-only">(current)</span>{% endif %}</a>
             </li>
         </ul>
@@ -41,13 +50,13 @@
 {% block content %}
 
 {% if reports %}
-{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse activate=request.GET.activate deactivate=request.GET.deactivate %}
 <table class="table table-hover table-bordered">
     <thead>
         <tr>
             <th>
-                <a href="{% url 'forensic_reports_list' %}?order_by=number{% if reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
-                    № {% if order_by == 'number' and reverse != '1' %}&uarr;
+                <a href="{% url 'forensic_reports_list' %}?order_by=number{% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
+                    № {% if order_by == '' or order_by == 'number' and reverse != '1' %}&uarr;
                     {% elif order_by == 'number' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
@@ -56,7 +65,7 @@
             <th>Відповідач</th>
             <th>Тип Об'єкту</th>
             <th>
-                <a href="{% url 'forensic_reports_list' %}?order_by=research_kind">
+                <a href="{% url 'forensic_reports_list' %}?{% if activate == '1' %}activate=1&{% elif deactivate == '1' %}deactivate=1&{% endif %}order_by=research_kind">
                     Вид Дослідження {% if order_by == 'research_kind' %}&uarr;{% endif %}
                 </a>
             </th>
@@ -64,7 +73,14 @@
             {% if request.GET.executed == '1' %}
             <th>Дата виконання</th>
             {% endif %}
-            <th>Днів у виконанні</th>
+            <th>
+                <a href="{% url 'forensic_reports_list' %}?{% if activate %}activate=1&{% elif deactivate %}deactivate=1&{% endif %}order_by=days_amount">
+                    Днів у виконанні {% if order_by == 'days_amount' %}&uarr;{% endif %}
+                </a>
+            </th>
+            {% if request.GET.deactivate == '1' %}
+            <th>Днів в очікуванні</th>
+            {% endif %}
             <th>Дії</th>
         </tr>
     </thead>
@@ -86,7 +102,10 @@
             {% if request.GET.executed == '1' %}
             <td class="td-link">{{ report.date_executed }}</td>
             {% endif %}
-            <td class="td-link">{{ report.days_amount }}</td>
+            <td class="td-link">{{ report.active_days }} </td>
+            {% if request.GET.deactivate == '1' %}
+            <td class="td-link">{{ report.waiting_time }}</td>
+            {% endif %}
             <td>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -112,10 +131,15 @@
 
 <div class="card">
   <div class="card-body">
-    {% if request.GET.executed != '1' %}
-    Всього в провадженні - {{ content.full_length }} експертиз, з них активних - {{ content.active_length }}
+    {% if request.GET.executed != '1' and request.GET.deactivate != '1' and request.GET.activate != '1' %}
+    Всього на виконанні - {{ content.open_reports }} проваджень, з них активних - {{ content.active_reports }}.
+    Всього закрито - {{ content.closed_reports }} проваджень.
+    {% elif request.GET.activate == '1' %}
+    Всього активних проваджень - {{ content.reports_count }}
+    {% elif request.GET.deactivate == '1' %}
+    Всього призупинених проваджень - {{ content.reports_count }}
     {% else %}
-    Всього закрито проваджень - {{ content.full_length }}
+    Всього закритих проваджень - {{ content.reports_count }}
     {% endif %}
   </div>
 </div>
@@ -134,14 +158,6 @@
     <h4>Уточнити параметри</h4>
     <form class="form-horizontal" action="" method="get" enctype="multipart/form-data" role="form">
         <input type="hidden" name="filter_status" value="success" />
-        <div class="form-group row">
-            <label for="selectActive">Статус провадження</label>
-            <select class="form-control" id="selectActive" name="active">
-                <option value="">---------</option>
-                <option value="True" {% if request.GET.active == 'True' %}selected{% endif %}>Активне</option>
-                <option value="False" {% if request.GET.active == 'False' %}selected{% endif %}>Призупинене</option>
-            </select>
-        </div>
         <div class="form-group row">
             <label for="inputDateArrived" class="col-sm-12">Дата надходження</label>
             <div class="col-sm-4">від</div><input type="text" id="inputDateArrived"
