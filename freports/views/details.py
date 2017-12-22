@@ -4,12 +4,13 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
+from django.utils import timezone
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
 from .days_counter import active_days, waiting_days
-from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge
+from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge, ReportDaysInfo
 
 petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи', 'Про призначення виїзду']
 done_type = ['Висновок експерта', 'Повідомлення про неможливість', 'Залишення без виконання']
@@ -111,6 +112,14 @@ def add_order(request, rid):
                 report.date_arrived = new_detail.date
                 report.active = True
                 report.save()
+                active_time = timezone.now - report.date_arrived
+                info_days_amount = ReportDaysInfo().objects.all()
+                new_time_amount = timezone.now - info_days_amount[0].change_date
+                for element in info_days_amount:
+                    element.change_date = timezone.now
+                    element.active_days = element.active_days + new_time_amount.days
+                days_amount = ReportDaysInfo(report=report, change_date=timezone.now, active_days=active_time.days)
+                days_amount.save()
                 messages.success(request, u"Ухвала про призначення експертизи успішно додана")
                 return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 

@@ -154,3 +154,29 @@ class ReportParticipants(models.Model):
 
     def __unicode__(self):
         return u"%s %s (report %s/%s)" % (self.status, self.surname, self.report.number, self.report.number_year)
+
+class ReportDaysInfo(models.Model):
+
+    class Meta(object):
+        verbose_name=u"Дні у виконанні"
+        verbose_name_plural=u"Дні у виконанні"
+
+    report = models.ForeignKey('Report',
+        verbose_name=u'Висновок',
+        blank=False,
+        null=False)
+
+    change_date = models.DateField(
+        blank=False,
+        default=timezone.now)
+
+    active_days = models.IntegerField(
+        blank=True,
+        null=True)
+
+    waiting_days = models.IntegerField(
+        blank=True,
+        null=True)
+
+    def __unicode__(self):
+        return u"Amount days for report %s" % (self.report)
