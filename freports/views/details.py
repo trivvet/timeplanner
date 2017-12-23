@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from datetime import datetime, date
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
@@ -10,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
 from .days_counter import active_days, waiting_days
-from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge, ReportDaysInfo
+from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge
 
 petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи', 'Про призначення виїзду']
 done_type = ['Висновок експерта', 'Повідомлення про неможливість', 'Залишення без виконання']
@@ -39,12 +40,11 @@ status_list = {
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
     details = ReportEvents.objects.filter(report=report).order_by('date')
-    report.last_event = details.reverse()[0]
-    report.days_amount = active_days(report, details)
-    report.waiting_time = waiting_days(report)
 
     if len(details.filter(name='first_arrived')) < 1:
         return HttpResponseRedirect(reverse('report_add_order', args=[rid]))
+
+    report.last_event = details.reverse()[0]
 
     participants_list = ReportParticipants.objects.filter(report=report)
     participants = {'other': []}
@@ -106,20 +106,25 @@ def add_order(request, rid):
                     'courts': courts, 'judges': judges})
             else:
                 new_detail = ReportEvents(**new_element)
-                new_detail.save()
                 report.judge_name = judge_name
                 report.case_number = case_number
                 report.date_arrived = new_detail.date
                 report.active = True
+                report.change_date = datetime.utcnow().date()
+                time_amount = datetime.utcnow() - datetime.strptime(report.date_arrived, "%Y-%m-%d")
+                days_amount = time_amount.days
+                reports = Report.objects.all()
+                if len(reports) > 0:
+                    new_time_amount = datetime.utcnow().date() - reports[0].change_date
+                    for element in reports:
+                        if element.active_days is not None:
+                            element.change_date = timezone.now
+                            element.active_days_amount = element.active_days_amount + new_time_amount.days
+
+                report.active_days_amount = days_amount
+                update_days_info(reports)
                 report.save()
-                active_time = timezone.now - report.date_arrived
-                info_days_amount = ReportDaysInfo().objects.all()
-                new_time_amount = timezone.now - info_days_amount[0].change_date
-                for element in info_days_amount:
-                    element.change_date = timezone.now
-                    element.active_days = element.active_days + new_time_amount.days
-                days_amount = ReportDaysInfo(report=report, change_date=timezone.now, active_days=active_time.days)
-                days_amount.save()
+                new_detail.save()
                 messages.success(request, u"Ухвала про призначення експертизи успішно додана")
                 return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
@@ -189,7 +194,12 @@ def add_detail(request, rid, kind):
                     report.save()
                 new_detail = ReportEvents(**new_element)
                 new_detail.save()
+                report.change_date = datetime.utcnow().date()
                 report = check_active(report)
+                report.active_days_amount = days_count(report, 'active')
+                report.waiting_days_amount = days_count(report, 'waiting')
+                update_dates_info(reports)
+
                 report.save()
                 messages.success(request, u"Подія '%s' успішно додана" % kind_specific[new_detail.name][0])
 
@@ -216,7 +226,7 @@ def edit_detail(request, rid, did):
         if request.POST.get('next'):
             next_url = reverse(request.POST.get('next'), args=[rid])
         else:
-            next_url = reverse('forensic_reports_list')
+            next_url = reverse('report_details_list', args=[rid])
 
         if request.POST.get('save_button'):
 
@@ -236,13 +246,16 @@ def edit_detail(request, rid, did):
                     edit_detail.activate = False
                     report.executed = True
                     report.date_executed = new_data['date']
-                    report.save()
                 else:
                     edit_detail.activate = new_data['activate']
                 edit_detail.save()
                 report = check_active(report)
                 if edit_detail.name == 'first_arrived':
                     report.date_arrived = edit_detail.date
+                report.active_days_amount = days_count(report, 'active')
+                report.waiting_days_amount = days_count(report, 'waiting')
+                reports = Report.objects.all()
+                update_dates_info(reports)
                 report.save()
                 messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])
 
@@ -274,19 +287,15 @@ def delete_detail(request, rid, did):
         if request.POST.get('delete_button'):
             current_detail = detail
             current_detail.delete()
-            last_detail = ReportEvents.objects.filter(report=report).order_by('date').reverse()
-            if len(last_detail) == 0 or last_detail[0].activate == True:
-                report.active = True
-                if report.executed == True:
-                    report.executed = False
-                    report.date_executed = None
-                report.save()
-            elif last_detail[0].activate == False:
-                report.active = False
-                if report.executed == True:
-                    report.executed = False
-                    report.date_executed = None
-                report.save()
+
+            report.change_date = datetime.utcnow().date()
+            report = check_active(report)
+            report.active_days_amount = days_count(report, 'active')
+            report.waiting_days_amount = days_count(report, 'waiting')
+            reports = Report.objects.all()
+            update_dates_info(reports)
+            report.save()
+
             messages.success(request,
                 u"Подія '%s' до провадження №%s/%s успішно видалена" % (kind_specific[detail.name][0], report.number, report.number_year))
         elif request.POST.get('cancel_button'):
@@ -312,6 +321,48 @@ def check_active(report):
             report.active = False
     return report
 
+def days_count(report, status):
+    events = ReportEvents.objects.filter(report=report).order_by('date')
+    days_amount = 0
+    last_event = events.reverse()[0]
+    if status == 'active':
+        event_activate = True
+        for event in events:
+            if event.id == events[0].id:
+                before_event = events[0]
+            else:
+                if event.activate != event_activate and before_event.activate == event_activate:
+                    time = event.date - before_event.date
+                    days_amount += time.days
+                if event.activate is not None:
+                    before_event = event
+        try:
+            execution_time = report.date_executed - last_event.date
+            days_amount += execution_time.days
+        except TypeError:
+            pass
+    elif status == 'waiting':
+        event_activate = False
+
+    if last_event.activate == event_activate:
+            time = date.today() - last_event.date
+            days_amount += time.days
+
+    return days_amount
+
+def update_dates_info(reports):
+    last_update = reports[0].change_date
+    time_amount = date.today() - last_update
+    if time_amount == 0:
+        return True
+    for report in reports:
+        report.change_date = last_update
+        if report.executed is None:
+            if report.active:
+                report.active_days_amount += time_amount.days
+            else:
+                report.waiting_days_amount += time_amount.days
+            report.save()
 
 def valid_detail(request_info, report_id):
     errors = {}

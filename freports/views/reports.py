@@ -57,26 +57,8 @@ def reports_list(request):
         reports = reports.order_by(order_by)
         if reverse_apply:
             reports = reports.reverse()
-        reports_out = reports
-    elif order_by == 'days_amount':
-        reports_out = []
-        for report in reports:
-            if len(reports_out) > 0:
-                index = 0
-                for report_out in reports_out:
-                    if report.active_days() < report_out.active_days():
-                        reports_out.insert(index, report)
-                        break
-                    elif index < len(reports_out)-1:
-                        index += 1
-                    else:
-                        reports_out.append(report)
-            else:
-                reports_out.append(report)
-    else:
-        reports_out = reports
 
-    return render(request, 'freports/reports_list.html', {'reports': reports_out, 'content': content})
+    return render(request, 'freports/reports_list.html', {'reports': reports, 'content': content})
 
 @login_required(login_url='/login/')
 def add_new_report_first(request):

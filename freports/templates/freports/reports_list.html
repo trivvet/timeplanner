@@ -73,11 +73,13 @@
             {% if request.GET.executed == '1' %}
             <th>Дата виконання</th>
             {% endif %}
+            {% if request.GET.activate == '1' %}
             <th>
                 <a href="{% url 'forensic_reports_list' %}?{% if activate %}activate=1&{% elif deactivate %}deactivate=1&{% endif %}order_by=days_amount">
                     Днів у виконанні {% if order_by == 'days_amount' %}&uarr;{% endif %}
                 </a>
             </th>
+            {% endif %}
             {% if request.GET.deactivate == '1' %}
             <th>Днів в очікуванні</th>
             {% endif %}
@@ -102,9 +104,11 @@
             {% if request.GET.executed == '1' %}
             <td class="td-link">{{ report.date_executed }}</td>
             {% endif %}
-            <td class="td-link">{{ report.active_days }} </td>
+            {% if request.GET.activate == '1' %}
+            <td class="td-link">{{ report.active_days_amount }} </td>
+            {% endif %}
             {% if request.GET.deactivate == '1' %}
-            <td class="td-link">{{ report.waiting_time }}</td>
+            <td class="td-link">{{ report.waiting_days_amount }}</td>
             {% endif %}
             <td>
                 <div class="dropdown">
