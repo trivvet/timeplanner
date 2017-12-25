@@ -10,21 +10,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item {% if request.GET.executed != '1' and request.GET.deactivate != '1' and request.GET.activate != '1' %}active{% endif %}">
+            <li class="nav-item {% if not request.GET.status %}active{% endif %}">
                 <a class="nav-link" href="{% url 'forensic_reports_list' %}">Усі
-                    {% if request.GET.executed == '' and request.GET.deactivate == '' and request.GET.activate == '' %}<span class="sr-only">(current)</span>{% endif %}</a>
+                    {% if not request.GET.status %}<span class="sr-only">(current)</span>{% endif %}</a>
             </li>
-            <li class="nav-item {% if request.GET.activate == '1' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}?activate=1">Активні
-                {% if request.GET.activate == '1' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            <li class="nav-item {% if request.GET.status == 'active' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}?status=active">Активні
+                {% if request.GET.status == 'active' %}<span class="sr-only">(current)</span>{% endif %}</a>
             </li>
-            <li class="nav-item {% if request.GET.deactivate == '1' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}?deactivate=1">Призупинені
-                    {% if request.GET.deactivate == '1' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            <li class="nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}?status=deactivate">Призупинені
+                    {% if request.GET.status == 'deactivate' %}<span class="sr-only">(current)</span>{% endif %}</a>
             </li>
-            <li class="nav-item {% if request.GET.executed == '1' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}?executed=1">Закриті
-                    {% if request.GET.executed == '1' %}<span class="sr-only">(current)</span>{% endif %}</a>
+            <li class="nav-item {% if request.GET.status == 'executed' %}active{% endif %}">
+                <a class="nav-link" href="{% url 'forensic_reports_list' %}?status=executed">Закриті
+                    {% if request.GET.status == 'executed' %}<span class="sr-only">(current)</span>{% endif %}</a>
             </li>
         </ul>
         <a class="btn btn-sm align-middle btn-outline-warning"
@@ -50,12 +50,13 @@
 {% block content %}
 
 {% if reports %}
-{% with order_by=request.GET.order_by reverse=request.GET.reverse activate=request.GET.activate deactivate=request.GET.deactivate %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse status=request.GET.status %}
 <table class="table table-hover table-bordered">
     <thead>
         <tr>
             <th>
-                <a href="{% url 'forensic_reports_list' %}?order_by=number{% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
+                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=number
+{% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
                     № {% if order_by == '' or order_by == 'number' and reverse != '1' %}&uarr;
                     {% elif order_by == 'number' and reverse == '1' %}&darr;{% endif %}
                 </a>
@@ -65,28 +66,47 @@
             <th>Відповідач</th>
             <th>Тип Об'єкту</th>
             <th>
-                <a href="{% url 'forensic_reports_list' %}?{% if activate == '1' %}activate=1&{% elif deactivate == '1' %}deactivate=1&{% endif %}order_by=research_kind">
+                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=research_kind">
                     Вид Дослідження {% if order_by == 'research_kind' %}&uarr;{% endif %}
                 </a>
             </th>
-            <th>Дата надходження</th>
-            {% if request.GET.executed == '1' %}
-            <th>Дата виконання</th>
-            {% endif %}
-            {% if request.GET.activate == '1' %}
             <th>
-                <a href="{% url 'forensic_reports_list' %}?{% if activate %}activate=1&{% elif deactivate %}deactivate=1&{% endif %}order_by=days_amount">
-                    Днів у виконанні {% if order_by == 'days_amount' %}&uarr;{% endif %}
+                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&
+order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reverse=1{% endif %}">
+                    Дата надходження {% if order_by == 'date_arrived' and reverse != '1' %}&uarr;
+                    {% elif order_by == 'date_arrived' and reverse == '1' %}&darr;{% endif %}
+                </a>
+            </th>
+            {% if request.GET.status == 'executed' %}
+            <th>
+                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=date_executed
+{% if order_by == 'date_executed' and reverse != '1' %}&reverse=1{% endif %}">
+                    Дата виконання {% if order_by == 'date_executed' and reverse != '1' %}&uarr;
+                    {% elif order_by == 'date_executed' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
             {% endif %}
-            {% if request.GET.deactivate == '1' %}
-            <th>Днів в очікуванні</th>
+            {% if request.GET.status == 'active' %}
+            <th>
+                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=active_days_amount
+{% if order_by == 'active_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
+                    Днів у виконанні {% if order_by == 'active_days_amount' and reverse != '1' %}&uarr;
+                    {% elif order_by == 'active_days_amount' and reverse == '1' %}&darr;{% endif %}
+                </a>
+            </th>
+            {% endif %}
+            {% if request.GET.status == 'deactivate' %}
+            <th>
+                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=waiting_days_amount
+{% if order_by == 'waiting_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
+                    Днів в очікуванні {% if order_by == 'waiting_days_amount' and reverse != '1' %}&uarr;
+                    {% elif order_by == 'waiting_days_amount' and reverse == '1' %}&darr;{% endif %}
+                </a>
+            </th>
             {% endif %}
             <th>Дії</th>
         </tr>
     </thead>
-{% endwith %}
 
     <tbody>
 
@@ -101,13 +121,13 @@
             <td class="td-link">{{ report.object_name }}</td>
             <td class="td-link">{{ report.research_kind }}</td>
             <td class="td-link">{{ report.date_arrived }}</td>
-            {% if request.GET.executed == '1' %}
+            {% if request.GET.status == 'executed' %}
             <td class="td-link">{{ report.date_executed }}</td>
             {% endif %}
-            {% if request.GET.activate == '1' %}
+            {% if request.GET.status == 'active' %}
             <td class="td-link">{{ report.active_days_amount }} </td>
             {% endif %}
-            {% if request.GET.deactivate == '1' %}
+            {% if request.GET.status == 'deactivate' %}
             <td class="td-link">{{ report.waiting_days_amount }}</td>
             {% endif %}
             <td>
@@ -147,6 +167,8 @@
     {% endif %}
   </div>
 </div>
+
+{% endwith %}
 
 
 

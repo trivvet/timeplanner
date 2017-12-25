@@ -16,18 +16,29 @@
     </head>
 
     <body>
-        <div class="container" id="homeContainer">
-            <div class="row" id="home-header">
-                <div class="col">
-                    <h1>Судова експертиза та оцінка нерухомого майна</h1>
+        <div class="container-fluid" id="homeContainer">
+            <div class="row standart-row" id="home-header">
+                <div class="col-7">
+                    <h1>Судова експертиза та оцінка</h1>
+                    <div id="header-info">
+                        <p>Будівельно-технічне дослідження</p>
+                        <p>Земельно-технічне дослідження</p>
+                        <p>Оціночно-будівельне дослідження</p>
+                        <p>Оцінка для цілей оподаткування</p>
+                        <button class="btn btn-info btn-lg" href="#mainInfo">Детальніше</button>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <img src="{{ PORTAL_URL }}{% static 'estate-search.png' %}" width="583px" height="456px">
                 </div>
             </div>
 
-            <div class="row" id="mainInfo">
+            <div class="row standart-row" id="mainInfo">
                 <div class="col">
                     <h2><b>Судовий експерт, оцінювач Власюк Володимир Володимирович</b></h2>
                     <p>Адреса: 29013, м. Хмельницький, вул. Проскурівського підпілля, 25</p>
-                    <p><b>Тел. 097-749-28-34</b></p>
+                    <p><b>Tel: 097-749-28-34</b></p>
+                    <p><b>Email: vlasyuk@budexpert.km.ua</b></p>
                     <ul>Документи, на підставі яких здійснюється дільність:
                         <li>Кваліфікаційне свідоцтво №1566 від 23.03.2012р, видане рішенням центральної
                         експертно-кваліфікаційної комісії Міністерства Юстиції України, строк дії до 20.03.2018р.</br>
@@ -38,10 +49,9 @@
                 </div>
             </div>
 
-            <hr />
-            <h2 class="text-center" id="questionsHeader">Сфера вирішуваних питань</h2>
-            <div class="row" id="home-content">
+            <div class="row standart-row" id="home-content">
                 <div class="col">
+                    <h2 class="text-center" id="questionsHeader">Сфера вирішуваних питань</h2>
                     <ul class="nav nav-tabs nav-fill" id="myList" role="tablist">
                         <li class="nav-item">
                             <a class="list-group-item-action nav-link active" data-toggle="list" href="#list-home"

@@ -106,23 +106,18 @@ def add_order(request, rid):
                     'courts': courts, 'judges': judges})
             else:
                 new_detail = ReportEvents(**new_element)
+                new_detail.save()
                 report.judge_name = judge_name
                 report.case_number = case_number
                 report.date_arrived = new_detail.date
                 report.active = True
                 report.change_date = datetime.utcnow().date()
-                time_amount = datetime.utcnow() - datetime.strptime(report.date_arrived, "%Y-%m-%d")
-                days_amount = time_amount.days
+                
+                report.active_days_amount = days_count(report, 'active')
+                report.waiting_days_amount = days_count(report, 'waiting')
                 reports = Report.objects.all()
-                if len(reports) > 0:
-                    new_time_amount = datetime.utcnow().date() - reports[0].change_date
-                    for element in reports:
-                        if element.active_days is not None:
-                            element.change_date = timezone.now
-                            element.active_days_amount = element.active_days_amount + new_time_amount.days
+                update_dates_info(reports)
 
-                report.active_days_amount = days_amount
-                update_days_info(reports)
                 report.save()
                 new_detail.save()
                 messages.success(request, u"Ухвала про призначення експертизи успішно додана")
@@ -198,6 +193,7 @@ def add_detail(request, rid, kind):
                 report = check_active(report)
                 report.active_days_amount = days_count(report, 'active')
                 report.waiting_days_amount = days_count(report, 'waiting')
+                reports = Report.objects.all()
                 update_dates_info(reports)
 
                 report.save()

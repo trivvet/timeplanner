@@ -1,12 +1,37 @@
 /* home page */
+.standart-row {
+  padding: 200px 200px;
+  min-height: 500px;
+}
 #home-header {
-  padding-top:50px;
-  margin-bottom: 20px;
-  color: #007bff;
+  background-color: rgba(248,248,248,1);
+}
+
+#home-header h1 {
+  font-size: 4em;
+}
+
+#header-info {
+  font-family: Georgia, sans-serif;
+  font-size: 2em;
+  padding-left: 100px;
+  padding-top: 40px;
+}
+
+#header-info .btn {
+  margin-top: 50px;
+  padding: 20px 50px;
+  border-radius: 20px;
+  font-size: 1em;
 }
 
 #contentList {
-  padding: 20px;
+  height: 300px;
+}
+
+#home-content {
+  background-color: rgba(248,248,248,1);
+  padding-bottom: 200px;
 }
 
 #homeContainer {
@@ -14,9 +39,6 @@
 }
 
 #mainInfo {
-  border: 2px solid #007bff;
-  border-radius: 15px;
-  padding: 20px;
   font-family: Georgia, sans-serif;
   font-style: italic;
   font-size: 1.5em;
@@ -46,7 +68,6 @@
 }
 
 h1 {
-  color: #007bff;
   font-family: cursive;
   font-style: italic;
 }

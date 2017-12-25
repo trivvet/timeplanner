@@ -19,13 +19,13 @@ def reports_list(request):
     days_count = ''
 
 
-    if request.GET.get('executed'):
+    if request.GET.get('status') == 'executed':
         reports = Report.objects.filter(executed=True)
         content['reports_count'] = reports.count()
-    elif request.GET.get('deactivate'):
+    elif request.GET.get('status') == 'deactivate':
         reports = Report.objects.filter(executed=False, active=False)
         content['reports_count'] = reports.count()
-    elif request.GET.get('activate'):
+    elif request.GET.get('status') == 'active':
         reports = Report.objects.filter(executed=False, active=True)
         content['reports_count'] = reports.count()
     else:
@@ -53,7 +53,8 @@ def reports_list(request):
 
     order_by = request.GET.get('order_by', '')
     reverse_apply = request.GET.get('reverse', '')
-    if order_by in ('research_kind', 'number'):
+    if order_by in ('research_kind', 'number', 'active_days_amount', 'waiting_days_amount', 'date_arrived',
+        'date_executed'):
         reports = reports.order_by(order_by)
         if reverse_apply:
             reports = reports.reverse()
