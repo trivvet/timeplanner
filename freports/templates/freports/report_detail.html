@@ -103,7 +103,7 @@
                 <tr>
                     <th scope="row">Днів у виконанні</th>
                     <td>
-                        {{ report.active_days_amount }}
+                        {{ report.active_days_amount|add:report.time_after_update }}
                     </td>
                 </tr>
                 <tr>
@@ -111,7 +111,7 @@
                     <td>
                         {% if report.executed %}<span style="color:blue">Закрите</span>
                         {% elif report.active %}<span style="color:green">Активне</span>
-                        {% else %}<span style="color:grey">Призупинене {{ report.waiting_days_amount }} днів тому</span>{% endif %}
+                        {% else %}<span style="color:grey">Призупинене {{ report.waiting_days_amount|add:report.time_after_update }} днів тому</span>{% endif %}
                     </td>
                 </tr>
                 <tr>

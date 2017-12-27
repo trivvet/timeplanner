@@ -1,8 +1,4 @@
 /* home page */
-.standart-row {
-  padding: 200px 200px;
-  min-height: 500px;
-}
 #home-header {
   background-color: rgba(248,248,248,1);
 }
@@ -25,9 +21,25 @@
   font-size: 1em;
 }
 
-#contentList {
-  height: 300px;
+.standart-row {
+  padding: 200px 100px;
+  min-height: 500px;
 }
+
+a.list-group-item-action {
+}
+
+#questionsHeader {
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+#contentList {
+  min-height: 300px;
+  padding: 40px;
+  background-color: white;
+}
+
 
 #home-content {
   background-color: rgba(248,248,248,1);
@@ -50,11 +62,6 @@
 
 #login-url {
   color: black;
-}
-
-#questionsHeader {
-  font-style: italic;
-  margin: 25px 0;
 }
 
 #myList {

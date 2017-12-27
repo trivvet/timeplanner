@@ -125,10 +125,23 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
             <td class="td-link">{{ report.date_executed }}</td>
             {% endif %}
             {% if request.GET.status == 'active' %}
-            <td class="td-link">{{ report.active_days_amount }} </td>
+            <td class="td-link">
+                {% if report.active_days_amount != 0 %}
+                {{ report.active_days_amount|add:time_after_update }}
+                {% else %}
+                Відомості відсутні
+                {% endif %}
+            </td>
+            {% else %}
             {% endif %}
             {% if request.GET.status == 'deactivate' %}
-            <td class="td-link">{{ report.waiting_days_amount }}</td>
+            <td class="td-link">
+                {% if report.waiting_days_amount %}
+                {{ report.waiting_days_amount|add:time_after_update }}
+                {% else %}
+                Відомості відсутні
+                {% endif %}
+            </td>
             {% endif %}
             <td>
                 <div class="dropdown">

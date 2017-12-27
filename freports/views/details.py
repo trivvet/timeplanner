@@ -60,9 +60,12 @@ def details_list(request, rid):
             participant.status = status_list[participant.status]
             participants['other'].append(participant)
     content = kind_specific
+    time_after_update = date.today() - report.change_date
+    report.time_after_update = time_after_update.days
 
     return render(request, 'freports/report_detail.html',
-        {'details': details, 'report': report, 'participants': participants, 'content': content, 'subjects': subjects })
+        {'details': details, 'report': report, 'participants': participants, 
+        'content': content, 'subjects': subjects })
 
 @login_required(login_url='/login/')
 def add_order(request, rid):

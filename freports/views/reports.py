@@ -59,7 +59,10 @@ def reports_list(request):
         if reverse_apply:
             reports = reports.reverse()
 
-    return render(request, 'freports/reports_list.html', {'reports': reports, 'content': content})
+    time_after_update = date.today() - reports[0].change_date
+
+    return render(request, 'freports/reports_list.html', 
+        {'reports': reports, 'content': content, 'time_after_update': time_after_update.days})
 
 @login_required(login_url='/login/')
 def add_new_report_first(request):
