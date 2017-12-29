@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 
-from .days_counter import days_amount
+from .days_counter import check_active, days_count, update_dates_info
 from ..models import Report, ReportEvents, Judge, Court, ReportParticipants, ReportSubject
 
 @login_required(login_url='/login/')
@@ -25,14 +25,14 @@ def reports_list(request):
     elif request.GET.get('status') == 'deactivate':
         reports = Report.objects.filter(executed=False, active=False)
         content['reports_count'] = reports.count()
-    elif request.GET.get('status') == 'active':
-        reports = Report.objects.filter(executed=False, active=True)
-        content['reports_count'] = reports.count()
-    else:
+    elif request.GET.get('status') == 'all':
         reports = Report.objects.all()
         content['open_reports'] = reports.filter(executed=False).count()
         content['closed_reports'] = reports.filter(executed=True).count()
         content['active_reports'] = reports.filter(executed=False, active=True).count()
+    else:
+        reports = Report.objects.filter(executed=False, active=True)
+        content['reports_count'] = reports.count()
 
     reports = reports.order_by('number')
 
@@ -153,7 +153,14 @@ def edit_report(request, rid):
                 current_report = Report(**new_report)
                 current_report.id = rid
                 current_report.active = content.active
+                court_order = ReportEvents.objects.get(report=current_report, name='first_arrived')
+                court_order.date = current_report.date_arrived
+                court_order.save()
 
+                current_report.active_days_amount = days_count(current_report, 'active')
+                current_report.waiting_days_amount = days_count(current_report, 'waiting')
+                reports = Report.objects.all()
+                update_dates_info(reports)
                 current_report.save()
                 messages.success(request, u"Провадження №%s/%s успішно відкориговане" % (current_report.number, current_report.number_year))
 
@@ -202,6 +209,17 @@ def delete_report(request, rid):
             messages.warning(request, u"Видалення провадження скасовано")
 
         return HttpResponseRedirect(reverse('forensic_reports_list'))
+
+def update_info(request):
+    reports = Report.objects.all()
+    for report in reports:
+        report.active_days_amount = days_count(report, 'active')
+        report.waiting_days_amount = days_count(report, 'waiting')
+        report.save()
+    update_dates_info(reports)
+
+    mesages.success(request, u"Дані проваджень оновлено успішно")
+    return HttpReponseRedirect(reverse('forensic_reports_list'))    
 
 def valid_report(data_post):
     errors = {}

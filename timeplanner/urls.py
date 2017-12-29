@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^freports/add/new_report/$', freports.add_new_report, name='forensic_add_new_report'),
     url(r'^freports/(?P<rid>\d+)/edit/$', freports.edit_report, name='forensic_edit_report'),
     url(r'^freports/(?P<rid>\d+)/delete/$', freports.delete_report, name='forensic_delete_report'),
+    url(r'^freports/update_info/$', freports.update_info, name='reports_update'),
 
     # event urls
     url(r'^freports/(?P<rid>\d+)/details/$', freports.details_list, name='report_details_list'),
