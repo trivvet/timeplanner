@@ -101,6 +101,6 @@ class Report(models.Model):
     def full_number(self):
         return u"{}/{}".format(self.number, self.number_year)
 
-    def active_days(self):
-
-        return 2
+    def time_after_update(self):
+        time_amount = date.today() - self.change_date
+        return time_amount.days

@@ -8,7 +8,7 @@
 }
 
 #header-info {
-  font-family: Georgia, sans-serif;
+  font-family: Foglihten Regular, Georgia, fantasy, serif;
   font-size: 2em;
   padding-left: 100px;
   padding-top: 40px;
@@ -23,10 +23,7 @@
 
 .standart-row {
   padding: 200px 100px;
-  min-height: 500px;
-}
-
-a.list-group-item-action {
+  min-height: 100%;
 }
 
 #questionsHeader {
@@ -54,6 +51,11 @@ a.list-group-item-action {
   font-family: Georgia, sans-serif;
   font-style: italic;
   font-size: 1.5em;
+}
+
+#arrows {
+  margin-left: 25rem;
+  margin-top: 10rem;
 }
 
 #home-buttons {
