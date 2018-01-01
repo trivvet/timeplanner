@@ -176,8 +176,8 @@ tbody>td {
 }
 
 /* detail pages */
-#report-detail-header {
-
+#event-list-header {
+  font-size: 1.75rem;
 }
 
 h3.event-second-header {

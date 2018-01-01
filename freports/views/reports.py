@@ -31,7 +31,7 @@ def reports_list(request):
         content['closed_reports'] = reports.filter(executed=True).count()
         content['active_reports'] = reports.filter(executed=False, active=True).count()
     else:
-        reports = Report.objects.filter(executed=False, active=True)
+        reports = Report.objects.filter(executed=False).exclude(active=False)
         content['reports_count'] = reports.count()
 
     reports = reports.order_by('number')
@@ -216,8 +216,8 @@ def update_info(request):
         report.save()
     update_dates_info(reports)
 
-    mesages.success(request, u"Дані проваджень оновлено успішно")
-    return HttpReponseRedirect(reverse('forensic_reports_list'))    
+    messages.success(request, u"Дані проваджень оновлено успішно")
+    return HttpResponseRedirect(reverse('forensic_reports_list'))    
 
 def valid_report(data_post):
     errors = {}
