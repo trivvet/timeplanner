@@ -171,6 +171,7 @@ def add_detail(request, rid, kind):
         if detail.name == 'petition':
             new_content['received'] = detail.sending
             break
+    new_content['date'] = details[0].date.isoformat()
 
     if request.method == 'POST':
         if request.POST.get('save_button'):

@@ -19,10 +19,9 @@
 
     <body>
         <!-- Start Container -->
-        <div class="container-fluid">
+        <div class="container">
             <div class="row" id="main-header">
-                <div class="col-2"></div>
-                <div class="col-7">
+                <div class="col-10">
                     <h1>
                         {% if user.is_authenticated %}
                         Time Planner
@@ -32,7 +31,7 @@
                     </h1>
                 </div>
                 {% if user.is_authenticated %}
-                <div class="col-sm-1">
+                <div class="col-2">
                     <div class="btn-group" role="group">
                         <button id="btnGroupDrop1" type="button" class="btn btn-success" href=""
                             aria-haspopup="true" aria-expanded="false">{{ user }}</button>
@@ -45,14 +44,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-2"></div>
                 {% endif %}
             </div>
 
             {% if user.is_authenticated %}
             <div class="row" id="navbar">
-                <div class="col-2"></div>
-                <div class="col">
+                <div class="col-12">
                     {% url "forensic_reports_list" as url_reports %}
                     {% url "forensic_participants_list" as url_participants %}
                     {% url "report_subjects_list" as url_subjects %}
@@ -89,21 +86,17 @@
                       </li>
                     </ul>
                 </div>
-                <div class="col-2"></div>
             </div>
             {% endif %}
 
             <div class="row" id="second-header">
-                <div class="col-2"></div>
-                <div class="col-8">
+                <div class="col-12">
                     {% block title %}{% endblock title %}
                 </div>
-                <div class="col-2"></div>
             </div>
 
             <div class="row" id="message">
-                <div class="col-2"></div>
-                <div class="col">
+                <div class="col-12">
                     {% block messages %}
                         {% if messages %}
                         {% for message in messages %}
@@ -117,26 +110,22 @@
                     {% block extra_messages %}
                     {% endblock extra_messages %}
                 </div>
-                <div class="col-2"></div>
             </div>
 
             <div class="row" id="main-content">
-                <div class="col-2">
-                    {% block extra_content %}{% endblock extra_content %}
-                </div>
-                <div class="col-8">
+                <div class="col-12">
                     {% block content %}{% endblock content %}
                 </div>
-                <div class="col-2"></div>
+                <div class="col-12">
+                    {% block extra_content %}{% endblock extra_content %}
+                </div>
             </div>
 
             <div class="row" id="footer">
-                <div class="col-2"></div>
-                <div class="col">
+                <div class="col-12">
                     <hr />
                     <p>{% if user.is_authenticated %}Time Planner, 2017-2018 &copy;{% endif %}</p>
                 </div>
-                <div class="col-2"></div>
             </div>
 
         </div>

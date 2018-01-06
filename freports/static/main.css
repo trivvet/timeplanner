@@ -71,6 +71,12 @@
 }
 
 /* main page */
+@media (min-width: 1200px) {
+  .container{
+    max-width: 1600px;
+  }
+}
+
 #main-header {
   margin-top:50px;
   margin-bottom: 20px;
@@ -129,22 +135,16 @@ tbody>td {
 }
 
 .filter {
-  border: 2px solid orange;
   border-radius: 10px;
-  margin-left: 50px;
-  height: 100%;
-  max-height: 500px;
-  padding: 10%;
-  min-width: 140px;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  background: #b0b6c0;
 }
 
 .input-date {
   margin-right: 5px;
   margin-left: 5px;
-}
-
-#filter-button {
-  margin-top: 40px;
+  max-width: 100px;
 }
 
 .no-style-link:hover {

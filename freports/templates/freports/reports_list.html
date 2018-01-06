@@ -195,21 +195,21 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
 {% block extra_content %}
 {% if request.GET.executed != '1' %}
 <div class="filter">
-    <h4>Уточнити параметри</h4>
-    <form class="form-horizontal" action="" method="get" enctype="multipart/form-data" role="form">
+    <form class="form-inline row" action="" method="get" enctype="multipart/form-data" role="form">
+        <div class="form-group mb-1 mt-1 col-1 h3">Фільтр</div>
         <input type="hidden" name="filter_status" value="success" />
-        <div class="form-group row">
-            <label for="inputDateArrived" class="col-sm-12">Дата надходження</label>
-            <div class="col-sm-4">від</div><input type="text" id="inputDateArrived"
-                class="input-date col-sm-7 dateinput" name="date_from" value="{{ request.GET.date_from }}"/>
-            <div class="col-sm-4">до</div><input type="text" class="input-date col-sm-7 dateinput" name="date_until"
+        <div class="form-group mb-1 mt-1 col-5">
+            <label for="inputDateArrived">Дата надходження від</label>
+            <input type="text" id="inputDateArrived"
+                class="input-date dateinput form-control" name="date_from" value="{{ request.GET.date_from }}"/>
+            до<input type="text" class="input-date dateinput form-control" name="date_until"
                 value="{{ request.GET.date_until }}"/>
         </div>
-        <div class="form-group row">
-            <label for="selectDayCount" class="col-sm-6">Днів у виконанні</label>
-            <input type="number" class="col-sm-5" name="day_count" value="{{ request.GET.day_count }}"/>
+        <div class="form-group mb-1 mt-1 col-3">
+            <label for="selectDayCount">Днів у виконанні</label>
+            <input class="input-date form-control" type="number" name="day_count" value="{{ request.GET.day_count }}"/>
         </div>
-        <div class="form-group row" id="filter-button">
+        <div class="form-group mb-1 mt-1 col-3" id="filter-button">
             <div class="col">
                 <input type="submit" class="btn btn-info" value="Застосувати"
                     name="apply_button" />

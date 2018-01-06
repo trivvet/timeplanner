@@ -1,9 +1,9 @@
 function initDateFields() {
-    var startDate = $('input.dateinput').val(), currentDate = new Date();
+    var startDate = $('#inputDate').val(), currentDate = new Date();
     if (!startDate) {
         var startDate = currentDate;
     }
-    $('input.dateinput').datetimepicker({
+    $('#inputDate').datetimepicker({
       format: 'YYYY-MM-DD',
       icons: {
           date: "fa fa-calendar",
@@ -14,6 +14,30 @@ function initDateFields() {
       },
       locale: 'uk',
       maxDate: currentDate,
+      viewDate: startDate,
+      defaultDate: startDate,
+      useCurrent: false,
+      daysOfWeekDisabled: [0,6]
+    });
+
+//    $('.input-group-addon').click(function(){
+//        $(this).siblings('input').focus();
+//    });
+}
+
+function initDateDecisionField() {
+    var startDate = $('#inputDate').val();
+    $('#inputDateDecision').datetimepicker({
+      format: 'YYYY-MM-DD',
+      icons: {
+          date: "fa fa-calendar",
+          previous: "fa fa-arrow-left",
+          next: "fa fa-arrow-right",
+          close: 'fa fa-times',
+          today: 'fa fa-calendar-check-o'
+      },
+      locale: 'uk',
+      maxDate: startDate,
       viewDate: startDate,
       defaultDate: startDate,
       useCurrent: false,
@@ -193,6 +217,17 @@ function addPlusButton() {
     });
 }
 
+// Change Decision Date when type Event Date
+function changeDecisionDate() {
+    $('#inputDate').focusout(function() {
+        inputDate = $('#inputDateDecision');
+        if (inputDate) {
+            inputDate.val($(this).val());
+            initDateDecisionField();
+        }
+    });
+}
+
 $(document).ready(function(){
     initDateFields();
     initDateTimeFields();
@@ -200,4 +235,5 @@ $(document).ready(function(){
     initFormPage();
     initSelectCourt();
     addPlusButton();
+    changeDecisionDate()
 })
