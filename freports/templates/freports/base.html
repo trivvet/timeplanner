@@ -7,6 +7,7 @@
         <meta charset="UTF-8" />
         <title>BudExpert</title>
 
+        <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700|Nunito:400,700" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -18,20 +19,52 @@
     </head>
 
     <body>
-        <!-- Start Container -->
-        <div class="container">
-            <div class="row" id="main-header">
-                <div class="col-10">
-                    <h1>
-                        {% if user.is_authenticated %}
-                        Time Planner
-                        {% else %}
-                        <a href="{% url 'business_card_first_page' %}">&lArr;</a>
-                        {% endif %}
-                    </h1>
-                </div>
-                {% if user.is_authenticated %}
-                <div class="col-2">
+        {% if user.is_authenticated %}
+        <!-- Main Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'forensic_reports_list' %}">Time Planner</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" 
+                aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    {% url "forensic_reports_list" as url_reports %}
+                    {% url "forensic_participants_list" as url_participants %}
+                    {% url "report_subjects_list" as url_subjects %}
+                    {% url "contacts_list" as url_contacts %}
+                    {% url "judges_list" as url_judges %}
+                    {% url "courts_list" as url_courts %} 
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_reports %}active{% endif %}"
+                                href="{{ url_reports }}">Провадження</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_participants %}active{% endif %}"
+                                href="{{ url_participants }}">Учасники</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_subjects %}active{% endif %}"
+                              href="{{ url_subjects }}">Об'єкти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_contacts %}active{% endif %}"
+                                href="{{ url_contacts }}">Контакти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_judges %}active{% endif %}"
+                                href="{{ url_judges }}">Судді</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == url_courts %}active{% endif %}"
+                                href="{{ url_courts }}">Суди</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Інші</a>
+                        </li>
+                    </ul>
                     <div class="btn-group" role="group">
                         <button id="btnGroupDrop1" type="button" class="btn btn-success" href=""
                             aria-haspopup="true" aria-expanded="false">{{ user }}</button>
@@ -44,55 +77,17 @@
                         </div>
                     </div>
                 </div>
-                {% endif %}
             </div>
+         <!-- Navbar content -->
+        </nav>
 
-            {% if user.is_authenticated %}
-            <div class="row" id="navbar">
-                <div class="col-12">
-                    {% url "forensic_reports_list" as url_reports %}
-                    {% url "forensic_participants_list" as url_participants %}
-                    {% url "report_subjects_list" as url_subjects %}
-                    {% url "contacts_list" as url_contacts %}
-                    {% url "judges_list" as url_judges %}
-                    {% url "courts_list" as url_courts %}
-                    <ul class="nav nav-tabs">
-                      <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_reports %}active{% endif %}"
-                            href="{{ url_reports }}">Провадження</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_participants %}active{% endif %}"
-                            href="{{ url_participants }}">Учасники</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_subjects %}active{% endif %}"
-                            href="{{ url_subjects }}">Об'єкти</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_contacts %}active{% endif %}"
-                            href="{{ url_contacts }}">Контакти</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_judges %}active{% endif %}"
-                            href="{{ url_judges }}">Судді</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link {% if request.path == url_courts %}active{% endif %}"
-                            href="{{ url_courts }}">Суди</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Інші</a>
-                      </li>
-                    </ul>
-                </div>
-            </div>
-            {% endif %}
+        {% endif %}
+
+        <!-- Start Container -->
+        <div class="container">
 
             <div class="row" id="second-header">
-                <div class="col-12">
-                    {% block title %}{% endblock title %}
-                </div>
+                {% block title %}{% endblock title %}
             </div>
 
             <div class="row" id="message">

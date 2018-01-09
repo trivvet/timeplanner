@@ -190,8 +190,15 @@ def delete_report(request, rid):
         report = Report.objects.get(pk=rid)
         content = u"Ви дійсно бажаєте видалите провадження №%s/017?" % report.number
         header = u"Видалення провадження №%s/017" % report.number
-        return render(request, 'freports/delete_form.html', {'report': report, 'header': header, 'content': content})
+        next_url = request.GET.get('next', '')
+        return render(request, 'freports/delete_form.html', {'report': report, 'header': header, 
+            'content': content, 'cancel_url': next_url})
     elif request.method == 'POST':
+        if request.POST.get('cancel_next'):
+            next_url = reverse(request.POST.get('cancel_next'), args=[rid])
+        else:
+            next_url = reverse('forensic_reports_list')
+
         if request.POST.get('delete_button'):
             current_report = Report.objects.get(pk=rid)
             participants = ReportParticipants.objects.filter(report=current_report)
@@ -206,7 +213,7 @@ def delete_report(request, rid):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Видалення провадження скасовано")
 
-        return HttpResponseRedirect(reverse('forensic_reports_list'))
+        return HttpResponseRedirect(next_url)
 
 def update_info(request):
     reports = Report.objects.all()

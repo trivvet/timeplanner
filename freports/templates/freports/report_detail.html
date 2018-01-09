@@ -126,8 +126,16 @@
                     <td>
                         <a type="button" class="btn btn-info"
                            href="{% url 'forensic_edit_report' report.id %}?next=report_details_list">Редагувати основну інформацію</a>
+                        <a type="button" class="btn btn-danger"
+                            href="{% url 'forensic_delete_report' report.id %}?next=report_details_list">Видалити провадження</a>
                         <a type="button" class="btn btn-success"
                             href="{% url 'report_add_participant' report.id 'other_participant' %}">Додати іншого учасника провадження</a>
+                    </td>
+                </tr> 
+                <tr>
+                    <th scope="row"></th>
+                    <td>
+                        
                     </td>
                 </tr>
             </tbody>
