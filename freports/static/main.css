@@ -82,15 +82,29 @@
   color: #221d5a;
   font-family: 'Josefin Sans', sans-serif;
   font-weight: 700;
+  text-shadow: 0 0 7px rgba(0,0,0,0.1);
 }
 
 #add-report {
-  padding: 0.5rem 0.75rem;
-  float: right;
+  margin-bottom: 15px;
+  margin-left: 10px;
 }
 
 #navbar-list {
-  margin-bottom: 10px;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+#navbar-list .nav-link {
+  border: 1px solid #eeeeee;
+}
+
+#navbar-list .active {
+  background-color: white;
+  color: orange;
+  border: 2px solid orange;
+  font-size: 1.3rem;
+  box-shadow: 0 0 7px rgba(0,0,0,0.2);
 }
 
 /* report pages */
@@ -114,15 +128,12 @@ tbody>td {
   vertical-align: center;
 }
 
-td.td-date {
-  font-size: 0.8em;
-}
 
 .table-hover>tbody>tr:hover>td.td-link, .table-hover>tbody>tr:hover>th.td-link {
   background: rgba(0,0,0,.1);
   border-top: 2px solid #6657cf;
   border-bottom: 2px solid #6657cf;
-  font-size: 1.05em;
+/*  font-size: 1.05em;*/
 }
 
 #calendar, #calendar1, #calendar2 {
@@ -135,14 +146,27 @@ td.td-date {
   color: #dc3545;
 }
 
-.card {
-  font-size: 1.1em;
+/*.card {
+  font-size: 1.2em;
   margin-bottom: 10px;
+  border-radius: 20px;
+  border: 1px solid #377a3f;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
 .card-body {
-  padding: 0.75rem;
-}
+  padding: 0.5rem 1rem;
+}*/
+
+/*.card-body span {
+  vertical-align: middle;
+}*/
+
+/*#add-report {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  float: right;
+}*/
 
 .filter {
   border-radius: 10px;

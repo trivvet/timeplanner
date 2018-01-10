@@ -1,11 +1,11 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<div class="col-8">
-    <h1>Список проваджень</h1>
-</div>
-<div class="col-4">
-    <a class="btn btn-sm align-middle btn-outline-warning"
+<div class="col">
+    <span class="h1">Список проваджень</span>
+<!-- </div> -->
+<!-- <div class="col-4"> -->
+    <a class="btn btn-outline-info"
         id="add-report" href="{% url 'forensic_add_new_report' %}">Додати провадження</a>
 </div>
 {% endblock title %}
@@ -27,10 +27,10 @@
 {% block content %}
 
 <nav class="nav nav-pills nav-justified" id="navbar-list">
-    <a class="nav-item nav-link {% if request.GET.status == 'all' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=all">Усі</a>
-    <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'forensic_reports_list' %}">Активні</a>
-    <a class="nav-link nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=deactivate">Призупинені</a>
-    <a class="nav-link nav-item {% if request.GET.status == 'executed' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=executed">Закриті</a>
+    <a class="nav-item nav-link {% if request.GET.status == 'all' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=all">Усі <span class="badge badge-info">{{ content.open_reports }}</span></a>
+    <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'forensic_reports_list' %}">Активні <span class="badge badge-success">{{ content.active_reports }}</span></a>
+    <a class="nav-link nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=deactivate">Призупинені <span class="badge badge-secondary">{{ content.deactivate_reports }}</span></a>
+    <a class="nav-link nav-item {% if request.GET.status == 'executed' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=executed">Закриті <span class="badge badge-light">{{ content.closed_reports }}</span></a>
 </nav>
 
 <!-- <nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
@@ -65,42 +65,41 @@
 {% if reports %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse status=request.GET.status %}
 
-<div class="card">
+<!-- <div class="card">
   <div class="card-body">
-    {% if request.GET.status == 'all' %}
-    Всього на виконанні - <strong>{{ content.open_reports }}</strong> проваджень, з них активних - <strong>{{ content.active_reports }}</strong>.
-    Всього закрито - <strong>{{ content.closed_reports }}</strong> проваджень.
+    <span>{% if request.GET.status == 'all' %}
+    Всього на виконанні - <strong>{{ content.open_reports }}</strong> проваджень.
     {% elif not request.GET.status %}
-    Всього активних проваджень - {{ content.reports_count }}
+    Всього активних проваджень - <strong>{{ content.active_reports }}</strong>
     {% elif request.GET.status == 'deactivate' %}
-    Всього призупинених проваджень - {{ content.reports_count }}
+    Всього призупинених проваджень - <strong>{{ content.deactivate_reports }}</strong>
     {% else %}
-    Всього закритих проваджень - {{ content.reports_count }}
-    {% endif %}
+    Всього закритих проваджень - <strong>{{ content.closed_reports }}</strong>
+    {% endif %}</span>
   </div>
-</div>
 
+</div> -->
 
-<table class="table table-hover table-bordered">
-    <thead>
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
         <tr>
-            <th>
+            <th scope="col">
                 <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=number
 {% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
                     № {% if order_by == '' or order_by == 'number' and reverse != '1' %}&uarr;
                     {% elif order_by == 'number' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
-            <th>Адреса</th>
-            <th>Позивач</th>
-            <th>Відповідач</th>
-            <th>Тип Об'єкту</th>
-            <th>
+            <th scope="col">Адреса</th>
+            <th scope="col">Позивач</th>
+            <th scope="col">Відповідач</th>
+            <th scope="col">Тип Об'єкту</th>
+            <th scope="col">
                 <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=research_kind">
                     Вид Дослідження {% if order_by == 'research_kind' %}&uarr;{% endif %}
                 </a>
             </th>
-            <th>
+            <th scope="col">
                 <a href="{% url 'forensic_reports_list' %}?status={{ status }}&
 order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reverse=1{% endif %}">
                     Дата надходження {% if order_by == 'date_arrived' and reverse != '1' %}&uarr;
@@ -108,7 +107,7 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
                 </a>
             </th>
             {% if request.GET.status == 'executed' %}
-            <th>
+            <th scope="col">
                 <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=date_executed
 {% if order_by == 'date_executed' and reverse != '1' %}&reverse=1{% endif %}">
                     Дата виконання {% if order_by == 'date_executed' and reverse != '1' %}&uarr;
@@ -117,7 +116,7 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
             </th>
             {% endif %}
             {% if not request.GET.status %}
-            <th>
+            <th scope="col">
                 <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=active_days_amount
 {% if order_by == 'active_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
                     Днів у виконанні {% if order_by == 'active_days_amount' and reverse != '1' %}&uarr;
@@ -140,31 +139,29 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
     <tbody>
 
         {% for report in reports %}
-        <tr class="table-{% if report.active is None %}danger{% elif report.filled_info == False %}warning{% elif report.active %}success
-            {% elif report.executed == False %}secondary{% else %}info{% endif %}"
+        <tr class="{% if report.active is None %}table-danger{% endif %}"
             data-href="{% url 'report_details_list' report.id %}">
-            <th class="td-link" scope="row">{{ report.full_number }}</th>
-            <td class="td-link">{{ report.address }}</td>
-            <td class="td-link">{{ report.plaintiff }}</td>
-            <td class="td-link">{{ report.defendant }}</td>
-            <td class="td-link">{{ report.object_name }}</td>
-            <td class="td-link">{{ report.research_kind }}</td>
-            <td class="td-link td-date">{{ report.date_arrived }}</td>
+            <th class="td-link" scope="row">{% if report.executed == True %}<p style="color:blue">{% elif report.active == True %}<p style="color:green">{% else %}<p style="color:grey">{% endif %}{{ report.full_number }}</p></th>
+            <td class="td-link">{{ report.address|truncatechars:25 }}</td>
+            <td class="td-link">{{ report.plaintiff|truncatechars:20 }}</td>
+            <td class="td-link">{{ report.defendant|truncatechars:20 }}</td>
+            <td class="td-link">{{ report.object_name|truncatechars:20 }}</td>
+            <td class="td-link">{{ report.research_kind|truncatechars:20 }}</td>
+            <td class="td-link td-date">{{ report.date_arrived|truncatechars:10 }}</td>
             {% if request.GET.status == 'executed' %}
-            <td class="td-link td-date">{{ report.date_executed }}</td>
+            <td class="td-link td-date">{{ report.date_executed|truncatechars:10 }}</td>
             {% endif %}
             {% if not request.GET.status %}
-            <td class="td-link text-center">
+            <td class="td-link">
                 {% if report.active_days_amount != 0 %}
                 {{ report.active_days_amount|add:report.time_after_update }}
                 {% else %}
                 Відомості відсутні
                 {% endif %}
             </td>
-            {% else %}
             {% endif %}
             {% if request.GET.status == 'deactivate' %}
-            <td class="td-link text-center">
+            <td class="td-link">
                 {% if report.waiting_days_amount %}
                 {{ report.waiting_days_amount|add:report.time_after_update }}
                 {% else %}

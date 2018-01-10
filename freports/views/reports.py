@@ -17,22 +17,21 @@ from ..models import Report, ReportEvents, Judge, Court, ReportParticipants, Rep
 def reports_list(request):
     content = {}
     days_count = ''
-
+    reports_all = Report.objects.all()
 
     if request.GET.get('status') == 'executed':
-        reports = Report.objects.filter(executed=True)
-        content['reports_count'] = reports.count()
+        reports = reports_all.filter(executed=True)
     elif request.GET.get('status') == 'deactivate':
-        reports = Report.objects.filter(executed=False, active=False)
-        content['reports_count'] = reports.count()
+        reports = reports_all.filter(executed=False, active=False)
     elif request.GET.get('status') == 'all':
-        reports = Report.objects.all()
-        content['open_reports'] = reports.filter(executed=False).count()
-        content['closed_reports'] = reports.filter(executed=True).count()
-        content['active_reports'] = reports.filter(executed=False, active=True).count()
+        reports = reports_all
     else:
         reports = Report.objects.filter(executed=False).exclude(active=False)
-        content['reports_count'] = reports.count()
+    
+    content['open_reports'] = reports_all.count()
+    content['closed_reports'] = reports_all.filter(executed=True).count()
+    content['active_reports'] = reports_all.filter(executed=False, active=True).count()
+    content['deactivate_reports'] = reports_all.filter(executed=False, active=False).count()
 
     reports = reports.order_by('number')
 
@@ -194,10 +193,7 @@ def delete_report(request, rid):
         return render(request, 'freports/delete_form.html', {'report': report, 'header': header, 
             'content': content, 'cancel_url': next_url})
     elif request.method == 'POST':
-        if request.POST.get('cancel_next'):
-            next_url = reverse(request.POST.get('cancel_next'), args=[rid])
-        else:
-            next_url = reverse('forensic_reports_list')
+        next_url = reverse('forensic_reports_list')
 
         if request.POST.get('delete_button'):
             current_report = Report.objects.get(pk=rid)
@@ -210,7 +206,10 @@ def delete_report(request, rid):
             else:
                 current_report.delete()
                 messages.success(request, u"Провадження №%s/017 успішно видалено" % current_report.number)
+
         elif request.POST.get('cancel_button'):
+            if request.POST.get('cancel_next'):
+                next_url = reverse(request.POST.get('cancel_next'), args=[rid])
             messages.warning(request, u"Видалення провадження скасовано")
 
         return HttpResponseRedirect(next_url)
