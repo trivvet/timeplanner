@@ -32,6 +32,32 @@
     <a class="nav-link nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=deactivate">Призупинені <span class="badge badge-secondary">{{ content.deactivate_reports }}</span></a>
     <a class="nav-link nav-item {% if request.GET.status == 'executed' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=executed">Закриті <span class="badge badge-light">{{ content.closed_reports }}</span></a>
 </nav>
+<button class="btn btn-outline-secondary" id="filter-button" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">Фільтр</button>
+<div class="collapse" id="filter">
+    <div class="card card-body">
+        <div class="filter">
+            <form class="form-inline row" action="" method="get" enctype="multipart/form-data" role="form">
+                <input type="hidden" name="filter_status" value="success" />
+                <div class="form-group mb-1 mt-1 col-9">
+                    <label for="inputDateArrived">Дата надходження від</label>
+                    <input type="text" id="inputDateArrived"
+                        class="input-date dateinput form-control" name="date_from" value="{{ request.GET.date_from }}"/>
+                    до<input type="text" class="input-date dateinput form-control" name="date_until"
+                        value="{{ request.GET.date_until }}"/>
+                    <label for="selectDayCount">Днів у виконанні</label>
+                    <input class="input-date form-control" type="number" name="day_count" value="{{ request.GET.day_count }}"/>
+                    
+                </div>
+                <div class="form-group mb-1 mt-1 col-3" id="filter-button">
+                    <input type="submit" class="btn btn-outline-info" value="Застосувати"
+                        name="apply_button" />
+                    <input type="submit" class="btn btn-outline-secondary" value="Скинути"
+                        name="cancel_button" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <!-- <nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
     <a class="navbar-brand" href="{% url 'forensic_reports_list' %}">Список проваджень</a>
@@ -141,7 +167,7 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
         {% for report in reports %}
         <tr class="{% if report.active is None %}table-danger{% endif %}"
             data-href="{% url 'report_details_list' report.id %}">
-            <th class="td-link" scope="row">{% if report.executed == True %}<p style="color:blue">{% elif report.active == True %}<p style="color:green">{% else %}<p style="color:grey">{% endif %}{{ report.full_number }}</p></th>
+            <th class="td-link" scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
             <td class="td-link">{{ report.address|truncatechars:25 }}</td>
             <td class="td-link">{{ report.plaintiff|truncatechars:20 }}</td>
             <td class="td-link">{{ report.defendant|truncatechars:20 }}</td>
@@ -187,30 +213,3 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
 {% endif %}
 
 {% endblock content %}
-
-{% block extra_content %}
-{% if request.GET.executed != '1' %}
-<div class="filter">
-    <form class="form-inline row" action="" method="get" enctype="multipart/form-data" role="form">
-        <div class="mb-1 mt-1 col-2 h3 text-center"><p class="mb-0">Фільтр</p></div>
-        <input type="hidden" name="filter_status" value="success" />
-        <div class="form-group mb-1 mt-1 col-7">
-            <label for="inputDateArrived">Дата надходження від</label>
-            <input type="text" id="inputDateArrived"
-                class="input-date dateinput form-control" name="date_from" value="{{ request.GET.date_from }}"/>
-            до<input type="text" class="input-date dateinput form-control" name="date_until"
-                value="{{ request.GET.date_until }}"/>
-            <label for="selectDayCount">Днів у виконанні</label>
-            <input class="input-date form-control" type="number" name="day_count" value="{{ request.GET.day_count }}"/>
-            
-        </div>
-        <div class="form-group mb-1 mt-1 col-3" id="filter-button">
-            <input type="submit" class="btn btn-outline-info" value="Застосувати"
-                name="apply_button" />
-            <input type="submit" class="btn btn-outline-secondary" value="Скинути"
-                name="cancel_button" />
-        </div>
-    </form>
-</div>
-{% endif %}
-{% endblock extra_content %}

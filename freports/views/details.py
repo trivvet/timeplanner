@@ -128,7 +128,11 @@ def add_order(request, rid):
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання ухвали про призначення експертизи скасовано")
-            return HttpResponseRedirect(reverse('forensic_reports_list'))
+        elif request.POST.get('delete_button'):
+                report.delete()
+                messages.success(request, u"Провадження №%s/017 успішно видалено" % report.number)
+
+        return HttpResponseRedirect(reverse('forensic_reports_list'))
 
     elif request.method == 'GET':
         if request.is_ajax():

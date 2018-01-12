@@ -15,9 +15,9 @@
     <input type="hidden" name='judge_id' value="{{ judge_id }}">
     <input type="hidden" name="cancel_next" value="{{ cancel_url }}">
     <div class="form-group row">
-        <label for="inputNumber" class="col-sm-3 col-form-label"></label>
-        <div class="col-sm-3" id="divInputNumber">
-            <input type="text" class="form-control col-sm-5 {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
+        <label for="inputNumber" class="col-3 col-form-label"></label>
+        <div class="col-md-9 col-lg-4" id="divInputNumber">
+            <input type="text" class="form-control col-5 {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
             <p id="dual-number">/</p>
             <select class="form-control col-sm-5" name="number_year">

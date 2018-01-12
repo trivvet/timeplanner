@@ -81,7 +81,7 @@ function initRowMakeLink() {
 }
 
 function initFormPage() {
-    $('#add-event>a, #edit-event a').click(function() {
+    $('#add-event>a, #edit-event a, #add-report').click(function() {
         var link = $(this);
 
         $.ajax({
@@ -128,7 +128,7 @@ function initForm(form, modal, link) {
             return false;
         },
         success: function(data, status, xhr) {
-            var html = $(data), newform = html.find('#main-content form');
+            var html = $(data), newform = html.find('#main-content form-horizontal');
 
             if (newform.length > 0) {
                 modal.find('.modal-body').html(newform);
@@ -140,6 +140,7 @@ function initForm(form, modal, link) {
                 $('#main-content').html(html.find('#main-content').html());
                 initFormPage();
                 addPlusButton();
+                initRowMakeLink();
                 $('#modalForm').modal('hide');
             }
         }
