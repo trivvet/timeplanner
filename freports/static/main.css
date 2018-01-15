@@ -1,34 +1,34 @@
 /* home page */
+.standart-row {
+  padding: 8% 4%;
+  min-height: 100%;
+  font-size: 2.5vh;
+}
+
 #home-header {
-  background-color: rgba(248,248,248,1);
+  /*background-color: rgba(248,248,248,1);*/
+  background-image: url(https://source.unsplash.com/xnUQO2DwXOo);
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #007bff;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 #home-header h1 {
-  font-size: 4em;
+  font-size: 3em;
+  margin-top: 5%;
 }
 
 #header-info {
   font-family: Foglihten Regular, Georgia, fantasy, serif;
-  font-size: 2em;
-  padding-left: 100px;
-  padding-top: 40px;
+  font-size: 1.2em;
+  padding-left: 6%;
+  padding-top: 2%;
 }
 
-#header-info .btn {
-  margin-top: 50px;
-  padding: 20px 50px;
-  border-radius: 20px;
-  font-size: 1em;
-}
-
-.standart-row {
-  padding: 200px 100px;
-  min-height: 100%;
-}
-
-#questionsHeader {
-  font-style: italic;
-  margin-bottom: 30px;
+#arrows {
+  margin: 0 40%;
+  width: 20%;
 }
 
 #contentList {
@@ -37,25 +37,23 @@
   background-color: white;
 }
 
-
 #home-content {
   background-color: rgba(248,248,248,1);
-  padding-bottom: 200px;
-}
-
-#homeContainer {
-  background-color: white;
+  font-size: 1.2em;
 }
 
 #mainInfo {
   font-family: Georgia, sans-serif;
   font-style: italic;
-  font-size: 1.5em;
 }
 
-#arrows {
-  margin-left: 25rem;
-  margin-top: 10rem;
+#mainInfo h2 {
+  font-size: 2em;
+}
+
+#questionsHeader {
+  font-style: italic;
+  margin-bottom: 30px;
 }
 
 #home-buttons {

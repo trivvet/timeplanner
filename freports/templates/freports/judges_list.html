@@ -1,7 +1,16 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
+
+<div class="col">
+    <span class="h1">{{ header }}</span>
+<!-- </div> -->
+<!-- <div class="col-4"> -->
+    <a class="btn btn-outline-info"
+        id="add-report" href="{% url 'forensic_add_judge' %}">Додати суддю</a>
+</div>
+
+<!-- <nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
     <a class="navbar-brand" href="">{{ header }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -10,7 +19,7 @@
         <a class="btn btn-sm align-middle btn-outline-warning"
                 id="add-report" href="{% url 'forensic_add_judge' %}">Додати суддю</a>
     </div>
-</nav>
+</nav> -->
 {% endblock title %}
 
 {% block extra_messages %}
@@ -20,13 +29,13 @@
 
 {% if judges %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
-<table class="table table-hover table-bordered">
-    <thead>
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
         <tr>
-            <th>Прізвище, ім'я, ім'я по батькові</th>
-            <th>Суд</th>
-            <th>Контакти</th>
-            <th>Дії</th>
+            <th scope="col">Прізвище, ім'я, ім'я по батькові</th>
+            <th scope="col">Суд</th>
+            <th scope="col">Контакти</th>
+<!--             <th scope="col">Дії</th> -->
         </tr>
     </thead>
 {% endwith %}
@@ -34,13 +43,13 @@
     <tbody>
 
         {% for judge in judges %}
-        <tr>
+        <tr data-href="{% url 'forensic_judge_detail' judge.id %}">
 
-            <td>{{ judge.surname }} {{ judge.first_name }} {{ judge.second_name }}
+            <td class="td-link" scope="row">{{ judge.surname }} {{ judge.first_name }} {{ judge.second_name }}
                 <span class="badge badge-success">{{ judge.cases_amount }}</span>
                 <span class="badge badge-info">{{ judge.executed_amount }}</span></td>
-            <td>{{ judge.court_name }}</td>
-            <td>
+            <td class="td-link">{{ judge.court_name }}</td>
+            <td class="td-link">
                 {% if judge.personal_phone %}
                     Тел. {{ judge.personal_phone }}</br>
                 {% endif %}
@@ -50,7 +59,8 @@
                 {% if judge.address %}
                    Адреса: {{ judge.address }}
                 {% endif %}
-            <td>
+            </td>
+            <!-- <td>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -65,7 +75,7 @@
                             href="{% url 'forensic_delete_judge' judge.id %}">Видалити</a>
                     </div>
                 </div>
-            </td>
+            </td> -->
         </tr>
         {% endfor %}
 
