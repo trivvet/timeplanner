@@ -150,6 +150,9 @@ def edit_report(request, rid):
                 current_report = Report(**new_report)
                 current_report.id = rid
                 current_report.active = content.active
+                current_report.executed = content.executed
+                if content.executed:
+                    current_report.date_executed = content.date_executed
                 court_order = ReportEvents.objects.get(report=current_report, name='first_arrived')
                 court_order.date = current_report.date_arrived
                 court_order.save()

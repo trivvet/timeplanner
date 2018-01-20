@@ -252,6 +252,7 @@ def edit_detail(request, rid, did):
                     report.date_executed = new_data['date']
                 else:
                     edit_detail.activate = new_data['activate']
+                    report.executed = False
                 edit_detail.save()
                 report = check_active(report)
                 if edit_detail.name == 'first_arrived':
