@@ -119,6 +119,7 @@ function initFormPage() {
 function initForm(form, modal, link) {
     initDateFields();
     initDateTimeFields();
+    changeDecisionDate()
 
     form.ajaxForm({
         url: link,

@@ -120,7 +120,7 @@ def add_order(request, rid):
                 report.waiting_days_amount = days_count(report, 'waiting')
                 reports = Report.objects.all()
                 update_dates_info(reports)
-
+                
                 report.save()
                 new_detail.save()
                 messages.success(request, u"Ухвала про призначення експертизи успішно додана")
@@ -248,11 +248,8 @@ def edit_detail(request, rid, did):
                 edit_detail.id = did
                 if new_data['activate'] == 'executed':
                     edit_detail.activate = False
-                    report.executed = True
-                    report.date_executed = new_data['date']
                 else:
                     edit_detail.activate = new_data['activate']
-                    report.executed = False
                 edit_detail.save()
                 report = check_active(report)
                 if edit_detail.name == 'first_arrived':

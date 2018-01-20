@@ -2,12 +2,10 @@
 {% load get_item %}
 
 {% block title %}
-<div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col">
+    <div class="col-3"></div>
+    <div class="col-9">
         <h2 id="report-detail-header">Детальна інформація про провадження №{{ report.full_number }}</h2>
     </div>
-</div>
 
 {% endblock title %}
 
@@ -16,7 +14,7 @@
 <!-- Головні учасники справи -->
 <div class="row" id="main-participants">
     <div class="col-sm-12">
-        <table class="table table-sm table-responsive table-hover">
+        <table class="table table-sm table-lg-responsive table-hover">
             <tbody>
                 <tr>
                     <th scope="row">Номер справи</th>
