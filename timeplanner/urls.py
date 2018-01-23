@@ -17,10 +17,12 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from freports import views as freports
+from freports.admin import admin_site
 from business_card import views as business_card
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # url(r'^admin/', admin.site.urls),
+    url(r'^myadmin/', admin_site.urls),
 
     # business card urls
     url(r'^$', business_card.first_page, name='business_card_first_page'),

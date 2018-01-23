@@ -119,7 +119,7 @@
             <div class="row" id="footer">
                 <div class="col-12">
                     <hr />
-                    <p>{% if user.is_authenticated %}Time Planner, 2017-2018 &copy;{% endif %}</p>
+                    <p>{% if user.is_authenticated %}Time Planner, 2017-2018 &copy; <a href="{% url 'myadmin:index' %}">Адмінка</a>{% endif %}</p>
                 </div>
             </div>
 

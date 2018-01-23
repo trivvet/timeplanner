@@ -88,7 +88,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'uk'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Kiev'
 
 USE_I18N = True
 
@@ -103,4 +103,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # settings for Django Axes
-#AXES_LOGIN_FAILURE_LIMIT = 5
+AXES_FAILURE_LIMIT = 3
+AXES_COOLOFF_TIME = 10

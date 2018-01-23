@@ -2,9 +2,9 @@
 
 {% block title %}
 
-<div class="col-4"><a class="h1" href="{% url 'business_card_first_page' %}">⇐</a></div>
+<div class="col-5"></div>
 <div class="col-4">
-    <h2>Вхід для адміністратора</h2>
+    <h2 id="questionsHeader">Вхід для адміністратора</h2>
 </div>
 {% endblock title %}
 
@@ -32,6 +32,7 @@
             <div class="col-sm-6">
               <input type="submit" class="btn btn-primary" value="Увійти"
                      name="save_button" />
+              <a class="btn btn-link" href="{% url 'business_card_first_page' %}">Повернутись на головну</a>
             </div>
         </div>
     </form>
