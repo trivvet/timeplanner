@@ -17,7 +17,7 @@ class ReportAdmin(admin.ModelAdmin):
 
 
 class MyAdminSite(AdminSite):
-	site_url = '../freports'
+	site_url = "/"
 
 
 admin_site = MyAdminSite(name="myadmin")

@@ -1,0 +1,24 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+
+<div class="col-5"></div>
+<div class="col-4">
+    <h2 id="questionsHeader">Вхід для адміністратора</h2>
+</div>
+{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-3"></div>
+    <form class="form-horizontal col-sm-6" action="" method="post" enctype="multipart/form-data" role="form">
+        {% csrf_token %}
+        <div class="form-group row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-6">
+              <a class="btn btn-link" href="{% url 'business_card_first_page' %}">Повернутись на головну</a>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock content %}

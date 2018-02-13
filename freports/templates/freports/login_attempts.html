@@ -1,0 +1,53 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+
+<div class="col">
+    <span class="h1">Записи невдалих спроб входу</span>
+<!--     <a class="btn btn-outline-danger"
+        id="add-report" href="{% url 'login_attempts' %}">Скинути дані</a> -->
+</div>
+
+{% endblock title %}
+
+{% block content %}
+
+{% if attempts %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th>Використане ім'я користувача</th>
+            <th>Час останньої спроби</th>
+            <th>Кількість невдалих спроб</th>
+            <th>IP адреса</th>
+            <th>Детальні дані</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for attempt in attempts %}
+        <tr>
+            <td>{{ attempt.username }}</td>
+            <td>{{ attempt.attempt_time }}</td>
+            <td>{{ attempt.failures_since_start }}</td>
+            <td>{{ attempt.ip_address }}</td>
+            <td>
+                <a class="btn btn-info" data-toggle="collapse" href="#collapse{{ attempt.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ attempt.id }}">
+                Дивитись
+                </a>
+                <div class="collapse" id="collapse{{ attempt.id }}">
+                    <div class="card card-body">
+                        <p>{{ attempt.user_agent }}</p>
+                        <p>{{ attempt.post_data }}</p>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}  
+    </tbody>
+</table>
+{% else %}
+<p>Поки-що дані відсутні</p>.
+{% endif %}
+
+{% endblock content %}

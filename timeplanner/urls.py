@@ -20,6 +20,8 @@ from freports import views as freports
 from freports.admin import admin_site
 from business_card import views as business_card
 
+from axes.decorators import watch_login
+
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
     url(r'^myadmin/', admin_site.urls),
@@ -75,6 +77,7 @@ urlpatterns = [
     url(r'^freports/judges/(?P<jid>\d+)/edit/$', freports.edit_judge, name='forensic_edit_judge'),
     url(r'^freports/judges/(?P<jid>\d+)/delete/$', freports.delete_judge, name='forensic_delete_judge'),
 
-    url(r'^login/$', freports.login_auth, name='login_form'),
+    url(r'^login/$', watch_login(freports.login_auth), name='login_form'),
     url(r'^logout/$', freports.logout_auth, name='logout_url'),
+    url(r'^login/attempts/$', freports.login_attempts, name='login_attempts'),
 ]
