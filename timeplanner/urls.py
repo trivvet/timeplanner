@@ -77,6 +77,12 @@ urlpatterns = [
     url(r'^freports/judges/(?P<jid>\d+)/edit/$', freports.edit_judge, name='forensic_edit_judge'),
     url(r'^freports/judges/(?P<jid>\d+)/delete/$', freports.delete_judge, name='forensic_delete_judge'),
 
+    # task urls
+    url(r'^freports/tasks/$', freports.tasks_list, name='tasks_list'),
+    url(r'^freports/tasks/add/$', freports.add_task, name='forensic_add_task'),
+    url(r'^freports/tasks/(?P<tid>\d+)/edit/$', freports.edit_task, name='forensic_edit_task'),
+    url(r'^freports/tasks/(?P<tid>\d+)/delete/$', freports.delete_task, name='forensic_delete_task'),
+
     url(r'^login/$', watch_login(freports.login_auth), name='login_form'),
     url(r'^logout/$', freports.logout_auth, name='logout_url'),
     url(r'^login/attempts/$', freports.login_attempts, name='login_attempts'),

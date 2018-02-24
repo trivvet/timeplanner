@@ -232,5 +232,40 @@ input, textarea, select {
   margin-top: 50px;
 }
 
+.group-buttons {
+  width: 95px;
+}
+
+.fa {
+  padding: 10px;
+  float: right;
+  border-radius: 5px;
+}
+
+.fa-trash-o {
+  color: crimson;
+  -webkit-animation-name: fadeInRight;
+}
+
+.fa-trash-o:hover {
+  color: white;
+  background-color: crimson;
+}
+
+.fa-pencil {
+  margin-right: 3px;
+  color: #418fff;*/
+  -webkit-animation-name: fadeInRight;
+}
+
+.fa-pencil:hover {
+  color: white;
+  background-color: #418fff;
+}
 
 
+
+/*form pages*/
+h2 {
+  text-align: center;
+}
