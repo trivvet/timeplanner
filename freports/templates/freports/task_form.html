@@ -1,0 +1,74 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="col">
+    <h2>{{ header }}</h2>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+
+    <input type="hidden" name="next_url" value="{{ next_url }}">
+
+    <!-- Task Kind -->
+    <div class="form-group row">
+        <label for="inputKind" class="col-sm-4 col-form-label">Вид завдання <strong>*</strong></label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.kind %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputKind" value="{{ content.kind }}"
+                placeholder="Введіть вид завдання" name="kind">
+            <div class="invalid-feedback">
+                {{ errors.kind }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Date and Time -->
+    <div class="form-group row">
+        <label for="inputTime" class="col-sm-4 col-form-label">Дата та час завдання <strong>*</strong></label>
+        <div class="col-sm-6">
+            <div class="input-group date">
+                <input type="text" id="inputTime" placeholder="напр. 10.12.2016 10:00" name="time"
+                    class="form-control {% if errors.time %}is-invalid{% elif errors %}is-valid{% endif %} datetimeinput"
+                    value="{{ content.time }}">
+                <div class="input-group-addon" id="calendar2">
+                    <span class="fa fa-calendar-times-o" aria-hidden="true"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if errors.time %}
+    <div class="form-group row form-error">
+        <div class="col-sm-4"></div>
+        <div class="col">
+            {{ errors.time }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Task Details -->
+    <div class="form-group row">
+        <label for="inputDetail" class="col-sm-4 col-form-label">Деталі завдання <strong>*</strong></label>
+        <div class="col-sm-6">
+            <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
+                id="inputDetail" name="detail" rows="3"
+                placeholder="Введіть опис завдання">{{ content.detail }}</textarea>
+            <div class="invalid-feedback">
+                {{ errors.detail }}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-6">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}
