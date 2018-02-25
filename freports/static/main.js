@@ -142,7 +142,7 @@ function initForm(form, modal, link) {
                 initFormPage();
                 addPlusButton();
                 initRowMakeLink();
-                // showDeleteButton();
+                showButtons();
                 $('#modalForm').modal('hide');
             }
         }
@@ -231,31 +231,13 @@ function changeDecisionDate() {
     });
 }
 
-// function showDeleteButton() {
-//     $('tbody tr').hover(function() {
-//         $(this).find(".fa-trash-o").fadeIn();
-//     }, function() {
-//         $(this).find(".fa-trash-o").fadeOut();
-//     });
-//     $('.fa-trash-o').hover(function() {
-//         $(".fa-trash-o").css("background-color", "red");
-//     }, function() {
-//         $(".fa-trash-o").css("background-color", "crimson");
-//     });
-// }
-
-// function showEditButton() {
-//     $('tbody tr').hover(function() {
-//         $(this).find(".fa-pencil").fadeIn();
-//     }, function() {
-//         $(this).find(".fa-pencil").fadeOut();
-//     });
-//     $('.fa-trash-o').hover(function() {
-//         $(".fa-trash-o").css("background-color", "red");
-//     }, function() {
-//         $(".fa-trash-o").css("background-color", "crimson");
-//     });
-// }
+function showButtons() {
+    $('tbody tr').hover(function() {
+        $(this).find(".fa").fadeIn();
+    }, function() {
+        $(this).find(".fa").fadeOut();
+    });
+}
 
 $(document).ready(function(){
     initDateFields();
@@ -265,6 +247,5 @@ $(document).ready(function(){
     initSelectCourt();
     addPlusButton();
     changeDecisionDate();
-    // showDeleteButton();
-    // showEditButton();
+    showButtons();
 })

@@ -26,7 +26,6 @@
             <th scope="col">Час</th>
             <th scope="col">Вид завдання</th>
             <th scope="col">Провадження</th>
-            <th scope="col">Деталі</th>
             <th scope="col" class="group-buttons"></th>
 <!--             <th scope="col">Дії</th> -->
         </tr>
@@ -36,27 +35,33 @@
     <tbody>
 
         {% for task in tasks %}
-        <tr data-href="">
+        <tr>
 
-            <th scope="row" class="td-link">{{ task.time|date:"D d M Y" }}</th>
-            <td class="td-link">
+            <th scope="row">{{ task.time|date:"D d M Y" }}</th>
+            <td>
                 {{ task.time|time }}
             </td>
-            <td class="td-link">{{ task.kind }}</td>
-            <td class="td-link">
+            <td>{{ task.kind }}</td>
+            <td>
                 {% if task.report %}
                     {{ task.report }}
                 {% else %}
                     Відсутні дані
                 {% endif %}
             </td>
-            <td class="td-link">{{ task.detail }}</td>
             <td class="group-buttons">
                 <a href="{% url 'forensic_delete_task' task.id %}"><i class="fa fa-trash-o"></i></a>
                 <a href="{% url 'forensic_edit_task' task.id %}"><i class="fa fa-pencil"></i></a>
-            </td>        
+                <a data-toggle="collapse" data-target="#collapse{{ task.id }}" aria-expanded="true" aria-controls="collapse{{ task.id }}"><i class="fa fa-eye"></i></a>
+            </td>       
+        </tr>
+        <tr id="collapse{{ task.id }}" class="collapse">
+            <td colspan="6">
+                {{ task.detail }}
+            </td>
         </tr>
         {% endfor %}
+
 
 
     </tbody>

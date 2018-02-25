@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.utils.timezone import get_current_timezone
+from django.utils.timezone import get_current_timezone, localtime
 
 from ..models import Task
 
@@ -69,7 +69,8 @@ def edit_task(request, tid):
 
         return HttpResponseRedirect(reverse('tasks_list'))
     else:
-        task.time = task.time.isoformat()
+
+        task.time = localtime(task.time).isoformat()
         return render(request, 'freports/task_form.html', 
             {'header': header, 'content': task})
 

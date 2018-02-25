@@ -144,22 +144,6 @@ tbody>td {
   color: #dc3545;
 }
 
-/*.card {
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  border-radius: 20px;
-  border: 1px solid #377a3f;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
-}
-
-.card-body {
-  padding: 0.5rem 1rem;
-}*/
-
-/*.card-body span {
-  vertical-align: middle;
-}*/
-
 #add-detail {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -232,14 +216,17 @@ input, textarea, select {
   margin-top: 50px;
 }
 
-.group-buttons {
-  width: 95px;
+td.group-buttons {
+  width: 150px;
+  padding: 0;
+  vertical-align: middle;
 }
 
 .fa {
   padding: 10px;
   float: right;
   border-radius: 5px;
+  display: none;
 }
 
 .fa-trash-o {
@@ -253,7 +240,7 @@ input, textarea, select {
 }
 
 .fa-pencil {
-  margin-right: 3px;
+  margin: 0 3px;
   color: #418fff;*/
   -webkit-animation-name: fadeInRight;
 }
@@ -263,9 +250,23 @@ input, textarea, select {
   background-color: #418fff;
 }
 
+.fa-eye {
+  color: green;
+}
+
+.fa-eye:hover {
+  color: white;
+  background-color: green;
+}
 
 
 /*form pages*/
 h2 {
   text-align: center;
+}
+
+.show {
+  border-bottom: 1px solid rgba(0,0,0,.075);
+  border-left: 1px solid rgba(0,0,0,.075);
+  border-right: 1px solid rgba(0,0,0,.075);
 }

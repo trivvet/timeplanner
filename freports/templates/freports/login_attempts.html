@@ -35,12 +35,12 @@
                 <a class="btn btn-info" data-toggle="collapse" href="#collapse{{ attempt.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ attempt.id }}">
                 Дивитись
                 </a>
-                <div class="collapse" id="collapse{{ attempt.id }}">
-                    <div class="card card-body">
-                        <p>{{ attempt.user_agent }}</p>
-                        <p>{{ attempt.post_data }}</p>
-                    </div>
-                </div>
+            </td>
+        </tr>
+        <tr class="collapse" id="collapse{{ attempt.id }}">
+            <td colspan="5">
+                <p>{{ attempt.user_agent }}</p>
+                <p>{{ attempt.post_data }}</p>
             </td>
         </tr>
         {% endfor %}  
