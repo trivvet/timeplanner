@@ -20,6 +20,7 @@
     {% if request.GET.date_until %}<li>провадження відкриті до {{ request.GET.date_until }}</li>{% endif %}
     {% if request.GET.day_count %}<li>у провадженні більше ніж {{ request.GET.day_count }}</li>{% endif %}
     </ul>
+    <a class="btn btn-outline-secondary" href="{% url 'forensic_reports_list' %}">Скинути фільтр</a>
 </div>
 {% endif %}
 {% endblock extra_messages %}
@@ -36,9 +37,9 @@
 <div class="collapse" id="filter">
     <div class="card card-body">
         <div class="filter">
-            <form class="form-inline row" action="" method="get" enctype="multipart/form-data" role="form">
+            <form class="form-inline row" action="{% url 'forensic_reports_list' %}{% if request.GET.status %}?{{ request.GET.status }}{% endif %}" method="get" enctype="multipart/form-data" role="form">
                 <input type="hidden" name="filter_status" value="success" />
-                <div class="form-group mb-1 mt-1 col-9">
+                <div class="form-group mb-1 mt-1 col-10">
                     <label for="inputDateArrived">Дата надходження від</label>
                     <input type="text" id="inputDateArrived"
                         class="input-date dateinput form-control" name="date_from" value="{{ request.GET.date_from }}"/>
@@ -48,63 +49,17 @@
                     <input class="input-date form-control" type="number" name="day_count" value="{{ request.GET.day_count }}"/>
                     
                 </div>
-                <div class="form-group mb-1 mt-1 col-3" id="filter-button">
+                <div class="form-group mb-1 mt-1 col-2" id="filter-button">
                     <input type="submit" class="btn btn-outline-info" value="Застосувати"
                         name="apply_button" />
-                    <input type="submit" class="btn btn-outline-secondary" value="Скинути"
-                        name="cancel_button" />
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- <nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
-    <a class="navbar-brand" href="{% url 'forensic_reports_list' %}">Список проваджень</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item {% if request.GET.status == 'all' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}?status=all">Усі
-                    {% if request.GET.status == 'all' %}<span class="sr-only">(current)</span>{% endif %}</a>
-            </li>
-            <li class="nav-item {% if not request.GET.status %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}">Активні
-                {% if not request.GET.status %}<span class="sr-only">(current)</span>{% endif %}</a>
-            </li>
-            <li class="nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}?status=deactivate">Призупинені
-                    {% if request.GET.status == 'deactivate' %}<span class="sr-only">(current)</span>{% endif %}</a>
-            </li>
-            <li class="nav-item {% if request.GET.status == 'executed' %}active{% endif %}">
-                <a class="nav-link" href="{% url 'forensic_reports_list' %}?status=executed">Закриті
-                    {% if request.GET.status == 'executed' %}<span class="sr-only">(current)</span>{% endif %}</a>
-            </li>
-        </ul>
-        
-    </div>
-</nav> -->
-
 {% if reports %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse status=request.GET.status %}
-
-<!-- <div class="card">
-  <div class="card-body">
-    <span>{% if request.GET.status == 'all' %}
-    Всього на виконанні - <strong>{{ content.open_reports }}</strong> проваджень.
-    {% elif not request.GET.status %}
-    Всього активних проваджень - <strong>{{ content.active_reports }}</strong>
-    {% elif request.GET.status == 'deactivate' %}
-    Всього призупинених проваджень - <strong>{{ content.deactivate_reports }}</strong>
-    {% else %}
-    Всього закритих проваджень - <strong>{{ content.closed_reports }}</strong>
-    {% endif %}</span>
-  </div>
-
-</div> -->
 
 <table class="table table-hover table-responsive-lg">
     <thead class="thead-light">

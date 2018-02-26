@@ -46,9 +46,8 @@ def reports_list(request):
             reports = reports.filter(date_arrived__lt=date_until)
 
         days_count = request.GET.get('day_count')
-
-    elif request.GET.get('filter_status') and request.GET.get('cancel_button'):
-        return HttpResponseRedirect(reverse('forensic_reports_list'))
+        if days_count:
+            reports = reports.filter(active_days_amount__gt=days_count)
 
     order_by = request.GET.get('order_by', '')
     reverse_apply = request.GET.get('reverse', '')

@@ -233,9 +233,9 @@ function changeDecisionDate() {
 
 function showButtons() {
     $('tbody tr').hover(function() {
-        $(this).find(".fa").fadeIn();
+        $(this).find(".fa").fadeIn(100);
     }, function() {
-        $(this).find(".fa").fadeOut();
+        $(this).find(".fa").fadeOut(100);
     });
 }
 

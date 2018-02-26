@@ -15,7 +15,7 @@ from ..models import Task
 
 @login_required(login_url='/login/')
 def tasks_list(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.all().order_by('time')
     header = 'Список завдань'
     return render(request, 'freports/tasks_list.html', 
     	{'tasks': tasks, 'header': header})
