@@ -99,6 +99,8 @@ class ReportEvents(models.Model):
         elif self.name == 'paid':
             description = self.subspecies
         elif self.name == 'schedule':
+            pz = timezone.get_current_timezone()
+            self.time = pz.normalize(self.time)
             description = 'Призначено виїзд о %s на %s' % (self.time.strftime('%H:%M'), self.time.strftime('%d-%m-%Y'))
         elif self.name == 'inspected':
             description = self.subspecies

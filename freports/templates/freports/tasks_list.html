@@ -44,7 +44,7 @@
             <td>{{ task.kind }}</td>
             <td>
                 {% if task.report %}
-                    {{ task.report }}
+                    {{ task.report.report.number }}/{{task.report.report.number_year}}
                 {% else %}
                     Відсутні дані
                 {% endif %}

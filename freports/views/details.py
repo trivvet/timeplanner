@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 from .days_counter import check_active, days_count, update_dates_info
 from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge
+from .tasks import add_detail_task
 
 petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи', 'Про призначення виїзду']
 done_type = ['Висновок експерта', 'Повідомлення про неможливість', 'Залишення без виконання']
@@ -203,8 +204,8 @@ def add_detail(request, rid, kind):
                 report.waiting_days_amount = days_count(report, 'waiting')
                 reports = Report.objects.all()
                 update_dates_info(reports)
-
                 report.save()
+                add_detail_task(new_detail)
                 messages.success(request, u"Подія '%s' успішно додана" % kind_specific[new_detail.name][0])
 
         elif request.POST.get('cancel_button'):
@@ -270,7 +271,7 @@ def edit_detail(request, rid, did):
         new_content = detail
         new_content.date = new_content.date.isoformat()
         if new_content.time:
-            new_content.time = new_content.time.isoformat()
+            new_content.time = timezone.localtime(new_content.time).isoformat()
         if new_content.decision_date:
             new_content.decision_date = new_content.decision_date.isoformat()
         return render(request, 'freports/detail_form.html', {'new_content': new_content, 'content': content, 'header': header})
@@ -357,11 +358,13 @@ def valid_detail(request_info, report_id):
 
     if name in ['schedule']:
         time = request_info.get('time')
+        pz = timezone.get_current_timezone()
         if not time:
             errors['time'] = u"Дата та час огляду є обов'язковими"
         else:
             try:
-                new_element['time'] = time
+                naive_time = datetime.strptime(time, '%Y-%m-%d %H:%M')
+                new_element['time'] = pz.localize(naive_time)
             except ValueError:
                 errors['time'] = u"Введіть коректний формат дати та часу"
 

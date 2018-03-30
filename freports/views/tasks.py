@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 import pytz, datetime
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
@@ -44,6 +44,13 @@ def add_task(request):
 
     else:
         return render(request, 'freports/task_form.html', {'header': header})
+
+def add_detail_task(detail):
+    new_task = valid_detail_task(detail)
+    if new_task['valid']:
+        new_item = Task(**new_task['task_data'])
+        new_item.save()
+    return HttpResponseRedirect(reverse('tasks_list'))
 
 @login_required(login_url='/login/')
 def edit_task(request, tid):
@@ -117,3 +124,33 @@ def valid_task(request_info):
         new_task['detail'] = detail
 
     return {'new_task': new_task, 'errors': errors}
+
+def valid_detail_task(detail):
+    new_task = {}
+    valid = False
+    report = detail.report
+    if detail.name == 'schedule':
+        new_task['kind'] = u"Виїзд за адресою {}".format(report.address)
+        new_task['time'] = detail.time
+        new_task['detail'] = detail.info
+        new_task['report'] = detail
+        valid = True
+
+    elif detail.name == 'petition':
+        new_task['kind'] = u"Направлення повідомлення про неможливість надання висновку"
+        date = datetime.strptime(detail.date, '%Y-%m-%d')
+        new_task['time'] = date + timedelta(days=90, hours=10)
+        new_task['detail'] = u"Після направлення клопотання {} від {}".format(
+            detail.subspecies, detail.date)
+        new_task['report'] = detail
+        valid = True
+
+    elif detail.name == 'bill':
+        new_task['kind'] = u'Відправлення без виконання (без оплати)'
+        date = datetime.strptime(detail.date, '%Y-%m-%d')
+        new_task['time'] = date + timedelta(days=45, hours=10)
+        new_task['detail'] = u"Після направлення рахунку від {}".format(detail.date)
+        new_task['report'] = detail
+        valid = True
+
+    return {'task_data': new_task, 'valid': valid} 

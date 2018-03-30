@@ -222,7 +222,7 @@ td.group-buttons {
   vertical-align: middle;
 }
 
-.fa {
+.group-buttons .fa {
   padding: 10px;
   float: right;
   border-radius: 5px;
