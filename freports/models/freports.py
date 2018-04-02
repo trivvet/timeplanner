@@ -97,7 +97,6 @@ class Report(models.Model):
             number=self.number, number_year=self.number_year, address=self.address, plaintiff=self.plaintiff,
             defendant=self.defendant, object_name=self.object_name, research_kind=self.research_kind)
 
-
     def full_number(self):
         return u"{}/{}".format(self.number, self.number_year)
 

@@ -80,6 +80,43 @@ function initRowMakeLink() {
     });
 }
 
+function initTodayTasksPage() {
+    $('#btnGroupDrop1').click(function() {
+        var link = $(this);
+
+        $.ajax({
+            'url': link.attr('href'),
+            'dataType': 'html',
+            'type': 'get',
+            'beforeSend': function() {
+                // $('.dropdown-menu').removeClass('show');
+                // $('.dropdown').removeClass('show');
+            },
+            'success': function(data, status, xhr) {
+                if (status != 'success') {
+                    alert("Вибачте, але на сервері сталася неочікувана помилка. Перезавантажте сторінку та спробуйте ще раз");
+                    return false;
+                }
+                var modal = $('#modalForm'), html = $(data);
+                modal.find('#first-header div').html(html.find('#task-list-header'));
+                modal.find('.modal-body').html(html.find('#main-content'));
+                modal.find('.modal-body').prepend(html.find('.tasks_free'));
+
+                showButtons();
+                initFormPage()
+
+                $('#modalForm').modal({'show': true});
+            },
+            'error': function() {
+                alert('Error on the server');
+                return false;
+            }
+        });
+
+        return false
+    });
+}
+
 function initFormPage() {
     $('#add-event>a, #edit-event a, #add-report').click(function() {
         var link = $(this);
@@ -98,7 +135,7 @@ function initFormPage() {
                     return false;
                 }
                 var modal = $('#modalForm'), html = $(data), form = html.find('#main-content form');
-                modal.find('#first-header').html(html.find('#second-header h2')).val();
+                modal.find('#first-header div').html(html.find('#second-header h2'));
                 modal.find('.modal-body').html(form);
                 modal.find('.modal-body').prepend(html.find('#second-header .row'));
 
@@ -243,6 +280,7 @@ $(document).ready(function(){
     initDateFields();
     initDateTimeFields();
     initRowMakeLink();
+    initTodayTasksPage()
     initFormPage();
     initSelectCourt();
     addPlusButton();

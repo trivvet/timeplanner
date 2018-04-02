@@ -270,3 +270,8 @@ h2 {
   border-left: 1px solid rgba(0,0,0,.075);
   border-right: 1px solid rgba(0,0,0,.075);
 }
+
+/*modal page*/
+#first-header div, #task-list-header {
+  margin: auto;
+}

@@ -11,14 +11,15 @@
     {% csrf_token %}
 
     <input type="hidden" name="next_url" value="{{ next_url }}">
+    <input type="hidden" name="report" value="{% if content.report %}{{ content.report }}{% endif %}"
 
     <!-- Task Kind -->
     <div class="form-group row">
-        <label for="inputKind" class="col-sm-4 col-form-label">Вид завдання <strong>*</strong></label>
+        <label for="inputKind" class="col-sm-4 col-form-label">Суть завдання <strong>*</strong></label>
         <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.kind %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputKind" value="{{ content.kind }}"
-                placeholder="Введіть вид завдання" name="kind">
+                placeholder="Введіть суть завдання" name="kind">
             <div class="invalid-feedback">
                 {{ errors.kind }}
             </div>
@@ -60,6 +61,16 @@
             </div>
         </div>
     </div>
+
+    <!-- Report Number -->
+    {% if content.report %}
+    <div class="form-group row">
+        <label for="inputReport" class="col-sm-4 col-form-label">Номер провадження</label>
+        <div class="col-sm-6">
+            <p>{{ content.report.report.number }}/{{ content.report.report.number_year }}</p>
+        </div>
+    </div>
+    {% endif %}
 
     <div class="form-group row">
         <div class="col-sm-4"></div>
