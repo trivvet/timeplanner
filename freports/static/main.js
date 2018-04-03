@@ -99,8 +99,9 @@ function initTodayTasksPage() {
                 }
                 var modal = $('#modalForm'), html = $(data);
                 modal.find('#first-header div').html(html.find('#task-list-header'));
-                modal.find('.modal-body').html(html.find('#main-content'));
+                modal.find('.modal-body').html(html.find('table'));
                 modal.find('.modal-body').prepend(html.find('.tasks_free'));
+                modal.find('.modal-footer').html(html.find('#add-report'))
 
                 showButtons();
                 initFormPage()

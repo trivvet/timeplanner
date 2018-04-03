@@ -19,15 +19,15 @@
 {% if tasks %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
 <table class="table table-hover table-responsive-lg">
-    <thead class="thead-light">
+    <!-- <thead class="thead-light">
         <tr>
             <th scope="col">Час</th>
             <th scope="col">Вид завдання</th>
             <th scope="col">Провадження</th>
             <th scope="col" class="group-buttons"></th>
-<!--             <th scope="col">Дії</th> -->
+           <th scope="col">Дії</th>
         </tr>
-    </thead>
+    </thead> -->
 {% endwith %}
 
     <tbody>
@@ -39,7 +39,7 @@
             <td>{{ task.kind }}</td>
             <td>
                 {% if task.report %}
-                    {{ task.report.report.number }}/{{task.report.report.number_year}}
+                    {{ task.report.full_number }}
                 {% else %}
                     Відсутні дані
                 {% endif %}
@@ -64,9 +64,10 @@
 
 
     </tbody>
-    <a class="btn btn-outline-info"
-        id="add-report" href="{% url 'forensic_add_task' %}">Додати завдання</a>
 </table>
+
+<a class="btn btn-outline-info"
+        id="add-report" href="{% url 'forensic_add_task' %}">Додати завдання</a>
 
 {% else %}
 <p class="tasks_free" style="color: green; font-size: 25px">На сьогодні активних завдань немає</p>

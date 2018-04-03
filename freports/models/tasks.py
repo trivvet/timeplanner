@@ -11,7 +11,12 @@ class Task(models.Model):
         verbose_name=u"Завдання"
         verbose_name_plural=u"Завдання"
 
-    report = models.ForeignKey('ReportEvents',
+    report = models.ForeignKey('Report',
+        verbose_name=u"Провадження",
+        blank=True,
+        null=True)
+
+    event = models.ForeignKey('ReportEvents',
         verbose_name=u"Подія",
         blank=True,
         null=True)

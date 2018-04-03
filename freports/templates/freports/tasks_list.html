@@ -24,7 +24,7 @@
         <tr>
             <th scope="col">Дата</th>
             <th scope="col">Час</th>
-            <th scope="col">Суть авдання</th>
+            <th scope="col">Суть завдання</th>
             <th scope="col">Провадження</th>
             <th scope="col" class="group-buttons"></th>
 <!--             <th scope="col">Дії</th> -->
@@ -44,7 +44,7 @@
             <td>{{ task.kind }}</td>
             <td>
                 {% if task.report %}
-                    {{ task.report.report.number }}/{{task.report.report.number_year}}
+                    {{ task.report.full_number }}
                 {% else %}
                     Відсутні дані
                 {% endif %}

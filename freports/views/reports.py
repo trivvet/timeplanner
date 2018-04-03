@@ -18,12 +18,13 @@ def reports_list(request):
     content = {}
     days_count = ''
     reports_all = Report.objects.all()
+    status = request.GET.get('status', '')
 
-    if request.GET.get('status') == 'executed':
+    if status == 'executed':
         reports = reports_all.filter(executed=True)
-    elif request.GET.get('status') == 'deactivate':
+    elif status == 'deactivate':
         reports = reports_all.filter(executed=False, active=False)
-    elif request.GET.get('status') == 'all':
+    elif status == 'all':
         reports = reports_all
     else:
         reports = Report.objects.filter(executed=False).exclude(active=False)
@@ -56,6 +57,11 @@ def reports_list(request):
         reports = reports.order_by(order_by)
         if reverse_apply:
             reports = reports.reverse()
+
+    if status == 'deactivate' or status == '':
+        for report in reports:
+            last_event = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
+            report.last_event = last_event
 
     return render(request, 'freports/reports_list.html', 
         {'reports': reports, 'content': content})

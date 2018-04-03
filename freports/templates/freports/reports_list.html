@@ -104,15 +104,17 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
                     {% elif order_by == 'active_days_amount' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
+            <th scope="col">Остання дія</th>
             {% endif %}
             {% if request.GET.status == 'deactivate' %}
-            <th>
+            <th scope="col">
                 <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=waiting_days_amount
 {% if order_by == 'waiting_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
                     Днів в очікуванні {% if order_by == 'waiting_days_amount' and reverse != '1' %}&uarr;
                     {% elif order_by == 'waiting_days_amount' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
+            <th scope="col">Остання дія</th>
             {% endif %}
         </tr>
     </thead>
@@ -140,6 +142,7 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
                 Відомості відсутні
                 {% endif %}
             </td>
+            <td class="td-link">{{ report.last_event.short_info }}</td>
             {% endif %}
             {% if request.GET.status == 'deactivate' %}
             <td class="td-link">
@@ -149,6 +152,7 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
                 Відомості відсутні
                 {% endif %}
             </td>
+            <td class="td-link">{{ report.last_event.short_info }}</td>
             {% endif %}
         </tr>
         {% endfor %}

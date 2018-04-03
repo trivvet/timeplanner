@@ -272,6 +272,25 @@ h2 {
 }
 
 /*modal page*/
+#first-header {
+  background: #fcda2e;
+  font-family: "Roboto", sans-serif;
+}
+
 #first-header div, #task-list-header {
   margin: auto;
+}
+
+#first-header .close {
+  margin-left: 0;
+}
+
+#task-list-header h2 {
+  font-family: "Roboto", "Ubuntu light", sans-serif;
+  text-align: center;
+}
+
+#task-list-header h3 {
+  font-family: 'Courgette', sans-serif;
+  text-align: center;
 }

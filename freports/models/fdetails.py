@@ -109,6 +109,19 @@ class ReportEvents(models.Model):
 
         return description + '. ' + self.info
 
+    def short_info(self):
+        descriptions = {
+            'first_arrived': u"Надійшла ухвала",
+            'arrived': u"Надійшли матеріали",
+            'petition': u"Направлене клопотання",
+            'bill': u"Направлений рахунок",
+            'paid': u"Проведена оплата",
+            'schedule': u"Призначено виїзд",
+            'inspected': u"Проведено огляд",
+            'done': u"Зданий до суду"
+        }
+        return descriptions[self.name]
+
 class ReportParticipants(models.Model):
 
     class Meta(object):
