@@ -1,0 +1,93 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="col">
+    <h2>{{ header }}</h2>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+
+    <input type="hidden" name="next_url" value="{{ next_url }}">
+
+    <!-- Account Title -->
+    <div class="form-group row">
+        <label for="inputTitle" class="col-sm-4 col-form-label">Назва рахунку <strong>*</strong></label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.title %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputTitle" value="{{ content.title }}"
+                placeholder="Введіть назву рахунку" name="title">
+            <div class="invalid-feedback">
+                {{ errors.title }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Total Sum -->
+    <div class="form-group row">
+        <label for="inputSum" class="col-sm-4 col-form-label">Сума на рахунку <strong>*</strong></label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.total_sum %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputSum" value="{{ content.total_sum }}"
+                placeholder="Введіть суму на рахунку" name="total_sum">
+            <div class="invalid-feedback">
+                {{ errors.total_sum }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Credit Sum -->
+    <div class="form-group row">
+        <label for="inputCredit" class="col-sm-4 col-form-label">Кредитні кошти <strong>*</strong></label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.credit_sum %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputCredit" value="{{ content.credit_sum }}"
+                placeholder="Введіть суму в кредиті" name="credit_sum">
+            <div class="invalid-feedback">
+                {{ errors.credit_sum }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Cash -->
+    <div class="form-group row">
+        <label for="inputCash" class="col-sm-4 col-form-label">Готівкова форма</label>
+        <div class="col-sm-6">
+            <input class="form-control" type="checkbox" id="inputCash" name="cash" value="True"> 
+        </div>
+    </div>
+
+    <!-- Account Cash -->
+    <div class="form-group">
+        <div class="row">
+            <label for="inputStatus" class="col-sm-4 col-form-label">Статус рахунку</label>
+            <div class="col-sm-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="inputStatus" value="self" checked>
+                    <label class="form-check-label" for="inputStatus">
+                      Особистий
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="inputStatus2" value="work">
+                    <label class="form-check-label" for="inputStatus2">
+                      Робочий
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-6">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}

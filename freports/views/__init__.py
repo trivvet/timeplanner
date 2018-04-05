@@ -7,3 +7,4 @@ from .subjects import subjects_list, subject_detail, add_subject, edit_subject, 
 from .courts import courts_list, court_detail, add_court, edit_court, delete_court
 from .judges import judges_list, judge_detail, add_judge, edit_judge, delete_judge
 from .tasks import tasks_list, tasks_today_list, add_task, edit_task, delete_task
+from .finances import accounts_list, add_account

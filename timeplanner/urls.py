@@ -84,6 +84,10 @@ urlpatterns = [
     url(r'^freports/tasks/(?P<tid>\d+)/edit/$', freports.edit_task, name='forensic_edit_task'),
     url(r'^freports/tasks/(?P<tid>\d+)/delete/$', freports.delete_task, name='forensic_delete_task'),
 
+    # task urls
+    url(r'^freports/finances/accounts/$', freports.accounts_list, name='accounts_list'),
+    url(r'^freports/finances/accounts/add/$', freports.add_account, name='forensic_add_account'),
+
     url(r'^login/$', watch_login(freports.login_auth), name='login_form'),
     url(r'^logout/$', freports.logout_auth, name='logout_url'),
     url(r'^login/attempts/$', freports.login_attempts, name='login_attempts'),

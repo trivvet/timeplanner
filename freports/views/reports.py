@@ -60,8 +60,9 @@ def reports_list(request):
 
     if status == 'deactivate' or status == '':
         for report in reports:
-            last_event = ReportEvents.objects.filter(report=report).order_by('date').reverse()[0]
-            report.last_event = last_event
+            report_events = ReportEvents.objects.filter(report=report).order_by('date').reverse()
+            if report_events.count() > 0:
+                report.last_event = report_events[0]
 
     return render(request, 'freports/reports_list.html', 
         {'reports': reports, 'content': content})

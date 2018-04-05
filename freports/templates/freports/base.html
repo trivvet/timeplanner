@@ -37,6 +37,7 @@
                     {% url "judges_list" as url_judges %}
                     {% url "courts_list" as url_courts %} 
                     {% url "tasks_list" as url_tasks %} 
+                    {% url "accounts_list" as url_accounts %} 
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == url_reports %}active{% endif %}"
@@ -67,7 +68,7 @@
                                 href="{{ url_tasks }}">Завдання</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Інші</a>
+                            <a class="nav-link {% if request.path == url_accounts %}active{% endif %}" href="{{ url_accounts }}">Фінанси</a>
                         </li>
                     </ul>
                     <div class="btn-group" role="group">
