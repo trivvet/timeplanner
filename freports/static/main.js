@@ -157,7 +157,7 @@ function initFormPage() {
 function initForm(form, modal, link) {
     initDateFields();
     initDateTimeFields();
-    changeDecisionDate()
+    changeDecisionDate();
 
     form.ajaxForm({
         url: link,
@@ -167,7 +167,8 @@ function initForm(form, modal, link) {
             return false;
         },
         success: function(data, status, xhr) {
-            var html = $(data), newform = html.find('#main-content form-horizontal');
+            var html = $(data), newform = html.find('#main-content form.form-horizontal');
+            console.log(newform);
 
             if (newform.length > 0) {
                 modal.find('.modal-body').html(newform);

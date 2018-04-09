@@ -40,7 +40,7 @@
 
     <!-- Account Credit Sum -->
     <div class="form-group row">
-        <label for="inputCredit" class="col-sm-4 col-form-label">Кредитні кошти <strong>*</strong></label>
+        <label for="inputCredit" class="col-sm-4 col-form-label">Кредитні кошти</label>
         <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.credit_sum %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputCredit" value="{{ content.credit_sum }}"
@@ -84,7 +84,7 @@
         <div class="col-sm-4"></div>
         <div class="col-sm-6">
           <input type="submit" class="btn btn-primary" value="Зберегти"
-                 name="save_button" />
+                 name="save_button" id="save_button" />
           <input type="submit" class="btn btn-link"
                  name="cancel_button" value="Скасувати" />
         </div>
