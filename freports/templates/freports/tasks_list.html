@@ -6,7 +6,7 @@
     <span class="h1">{{ header }}</span><span class="badge badge-danger">Демо</span>
 <!-- </div> -->
 <!-- <div class="col-4"> -->
-    <a class="btn btn-outline-info"
+    <a class="btn btn-outline-info modal-button"
         id="add-report" href="{% url 'forensic_add_task' %}">Додати завдання</a>
 </div>
 
@@ -50,8 +50,8 @@
                 {% endif %}
             </td>
             <td class="group-buttons">
-                <a href="{% url 'forensic_delete_task' task.id %}"><i class="fa fa-trash-o"></i></a>
-                <a href="{% url 'forensic_edit_task' task.id %}"><i class="fa fa-pencil"></i></a>
+                <a class="modal-button" href="{% url 'forensic_delete_task' task.id %}"><i class="fa fa-trash-o"></i></a>
+                <a class="modal-button" href="{% url 'forensic_edit_task' task.id %}"><i class="fa fa-pencil"></i></a>
                 <a data-toggle="collapse" data-target="#collapse{{ task.id }}" aria-expanded="true" aria-controls="collapse{{ task.id }}"><i class="fa fa-eye"></i></a>
             </td>       
         </tr>

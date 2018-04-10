@@ -9,8 +9,8 @@
     {% csrf_token %}
     {% if status == 'other_participant' %}
     <div class="form-group row">
-        <label for="inputStatus" class="col-sm-3 col-form-label">Статус учасника <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputStatus" class="col-sm-4 col-form-label">Статус учасника <strong>*</strong></label>
+        <div class="col-sm-6">
             <select class="form-control {% if errors.status %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputStatus" name="status" value="{{ content.status }}">
                 <option value=''>-----------</option>
@@ -31,8 +31,8 @@
     {% endif %}
 
     <div class="form-group row">
-        <label for="inputSurname" class="col-sm-3 col-form-label">Прізвище або назва учасника <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputSurname" class="col-sm-4 col-form-label">Прізвище або назва учасника <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.surname %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputSurname" value="{{ content.surname }}"
                 placeholder="Введіть прізвище учасника" name="surname">
@@ -43,8 +43,8 @@
     </div>
 
     <div class="form-group row">
-        <label for="inputName" class="col-sm-3 col-form-label">Ім'я та ім'я по-батькові учасника</label>
-        <div class="col-sm-4">
+        <label for="inputName" class="col-sm-4 col-form-label">Ім'я та ім'я по-батькові учасника</label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputName" value="{{ content.name }}"
                 placeholder="Введіть ім'я та ім'я по-батькові учасника" name="name">
@@ -55,8 +55,8 @@
     </div>
 
     <div class="form-group row">
-        <label for="inputAddress" class="col-sm-3 col-form-label">Адреса для листування</label>
-        <div class="col-sm-4">
+        <label for="inputAddress" class="col-sm-4 col-form-label">Адреса для листування</label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.address %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputAddress" value="{{ content.address }}"
                 placeholder="Введіть адресу проживання учасника" name="address">
@@ -67,8 +67,8 @@
     </div>
 
     <div class="form-group row">
-        <label for="inputPhone" class="col-sm-3 col-form-label">Контактний телефон</label>
-        <div class="col-sm-4">
+        <label for="inputPhone" class="col-sm-4 col-form-label">Контактний телефон</label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.phone %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputPhone" value="{{ content.phone }}"
                 placeholder="Введіть контактний телефон учасника" name="phone">
@@ -79,8 +79,8 @@
     </div>
 
     <div class="form-group row">
-        <label for="inputInfo" class="col-sm-3 col-form-label">Додаткова інформація</label>
-        <div class="col-sm-4">
+        <label for="inputInfo" class="col-sm-4 col-form-label">Додаткова інформація</label>
+        <div class="col-sm-6">
             <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputInfo" name="info" rows="5"
                 placeholder="Введіть додаткову інформацію про участика">{{ content.info }}</textarea>
@@ -88,7 +88,7 @@
     </div>
 
     <div class="form-group row">
-        <div class="col-sm-3"></div>
+        <div class="col-sm-4"></div>
         <div class="col-sm-6">
           <input type="submit" class="btn btn-primary" value="Зберегти"
                  name="save_button" />

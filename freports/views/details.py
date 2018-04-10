@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 
 from .days_counter import check_active, days_count, update_dates_info
 from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge
-from .tasks import add_detail_task
+from .tasks import add_detail_task, edit_detail_task
 
 petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи', 'Про призначення виїзду']
 done_type = ['Висновок експерта', 'Повідомлення про неможливість', 'Залишення без виконання']
@@ -260,6 +260,7 @@ def edit_detail(request, rid, did):
                 reports = Report.objects.all()
                 update_dates_info(reports)
                 report.save()
+                edit_detail_task(edit_detail)
                 messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])
 
         elif request.POST.get('cancel_button'):

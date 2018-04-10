@@ -18,6 +18,8 @@ function initDateFields() {
       defaultDate: startDate,
       useCurrent: false,
       daysOfWeekDisabled: [0,6]
+    }).on('dp.hide', function(event) {
+      $(this).blur();
     });
 
 //    $('.input-group-addon').click(function(){
@@ -42,11 +44,9 @@ function initDateDecisionField() {
       defaultDate: startDate,
       useCurrent: false,
       daysOfWeekDisabled: [0,6]
+    }).on('dp.hide', function(event) {
+      $(this).blur();
     });
-
-//    $('.input-group-addon').click(function(){
-//        $(this).siblings('input').focus();
-//    });
 }
 
 function initDateTimeFields() {
@@ -71,6 +71,8 @@ function initDateTimeFields() {
       locale: 'uk',
       useCurrent: false,
       daysOfWeekDisabled: [0,6]
+    }).on('dp.hide', function(event) {
+      $(this).blur();
     });
 }
 
@@ -119,7 +121,7 @@ function initTodayTasksPage() {
 }
 
 function initFormPage() {
-    $('#add-event>a, #edit-event a, #add-report').click(function() {
+    $('.modal-button').on("click", function() {
         var link = $(this);
 
         $.ajax({

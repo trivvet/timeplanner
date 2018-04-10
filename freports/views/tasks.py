@@ -97,6 +97,16 @@ def edit_task(request, tid):
         return render(request, 'freports/task_form.html', 
             {'header': header, 'content': task, 'reports': reports})
 
+def edit_detail_task(detail):
+    edit_task = Task.objects.filter(event=detail)
+    new_task = valid_detail_task(detail)
+    if new_task['valid']:
+        new_item = Task(**new_task['task_data'])
+        if edit_task:
+            new_item.id = edit_task[0].id
+        new_item.save()
+    return HttpResponseRedirect(reverse('tasks_list'))
+
 @login_required(login_url='/login/')
 def delete_task(request, tid):
     task = Task.objects.get(pk=tid)

@@ -196,7 +196,7 @@ def edit_report(request, rid):
 def delete_report(request, rid):
     if request.method == 'GET':
         report = Report.objects.get(pk=rid)
-        content = u"Ви дійсно бажаєте видалите провадження №%s/017?" % report.number
+        content = u"Ви дійсно бажаєте видалити провадження №%s/017?" % report.number
         header = u"Видалення провадження №%s/017" % report.number
         next_url = request.GET.get('next', '')
         return render(request, 'freports/delete_form.html', {'report': report, 'header': header, 
