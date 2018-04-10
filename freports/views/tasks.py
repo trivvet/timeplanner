@@ -186,7 +186,7 @@ def valid_detail_task(detail):
         new_task['kind'] = u"Направлення повідомлення про неможливість надання висновку"
         new_task['time'] = date + timedelta(days=90, hours=10)
         new_task['detail'] = u"Після направлення клопотання {} від {}".format(
-            detail.subspecies, detail.date)
+            detail.subspecies, date.strftime("%d-%m-%Y"))
         new_task['report'] = detail.report
         new_task['event'] = detail
         valid = True
@@ -194,7 +194,7 @@ def valid_detail_task(detail):
     elif detail.name == 'bill':
         new_task['kind'] = u'Відправлення без виконання (без оплати)'
         new_task['time'] = date + timedelta(days=45, hours=10)
-        new_task['detail'] = u"{} від {}".format(detail.detail_info(), date.strftime("%Y-%m-%d"))
+        new_task['detail'] = u"{} від {}".format(detail.detail_info(), date.strftime("%d-%m-%Y"))
         new_task['report'] = detail.report
         new_task['event'] = detail
         valid = True
