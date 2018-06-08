@@ -152,6 +152,7 @@ function initForm(form, modal, link) {
     initDateFields();
     initDateTimeFields();
     changeDecisionDate();
+    initSelectCourt(link);
 
     form.ajaxForm({
         url: link,
@@ -181,9 +182,10 @@ function initForm(form, modal, link) {
     });
 }
 
-function initSelectCourt() {
+function initSelectCourt(link) {
     $('#inputCourtForOrder').change(function() {
         $.ajax('', {
+            'url': link,
             'type': 'GET',
             'async': true,
             'dataType': 'json',
@@ -211,6 +213,7 @@ function initSelectCourt() {
     }
     $('#inputCourt').change(function() {
         $.ajax('', {
+            'url': link,
             'type': 'GET',
             'async': true,
             'dataType': 'json',

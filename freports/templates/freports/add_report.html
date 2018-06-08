@@ -10,8 +10,8 @@
     <input type="hidden" name="next" value="{{ next_url }}">
 
     <div class="form-group row">
-        <label for="inputDate" class="col-sm-3 col-form-label">Дата надходження <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputDate" class="col-sm-4 col-form-label">Дата надходження <strong>*</strong></label>
+        <div class="col-sm-6">
             <div class="input-group date">
                 <input type="text" id="inputDate" placeholder="напр. 01.01.2017" name="date_arrived"
                     class="form-control {% if errors.date_arrived %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
@@ -24,15 +24,15 @@
     </div>
     {% if errors.date_arrived %}
     <div class="form-group row form-error">
-        <div class="col-sm-3"></div>
+        <div class="col-sm-4"></div>
         <div class="col">
             {{ errors.date_arrived }}
         </div>
     </div>
     {% endif %}
     <div class="form-group row">
-        <label for="inputNumber" class="col-sm-3 col-form-label">Номер провадження <strong>*</strong></label>
-        <div class="col-sm-3" id="divInputNumber">
+        <label for="inputNumber" class="col-sm-4 col-form-label">Номер провадження <strong>*</strong></label>
+        <div class="col-sm-6" id="divInputNumber">
             <input type="text" class="form-control col-sm-5 {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
             <p id="dual-number">/</p>
@@ -45,7 +45,7 @@
     </div>
     {% if errors.number %}
     <div class="form-group row form-error">
-        <div class="col-sm-3"></div>
+        <div class="col-sm-4"></div>
         <div class="col">
             {{ errors.number }}
         </div>
@@ -54,8 +54,8 @@
 
     <!-- Номер цивільної справи -->
     <div class="form-group row">
-        <label for="inputCase" class="col-sm-3 col-form-label">Номер справи <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputCase" class="col-sm-4 col-form-label">Номер справи <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" id="inputCase" placeholder="Введіть номер судової справи" name="case_number"
                     class="form-control {% if errors.case_number %}is-invalid{% elif errors %}is-valid{% endif %}"
                     value="{{ content.case_number }}">
@@ -67,8 +67,8 @@
 
     <!-- Вибір суду -->
     <div class="form-group row">
-        <label for="inputCourt" class="col-sm-3 col-form-label">Назва суду <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputCourt" class="col-sm-4 col-form-label">Назва суду <strong>*</strong></label>
+        <div class="col-sm-6">
             <select class="form-control {% if errors.court_name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputCourt" name="court" value="{{ content.court }}">
                 <option value=''>-----------</option>
@@ -85,8 +85,8 @@
 
     <!-- Вибір судді -->
     <div class="form-group row">
-        <label for="inputJudge" class="col-sm-3 col-form-label">Суддя <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputJudge" class="col-sm-4 col-form-label">Суддя <strong>*</strong></label>
+        <div class="col-sm-6">
             <select class="form-control {% if errors.judge %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputJudge" name="judge" value="{{ content.judge_name.id }}">
                 <option value='' {% if errors.judge %}selected{% endif %}>-----------</option>
@@ -105,8 +105,8 @@
 
     <!-- Адреса об'єкту -->
     <div class="form-group row">
-        <label for="inputAddress" class="col-sm-3 col-form-label">Адреса об'єкту <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputAddress" class="col-sm-4 col-form-label">Адреса об'єкту <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.address %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputAddress" name="address" value="{{ content.address }}"
                 placeholder="Введіть скорочену адресу об'єкту" aria-describedby="addressHelp">
@@ -122,8 +122,8 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputPlaintiffName" class="col-sm-3 col-form-label">Позивач <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputPlaintiffName" class="col-sm-4 col-form-label">Позивач <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.plaintiff %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputPlaintiffName" value="{{ content.plaintiff }}"
                 placeholder="Введіть прізвище позивача" name="plaintiff">
@@ -133,8 +133,8 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputDefendantName" class="col-sm-3 col-form-label">Відповідач <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputDefendantName" class="col-sm-4 col-form-label">Відповідач <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.defendant %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputDefendantName" placeholder="Введіть прізвище відповідача"
                 name="defendant" value="{{ content.defendant }}">
@@ -144,8 +144,8 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputObjectName" class="col-sm-3 col-form-label">Об'єкт дослідження <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputObjectName" class="col-sm-4 col-form-label">Об'єкт дослідження <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.object_name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputObjectName" name="object_name" value="{{ content.object_name }}"
                 placeholder="Введіть назву об'єкту дослідження" aria-describedby="objectHelp">
@@ -161,8 +161,8 @@
         </div>
     </div>
     <div class="form-group row">
-        <label for="inputResearchKind" class="col-sm-3 col-form-label">Вид дослідження <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputResearchKind" class="col-sm-4 col-form-label">Вид дослідження <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.research_kind %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputResearchKind" name="research_kind" placeholder="Введіть вид дослідження"
                 aria-describedby="defendantHelp" value="{{ content.research_kind }}">
@@ -178,7 +178,7 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-sm-3"></div>
+        <div class="col-sm-4"></div>
         <div class="col-sm-6">
           <input type="submit" class="btn btn-primary" value="Зберегти"
                  name="save_button" />

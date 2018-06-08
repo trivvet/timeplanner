@@ -176,7 +176,7 @@ def edit_report(request, rid):
         return HttpResponseRedirect(next_url)
 
     else:
-        if request.is_ajax():
+        if request.is_ajax() and request.GET.get('court'):
             court = Court.objects.get(pk=request.GET.get('court'))
             judges = Judge.objects.filter(court_name=court)
             new_list = []

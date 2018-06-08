@@ -190,9 +190,9 @@
                                         Дія
                                     </button>
                                     <div class="dropdown-menu" id="edit-event" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="{% url 'report_edit_detail' report.id detail.id %}">Редагувати</a>
+                                        <a class="dropdown-item modal-button" href="{% url 'report_edit_detail' report.id detail.id %}">Редагувати</a>
                                         {% if detail.name != 'first_arrived' %}
-                                        <a class="dropdown-item" href="{% url 'report_delete_detail' report.id detail.id %}">Видалити</a>
+                                        <a class="dropdown-item modal-button" href="{% url 'report_delete_detail' report.id detail.id %}">Видалити</a>
                                         {% endif %}
                                     </div>
                                 </div>
