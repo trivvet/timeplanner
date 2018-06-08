@@ -36,7 +36,7 @@ def tasks_today_list(request):
 @login_required(login_url='/login/')
 def add_task(request):
     header = u'Додавання завдання'
-    reports = Report.objects.filter(executed=False)
+    reports = Report.objects.filter(executed=False).order_by('number')
     if request.method == 'POST':
         if request.POST.get('save_button'):
             valid_data = valid_task(request.POST)
@@ -70,7 +70,7 @@ def edit_task(request, tid):
     task = Task.objects.get(pk=tid)
     header = u'Редагування інформації про завдання {name} яке призначене на {date}'.format(
         name=task.kind, date=task.time.strftime("%Y-%m-%d"))
-    reports = Report.objects.all()
+    reports = Report.objects.filter(executed=False).order_by('number')
     if request.method == 'POST':
         if request.POST.get('save_button'):
             valid_data = valid_task(request.POST)

@@ -110,6 +110,11 @@
   box-shadow: 0 0 7px rgba(0,0,0,0.2);
 }
 
+.btn-group .dropdown-menu {
+  right: 0;
+  left: inherit;
+}
+
 /* report pages */
 
 

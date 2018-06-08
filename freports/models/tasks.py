@@ -32,8 +32,7 @@ class Task(models.Model):
         blank=False,
         null=False)
 
-    detail = models.CharField(
-        max_length=256,
+    detail = models.TextField(
         blank=False,
         null=False,
         verbose_name=u"Деталі")
