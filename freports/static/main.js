@@ -50,29 +50,21 @@ function initDateDecisionField() {
 }
 
 function initDateTimeFields() {
-    var startDate = $('input.datetimeinput').val(), currentDate = new Date();
+    var startDate = $('#datetimepicker1 input').val(), currentDate = new Date();
     if (!startDate) {
         var startDate = currentDate;
     }
-    $('input.datetimeinput').datetimepicker({
-      format: 'YYYY-MM-DD HH:mm',
-      icons: {
-          time: "fa fa-clock-o",
-          date: "fa fa-calendar",
-          up: "fa fa-arrow-up",
-          down: "fa fa-arrow-down",
-          previous: "fa fa-arrow-left",
-          next: "fa fa-arrow-right",
-          close: 'fa fa-times',
-          today: 'fa fa-calendar-check-o'
-      },
-      sideBySide: true,
-      stepping: 30,
-      locale: 'uk',
-      useCurrent: false,
-      daysOfWeekDisabled: [0,6]
-    }).on('dp.hide', function(event) {
-      $(this).blur();
+    $('#datetimepicker1').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm',
+        sideBySide: true,
+        locale: 'uk',
+        date: startDate,
+        stepping: 30,
+        useCurrent: false,
+        daysOfWeekDisabled: [0,7],
+        minDate: startDate,
+        // allowInputToggle: true,
+        enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     });
 }
 
@@ -170,7 +162,6 @@ function initForm(form, modal, link) {
         },
         success: function(data, status, xhr) {
             var html = $(data), newform = html.find('#main-content form.form-horizontal');
-            console.log(newform);
 
             if (newform.length > 0) {
                 modal.find('.modal-body').html(newform);

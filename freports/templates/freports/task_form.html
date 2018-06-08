@@ -28,14 +28,15 @@
 
     <!-- Task Date and Time -->
     <div class="form-group row">
-        <label for="inputTime" class="col-sm-4 col-form-label">Дата та час завдання <strong>*</strong></label>
+        <label for="datetimeepicker1" class="col-sm-4 col-form-label">Дата та час завдання <strong>*</strong></label>
         <div class="col-sm-6">
-            <div class="input-group date">
-                <input type="text" id="inputTime" placeholder="напр. 10.12.2016 10:00" name="time"
-                    class="form-control {% if errors.time %}is-invalid{% elif errors %}is-valid{% endif %} datetimeinput"
-                    value="{{ content.time }}">
-                <div class="input-group-addon" id="calendar2">
-                    <span class="fa fa-calendar-times-o" aria-hidden="true"></span>
+            <div class="form-group">
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="напр. 10.12.2016 10:00"
+                    name="time" value="{{ content.time }}" />
+                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
                 </div>
             </div>
         </div>
