@@ -26,7 +26,7 @@ def tasks_list(request):
 @login_required(login_url='/login/')
 def tasks_today_list(request):
     today = date.today()
-    tasks = Task.objects.filter(time__year=today.year, time__month=today.month, time__day=today.day)
+    tasks = Task.objects.filter(time__startswith=today)
     translation.activate('uk')
     header = u'{} {}'.format(date_format(today, 'l'), today.strftime("%d-%m-%Y"))
     return render(request, 'freports/tasks_today_list.html',
