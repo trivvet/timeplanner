@@ -274,6 +274,36 @@ function showButtons() {
     });
 }
 
+function clickExecuteTask() {
+    $('.checkbox-container input').click(function() {
+        box = $(this)
+        $.ajax('', {
+            'type': 'POST',
+            'async': true,
+            'dataType': 'json',
+            'data': {
+                'pk': box.val(),
+                'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            'beforeSend': function(xhr, setting) {
+                box.prop('disabled', true);
+            },
+            'error': function(xhr, status, error) {
+                alert(error);
+            },
+            'success': function(data, status, xhr) {
+                taskLine = box.parents('tr');
+                content = "<td colspan='6'>Завдання виконане</td>"
+                taskLine.removeClass('table-danger').addClass('table-success text-center').html(content);
+                setTimeout(function() {
+                    taskLine.remove();
+                }, 1500);
+                // alert("Завдання виконане");
+            }
+        });
+    });
+}
+
 $(document).ready(function(){
     initDateFields();
     initDateTimeFields();
@@ -284,4 +314,5 @@ $(document).ready(function(){
     addPlusButton();
     changeDecisionDate();
     showButtons();
+    clickExecuteTask()
 })

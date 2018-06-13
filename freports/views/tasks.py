@@ -6,7 +6,7 @@ from datetime import date, datetime, timedelta
 from calendar import day_abbr
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 from django.urls import reverse
 from django.utils import translation
 from django.contrib import messages
@@ -18,10 +18,22 @@ from ..models import Task, Report, ReportEvents, ReportSubject
 
 @login_required(login_url='/login/')
 def tasks_list(request):
-    tasks = Task.objects.all().order_by('time')
+    if request.method == "POST":
+        try:
+            executed_task = Task.objects.get(pk=request.POST.get('pk'))
+        except:
+            return JsonResponse({'status': 'error', 'message': u"We can't find this task"})
+        executed_task.execute = True
+        executed_task.save()
+        return JsonResponse({'status': 'success'})
+    if request.GET.get('status'):
+        tasks = Task.objects.filter(execute=True).order_by('time')
+    else:
+        tasks = Task.objects.all().exclude(execute=True).order_by('time')
     header = u'Список завдань'
+    pz = get_current_timezone()
     return render(request, 'freports/tasks_list.html', 
-    	{'tasks': tasks, 'header': header})
+    	{'tasks': tasks, 'header': header, 'today': pz.localize(datetime.now())})
 
 @login_required(login_url='/login/')
 def tasks_today_list(request):

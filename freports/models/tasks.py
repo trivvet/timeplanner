@@ -22,9 +22,14 @@ class Task(models.Model):
         null=True)
 
     time = models.DateTimeField(
-        verbose_name = u"Дата та час завдання",
+        verbose_name=u"Дата та час завдання",
         blank=False,
-        default=timezone.now) 
+        default=timezone.now)
+
+    execute = models.NullBooleanField(
+        verbose_name=u"Статус виконання",
+        blank=True,
+        null=True)
 
     kind = models.CharField(
         verbose_name = u"Вид завдання",

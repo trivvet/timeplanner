@@ -17,11 +17,17 @@
 
 {% block content %}
 
+<nav class="nav nav-pills nav-justified" id="navbar-list">
+    <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'tasks_list' %}">Активні</a>
+    <a class="nav-item nav-link {% if request.GET.status == 'execute' %}active{% endif %}" href="{% url 'tasks_list' %}?status=execute">Виконані</a>
+</nav>
+
 {% if tasks %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
 <table class="table table-hover table-responsive-lg">
     <thead class="thead-light">
         <tr>
+            <th></th>
             <th scope="col">Дата</th>
             <th scope="col">Час</th>
             <th scope="col">Суть завдання</th>
@@ -33,15 +39,24 @@
 {% endwith %}
 
     <tbody>
-
+        {% csrf_token %}
         {% for task in tasks %}
-        <tr>
-
-            <th scope="row">{{ task.time|date:"D d M Y" }}</th>
+        <tr {% if task.time < today %}class="table-danger"{% endif %}>
+            <td>
+                <label class="checkbox-container">
+                    <input type="checkbox" name="execute" 
+                        value="{{ task.id }}">
+                    <span class="checkmark"></span>
+                </label>
+            </td>
+            <th scope="row">
+                
+                {{ task.time|date:"D d M Y" }}
+            </th>
             <td>
                 {{ task.time|time }}
             </td>
-            <td>{{ task.kind }}</td>
+            <td>{{ task.kind }}{{ task.execute }}</td>
             <td>
                 {% if task.report %}
                     {{ task.report.full_number }}
