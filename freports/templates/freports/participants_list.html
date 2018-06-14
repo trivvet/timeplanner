@@ -57,6 +57,12 @@
 
 </table>
 
+{% if participants.has_other_pages %}
+
+{% include "freports/pagination.html" with items=participants url_next="forensic_participants_list" %}
+
+{% endif %}
+
 {% else %}
 <p>Ще немає даних</p>
 {% endif %}

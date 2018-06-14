@@ -6,12 +6,21 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from ..models import Report, ReportSubject
 
 @login_required(login_url='/login/')
 def subjects_list(request):
-    subjects = ReportSubject.objects.all()
+    all_subjects = ReportSubject.objects.all()
+    paginator = Paginator(all_subjects, 10)
+    page = request.GET.get('page', '')
+    try:
+        subjects = paginator.page(page)
+    except PageNotAnInteger:
+        subjects = paginator.page(1)
+    except EmptyPage:
+        subjects = paginator.page(paginator.num_page)
     header = u"Список об'єктів дослідження"
     return render(request, 'freports/subjects_list.html', {'subjects': subjects, 'header': header})
 

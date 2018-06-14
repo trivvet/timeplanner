@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from ..models import Report, ReportEvents, ReportParticipants, Contacts
 
@@ -19,9 +20,17 @@ status_list = {
 
 @login_required(login_url='/login/')
 def participants_list(request):
-    participants = ReportParticipants.objects.all()
-    for participant in participants:
+    all_participants = ReportParticipants.objects.all()
+    for participant in all_participants:
         participant.status = status_list[participant.status]
+    paginator = Paginator(all_participants, 10)
+    page = request.GET.get('page', '')
+    try:
+        participants = paginator.page(page)
+    except PageNotAnInteger:
+        participants = paginator.page(1)
+    except EmptyPage:
+        participants = paginator.page(paginator.num_page)
     header = u'Список учасників проваджень'
     return render(request, 'freports/participants_list.html', {'participants': participants, 'header': header})
 

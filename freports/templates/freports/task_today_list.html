@@ -1,0 +1,78 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+
+<div class="col">
+    <span class="h1">{{ header }}</span><span class="badge badge-danger">Демо</span>
+<!-- </div> -->
+<!-- <div class="col-4"> -->
+    <a class="btn btn-outline-info"
+        id="add-report" href="{% url 'forensic_add_task' %}">Додати завдання</a>
+</div>
+
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+{% if tasks %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Дата</th>
+            <th scope="col">Час</th>
+            <th scope="col">Вид завдання</th>
+            <th scope="col">Провадження</th>
+            <th scope="col" class="group-buttons"></th>
+<!--             <th scope="col">Дії</th> -->
+        </tr>
+    </thead>
+{% endwith %}
+
+    <tbody>
+
+        {% for task in tasks %}
+        <tr>
+
+            <th scope="row">{{ task.time|date:"D d M Y" }}</th>
+            <td>
+                {{ task.time|time }}
+            </td>
+            <td>{{ task.kind }}</td>
+            <td>
+                {% if task.report %}
+                    {{ task.report.report.number }}/{{task.report.report.number_year}}
+                {% else %}
+                    Відсутні дані
+                {% endif %}
+            </td>
+            <td class="group-buttons">
+                <a href="{% url 'forensic_delete_task' task.id %}"><i class="fa fa-trash-o"></i></a>
+                <a href="{% url 'forensic_edit_task' task.id %}"><i class="fa fa-pencil"></i></a>
+                <a data-toggle="collapse" data-target="#collapse{{ task.id }}" aria-expanded="true" aria-controls="collapse{{ task.id }}"><i class="fa fa-eye"></i></a>
+            </td>       
+        </tr>
+        <tr id="collapse{{ task.id }}" class="collapse">
+            <td colspan="6">
+                {% if task.detail %}
+                    {{ task.detail }}
+                {% else %}
+                    Детальні відомості відсутні
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+
+
+
+    </tbody>
+</table>
+
+{% else %}
+<p style="color: green">На сьогодні активних завдань немає</p>
+{% endif %}
+
+{% endblock content %}

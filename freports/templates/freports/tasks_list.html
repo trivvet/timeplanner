@@ -27,7 +27,9 @@
 <table class="table table-hover table-responsive-lg">
     <thead class="thead-light">
         <tr>
+            {% if not request.GET.status %}
             <th></th>
+            {% endif %}
             <th scope="col">Дата</th>
             <th scope="col">Час</th>
             <th scope="col">Суть завдання</th>
@@ -41,14 +43,18 @@
     <tbody>
         {% csrf_token %}
         {% for task in tasks %}
-        <tr {% if task.time < today %}class="table-danger"{% endif %}>
+        <tr {% if not request.GET.status and task.time < today %}class="table-danger"{% endif %}>
+            {% if not request.GET.status %}
             <td>
+                {% if task.time < today %}
                 <label class="checkbox-container">
                     <input type="checkbox" name="execute" 
                         value="{{ task.id }}">
                     <span class="checkmark"></span>
                 </label>
+                {% endif %}
             </td>
+            {% endif %}
             <th scope="row">
                 
                 {{ task.time|date:"D d M Y" }}
@@ -56,7 +62,7 @@
             <td>
                 {{ task.time|time }}
             </td>
-            <td>{{ task.kind }}{{ task.execute }}</td>
+            <td>{{ task.kind }}</td>
             <td>
                 {% if task.report %}
                     {{ task.report.full_number }}
@@ -85,6 +91,37 @@
 
     </tbody>
 </table>
+
+{% if request.GET.status and tasks.has_other_pages %}
+{% include "freports/pagination.html" with items=tasks url_next="tasks_list" %}
+<!-- <nav aria-label="Page navigation example">
+    <ul class="pagination">
+        {% if tasks.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'tasks_list' %}?status=execute&page={{ tasks.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        {% endif %}
+        {% for page in tasks.paginator.page_range %}
+            <li class="page-item {% if tasks.number == page %}active{% endif %}">
+                <a class="page-link" href="{% url 'tasks_list' %}?status=execute&page={{ page }}">
+                    {{ page }}
+                </a>
+            </li>
+        {% endfor %}
+        {% if tasks.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'tasks_list' %}?status=execute&page={{ tasks.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav> -->
+{% endif %}
 
 {% else %}
 <p>Ще немає даних</p>

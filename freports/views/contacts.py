@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from ..models import Contacts
 
@@ -18,7 +19,15 @@ status_list = {
 
 @login_required(login_url='/login/')
 def contacts_list(request):
-    contacts = Contacts.objects.all().order_by('surname')
+    all_contacts = Contacts.objects.all().order_by('surname')
+    paginator = Paginator(all_contacts, 10)
+    page = request.GET.get('page', '')
+    try:
+        contacts = paginator.page(page)
+    except PageNotAnInteger:
+        contacts = paginator.page(1)
+    except EmptyPage:
+        contacts = paginator.page(paginator.num_page)
     header = 'Список контактів'
     for contact in contacts:
         contact.status = status_list[contact.status]

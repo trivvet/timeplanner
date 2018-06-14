@@ -5,12 +5,13 @@ import pytz, datetime
 from datetime import date, datetime, timedelta
 from calendar import day_abbr
 
-from django.shortcuts import render
-from django.http import HttpResponseRedirect,JsonResponse
-from django.urls import reverse
-from django.utils import translation
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponseRedirect,JsonResponse
+from django.shortcuts import render
+from django.urls import reverse
+from django.utils import translation
 from django.utils.timezone import get_current_timezone, localtime
 from django.utils.formats import date_format
 
@@ -27,9 +28,17 @@ def tasks_list(request):
         executed_task.save()
         return JsonResponse({'status': 'success'})
     if request.GET.get('status'):
-        tasks = Task.objects.filter(execute=True).order_by('time')
+        all_tasks = Task.objects.filter(execute=True).order_by('time').reverse()
+        paginator = Paginator(all_tasks, 3)
+        page = request.GET.get('page', '')
+        try:
+            tasks = paginator.page(page)
+        except PageNotAnInteger:
+            tasks = paginator.page(1)
+        except EmptyPage:
+            tasks = paginator.page(paginator.num_pages)
     else:
-        tasks = Task.objects.all().exclude(execute=True).order_by('time')
+        tasks = Task.objects.all().exclude(execute=True).order_by('time')        
     header = u'Список завдань'
     pz = get_current_timezone()
     return render(request, 'freports/tasks_list.html', 
@@ -96,6 +105,7 @@ def edit_task(request, tid):
                 return render(request, 'freports/task_form.html',
                     {'content': edit_task, 'errors': errors, 'header': header, 'reports': reports})
             else:
+                edit_task.execute = task.execute
                 edit_item = Task(**edit_task)
                 edit_item.id = task.id
                 edit_item.save()

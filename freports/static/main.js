@@ -176,6 +176,7 @@ function initForm(form, modal, link) {
                 addPlusButton();
                 initRowMakeLink();
                 showButtons();
+                clickExecuteTask();
                 $('#modalForm').modal('hide');
             }
         }
