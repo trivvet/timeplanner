@@ -9,6 +9,7 @@
     {% csrf_token %}
     <input type="hidden" name="next" value="{{ next_url }}">
 
+    <!-- Дата надходження -->
     <div class="form-group row">
         <label for="inputDate" class="col-sm-4 col-form-label">Дата надходження <strong>*</strong></label>
         <div class="col-sm-6">
@@ -30,6 +31,8 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- номер провадження -->
     <div class="form-group row">
         <label for="inputNumber" class="col-sm-4 col-form-label">Номер провадження <strong>*</strong></label>
         <div class="col-sm-6" id="divInputNumber">
@@ -68,7 +71,7 @@
     <!-- Вибір суду -->
     <div class="form-group row">
         <label for="inputCourt" class="col-sm-4 col-form-label">Назва суду <strong>*</strong></label>
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <select class="form-control {% if errors.court_name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputCourt" name="court" value="{{ content.court }}">
                 <option value=''>-----------</option>
@@ -86,7 +89,7 @@
     <!-- Вибір судді -->
     <div class="form-group row">
         <label for="inputJudge" class="col-sm-4 col-form-label">Суддя <strong>*</strong></label>
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <select class="form-control {% if errors.judge %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputJudge" name="judge" value="{{ content.judge_name.id }}">
                 <option value='' {% if errors.judge %}selected{% endif %}>-----------</option>

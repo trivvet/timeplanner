@@ -1,51 +1,32 @@
 function initDateFields() {
-    var startDate = $('#inputDate').val(), currentDate = new Date();
+    var startDate = $('#inputDate input').val(), currentDate = new Date();
     if (!startDate) {
         var startDate = currentDate;
     }
     $('#inputDate').datetimepicker({
-      format: 'YYYY-MM-DD',
-      icons: {
-          date: "fa fa-calendar",
-          previous: "fa fa-arrow-left",
-          next: "fa fa-arrow-right",
-          close: 'fa fa-times',
-          today: 'fa fa-calendar-check-o'
-      },
-      locale: 'uk',
-      maxDate: currentDate,
-      viewDate: startDate,
-      defaultDate: startDate,
-      useCurrent: false,
-      daysOfWeekDisabled: [0,6]
-    }).on('dp.hide', function(event) {
-      $(this).blur();
+        format: 'YYYY-MM-DD',
+        locale: 'uk',
+        maxDate: currentDate,
+        date: startDate,
+        defaultDate: startDate,
+        useCurrent: false,
+        daysOfWeekDisabled: [0]
     });
-
-//    $('.input-group-addon').click(function(){
-//        $(this).siblings('input').focus();
-//    });
 }
 
 function initDateDecisionField() {
-    var startDate = $('#inputDate').val();
+    var startDate = $('#inputDateDecision input').val(), currentDate = new Date();
+    if (!startDate) {
+        var startDate = currentDate;
+    }
     $('#inputDateDecision').datetimepicker({
-      format: 'YYYY-MM-DD',
-      icons: {
-          date: "fa fa-calendar",
-          previous: "fa fa-arrow-left",
-          next: "fa fa-arrow-right",
-          close: 'fa fa-times',
-          today: 'fa fa-calendar-check-o'
-      },
-      locale: 'uk',
-      maxDate: startDate,
-      viewDate: startDate,
-      defaultDate: startDate,
-      useCurrent: false,
-      daysOfWeekDisabled: [0,6]
-    }).on('dp.hide', function(event) {
-      $(this).blur();
+        format: 'YYYY-MM-DD',
+        locale: 'uk',
+        maxDate: startDate,
+        date: startDate,
+        defaultDate: startDate,
+        useCurrent: false,
+        daysOfWeekDisabled: [0,6]
     });
 }
 
@@ -65,12 +46,6 @@ function initDateTimeFields() {
         minDate: startDate,
         // allowInputToggle: true,
         enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
-    });
-}
-
-function initRowMakeLink() {
-    $('.td-link').click(function(){
-        window.location = $(this).parent().data("href");
     });
 }
 
@@ -112,39 +87,51 @@ function initTodayTasksPage() {
     });
 }
 
+function initRowMakeLink() {
+    $('.td-link').click(function(){
+        row = $(this).parent()
+        if(row.hasClass('table-danger')) {
+            activateModalPage(row.data("href"));
+        } else {
+            window.location = row.data("href");
+        }
+    });
+}
+
 function initFormPage() {
     $('.modal-button').on("click", function() {
-        var link = $(this);
+        activateModalPage($(this).attr('href'));
+        return false
+    });
+}
 
-        $.ajax({
-            'url': link.attr('href'),
-            'dataType': 'html',
-            'type': 'get',
-            'beforeSend': function() {
-                $('.dropdown-menu').removeClass('show');
-                $('.dropdown').removeClass('show');
-            },
-            'success': function(data, status, xhr) {
-                if (status != 'success') {
-                    alert("Вибачте, але на сервері сталася неочікувана помилка. Перезавантажте сторінку та спробуйте ще раз");
-                    return false;
-                }
-                var modal = $('#modalForm'), html = $(data), form = html.find('#main-content form');
-                modal.find('#first-header div').html(html.find('#second-header h2'));
-                modal.find('.modal-body').html(form);
-                modal.find('.modal-body').prepend(html.find('#second-header .row'));
-
-                initForm(form, modal, link.attr('href'));
-
-                $('#modalForm').modal({'show': true});
-            },
-            'error': function() {
-                alert('Error on the server');
+function activateModalPage(link) {
+    $.ajax({
+        'url': link,
+        'dataType': 'html',
+        'type': 'get',
+        'beforeSend': function() {
+            $('.dropdown-menu').removeClass('show');
+            $('.dropdown').removeClass('show');
+        },
+        'success': function(data, status, xhr) {
+            if (status != 'success') {
+                alert("Вибачте, але на сервері сталася неочікувана помилка. Перезавантажте сторінку та спробуйте ще раз");
                 return false;
             }
-        });
+            var modal = $('#modalForm'), html = $(data), form = html.find('#main-content form');
+            modal.find('#first-header div').html(html.find('#second-header h2'));
+            modal.find('.modal-body').html(form);
+            modal.find('.modal-body').prepend(html.find('#second-header .row'));
 
-        return false
+            initForm(form, modal, link);
+
+            $('#modalForm').modal({'show': true});
+        },
+        'error': function() {
+            alert('Error on the server');
+            return false;
+        }
     });
 }
 
@@ -261,7 +248,7 @@ function changeDecisionDate() {
     $('#inputDate').focusout(function() {
         inputDate = $('#inputDateDecision');
         if (inputDate) {
-            inputDate.val($(this).val());
+            inputDate.children('input').val($(this).children('input').val());
             initDateDecisionField();
         }
     });

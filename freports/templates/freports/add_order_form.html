@@ -15,17 +15,16 @@
     <!-- Дата події -->
     <div class="form-group row">
         <label for="inputDate" class="col-sm-4 col-form-label">Дата події <strong>*</strong></label>
-        <div class="col-sm-8">
-            <div class="input-group date">
-                <input type="text" id="inputDate" placeholder="напр. 01.01.2017" name="date"
-                    class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
-                    value="{{ new_content.date }}">
-                <div class="input-group-addon" id="calendar">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                </div>
+        <div class="col-sm-8 input-group date" id="inputDate" 
+            data-target-input="nearest">
+            <input type="text" class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#inputDate" placeholder="напр. 01.01.2018"
+            name="date" value="{{ new_content.date }}" />
+            <div class="input-group-append" data-target="#inputDate" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
         </div>
     </div>
+
     {% if errors.date %}
     <div class="form-group row form-error">
         <div class="col-sm-4"></div>
@@ -38,14 +37,13 @@
     <!-- Дата винесення ухвали -->
     <div class="form-group row">
         <label for="inputDateDecision" class="col-sm-4 col-form-label">Дата винесення ухвали <strong>*</strong></label>
-        <div class="col-sm-8">
-            <div class="input-group date">
-                <input type="text" id="inputDateDecision" placeholder="напр. 10.12.2016" name="decision_date"
-                    class="form-control {% if errors.decision_date %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
-                    value="{{ new_content.decision_date }}">
-                <div class="input-group-addon" id="calendar2">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                </div>
+        <div class="col-sm-8 input-group date" id="inputDateDecision" 
+            data-target-input="nearest">
+            <input type="text" class="form-control {% if errors.decision_date %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" 
+                data-target="#inputDateDecision" placeholder="напр. 01.01.2018"
+                name="decision_date" value="{{ new_content.decision_date }}" />
+            <div class="input-group-append" data-target="#inputDateDecision" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
         </div>
     </div>
@@ -61,7 +59,7 @@
     <!-- Вибір суду -->
     <div class="form-group row">
         <label for="inputCourtForOrder" class="col-sm-4 col-form-label">Назва суду <strong>*</strong></label>
-        <div class="col-sm-4">
+        <div class="col-sm-8">
             <select class="form-control {% if errors.court_name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputCourtForOrder" name="court" value="{{ new_content.court }}">
                 <option value=''>-----------</option>
@@ -79,7 +77,7 @@
     <!-- Вибір судді -->
     <div class="form-group row" {% if new_content.judge is None %}hidden{% endif %}>
         <label for="inputJudge" class="col-sm-4 col-form-label">Суддя <strong>*</strong></label>
-        <div class="col-sm-4">
+        <div class="col-sm-8">
             <select class="form-control {% if errors.judge %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputJudge" name="judge" value="{{ new_content.judge }}">
                 <option value=''>-----------</option>

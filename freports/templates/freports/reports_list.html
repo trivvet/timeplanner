@@ -122,8 +122,14 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
     <tbody>
 
         {% for report in reports %}
-        <tr class="{% if report.active is None %}table-danger{% endif %}"
-            data-href="{% url 'report_details_list' report.id %}">
+        <tr class="
+            {% if report.active is None %}
+                table-danger
+            {% elif report.address == '-' or report.plaintiff == '-' or  report.defendant == '-' or report.object_name == '-' or report.research_kind == '-' %}
+                table-warning
+            {% endif %}
+            "
+            data-href="{% if report.active is None %}{% url 'report_add_order' report.id %}{% else %}{% url 'report_details_list' report.id %}{% endif %}">
             <th class="td-link" scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
             <td class="td-link">{{ report.address|truncatechars:25 }}</td>
             <td class="td-link">{{ report.plaintiff|truncatechars:20 }}</td>

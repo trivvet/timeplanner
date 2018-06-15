@@ -136,7 +136,7 @@ def add_order(request, rid):
         return HttpResponseRedirect(reverse('forensic_reports_list'))
 
     elif request.method == 'GET':
-        if request.is_ajax():
+        if request.is_ajax() and request.GET.get('court', ''):
             court = Court.objects.get(pk=request.GET.get('court'))
             judges = Judge.objects.filter(court_name=court)
             new_list = []

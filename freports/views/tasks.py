@@ -29,7 +29,7 @@ def tasks_list(request):
         return JsonResponse({'status': 'success'})
     if request.GET.get('status'):
         all_tasks = Task.objects.filter(execute=True).order_by('time').reverse()
-        paginator = Paginator(all_tasks, 3)
+        paginator = Paginator(all_tasks, 10)
         page = request.GET.get('page', '')
         try:
             tasks = paginator.page(page)
