@@ -75,18 +75,8 @@
             <th scope="col">Позивач</th>
             <th scope="col">Відповідач</th>
             <th scope="col">Тип Об'єкту</th>
-            <th scope="col">
-                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=research_kind">
-                    Вид Дослідження {% if order_by == 'research_kind' %}&uarr;{% endif %}
-                </a>
-            </th>
-            <th scope="col">
-                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&
-order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reverse=1{% endif %}">
-                    Дата надходження {% if order_by == 'date_arrived' and reverse != '1' %}&uarr;
-                    {% elif order_by == 'date_arrived' and reverse == '1' %}&darr;{% endif %}
-                </a>
-            </th>
+            <th scope="col">Вид Дослідження</th>
+            <th scope="col">Дата надходження</th>
             {% if request.GET.status == 'executed' %}
             <th scope="col">
                 <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=date_executed
