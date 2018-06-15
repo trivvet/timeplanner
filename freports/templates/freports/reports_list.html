@@ -136,7 +136,7 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
             <td class="td-link">{{ report.defendant|truncatechars:20 }}</td>
             <td class="td-link">{{ report.object_name|truncatechars:20 }}</td>
             <td class="td-link">{{ report.research_kind|truncatechars:20 }}</td>
-            <td class="td-link td-date">{{ report.date_arrived|truncatechars:10 }}</td>
+            <td class="td-link td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
             {% if request.GET.status == 'executed' %}
             <td class="td-link td-date">{{ report.date_executed|truncatechars:10 }}</td>
             {% endif %}
@@ -171,6 +171,11 @@ order_by=date_arrived{% if order_by == 'date_arrived' and reverse != '1' %}&reve
 
 {% endwith %}
 
+{% if request.GET.status == 'all' or request.GET.status == 'executed' %}
+    {% if reports.has_other_pages %}
+        {% include 'freports/pagination.html' with items=reports url_next="forensic_reports_list" extra=request.GET.status %}
+    {% endif %}
+{% endif %}
 
 
 {% else %}

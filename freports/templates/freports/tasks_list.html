@@ -93,34 +93,7 @@
 </table>
 
 {% if request.GET.status and tasks.has_other_pages %}
-{% include "freports/pagination.html" with items=tasks url_next="tasks_list" %}
-<!-- <nav aria-label="Page navigation example">
-    <ul class="pagination">
-        {% if tasks.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="{% url 'tasks_list' %}?status=execute&page={{ tasks.previous_page_number }}" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        {% endif %}
-        {% for page in tasks.paginator.page_range %}
-            <li class="page-item {% if tasks.number == page %}active{% endif %}">
-                <a class="page-link" href="{% url 'tasks_list' %}?status=execute&page={{ page }}">
-                    {{ page }}
-                </a>
-            </li>
-        {% endfor %}
-        {% if tasks.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="{% url 'tasks_list' %}?status=execute&page={{ tasks.next_page_number }}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-        {% endif %}
-    </ul>
-</nav> -->
+{% include "freports/pagination.html" with items=tasks url_next="tasks_list" extra=request.GET.status %}
 {% endif %}
 
 {% else %}

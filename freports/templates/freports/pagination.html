@@ -2,7 +2,7 @@
     <ul class="pagination">
         {% if items.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="{% url url_next %}?status=execute&page={{ items.previous_page_number }}" aria-label="Previous">
+            <a class="page-link" href="{% url url_next %}?page={{ items.previous_page_number }}&status={{ extra }}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
             </a>
@@ -10,14 +10,14 @@
         {% endif %}
         {% for page in items.paginator.page_range %}
             <li class="page-item {% if items.number == page %}active{% endif %}">
-                <a class="page-link" href="{% url url_next %}?status=execute&page={{ page }}">
+                <a class="page-link" href="{% url url_next %}?page={{ page }}&status={{ extra }}">
                     {{ page }}
                 </a>
             </li>
         {% endfor %}
         {% if items.has_next %}
         <li class="page-item">
-            <a class="page-link" href="{% url url_next %}?status=execute&page={{ items.next_page_number }}" aria-label="Next">
+            <a class="page-link" href="{% url url_next %}?page={{ items.next_page_number }}&status={{ extra }}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>

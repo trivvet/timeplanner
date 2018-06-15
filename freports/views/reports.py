@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .days_counter import check_active, days_count, update_dates_info
 from ..models import Report, ReportEvents, Judge, Court, ReportParticipants, ReportSubject
@@ -63,6 +64,16 @@ def reports_list(request):
             report_events = ReportEvents.objects.filter(report=report).order_by('date').reverse()
             if report_events.count() > 0:
                 report.last_event = report_events[0]
+
+    if status in ['executed', 'all']:
+        paginator = Paginator(reports, 15)
+        page = request.GET.get('page', '')
+        try:
+            reports = paginator.page(page)
+        except PageNotAnInteger:
+            reports = paginator.page(1)
+        except EmptyPage:
+            reports = paginator.page(paginator.num_page)
 
     return render(request, 'freports/reports_list.html', 
         {'reports': reports, 'content': content})
