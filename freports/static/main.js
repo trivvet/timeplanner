@@ -283,10 +283,9 @@ function clickExecuteTask() {
                 taskLine = box.parents('tr');
                 content = "<td colspan='6'>Завдання виконане</td>"
                 taskLine.removeClass('table-danger').addClass('table-success text-center').html(content);
-                setTimeout(function() {
-                    taskLine.remove();
-                }, 1500);
-                // alert("Завдання виконане");
+                taskLine.fadeOut(1500, function() {
+                    $(this).remove();
+                });
             }
         });
     });

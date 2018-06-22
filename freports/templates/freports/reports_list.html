@@ -163,7 +163,7 @@
 
 {% if request.GET.status == 'all' or request.GET.status == 'executed' %}
     {% if reports.has_other_pages %}
-        {% include 'freports/pagination.html' with items=reports url_next="forensic_reports_list" extra=request.GET.status %}
+        {% include 'freports/pagination.html' with items=reports url_next="forensic_reports_list" extra=request.GET.status order_by=request.GET.order_by reverse=request.GET.reverse %}
     {% endif %}
 {% endif %}
 

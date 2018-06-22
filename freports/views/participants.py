@@ -20,17 +20,18 @@ status_list = {
 
 @login_required(login_url='/login/')
 def participants_list(request):
-    all_participants = ReportParticipants.objects.all()
-    for participant in all_participants:
+    participants = ReportParticipants.objects.all()
+    for participant in participants:
         participant.status = status_list[participant.status]
-    paginator = Paginator(all_participants, 10)
-    page = request.GET.get('page', '')
-    try:
-        participants = paginator.page(page)
-    except PageNotAnInteger:
-        participants = paginator.page(1)
-    except EmptyPage:
-        participants = paginator.page(paginator.num_page)
+    if request.GET.get('all_pages', '') == '':
+        paginator = Paginator(participants, 10)
+        page = request.GET.get('page', '')
+        try:
+            participants = paginator.page(page)
+        except PageNotAnInteger:
+            participants = paginator.page(1)
+        except EmptyPage:
+            participants = paginator.page(paginator.num_page)
     header = u'Список учасників проваджень'
     return render(request, 'freports/participants_list.html', {'participants': participants, 'header': header})
 

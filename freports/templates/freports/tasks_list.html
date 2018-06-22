@@ -3,7 +3,7 @@
 {% block title %}
 
 <div class="col">
-    <span class="h1">{{ header }}</span><span class="badge badge-danger">Демо</span>
+    <span class="h1">{{ header }}</span><span class="badge badge-danger">Beta</span>
 <!-- </div> -->
 <!-- <div class="col-4"> -->
     <a class="btn btn-outline-info modal-button"
@@ -19,7 +19,7 @@
 
 <nav class="nav nav-pills nav-justified" id="navbar-list">
     <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'tasks_list' %}">Активні</a>
-    <a class="nav-item nav-link {% if request.GET.status == 'execute' %}active{% endif %}" href="{% url 'tasks_list' %}?status=execute">Виконані</a>
+    <a class="nav-item nav-link {% if request.GET.status %}active{% endif %}" href="{% url 'tasks_list' %}?status=execute">Виконані</a>
 </nav>
 
 {% if tasks %}

@@ -28,15 +28,16 @@ def tasks_list(request):
         executed_task.save()
         return JsonResponse({'status': 'success'})
     if request.GET.get('status'):
-        all_tasks = Task.objects.filter(execute=True).order_by('time').reverse()
-        paginator = Paginator(all_tasks, 3)
-        page = request.GET.get('page', '')
-        try:
-            tasks = paginator.page(page)
-        except PageNotAnInteger:
-            tasks = paginator.page(1)
-        except EmptyPage:
-            tasks = paginator.page(paginator.num_pages)
+        tasks = Task.objects.filter(execute=True).order_by('time').reverse()
+        if request.GET.get('all_pages', '') == '':
+            paginator = Paginator(tasks, 3)
+            page = request.GET.get('page', '')
+            try:
+                tasks = paginator.page(page)
+            except PageNotAnInteger:
+                tasks = paginator.page(1)
+            except EmptyPage:
+                tasks = paginator.page(paginator.num_pages)
     else:
         tasks = Task.objects.all().exclude(execute=True).order_by('time')        
     header = u'Список завдань'
@@ -105,15 +106,14 @@ def edit_task(request, tid):
                 return render(request, 'freports/task_form.html',
                     {'content': edit_task, 'errors': errors, 'header': header, 'reports': reports})
             else:
-                edit_task.execute = task.execute
                 edit_item = Task(**edit_task)
                 edit_item.id = task.id
                 edit_item.save()
                 messages.success(request, u"Завдання {} успішно змінене".format(edit_item.kind))
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Радагування завдання скасовано")
-
-        return HttpResponseRedirect(reverse('tasks_list'))
+        url = "%s?status=%s" % (reverse('tasks_list'), task.execute)
+        return HttpResponseRedirect(url)
     else:
         task.time = localtime(task.time).isoformat()
         return render(request, 'freports/task_form.html', 
@@ -170,6 +170,8 @@ def valid_task(request_info):
         errors['detail'] = u"Деталізація завдання є обов'язковою"
     else:
         new_task['detail'] = detail
+
+    execute = request_info.get('execute', '')
 
     report = request_info.get('report', '')
     if report:

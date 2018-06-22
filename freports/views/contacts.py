@@ -19,15 +19,16 @@ status_list = {
 
 @login_required(login_url='/login/')
 def contacts_list(request):
-    all_contacts = Contacts.objects.all().order_by('surname')
-    paginator = Paginator(all_contacts, 10)
-    page = request.GET.get('page', '')
-    try:
-        contacts = paginator.page(page)
-    except PageNotAnInteger:
-        contacts = paginator.page(1)
-    except EmptyPage:
-        contacts = paginator.page(paginator.num_page)
+    contacts = Contacts.objects.all().order_by('surname')
+    if request.GET.get('all_pages', '') == '':
+        paginator = Paginator(contacts, 10)
+        page = request.GET.get('page', '')
+        try:
+            contacts = paginator.page(page)
+        except PageNotAnInteger:
+            contacts = paginator.page(1)
+        except EmptyPage:
+            contacts = paginator.page(paginator.num_page)
     header = 'Список контактів'
     for contact in contacts:
         contact.status = status_list[contact.status]

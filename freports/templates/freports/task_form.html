@@ -63,6 +63,19 @@
         </div>
     </div>
 
+    <!-- Status of Execution -->
+    {% if content.execute %}
+    <div class="form-group row">
+        <label for="inputExecute" class="col-sm-4 col-form-label">Статус виконання</label>
+        <div class="col-sm-6">
+            <select class="form-control" id="inputExecute" name="execute" value="{{ content.execute }}">
+                <option value="True">Завершене</option>
+                <option value="">Активне</option>
+            </select>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Report Number -->
     <div class="form-group row">
         <label for="inputReport" class="col-sm-4 col-form-label">Номер провадження</label>

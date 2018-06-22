@@ -20,6 +20,7 @@ def reports_list(request):
     days_count = ''
     reports_all = Report.objects.all()
     status = request.GET.get('status', '')
+    all_pages = request.GET.get('all_pages', '')
 
     if status == 'executed':
         reports = reports_all.filter(executed=True)
@@ -65,7 +66,7 @@ def reports_list(request):
             if report_events.count() > 0:
                 report.last_event = report_events[0]
 
-    if status in ['executed', 'all']:
+    if status in ['executed', 'all'] and all_pages == '':
         paginator = Paginator(reports, 15)
         page = request.GET.get('page', '')
         try:
