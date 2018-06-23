@@ -112,7 +112,8 @@ def edit_task(request, tid):
                 messages.success(request, u"Завдання {} успішно змінене".format(edit_item.kind))
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Радагування завдання скасовано")
-        url = "%s?status=%s" % (reverse('tasks_list'), task.execute)
+        url = "%s?status=%s" % (reverse('tasks_list'), task.execute or '')
+        print url
         return HttpResponseRedirect(url)
     else:
         task.time = localtime(task.time).isoformat()

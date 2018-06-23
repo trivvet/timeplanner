@@ -6,28 +6,31 @@ function initDateFields() {
     $('#inputDate').datetimepicker({
         format: 'YYYY-MM-DD',
         locale: 'uk',
-        maxDate: currentDate,
         date: startDate,
+        maxDate: currentDate,
         defaultDate: startDate,
         useCurrent: false,
-        daysOfWeekDisabled: [0]
+        daysOfWeekDisabled: [0],
+        buttons: {
+            showToday: true,
+            showClose: true
+        }
     });
 }
 
 function initDateDecisionField() {
-    var startDate = $('#inputDateDecision input').val(), currentDate = new Date();
-    if (!startDate) {
-        var startDate = currentDate;
+    var maxDate = $('#inputDate input').val(), currentDate = new Date();
+    if (!maxDate) {
+        maxDate = currentDate;
     }
     $('#inputDateDecision').datetimepicker({
         format: 'YYYY-MM-DD',
         locale: 'uk',
-        maxDate: startDate,
-        date: startDate,
-        defaultDate: startDate,
+        maxDate: maxDate,
         useCurrent: false,
         daysOfWeekDisabled: [0,6]
     });
+    initChangeDecisionDate();
 }
 
 function initDateTimeFields() {
@@ -44,8 +47,21 @@ function initDateTimeFields() {
         useCurrent: false,
         daysOfWeekDisabled: [0,7],
         minDate: startDate,
-        // allowInputToggle: true,
         enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+    });
+}
+
+function initChangeDecisionDate() {
+    $('#inputDate').focusout(function() {
+        inputDate = $('#inputDateDecision');
+        inputDateValue = inputDate.children('input').val();
+        if (inputDate && !inputDateValue) {
+            decisionDate = new Date($(this).children('input').val());
+            decisionDate.setDate(decisionDate.getDate() - 10);
+            decisionDate = decisionDate.toISOString().slice(0,10);
+            inputDate.children('input').val(decisionDate);
+        }
+        initDateDecisionField();
     });
 }
 
@@ -138,7 +154,7 @@ function activateModalPage(link) {
 function initForm(form, modal, link) {
     initDateFields();
     initDateTimeFields();
-    changeDecisionDate();
+    initDateDecisionField();
     initSelectCourt(link);
 
     form.ajaxForm({
@@ -243,17 +259,6 @@ function addPlusButton() {
     });
 }
 
-// Change Decision Date when type Event Date
-function changeDecisionDate() {
-    $('#inputDate').focusout(function() {
-        inputDate = $('#inputDateDecision');
-        if (inputDate) {
-            inputDate.children('input').val($(this).children('input').val());
-            initDateDecisionField();
-        }
-    });
-}
-
 function showButtons() {
     $('tbody tr').hover(function() {
         $(this).find(".fa").fadeIn(100);
@@ -299,7 +304,6 @@ $(document).ready(function(){
     initFormPage();
     initSelectCourt();
     addPlusButton();
-    changeDecisionDate();
     showButtons();
     clickExecuteTask()
 })
