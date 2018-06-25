@@ -12,14 +12,10 @@
     <!-- Дата надходження -->
     <div class="form-group row">
         <label for="inputDate" class="col-sm-4 col-form-label">Дата надходження <strong>*</strong></label>
-        <div class="col-sm-6">
-            <div class="input-group date">
-                <input type="text" id="inputDate" placeholder="напр. 01.01.2017" name="date_arrived"
-                    class="form-control {% if errors.date_arrived %}is-invalid{% elif errors %}is-valid{% endif %} dateinput"
-                    value="{{ content.date_arrived }}">
-                <div class="input-group-addon" id="calendar">
-                    <i class="fa fa-calendar" aria-hidden="true"></i>
-                </div>
+        <div class="col-sm-8 input-group date" id="inputDate" data-target-input="nearest">
+            <input type="text" placeholder="напр. 01.01.2018" name="date_arrived" class="form-control {% if errors.date_arrived %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#inputDate" value="{{ content.date_arrived }}">
+            <div class="input-group-append" data-target="#inputDate" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
         </div>
     </div>
