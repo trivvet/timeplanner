@@ -122,10 +122,14 @@
                 <tr>
                     <th scope="row"></th>
                     <td>
-                        <a type="button" class="btn btn-info modal-button"
-                           href="{% url 'forensic_edit_report' report.id %}?next=report_details_list">Редагувати основну інформацію</a>
-                        <a type="button" class="btn btn-danger modal-button"
-                            href="{% url 'forensic_delete_report' report.id %}?next=report_details_list">Видалити провадження</a>
+                        {% if report.address != '-' and report.plaintiff != '-' and  report.defendant != '-' and report.object_name != '-' and report.research_kind != '-' %}
+                            <a type="button" class="btn btn-info modal-button"
+                                href="{% url 'forensic_edit_report' report.id %}?next=report_details_list">Редагувати основну інформацію</a>
+                        {% endif %}
+                        {% if report.address == '-' and report.plaintiff == '-' and  report.defendant == '-' and report.object_name == '-' and report.research_kind == '-' %}
+                            <a type="button" class="btn btn-danger modal-button"
+                                href="{% url 'forensic_delete_report' report.id %}?next=report_details_list">Видалити провадження</a>
+                        {% endif %}
                         <a type="button" class="btn btn-success modal-button"
                             href="{% url 'report_add_participant' report.id 'other_participant' %}">Додати іншого учасника провадження</a>
                     </td>

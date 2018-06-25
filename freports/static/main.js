@@ -3,6 +3,7 @@ function initDateFields() {
     if (!startDate) {
         var startDate = currentDate;
     }
+    // $('#inputDateDecision').parent().hide();
     $('#inputDate').datetimepicker({
         format: 'YYYY-MM-DD',
         locale: 'uk',
@@ -53,15 +54,26 @@ function initDateTimeFields() {
 
 function initChangeDecisionDate() {
     $('#inputDate').focusout(function() {
-        inputDate = $('#inputDateDecision');
-        inputDateValue = inputDate.children('input').val();
-        if (inputDate && !inputDateValue) {
-            decisionDate = new Date($(this).children('input').val());
-            decisionDate.setDate(decisionDate.getDate() - 10);
-            decisionDate = decisionDate.toISOString().slice(0,10);
-            inputDate.children('input').val(decisionDate);
+        // $('#inputDateDecision').parent().show();
+        var inputDate = $('#inputDateDecision');
+        if (inputDate) {
+            var inputDateValue = new Date(inputDate.children('input').val());
+            var eventDate = new Date($(this).children('input').val());
+            var maxDate = new Date($(this).children('input').val());
+            if (inputDateValue > eventDate || maxDate > eventDate) {
+                eventDate.setDate(eventDate.getDate() - 10);
+                inputDate.datetimepicker('destroy');
+                $('#inputDateDecision').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    locale: 'uk',
+                    date: eventDate,
+                    maxDate: maxDate,
+                    useCurrent: false,
+                    daysOfWeekDisabled: [0,6]
+                });
+            }
         }
-        initDateDecisionField();
+        
     });
 }
 
