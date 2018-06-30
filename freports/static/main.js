@@ -298,7 +298,8 @@ function clickExecuteTask() {
             },
             'success': function(data, status, xhr) {
                 taskLine = box.parents('tr');
-                content = "<td colspan='6'>Завдання виконане</td>"
+                content = "<td colspan='6'>Завдання виконане</td>";
+                activateModalPage(data.next_url);
                 taskLine.removeClass('table-danger').addClass('table-success text-center').html(content);
                 taskLine.fadeOut(1500, function() {
                     $(this).remove();

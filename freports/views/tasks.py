@@ -46,7 +46,13 @@ def change_status_task(request):
             return JsonResponse({'status': 'error', 'message': u"We can't find this task"})
         executed_task.execute = True
         executed_task.save()
-        return JsonResponse({'status': 'success'})
+        print executed_task.event.name
+        if executed_task.event.name == 'schedule':
+            next_url = reverse('report_add_detail', 
+                kwargs={'rid': executed_task.report.id, 'kind': 'inspected'})
+        else:
+            next_url = ''
+        return JsonResponse({'status': 'success', 'next_url': next_url})
 
 @login_required(login_url='/login/')
 def tasks_today_list(request):
