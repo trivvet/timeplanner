@@ -19,14 +19,6 @@ from ..models import Task, Report, ReportEvents, ReportSubject
 
 @login_required(login_url='/login/')
 def tasks_list(request):
-    if request.method == "POST":
-        try:
-            executed_task = Task.objects.get(pk=request.POST.get('pk'))
-        except:
-            return JsonResponse({'status': 'error', 'message': u"We can't find this task"})
-        executed_task.execute = True
-        executed_task.save()
-        return JsonResponse({'status': 'success'})
     if request.GET.get('status'):
         tasks = Task.objects.filter(execute=True).order_by('time').reverse()
         if request.GET.get('all_pages', '') == '':
@@ -44,6 +36,17 @@ def tasks_list(request):
     pz = get_current_timezone()
     return render(request, 'freports/tasks_list.html', 
     	{'tasks': tasks, 'header': header, 'today': pz.localize(datetime.now())})
+
+@login_required(login_url='/login/')
+def change_status_task(request):
+    if request.method == "POST":
+        try:
+            executed_task = Task.objects.get(pk=request.POST.get('pk'))
+        except:
+            return JsonResponse({'status': 'error', 'message': u"We can't find this task"})
+        executed_task.execute = True
+        executed_task.save()
+        return JsonResponse({'status': 'success'})
 
 @login_required(login_url='/login/')
 def tasks_today_list(request):
@@ -113,7 +116,6 @@ def edit_task(request, tid):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Радагування завдання скасовано")
         url = "%s?status=%s" % (reverse('tasks_list'), task.execute or '')
-        print url
         return HttpResponseRedirect(url)
     else:
         task.time = localtime(task.time).isoformat()

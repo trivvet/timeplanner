@@ -281,8 +281,8 @@ function showButtons() {
 
 function clickExecuteTask() {
     $('.checkbox-container input').click(function() {
-        box = $(this)
-        $.ajax('', {
+        var box = $(this);
+        $.ajax(box.data('url'), {
             'type': 'POST',
             'async': true,
             'dataType': 'json',
