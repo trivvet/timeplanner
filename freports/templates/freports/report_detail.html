@@ -120,12 +120,12 @@
                     </td>
                 </tr>
 
-                {% if content.tasks %}
+                {% if tasks %}
                 <tr>
                     <th scope="row">Активні завдання</th>
                     <td>
                         <ul class="list-group small-list">
-                            {% for task in content.tasks %}
+                            {% for task in tasks %}
                             <li class="list-group-item">
                                 {{ task.time }} - {{ task.kind }}  
                             </li>

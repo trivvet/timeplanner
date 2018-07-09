@@ -63,11 +63,11 @@ def details_list(request, rid):
     content = kind_specific
     time_after_update = date.today() - report.change_date
     report.time_after_update = time_after_update.days
-    content['tasks'] = Task.objects.filter(report=report).exclude(execute=True)
+    tasks = Task.objects.filter(report=report).exclude(execute=True)
 
     return render(request, 'freports/report_detail.html',
         {'details': details, 'report': report, 'participants': participants, 
-        'content': content, 'subjects': subjects })
+        'content': content, 'subjects': subjects, 'tasks': tasks })
 
 @login_required(login_url='/login/')
 def add_order(request, rid):
