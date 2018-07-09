@@ -270,7 +270,7 @@ h2.center-header {
 }
 
 td.group-buttons {
-/*  width: 150px;*/
+  width: 150px;
   padding: 0;
   vertical-align: middle;
 }
