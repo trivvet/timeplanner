@@ -56,6 +56,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'timeplanner.context_processors.relative_path',
+                'timeplanner.context_processors.today_tasks',
             ],
         },
     },

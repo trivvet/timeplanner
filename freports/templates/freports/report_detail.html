@@ -119,6 +119,21 @@
                         {{ report.last_event.subspecies }}
                     </td>
                 </tr>
+
+                {% if content.tasks %}
+                <tr>
+                    <th scope="row">Активні завдання</th>
+                    <td>
+                        <ul class="list-group small-list">
+                            {% for task in content.tasks %}
+                            <li class="list-group-item">
+                                {{ task.time }} - {{ task.kind }}  
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    <td>
+                </tr>
+                {% endif %}
                 <tr>
                     <th scope="row"></th>
                     <td>

@@ -58,6 +58,7 @@ def change_status_task(request):
 def tasks_today_list(request):
     today = date.today()
     tasks = Task.objects.filter(time__startswith=today)
+    tasks = tasks.exclude(execute=True).order_by('time')
     translation.activate('uk')
     header = u'{} {}'.format(date_format(today, 'l'), today.strftime("%d-%m-%Y"))
     return render(request, 'freports/tasks_today_list.html',

@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
 from .days_counter import check_active, days_count, update_dates_info
-from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge
+from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge, Task
 from .tasks import add_detail_task, edit_detail_task
 
 petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи', 'Про призначення виїзду']
@@ -63,6 +63,7 @@ def details_list(request, rid):
     content = kind_specific
     time_after_update = date.today() - report.change_date
     report.time_after_update = time_after_update.days
+    content['tasks'] = Task.objects.filter(report=report).exclude(execute=True)
 
     return render(request, 'freports/report_detail.html',
         {'details': details, 'report': report, 'participants': participants, 

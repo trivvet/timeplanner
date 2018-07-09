@@ -74,9 +74,15 @@
                         </li>
                     </ul>
                     <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-success" href="{% url 'tasks_today_list' %}"
+                        {% if TODAY_TASKS == True %}
+                        <button id="btnGroupDrop1" type="button" class="btn btn-danger" href="{% url 'tasks_today_list' %}"
                             aria-haspopup="true" aria-expanded="false">Сьогодні</button>
-                        <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split"
+                        {% else %}
+                        <button type="button" class="btn" aria-haspopup="true" aria-expanded="false">
+                            {{ request.user.username }}
+                        </button>
+                        {% endif %}
+                        <button type="button" class="btn dropdown-toggle dropdown-toggle-split"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
@@ -94,7 +100,6 @@
 
         <!-- Start Container -->
         <div class="container">
-
             <div class="row" id="second-header">
                     {% block title %}{% endblock title %}
             </div>

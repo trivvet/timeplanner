@@ -6,8 +6,6 @@
 }
 
 #home-header {
-  /*background-color: rgba(248,248,248,1);*/
-  /*background-image: url(https://source.unsplash.com/xnUQO2DwXOo);*/
   background-image: url(./background.jpeg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -226,8 +224,53 @@ input, textarea, select {
   margin-top: 50px;
 }
 
+.small-list {
+  font-size: 1rem;
+}
+
+.small-list li {
+  width: 70%;
+}
+
+/*form pages*/
+h2.center-header {
+  text-align: center;
+}
+
+.show {
+  border-bottom: 1px solid rgba(0,0,0,.075);
+  border-left: 1px solid rgba(0,0,0,.075);
+  border-right: 1px solid rgba(0,0,0,.075);
+}
+
+/*modal page*/
+#first-header {
+  background: #fcda2e;
+  font-family: "Roboto", sans-serif;
+}
+
+#first-header div, #task-list-header {
+  margin: auto;
+}
+
+#first-header .close {
+  margin-left: 0;
+}
+
+
+/*tasks page*/
+#task-list-header h2 {
+  font-family: "Roboto", "Ubuntu light", sans-serif;
+  text-align: center;
+}
+
+#task-list-header h3 {
+  font-family: 'Courgette', sans-serif;
+  text-align: center;
+}
+
 td.group-buttons {
-  width: 150px;
+/*  width: 150px;*/
   padding: 0;
   vertical-align: middle;
 }
@@ -267,44 +310,6 @@ td.group-buttons {
 .fa-eye:hover {
   color: white;
   background-color: green;
-}
-
-
-/*form pages*/
-h2.center-header {
-  text-align: center;
-}
-
-.show {
-  border-bottom: 1px solid rgba(0,0,0,.075);
-  border-left: 1px solid rgba(0,0,0,.075);
-  border-right: 1px solid rgba(0,0,0,.075);
-}
-
-/*modal page*/
-#first-header {
-  background: #fcda2e;
-  font-family: "Roboto", sans-serif;
-}
-
-#first-header div, #task-list-header {
-  margin: auto;
-}
-
-#first-header .close {
-  margin-left: 0;
-}
-
-
-/*tasks page*/
-#task-list-header h2 {
-  font-family: "Roboto", "Ubuntu light", sans-serif;
-  text-align: center;
-}
-
-#task-list-header h3 {
-  font-family: 'Courgette', sans-serif;
-  text-align: center;
 }
 
 /* Customize the label (the container) */
