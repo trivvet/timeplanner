@@ -120,6 +120,8 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- Позивач -->
     <div class="form-group row">
         <label for="inputPlaintiffName" class="col-sm-4 col-form-label">Позивач <strong>*</strong></label>
         <div class="col-sm-6">
@@ -131,6 +133,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Відповідач -->
     <div class="form-group row">
         <label for="inputDefendantName" class="col-sm-4 col-form-label">Відповідач <strong>*</strong></label>
         <div class="col-sm-6">
@@ -142,6 +146,8 @@
             </div>
         </div>
     </div>
+
+    <!-- Об'єкт дослідження -->
     <div class="form-group row">
         <label for="inputObjectName" class="col-sm-4 col-form-label">Об'єкт дослідження <strong>*</strong></label>
         <div class="col-sm-6">
@@ -159,12 +165,14 @@
             {% endif %}
         </div>
     </div>
+
+    <!-- Вид дослідження -->
     <div class="form-group row">
         <label for="inputResearchKind" class="col-sm-4 col-form-label">Вид дослідження <strong>*</strong></label>
         <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.research_kind %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputResearchKind" name="research_kind" placeholder="Введіть вид дослідження"
-                aria-describedby="defendantHelp" value="{{ content.research_kind }}">
+                aria-describedby="researchHelp" value="{{ content.research_kind }}">
             {% if errors.research_kind %}
             <div class="invalid-feedback">
                 {{ errors.research_kind }}
@@ -174,6 +182,15 @@
                 напр. розподіл, накладка, залиття
             </small>
             {% endif %}
+        </div>
+    </div>
+
+    <!-- Вартість -->
+    <div class="form-group row">
+        <label for="inputCost" class="col-sm-4 col-form-label">
+        Вартість</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="inputCost" name="cost" placeholder="Введість вартість" value="{% if content.cost %}{{ content.cost }}{% endif %}">
         </div>
     </div>
     <div class="form-group row">

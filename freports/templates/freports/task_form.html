@@ -11,7 +11,10 @@
     {% csrf_token %}
 
     <input type="hidden" name="next_url" value="{{ next_url }}">
-    <input type="hidden" name="event" value="{% if content.event %}{{ content.event.id }}{% endif %}"
+    <input type="hidden" name="event" value="{% if content.event %}{{ content.event.id }}{% endif %}">
+    {% if report_number %}
+    <input type="hidden" name="report" value="{{ report_number }}" />
+    {% endif %}
 
     <!-- Task Kind -->
     <div class="form-group row">
@@ -81,11 +84,11 @@
         <label for="inputReport" class="col-sm-4 col-form-label">Номер провадження</label>
         <div class="col-sm-6">
             <select class="form-control {% if errors.report %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputReport" name="report" value="{{ content.report.id }}" {% if content.event %}disabled{% endif %}>
+                id="inputReport" name="report" value="{% if report_number %}{{ report_number }}{% else %}{{ content.report.id }}{% endif %}" {% if content.event or report_number %}disabled{% endif %}>
                 <option value=''>-----------</option>
                 {% for report in reports %}
                 <option value='{{ report.id }}'
-                    {% if content.report.id == report.id %}selected{% endif %}>{{ report }}</option>
+                    {% if content.report.id == report.id or report_number|add:0 == report.id %}selected{% endif %}>{{ report }}</option>
                 {% endfor %}
             </select>
             <div class="invalid-feedback">

@@ -14,7 +14,6 @@ def relative_path(request):
 def today_tasks(request):
     today = date.today()
     tasks = Task.objects.filter(time__startswith=today).exclude(execute=True)
-    print tasks
     answer = ''
     if tasks:
         answer = True

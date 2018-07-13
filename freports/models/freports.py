@@ -57,6 +57,10 @@ class Report(models.Model):
     active = models.NullBooleanField(
         blank=False)
 
+    cost = models.IntegerField(
+        blank=True,
+        null=True)
+
     date_arrived = models.DateField(
         blank=False,
         default=timezone.now)

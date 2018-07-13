@@ -83,11 +83,19 @@ def add_task(request):
                 messages.success(request, u"Завдання %s успішно додане" % new_item)
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання завдання скасовано")
-
-        return HttpResponseRedirect(reverse('tasks_list'))
+        next_page = request.POST.get('next_url', '')
+        if next_page:
+            url = next_page
+        else:
+            url = reverse('tasks_list')
+        return HttpResponseRedirect(url)
 
     else:
-        return render(request, 'freports/task_form.html', {'header': header, 'reports': reports})
+        next_page = request.GET.get('next_page', '')
+        report = request.GET.get('report')
+        return render(request, 'freports/task_form.html', 
+            {'header': header, 'reports': reports, 'next_url': next_page,
+            'report_number': report})
 
 def add_detail_task(detail):
     new_task = valid_detail_task(detail)
@@ -118,15 +126,22 @@ def edit_task(request, tid):
                 edit_item = Task(**edit_task)
                 edit_item.id = task.id
                 edit_item.save()
+                task = edit_item
                 messages.success(request, u"Завдання {} успішно змінене".format(edit_item.kind))
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Радагування завдання скасовано")
-        url = "%s?status=%s" % (reverse('tasks_list'), task.execute or '')
+        next_page = request.POST.get('next_url', '')
+        if next_page:
+            url = next_page
+        else:
+            url = "%s?status=%s" % (reverse('tasks_list'), task.execute or '')
         return HttpResponseRedirect(url)
     else:
         task.time = localtime(task.time).isoformat()
+        next_page = request.GET.get('next_page', '')
         return render(request, 'freports/task_form.html', 
-            {'header': header, 'content': task, 'reports': reports})
+            {'header': header, 'content': task, 'reports': reports,
+                'next_url': next_page})
 
 def edit_detail_task(detail):
     edit_task = Task.objects.filter(event=detail)
@@ -183,6 +198,8 @@ def valid_task(request_info):
     execute = request_info.get('execute', '')
 
     report = request_info.get('report', '')
+    print report
+    print type(report)
     if report:
         try:
             new_task['report'] = Report.objects.get(pk=report)

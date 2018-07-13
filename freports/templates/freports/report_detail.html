@@ -98,6 +98,12 @@
                     </td>
                 </tr>
                 {% endfor %}
+                {% if report.cost %}
+                <tr>
+                    <th scope="row">Вартість</th>
+                    <td>{{ report.cost }}грн</td>
+                </tr>
+                {% endif %}
                 <tr>
                     <th scope="row">Днів у виконанні</th>
                     <td>
@@ -127,7 +133,11 @@
                         <ul class="list-group small-list">
                             {% for task in tasks %}
                             <li class="list-group-item">
-                                {{ task.time }} - {{ task.kind }}  
+                                {{ task.time }} - {{ task.kind }}
+                                <span class="group-buttons">
+                                    <a class="modal-button" href="{% url 'forensic_delete_task' task.id %}?next_page={% url 'report_details_list' report.id %}"><i class="fa fa-trash-o"></i></a>
+                                    <a class="modal-button" href="{% url 'forensic_edit_task' task.id %}?next_page={% url 'report_details_list' report.id %}"><i class="fa fa-pencil"></i></a>
+                                </span>    
                             </li>
                             {% endfor %}
                         </ul>
@@ -160,17 +170,17 @@
     </div>
 </div>
 
-
-
 {% if details %}
+
 <div id="accordion" role="tablist">
     <div class="card">
         <div class="card-header" role="tab">
             <a data-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="navbar-brand" id="event-list-header">
                 Список подій (всього - {{ details.count }}) &#x2193;
             </a>
+            {% if participants.plaintiff and participants.defendant and subjects %}
             <div class="dropdown" id="add-detail">
-                <button class="btn btn-md align-middle btn-outline-success dropdown-toggle" type="button"
+                <button class="btn btn-md btn-outline-success dropdown-toggle" type="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Додати подію
                 </button>
@@ -182,6 +192,9 @@
                     {% endfor %}
                 </div>
             </div>
+            {% endif %}
+            <a class="btn btn-outline-info align-top float-right modal-button dropdown"
+                href="{% url 'forensic_add_task' %}?next_page={% url 'report_details_list' report.id %}&report={{ report.id }}">Додати завдання</a>
         </div>
 
         <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">

@@ -205,6 +205,8 @@ def add_detail(request, rid, kind):
                 report.waiting_days_amount = days_count(report, 'waiting')
                 reports = Report.objects.all()
                 update_dates_info(reports)
+                if new_detail.name == 'bill':
+                    report.cost = new_detail.cost
                 report.save()
                 add_detail_task(new_detail)
                 messages.success(request, u"Подія '%s' успішно додана" % kind_specific[new_detail.name][0])
@@ -260,6 +262,8 @@ def edit_detail(request, rid, did):
                 report.waiting_days_amount = days_count(report, 'waiting')
                 reports = Report.objects.all()
                 update_dates_info(reports)
+                if new_detail.name == 'bill':
+                    report.cost = new_detail.cost
                 report.save()
                 edit_detail_task(edit_detail)
                 messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])
@@ -299,6 +303,8 @@ def delete_detail(request, rid, did):
             report.waiting_days_amount = days_count(report, 'waiting')
             reports = Report.objects.all()
             update_dates_info(reports)
+            if current_detail.name == 'bill':
+                report.cost = None
             report.save()
 
             messages.success(request,

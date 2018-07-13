@@ -316,4 +316,10 @@ def valid_report(data_post):
     else:
         new_report['research_kind'] = research_kind
 
+    cost = data_post.get('cost')
+    try:
+        new_report['cost'] = int(cost)
+    except:
+        new_report['cost'] = None
+
     return {'errors': errors, 'data_report': new_report}
