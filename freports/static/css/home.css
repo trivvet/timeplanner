@@ -1,0 +1,77 @@
+/* home page */
+.standart-row {
+  padding: 8% 4%;
+  min-height: 100%;
+  font-size: 2.5vh;
+}
+
+#home-header {
+  background-image: url(./../background.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #007bff;
+  text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+#home-header h1 {
+  font-size: 3em;
+  margin-top: 5%;
+}
+
+#header-info {
+  font-family: Foglihten Regular, Georgia, fantasy, serif;
+  font-size: 1.2em;
+  padding-left: 6%;
+  padding-top: 2%;
+}
+
+#arrows {
+  margin: 0 40%;
+  width: 20%;
+}
+
+#contentList {
+  min-height: 300px;
+  padding: 40px;
+  background-color: white;
+}
+
+#home-content {
+  background-color: rgba(248,248,248,1);
+  font-size: 1.2em;
+}
+
+#mainInfo {
+  font-family: Georgia, sans-serif;
+  font-style: italic;
+}
+
+#mainInfo h2 {
+  font-size: 2em;
+}
+
+#questionsHeader {
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+#home-buttons {
+  margin-top: 20px;
+}
+
+#login-url {
+  color: black;
+}
+
+#myList {
+  font-size: 1.25em;
+}
+
+#register-link {
+  color: black;
+}
+
+#map {
+    height: 400px;  /* The height is 400 pixels */
+    width: 100%;  /* The width is the width of the web page */
+}

@@ -13,7 +13,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.standalone.min.css" />
          <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" />
-        <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'main.css' %}" type="text/css">
+        <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'css/home.css' %}" type="text/css">
     </head>
 
     <body>
@@ -60,99 +60,6 @@
                     </ul>
                 </div>
             </div>
-
-            <!-- <div class="row standart-row" id="home-content">
-                <div class="col">
-                    <h2 class="text-center" id="questionsHeader">Сфера вирішуваних питань</h2>
-                    <ul class="nav nav-tabs nav-fill" id="myList" role="tablist">
-                        <li class="nav-item">
-                            <a class="list-group-item-action nav-link active" data-toggle="list" href="#list-home"
-                                id="list-home-list" role="tab" aria-controls="home">Розподіл будівель та </br>земельних ділянок</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="list-group-item-action nav-link" id="list-profile-list" data-toggle="list" href="#list-profile"
-                                role="tab" aria-controls="profile">Відповідність конструкцій</br> та будівель ДБН</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="list-group-item-action nav-link" id="list-messages-list" data-toggle="list" href="#list-messages"
-                                role="tab" aria-controls="messages">Оцінка</br> нерухомості</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="list-group-item-action nav-link" id="list-settings-list" data-toggle="list" href="#list-settings"
-                            role="tab" aria-controls="settings">Порушення меж </br>земельних ділянок</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="list-group-item-action nav-link" id="list-damage-list" data-toggle="list" href="#list-damage"
-                            role="tab" aria-controls="damage">Майнова шкода</br> після залиття (пожежі)</a>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content" id="contentList">
-                        <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
-                            <div class="row">
-                                <div class="col-8">
-                                    <ul>
-                                        Питання можливості поділу будівель та земельних ділянок виникає як під час судових спорів, так і
-                                    при добровільному поділі між співвласниками. Для його вирішення потрібне проведення будівельно-технічного дослідження,
-                                    на вирішення якого можливо поставити наступні питання:
-                                        <li>Чи існує технічна можливість поділу будівлі та земельної ділянки?</li>
-                                        <li>Які можливі варіанти такого поділу?</li>
-                                        <li>Який розмір відхилення від ідеальних часток співвласників для кожного з варіантів поділу?</li>
-                                        <li>Який перелік та об'єми будівельних робіт необхідно виконати для забезпечення роздільного користування співвласниками будівлею</li>
-                                    </ul>
-                                    <hr>
-                                    <ul>
-                                        На дослідження необхідно надати наступні документи:
-                                        <li>Правовстановлюючі документи на об'єкт (напр. свідоцтво про право власності, договір дарування, договір купівлі-продажу, державний акт);</li>
-                                        <li>Технічну документацію: для будівлі або приміщення - це технічний паспорт або інвентаризаційна справа; для земельної ділянки - технічна документація або проект землеустрою (при добровільному поділі земельної ділянки технічна документацію надавати не обов'язково);</li>
-                                        <li>Копію паспорту власника.</li>
-                                </div>
-                                <div class="col-4"><img class="img-fluid max-width:30%" src="{{ PORTAL_URL }}{% static 'land_division.jpg' %}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
-                            Відповідність будівель та споруд, а також виконаних будівельних робіт, будівельним нормам і правилам визначається в рамках будівельно-технічного дослідеження.
-                        </div>
-                        <div class="tab-pane" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
-                            Визначення вартості об'єкту нерухомого майна необхідне в наступних випадках:
-                            <ul>
-                                <li>Для визначення ставки оподаткування під час укладання цивільно-правової угоди;</li>
-                                <li>Для визначення величини судового збору при подачі цивільного позову;</li>
-                                <li>У випадках проведення судової експертизи за ухвалою суду.</li>
-                            </ul>
-                        </div>
-                        <div class="tab-pane" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
-                            <div class="row">
-                                <div class="col-8">
-                                    <p>Проблема порушення меж земельних ділянок стала актуальна після відновлення в України в 1992 році інституту права власності на землю. Під порушенням меж розуміється невдіповідність фактичних меж земельної ділянки даним правовстановлюючих документів.</p>
-
-                                    <ul><strong>Найбільш поширеною причиною виникнення невідповідності меж земельних ділянок є порушення, допущені під час виготовлення землевпорядної документації</strong>, а саме:
-                                        <li>Не було використане відповідне GPS обладнання для визначення розташування поворотних точок меж ділянки відносно Державної геодезничної мережі</li>
-                                        <li>Обміри меж земельних ділянок проведені неякісно або не проведені взагалі (межі встановлені на основі слів замовника або за даними супутникових чи аерофотознімків місцевості)</li>
-                                        <li>Для уникнення накладок із земельними ділянками, які уже внесені в інформаційну базу Державного земельного кадастру, деякі виконавці документації ідуть шляхом найменшого опору та коректують прив'язку меж до Державної геодезничної мережі, таким чином зміщуючи межі ділянки</li>
-                                    </ul>
-                                    
-                                    <p>Також причиною невідповідності меж можуть бути порушення правил добросусідства, а саме самовільне переміщення межових знаків (огорож) суміжними землевласниками</p>
-
-                                    <p>Факт порушення меж земельної ділянки встановлюється за результатами проведення земельно-технічної експертизи.</p>
-                                </div>
-                                <div class="col-4">
-                                    <img class="img-fluid max-width:30%" src="{{ PORTAL_URL }}{% static 'gps-receiver-1054713_1280.jpg' %}">
-                                </div>
-                            </div>
-                            
-
-                        </div>
-                        <div class="tab-pane" id="list-damage" role="tabpanel" aria-labelledby="list-damage-list">
-                            Визначення розміру майнової шкоди, завданої залиттям, пожежею або стихійним лихом, а також причинно-наслідкового зв'язку між пошкодженнями будівель і їх конструктивних елементів та певною подією або діями третіх осіб, проводиться в рамках будівельно-технічного дослідження.
-                            <ul>На дослідження необхідно надати:
-                                <li></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
 
             <hr />
             <div class="row" id="homeFooter">
