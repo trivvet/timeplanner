@@ -147,6 +147,12 @@ function activateModalPage(link) {
                 alert("Вибачте, але на сервері сталася неочікувана помилка. Перезавантажте сторінку та спробуйте ще раз");
                 return false;
             }
+            if (data.length < 100) {
+                var data_info = JSON.parse(data);
+                if (data_info.modal == 'false') {
+                    location.reload();
+                }
+            }
             var modal = $('#modalForm'), html = $(data), form = html.find('#main-content form');
             modal.find('#first-header div').html(html.find('#second-header h2'));
             modal.find('.modal-body').html(form);

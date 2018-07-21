@@ -41,8 +41,6 @@
 }
 
 /* report pages */
-
-
 #divInputNumber {
   display: flex;
 }
@@ -66,7 +64,6 @@ tbody>td {
   background: rgba(0,0,0,.1);
   border-top: 2px solid #6657cf;
   border-bottom: 2px solid #6657cf;
-/*  font-size: 1.05em;*/
 }
 
 #calendar, #calendar1, #calendar2 {
@@ -156,7 +153,7 @@ input, textarea, select {
 }
 
 .small-list li {
-  width: 70%;
+  width: 80%;
 }
 
 /*form pages*/
@@ -228,6 +225,15 @@ td.group-buttons {
 .fa-pencil:hover {
   color: white;
   background-color: #418fff;
+}
+
+.fa-check {
+  color: green;
+}
+
+.fa-check:hover {
+  color: white;
+  background-color: green;
 }
 
 .fa-eye {

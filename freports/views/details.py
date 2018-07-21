@@ -14,7 +14,7 @@ from .days_counter import check_active, days_count, update_dates_info
 from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge, Task
 from .tasks import add_detail_task, edit_detail_task
 
-petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи', 'Про призначення виїзду']
+petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи']
 done_type = ['Висновок експерта', 'Повідомлення про неможливість', 'Залишення без виконання']
 inspected_type = ['Проведено успішно', 'Не надано доступ', 'Відмінено']
 bill_type = ['Направлено рекомендованого листа', 'Вручено особисто', 'Вручено представнику', 'Направлено електронного листа']
@@ -177,6 +177,7 @@ def add_detail(request, rid, kind):
         if detail.name == 'petition':
             new_content['received'] = detail.sending
             break
+    print(details[0])
     if kind == 'inspected' and details[0].time:
         new_content['date'] = details[0].time.date().isoformat()
     else:
@@ -266,8 +267,8 @@ def edit_detail(request, rid, did):
                 report.waiting_days_amount = days_count(report, 'waiting')
                 reports = Report.objects.all()
                 update_dates_info(reports)
-                if new_detail.name == 'bill':
-                    report.cost = new_detail.cost
+                if edit_detail.name == 'bill':
+                    report.cost = edit_detail.cost
                 report.save()
                 edit_detail_task(edit_detail)
                 messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])

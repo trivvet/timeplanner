@@ -39,19 +39,35 @@ def tasks_list(request):
 
 @login_required(login_url='/login/')
 def change_status_task(request):
-    if request.method == "POST":
-        try:
-            executed_task = Task.objects.get(pk=request.POST.get('pk'))
-        except:
-            return JsonResponse({'status': 'error', 'message': u"We can't find this task"})
-        executed_task.execute = True
-        executed_task.save()
-        if executed_task.event and executed_task.event.name == 'schedule':
-            next_url = reverse('report_add_detail', 
-                kwargs={'rid': executed_task.report.id, 'kind': 'inspected'})
+    if request.is_ajax():
+        if request.method == "POST":
+            try:
+                executed_task = Task.objects.get(pk=request.POST.get('pk'))
+            except:
+                return JsonResponse({'status': 'error', 
+                    'message': u"We can't find this task"})
+            executed_task.execute = True
+            executed_task.save()
+            if executed_task.event and executed_task.event.name == 'schedule':
+                next_url = reverse('report_add_detail', 
+                    kwargs={'rid': executed_task.report.id, 'kind': 'inspected'})
+            else:
+                next_url = ''
+            return JsonResponse({'status': 'success', 
+                'next_url': next_url})
         else:
-            next_url = ''
-        return JsonResponse({'status': 'success', 'next_url': next_url})
+            try:
+                executed_task = Task.objects.get(pk=request.GET.get('pk'))
+            except:
+                return JsonResponse({'status': 'error', 
+                    'message': u"We can't find this task"})
+            executed_task.execute = True
+            executed_task.save()
+            if executed_task.event and executed_task.event.name == 'schedule':
+                return HttpResponseRedirect(reverse('report_add_detail', 
+                    kwargs={'rid': executed_task.report.id, 'kind': 'inspected'}))
+            report_id = request.GET.get('report')
+            return JsonResponse({'status': 'success', 'modal': 'false'})
 
 @login_required(login_url='/login/')
 def tasks_today_list(request):
@@ -62,7 +78,6 @@ def tasks_today_list(request):
     header = u'{} {}'.format(date_format(today, 'l'), today.strftime("%d-%m-%Y"))
     return render(request, 'freports/tasks_today_list.html',
         {'tasks': tasks, 'header': header})
-
 
 @login_required(login_url='/login/')
 def add_task(request):
