@@ -177,7 +177,10 @@ def add_detail(request, rid, kind):
         if detail.name == 'petition':
             new_content['received'] = detail.sending
             break
-    new_content['date'] = details[0].date.isoformat()
+    if kind == 'inspected' and details[0].time:
+        new_content['date'] = details[0].time.date().isoformat()
+    else:
+        new_content['date'] = details[0].date.isoformat()
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -217,7 +220,8 @@ def add_detail(request, rid, kind):
         return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
 
     else:
-        return render(request, 'freports/detail_form.html', {'header': header, 'content': content, 'new_content': new_content})
+        return render(request, 'freports/detail_form.html', {'header': header, 
+            'content': content, 'new_content': new_content})
 
 @login_required(login_url='/login/')
 def edit_detail(request, rid, did):
