@@ -323,5 +323,5 @@ $(document).ready(function(){
     initSelectCourt();
     addPlusButton();
     showButtons();
-    clickExecuteTask()
+    clickExecuteTask();
 })

@@ -30,17 +30,6 @@
   width: 20%;
 }
 
-#contentList {
-  min-height: 300px;
-  padding: 40px;
-  background-color: white;
-}
-
-#home-content {
-  background-color: rgba(248,248,248,1);
-  font-size: 1.2em;
-}
-
 #mainInfo {
   font-family: Georgia, sans-serif;
   font-style: italic;
@@ -50,28 +39,8 @@
   font-size: 2em;
 }
 
-#questionsHeader {
-  font-style: italic;
-  margin-bottom: 30px;
-}
-
-#home-buttons {
-  margin-top: 20px;
-}
-
-#login-url {
-  color: black;
-}
-
-#myList {
-  font-size: 1.25em;
-}
-
-#register-link {
-  color: black;
-}
-
 #map {
-    height: 400px;  /* The height is 400 pixels */
-    width: 100%;  /* The width is the width of the web page */
+    margin: 0 auto;
+    height: 80%;  /* The height is 400 pixels */
+    width: 80%;  /* The width is the width of the web page */
 }
