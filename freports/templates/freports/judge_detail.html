@@ -65,10 +65,12 @@
                         {% if cases %}
                         <ul class="list-group">
                             {% for case in cases %}
+                            {% if case.active is None %}
                             <li class="list-group-item">
-                                <a class="no-style-link report-detail-item"
-                                    href="{% url 'report_details_list' case.id %}">{{ case.short_name }}</a></br>
+                                <a class="no-style-link text-danger report-detail-item modal-button"
+                                    href="{% url 'report_add_order' case.id %}">{{ case.full_number }} (Не введена ухвала)</a></br>
                             </li>
+                            {% endif %}
                             {% endfor %}
                             <a class="btn btn-outline-success badge" style="margin-top: 10px;"
                                 href="{% url 'forensic_add_new_report' %}?judge={{ content.id }}&next=forensic_judge_detail"
