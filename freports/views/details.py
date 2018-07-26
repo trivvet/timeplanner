@@ -177,7 +177,6 @@ def add_detail(request, rid, kind):
         if detail.name == 'petition':
             new_content['received'] = detail.sending
             break
-    print(details[0])
     if kind == 'inspected' and details[0].time:
         new_content['date'] = details[0].time.date().isoformat()
     else:

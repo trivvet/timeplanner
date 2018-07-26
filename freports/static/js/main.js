@@ -289,14 +289,19 @@ function showButtons() {
 }
 
 function clickExecuteTask() {
-    $('.checkbox-container input').click(function() {
+    $('.checkbox-container input, .try').click(function() {
         var box = $(this);
+        if (box.val()) {
+            var taskKey = box.val();
+        } else {
+            var taskKey = box.data('pk');
+        }
         $.ajax(box.data('url'), {
             'type': 'POST',
             'async': true,
             'dataType': 'json',
             'data': {
-                'pk': box.val(),
+                'pk': taskKey,
                 'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             'beforeSend': function(xhr, setting) {

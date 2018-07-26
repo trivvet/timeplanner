@@ -41,6 +41,7 @@ def tasks_list(request):
 def change_status_task(request):
     if request.is_ajax():
         if request.method == "POST":
+            print "We're here!!!!"
             try:
                 executed_task = Task.objects.get(pk=request.POST.get('pk'))
             except:
