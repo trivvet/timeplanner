@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect,JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils import translation
+from django.utils import translation, timezone
 from django.utils.timezone import get_current_timezone, localtime
 from django.utils.formats import date_format
 
@@ -185,6 +185,15 @@ def delete_task(request, tid):
             name=task.kind, date=task.time.strftime("%Y-%m-%d"))
         return render(request, 'freports/delete_form.html', 
             {'content': content, 'header': header})
+
+def delete_old_tasks(request):
+    tasks = Task.objects.filter(execute=True)
+    for task in tasks:
+        substract = timezone.now().date() - task.time.date()
+        if substract.days > 31:
+            task.delete()
+    messages.success(request, u"Завдання, виконані більше місяця тому, успішно видалено")
+    return HttpResponseRedirect(reverse('tasks_list'))
 
 def valid_task(request_info):
     errors, new_task = {}, {}

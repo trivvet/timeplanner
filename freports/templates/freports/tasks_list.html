@@ -97,6 +97,10 @@
 {% include "freports/pagination.html" with items=tasks url_next="tasks_list" extra=request.GET.status %}
 {% endif %}
 
+{% if request.GET.status %}
+<a class="btn btn-outline-danger mt-2" href="{% url 'forensic_delete_old' %}">Видалити давні завдання</a>
+{% endif %}
+
 {% else %}
 <p>Ще немає даних</p>
 {% endif %}
