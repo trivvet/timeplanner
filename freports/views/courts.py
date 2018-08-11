@@ -100,7 +100,8 @@ def delete_court(request, cid):
         next_url_name, next_url = request.GET.get('next', ''), ''
         if next_url_name:
             next_url = reverse(next_url_name, args=[cid])
-        return render(request, 'freports/delete_form.html', {'content': content, 'header': header, 'cancel_url': next_url})
+        return render(request, 'freports/delete_form.html', 
+            {'content': content, 'header': header, 'cancel_url': next_url})
     else:
         if request.POST.get('cancel_button'):
             messages.warning(request, u"Видалення інформації про {} скасовано".format(court.name))

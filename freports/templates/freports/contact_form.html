@@ -1,0 +1,107 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col">
+        <h2>{{ header }}</h2>
+    </div>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+
+    <!-- Surname -->
+    <div class="form-group row">
+        <label for="inputSurname" class="col-sm-4 col-form-label">Прізвище <strong>*</strong></label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control {% if errors.surname %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputSurname" value="{{ content.surname }}"
+                placeholder="Введіть прізвище контакту" name="surname">
+            <div class="invalid-feedback">
+                {{ errors.surname }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Name -->
+    <div class="form-group row">
+        <label for="inputName" class="col-sm-4 col-form-label">Ім'я та ім'я по батькові <strong>*</strong></label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control {% if errors.name %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputName" value="{{ content.name }}"
+                placeholder="Введіть ім'я та ім'я по-батькові контакту" name="name">
+            <div class="invalid-feedback">
+                {{ errors.name }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Status -->
+    <div class="form-group row">
+        <label for="inputStatus" class="col-sm-4 col-form-label">Статус <strong>*</strong></label>
+        <div class="col-sm-5">
+            <select class="form-control {% if errors.status %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputStatus" name="status" value="{{ content.status }}">
+                <option value=''>-----------</option>
+                {% for key, value in status_list %}
+                <option value='{{ key }}'
+                    {% if content.status == key %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.status }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Address -->
+    <div class="form-group row">
+        <label for="inputAddress" class="col-sm-4 col-form-label">Адреса</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control {% if errors.address %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputAddress" value="{{ content.address }}"
+                placeholder="Введіть адресу контакту" name="address">
+            <div class="invalid-feedback">
+                {{ errors.address }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Phone -->
+    <div class="form-group row">
+        <label for="inputPhone" class="col-sm-4 col-form-label">Телефон <strong>*</strong></label>
+        <div class="col-sm-5">
+            <input type="tel" class="form-control {% if errors.phone %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputPhone" value="{{ content.phone }}"
+                pattern="[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+                placeholder="напр. 097-333-33-55" name="phone">
+            <div class="invalid-feedback">
+                {{ errors.phone }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Info -->
+    <div class="form-group row">
+        <label for="inputInfo" class="col-sm-4 col-form-label">Додаткова інформація</label>
+        <div class="col-sm-5">
+            <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
+                id="inputInfo" name="info" rows="2"
+                placeholder="Введіть додаткову інформацію про контакт">{{ content.info }}</textarea>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-5">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}

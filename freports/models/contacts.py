@@ -24,19 +24,19 @@ class Contacts(models.Model):
         null=True)
 
     status = models.CharField(
-        verbose_name = u"Статус учасника",
+        verbose_name = u"Статус в провадженні",
         max_length=256,
         blank=False,
         null=False)
 
     address = models.CharField(
-        verbose_name = u"Адреса учасника",
+        verbose_name = u"Адреса",
         max_length=256,
         blank=True,
         null=True)
 
     phone = models.CharField(
-        verbose_name = u"Телефон учасника",
+        verbose_name = u"Телефон",
         max_length=256,
         blank=True,
         null=True)

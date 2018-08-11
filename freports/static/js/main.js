@@ -162,8 +162,8 @@ function activateModalPage(link) {
 
             $('#modalForm').modal({'show': true});
         },
-        'error': function() {
-            alert('Error on the server');
+        'error': function(error) {
+            alert('Error on the server: ' + error.status);
             return false;
         }
     });

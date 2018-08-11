@@ -61,7 +61,8 @@ urlpatterns = [
         name='report_delete_subject'),
 
     # contact urls
-    url(r'^contacts/$', freports.contacts_list, name='contacts_list'),
+    url(r'^freports/contacts/$', freports.contacts_list, name='contacts_list'),
+    url(r'^freports/contacts/add/$', freports.add_contact, name="forensic_add_contact"),
 
     # court urls
     url(r'^freports/courts/$', freports.courts_list, name='courts_list'),
