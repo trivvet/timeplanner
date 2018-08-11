@@ -10,14 +10,13 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from ..models import Contacts
 
-status_list = {
-    'judge': 'Суддя',
-    'plaintiff': 'Позивач',
-    'defendant': 'Відповідач',
-    'plaintiff_agent': 'Представник позивача',
-    'defendant_agent': 'Представник відповідача',
-    'other_participant': 'Інший учасник',
-    u'': 'adfjlakjf'}
+contacts_status_list = {
+    'judge': u'Суддя',
+    'member': u'Учасник справи',
+    'participant': u'Представник',
+    'lawyer': u"Адвокат",
+    'customer': u"Замовник"
+}
 
 @login_required(login_url='/login/')
 def contacts_list(request):
@@ -32,9 +31,18 @@ def contacts_list(request):
         except EmptyPage:
             contacts = paginator.page(paginator.num_page)
     header = 'Список контактів'
+    keys = contacts_status_list.keys()
     for contact in contacts:
-        contact.status = status_list[contact.status]
-    return render(request, 'freports/contacts_list.html', {'contacts': contacts, 'header': header})
+        if contact.status in keys:
+            contact.status = contacts_status_list[contact.status]
+        elif contact.status in ['plaintiff', 'defendant', 'other_participant']:
+            contact.status = u"Учасник справи"
+        elif contact.status in ['plaintiff_agent', 'defendant_agent']:
+            contact.status = u"Представник"
+        else:
+            contact.status = u"Невідомий статус"
+    return render(request, 'freports/contacts_list.html', 
+        {'contacts': contacts, 'header': header})
 
 @login_required(login_url='/login/')
 def add_contact(request):
@@ -62,7 +70,7 @@ def add_contact(request):
             return HttpResponseRedirect(reverse('contacts_list'))
 
     return render(request, 'freports/contact_form.html', {
-        'header': header, 'status_list': status_list.iteritems(),
+        'header': header, 'status_list': contacts_status_list.iteritems(),
         'content': content, 'errors': errors})
 
 login_required(login_url='/login/')
@@ -103,7 +111,7 @@ def valid_contact(data):
     if not status:
         errors['status'] = u"Статус є обов'язковим"
     else:
-        if status in status_list.keys():
+        if status in contacts_status_list.keys():
             contact['status'] = status
         else:
             errors['status'] = u"Виберіть статус зі списку"
