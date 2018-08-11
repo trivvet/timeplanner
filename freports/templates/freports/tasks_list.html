@@ -16,8 +16,8 @@
 {% block content %}
 
 <nav class="nav nav-pills nav-justified" id="navbar-list">
-    <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'tasks_list' %}">Активні</a>
-    <a class="nav-item nav-link {% if request.GET.status %}active{% endif %}" href="{% url 'tasks_list' %}?status=execute">Виконані</a>
+    <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'tasks_list' %}">Активні <span class="badge badge-success">{{ content.active_tasks }}</span></a>
+    <a class="nav-item nav-link {% if request.GET.status %}active{% endif %}" href="{% url 'tasks_list' %}?status=execute">Виконані <span class="badge badge-secondary">{{ content.done_tasks }}</span></a>
 </nav>
 
 {% if tasks %}

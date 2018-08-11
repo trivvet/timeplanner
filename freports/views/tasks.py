@@ -19,8 +19,12 @@ from ..models import Task, Report, ReportEvents, ReportSubject
 
 @login_required(login_url='/login/')
 def tasks_list(request):
+    all_tasks = Task.objects.all()
+    content = {}
+    content['active_tasks'] = all_tasks.exclude(execute=True).count()
+    content['done_tasks'] = all_tasks.filter(execute=True).count()
     if request.GET.get('status'):
-        tasks = Task.objects.filter(execute=True).order_by('time').reverse()
+        tasks = all_tasks.filter(execute=True).order_by('time').reverse()
         if request.GET.get('all_pages', '') == '':
             paginator = Paginator(tasks, 10)
             page = request.GET.get('page', '')
@@ -31,11 +35,12 @@ def tasks_list(request):
             except EmptyPage:
                 tasks = paginator.page(paginator.num_pages)
     else:
-        tasks = Task.objects.all().exclude(execute=True).order_by('time')        
+        tasks = all_tasks.all().exclude(execute=True).order_by('time')        
     header = u'Список завдань'
     pz = get_current_timezone()
     return render(request, 'freports/tasks_list.html', 
-    	{'tasks': tasks, 'header': header, 'today': pz.localize(datetime.now())})
+    	{'tasks': tasks, 'header': header, 'today': pz.localize(datetime.now()),
+        'content': content})
 
 @login_required(login_url='/login/')
 def change_status_task(request):
