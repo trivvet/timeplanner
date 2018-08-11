@@ -52,7 +52,7 @@ def add_contact(request):
                 new_contact = Contacts(**contact)
                 new_contact.save()
                 messages.success(request, 
-                    u"Контакт % успішно додано".format(new_contact.surname))
+                    u"Контакт {} успішно додано".format(new_contact.surname))
                 return HttpResponseRedirect(reverse('contacts_list'))
             messages.error(request, u"Виправте наступні помилки")
             content = contact
@@ -64,6 +64,24 @@ def add_contact(request):
     return render(request, 'freports/contact_form.html', {
         'header': header, 'status_list': status_list.iteritems(),
         'content': content, 'errors': errors})
+
+login_required(login_url='/login/')
+def delete_contact(request, cid):
+    contact = Contacts.objects.get(pk=cid)
+    if request.method == 'POST':
+        if request.POST.get('cancel_button', ''):
+            messages.warning(request,
+                u"Видалення контакту скасовано")
+        elif request.POST.get('delete_button', ''):
+            contact.delete()
+            messages.success(request,
+                u"Контакт {} {} успішно видалений".format(contact.surname, contact.name))
+        return HttpResponseRedirect(reverse('contacts_list'))
+    else:
+        header = u"Видалення контакту {}".format(contact.surname)
+        content = u"Ви дійсно бажаєте видалити інформацію про контакт {} {}".format(contact.surname, contact.name)
+        return render(request, 'freports/delete_form.html', 
+            {'header': header, 'content': content})
 
 def valid_contact(data):
     errors = {}
