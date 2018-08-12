@@ -14,6 +14,13 @@
 
 {% block content %}
 
+<nav class="nav nav-pills nav-justified" id="navbar-list">
+    <a class="nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'contacts_list' %}">Усі</a>
+    <a class=" nav-item nav-link {% if request.GET.status == 'members' %}active{% endif %}" href="{% url 'contacts_list' %}?status=members">Учасники справи</a>
+    <a class="nav-link nav-item {% if request.GET.status == 'participants' %}active{% endif %}" href="{% url 'contacts_list' %}?status=participants">Представники</a>
+    <a class="nav-link nav-item {% if request.GET.status == 'customers' %}active{% endif %}" href="{% url 'contacts_list' %}?status=customers">Замовники</a>
+</nav>
+
 {% if contacts %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse %}
 <table class="table table-hover table-bordered">

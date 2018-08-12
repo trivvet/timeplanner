@@ -21,6 +21,14 @@ contacts_status_list = {
 @login_required(login_url='/login/')
 def contacts_list(request):
     contacts = Contacts.objects.all().order_by('surname')
+    status = request.GET.get('status', '')
+    if status == 'members':
+        contacts = contacts.filter(status='member')
+    elif status == 'participants':
+        contacts = contacts.filter(status__in=['participant', 'lawyer'])
+    elif status == 'customers':
+        contacts = contacts.filter(status='customer')
+
     if request.GET.get('all_pages', '') == '':
         paginator = Paginator(contacts, 10)
         page = request.GET.get('page', '')
