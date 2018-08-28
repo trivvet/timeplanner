@@ -28,7 +28,7 @@
                         <a class="no-style-link report-detail-item" href="{% url 'forensic_participant_detail' plaintiff.id %}">
                             {{ plaintiff.surname }} {{ plaintiff.name }}</a>
                         {% if forloop.last %}
-                        <a class="btn btn-outline-success badge" href="{% url 'report_add_participant' report.id 'plaintiff' %}"
+                        <a class="btn btn-outline-success badge modal-button" href="{% url 'report_add_participant' report.id 'plaintiff' %}"
                             hidden>Додати позивача</a>
                         {% else %}
                         </br>
@@ -49,7 +49,7 @@
                         <a class="no-style-link report-detail-item" href="{% url 'forensic_participant_detail' defendant.id %}">
                             {{ defendant.surname }} {{ defendant.name }}</a>
                         {% if forloop.last %}
-                        <a class="btn btn-outline-success badge" href="{% url 'report_add_participant' report.id 'defendant' %}"
+                        <a class="btn btn-outline-success badge modal-button" href="{% url 'report_add_participant' report.id 'defendant' %}"
                             hidden>Додати відповідача</a></br>
                         {% else %}
                         </br>
@@ -77,7 +77,7 @@
                             {{ subject.subject_type }}, {% if subject.full_address|length < 50 %}{{ subject.full_address }}
                                 {% else %}{{ subject.short_address }}{% endif %}</a>
                         {% if forloop.last %}
-                        <a class="btn btn-outline-success badge" href="{% url 'report_add_subject' report.id %}"
+                        <a class="btn btn-outline-success badge modal-button" href="{% url 'report_add_subject' report.id %}"
                             hidden>Додати об'єкт дослідження</a></br>
                         {% else %}
                         </br>
