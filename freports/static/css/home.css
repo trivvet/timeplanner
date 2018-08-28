@@ -39,8 +39,37 @@
   font-size: 2em;
 }
 
+.horizontal-line {
+  margin-top: -5rem;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#map-icon {
+  top: -2rem;
+  left: 47%;
+  width: 6%;
+  text-align: center;
+  background-color: white;
+  position: relative;
+}
+
+.map-header {
+  font-family: Georgia, sans-serif;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  margin-top: -1rem;
+}
+
 #map {
-    margin: 0 auto;
+    margin: 1rem auto 8rem auto;
     height: 80%;  /* The height is 400 pixels */
     width: 80%;  /* The width is the width of the web page */
+}
+
+.contact-info {
+  width: 60%;
+  margin: auto;
+  color: gray;
 }
