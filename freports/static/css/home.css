@@ -90,15 +90,11 @@
   right: -160px;
   transform: translate(-50%, -100%);
   /* Style the info window. */
-  /*background-color: white;*/
   color: red;
-  /*padding: 5px;*/
-  /*border-radius: 5px;*/
   font-family: sans-serif;
   overflow-y: auto;
   max-height: 60px;
   font-size: 24px;
   font-weight: bold;
   text-shadow: 2px 2px white;
-  /*box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.5);*/
 }

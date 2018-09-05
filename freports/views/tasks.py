@@ -95,6 +95,10 @@ def add_task(request):
             errors = valid_data['errors']
             new_task = valid_data['new_task']
             if errors:
+                try:
+                    new_task['time'] = localtime(new_task['time']).isoformat()
+                except: 
+                    pass
                 messages.error(request, u"Виправте наступні помилки")
                 return render(request, 'freports/task_form.html', 
                     {'content': new_task, 'errors': errors, 'header': header, 'reports': reports})
@@ -228,8 +232,6 @@ def valid_task(request_info):
     execute = request_info.get('execute', '')
 
     report = request_info.get('report', '')
-    print report
-    print type(report)
     if report:
         try:
             new_task['report'] = Report.objects.get(pk=report)

@@ -15,9 +15,7 @@ function initMap() {
     var marker = new google.maps.Marker(
         {
             position: uluru, 
-            map: map,
-            title: "Судовий експерт Власюк В.В.",
-            customInfo: "Marker A"
+            map: map
         }
     );
     popup = new Popup(
