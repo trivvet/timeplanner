@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from ..models import Report, ReportEvents, ReportParticipants, Contacts
+from ..models import Report, ReportEvents, ReportParticipants, Contact
 
 status_list = {
     'judge': 'Суддя',
@@ -178,7 +178,7 @@ def valid_detail(request_info, report_id, main_status):
 def find_contact(participant):
     contact = False
     if participant.address or participant.phone:
-        current_contacts = Contacts.objects.filter(surname=participant.surname)
+        current_contacts = Contact.objects.filter(surname=participant.surname)
         if current_contacts and current_contacts[0].status == participant.status:
             current_contact = current_contacts[0]
             if participant.name:
@@ -204,7 +204,7 @@ def find_contact(participant):
             contact = current_contact
 
         else:
-            contact = Contacts(surname=participant.surname, name=participant.name, status=participant.status,
+            contact = Contact(surname=participant.surname, name=participant.name, status=participant.status,
                 address=participant.address, phone=participant.phone, info=participant.info)
 
     return contact

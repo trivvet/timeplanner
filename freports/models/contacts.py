@@ -5,7 +5,7 @@ from django.db import models
 
 # Create your models here.
 
-class Contacts(models.Model):
+class Contact(models.Model):
 
     class Meta(object):
         verbose_name=u"Контакт"
