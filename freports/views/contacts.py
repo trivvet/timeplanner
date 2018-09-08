@@ -94,6 +94,10 @@ def edit_contact(request, cid):
     header = u"Редагування контакту {}".format(contact.surname)
     errors = {}
     if request.method == 'POST':
+        if request.POST.get('next_url', ''):
+            next_url = request.POST.get('next_url')
+        else:
+            next_url = reverse('contacts_list')
         if request.POST.get('save_button', ''):
             data = request.POST
             answer = valid_contact(data)
@@ -104,19 +108,20 @@ def edit_contact(request, cid):
                 edit_item.id = contact.id
                 edit_item.save()
                 messages.success(request, u"Контакт {} успішно змінено".format(edit_item.surname))
-                return HttpResponseRedirect(reverse('contacts_list'))
+                return HttpResponseRedirect(next_url)
             else:
                 messages.error(request, u"Виправте наступні помилки")
                 content = edit_contact
         elif request.POST.get('cancel_button', ''):
             messages.warning(request, u"Редагування контакту скасовано")
-            return HttpResponseRedirect(reverse('contacts_list'))
+            return HttpResponseRedirect(next_url)
     else:
         content = contact
+        next_url = request.GET.get('next_url', '')
 
     return render(request, 'freports/contact_form.html', {
         'header': header, 'content': content, 'status_list': contacts_status_list.iteritems(),
-        'errors': errors})
+        'errors': errors, 'next_url': next_url})
 
 
 login_required(login_url='/login/')

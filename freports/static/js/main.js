@@ -178,9 +178,6 @@ function initForm(form, modal, link) {
     form.ajaxForm({
         url: link,
         dataType: 'html',
-        beforeSend: function() {
-            console.log(link);
-        },
         error: function() {
             alert("Вибачте, але на сервері сталася неочікувана помилка. Перезавантажте сторінку та спробуйте ще раз");
             return false;

@@ -56,7 +56,7 @@
             </tbody>
 
         </table>
-        <a type="button" class="btn btn-info modal-button" href="{% url 'forensic_edit_contact' content.id %}">Редагувати</a>
+        <a type="button" class="btn btn-info modal-button" href="{% url 'forensic_edit_contact' content.id %}?next_url={% url 'forensic_contact_detail' content.id %}">Редагувати</a>
         <a type="button" class="btn btn-danger modal-button" href="{% url 'forensic_delete_contact' content.id %}">Видалити</a>
     </div>
 </div>
