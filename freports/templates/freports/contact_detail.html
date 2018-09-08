@@ -1,0 +1,63 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="col-sm-2"></div>
+<div class="col">
+    <h2>{{ header }}</h2>
+</div>
+{% endblock title %}
+
+{% block messages %}
+{% if messages %}
+    {% for message in messages %}
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col alert alert-{% if message.tags == 'error' %}danger
+             {% else %}{{ message.tags }}{% endif %}"
+             role="alert">{{ message }}</div>
+    </div>
+    {% endfor %}
+{% endif %}
+{% endblock messages %}
+
+{% block content %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+        <table class="table table-bordered table-hover">
+            <thead></thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Прізвище, ім'я та ім'я по батькові</th>
+                    <td>{{ content.surname }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">ім'я та ім'я по батькові</th>
+                    <td>{{ content.name }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Статус у провадженні</th>
+                    <td>{% for key, status in status_list %}{% if key == content.status %}{{ status }}{% endif %}{% endfor %}</td>
+                </tr>
+                {% if content.address %}
+                <tr>
+                    <th scope="row">Адреса</th>
+                    <td>{{ content.address }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th scope="row">Телефон</th>
+                    <td>{{ content.phone }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Додаткова інформація</th>
+                    <td>{{ content.info }}</td>
+                </tr>
+            </tbody>
+
+        </table>
+        <a type="button" class="btn btn-info modal-button" href="{% url 'forensic_edit_contact' content.id %}">Редагувати</a>
+        <a type="button" class="btn btn-danger modal-button" href="{% url 'forensic_delete_contact' content.id %}">Видалити</a>
+    </div>
+</div>
+{% endblock content %}

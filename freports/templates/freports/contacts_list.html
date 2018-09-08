@@ -52,9 +52,9 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                            href="">Детальна інформація</a>
-                        <a class="dropdown-item"
-                            href="">Редагувати</a>
+                            href="{% url 'forensic_contact_detail' contact.id %}">Детальна інформація</a>
+                        <a class="dropdown-item modal-button"
+                            href="{% url 'forensic_edit_contact' contact.id %}">Редагувати</a>
                         <a class="dropdown-item modal-button"
                             href="{% url 'forensic_delete_contact' contact.id %}">Видалити</a>
                     </div>

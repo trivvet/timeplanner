@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
-from ..models import Contacts
+from ..models import Contact
 
 contacts_status_list = {
     'judge': u'Суддя',
@@ -20,7 +20,7 @@ contacts_status_list = {
 
 @login_required(login_url='/login/')
 def contacts_list(request):
-    contacts = Contacts.objects.all().order_by('surname')
+    contacts = Contact.objects.all().order_by('surname')
     status = request.GET.get('status', '')
     if status == 'members':
         contacts = contacts.filter(status='member')
@@ -53,6 +53,13 @@ def contacts_list(request):
         {'contacts': contacts, 'header': header})
 
 @login_required(login_url='/login/')
+def contact_detail(request, cid):
+    contact = Contact.objects.get(pk=cid)
+    header = u"Детальна інформація про контакт {}".format(contact.surname)
+    return render(request, 'freports/contact_detail.html', {
+        'header': header, 'content': contact, 'status_list': contacts_status_list.iteritems()})
+
+@login_required(login_url='/login/')
 def add_contact(request):
     header='Додавання контакту'
     content = {}
@@ -65,7 +72,7 @@ def add_contact(request):
             contact = answer['contact']
             errors = answer['errors']
             if not errors:
-                new_contact = Contacts(**contact)
+                new_contact = Contact(**contact)
                 new_contact.save()
                 messages.success(request, 
                     u"Контакт {} успішно додано".format(new_contact.surname))
@@ -81,9 +88,40 @@ def add_contact(request):
         'header': header, 'status_list': contacts_status_list.iteritems(),
         'content': content, 'errors': errors})
 
+@login_required(login_url='/login/')
+def edit_contact(request, cid):
+    contact = Contact.objects.get(pk=cid)
+    header = u"Редагування контакту {}".format(contact.surname)
+    errors = {}
+    if request.method == 'POST':
+        if request.POST.get('save_button', ''):
+            data = request.POST
+            answer = valid_contact(data)
+            edit_contact = answer['contact']
+            errors = answer['errors']
+            if not errors:
+                edit_item = Contact(**edit_contact)
+                edit_item.id = contact.id
+                edit_item.save()
+                messages.success(request, u"Контакт {} успішно змінено".format(edit_item.surname))
+                return HttpResponseRedirect(reverse('contacts_list'))
+            else:
+                messages.error(request, u"Виправте наступні помилки")
+                content = edit_contact
+        elif request.POST.get('cancel_button', ''):
+            messages.warning(request, u"Редагування контакту скасовано")
+            return HttpResponseRedirect(reverse('contacts_list'))
+    else:
+        content = contact
+
+    return render(request, 'freports/contact_form.html', {
+        'header': header, 'content': content, 'status_list': contacts_status_list.iteritems(),
+        'errors': errors})
+
+
 login_required(login_url='/login/')
 def delete_contact(request, cid):
-    contact = Contacts.objects.get(pk=cid)
+    contact = Contact.objects.get(pk=cid)
     if request.method == 'POST':
         if request.POST.get('cancel_button', ''):
             messages.warning(request,
@@ -125,6 +163,7 @@ def valid_contact(data):
             errors['status'] = u"Виберіть статус зі списку"
 
     address = data.get('address', '')
+    contact['address'] = address
 
     phone = data.get('phone', '')
     if not phone:
@@ -133,5 +172,6 @@ def valid_contact(data):
         contact['phone'] = phone
 
     info = data.get('info')
+    contact['info'] = info
 
     return {'errors': errors, 'contact': contact}
