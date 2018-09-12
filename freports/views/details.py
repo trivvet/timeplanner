@@ -14,18 +14,19 @@ from .days_counter import check_active, days_count, update_dates_info
 from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge, Task
 from .tasks import add_detail_task, edit_detail_task
 
-petition_type = ['Про надання додаткових матеріалів', 'Про уточнення питань', 'Про надання справи']
-done_type = ['Висновок експерта', 'Повідомлення про неможливість', 'Залишення без виконання']
-inspected_type = ['Проведено успішно', 'Не надано доступ', 'Відмінено']
-bill_type = ['Направлено рекомендованого листа', 'Вручено особисто', 'Вручено представнику', 'Направлено електронного листа']
-paid_type = ['На банківський рахунок', 'Готівкою']
+petition_type = [u'Про надання додаткових матеріалів', u'Про уточнення питань', u'Про надання справи']
+done_type = [u'Висновок експерта', u'Повідомлення про неможливість', u'Залишення без виконання']
+inspected_type = [u'Проведено успішно', u'Не надано доступ', u'Відмінено']
+bill_type = [u'Направлено рекомендованого листа', u'Вручено особисто', u'Вручено представнику', u'Направлено електронного листа']
+paid_type = [u'На банківський рахунок', u'Готівкою']
+message_type = ['Направлене клопотання', u'Надіслані листи', u'Повідомлено телефоном', u'Повідомлено особисто']
 kind_specific = {
         'first_arrived': ['надходження ухвали', ['date', 'info', 'received', 'decision_date']],
         'arrived': ['надходження з суду', ['date', 'info', 'received']],
         'petition': ['направлення клопотання', ['date', 'info', 'type', 'necessary', 'sending'], petition_type],
         'bill': ['направлення рахунку', ['date', 'info', 'cost', 'address', 'type'], bill_type],
         'paid': ['оплата', ['date', 'info', 'type'], paid_type],
-        'schedule': ['призначення виїзду', ['date', 'info', 'time']],
+        'schedule': ['призначення виїзду', ['date', 'info', 'time', 'type'], message_type],
         'inspected': ['проведення огляду', ['date', 'info', 'type'], inspected_type],
         'done': ['відправлення до суду', ['date', 'info', 'sending', 'type'], done_type]}
 

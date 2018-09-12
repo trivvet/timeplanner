@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 from axes.models import AccessAttempt
 from axes.utils import reset
 
+@login_required(login_url='/login/')
 def login_auth(request):
     attempts = AccessAttempt.objects.all()
     login_attempts_last = 0
@@ -45,3 +46,12 @@ def logout_auth(request):
 def login_attempts(request):
     attempts = AccessAttempt.objects.all()
     return render(request, 'freports/login_attempts.html', {'attempts': attempts})
+
+def delete_old_attempts(request):
+    attempts = Task.objects.all()
+    for attempt in attempts:
+        substract = timezone.now().date() - task.time.date()
+        if substract.days > 31:
+            task.delete()
+    messages.success(request, u"Завдання, виконані більше місяця тому, успішно видалено")
+    return HttpResponseRedirect(reverse('tasks_list'))

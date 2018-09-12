@@ -49,10 +49,12 @@
                     <th scope="row">Телефон</th>
                     <td>{{ content.phone }}</td>
                 </tr>
+                {% if content.info %}
                 <tr>
                     <th scope="row">Додаткова інформація</th>
                     <td>{{ content.info }}</td>
                 </tr>
+                {% endif %}
             </tbody>
 
         </table>

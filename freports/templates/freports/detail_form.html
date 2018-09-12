@@ -96,7 +96,7 @@
     <!-- Тип документу -->
     {% if 'type' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputType" class="col-sm-4 col-form-label">Підтип події <strong>*</strong></label>
+        <label for="inputType" class="col-sm-4 col-form-label">{% if content.type == schedule %}Тип повідомлення{% else %}Підтип події{% endif %} <strong>*</strong></label>
         <div class="col-sm-8">
             <select class="form-control {% if errors.subspecies %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputType" name="subspecies" value="{{ new_content.subspecies }}">

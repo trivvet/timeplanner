@@ -16,7 +16,17 @@ status_list = {
     'defendant': 'Відповідач',
     'plaintiff_agent': 'Представник позивача',
     'defendant_agent': 'Представник відповідача',
-    'other_participant': 'Інший учасник'}
+    'other_participant': 'Інший учасник'
+}
+
+status_translate = {
+    'judge': 'judge',
+    'plaintiff': 'member',
+    'defendant': 'member',
+    'plaintiff_agent': 'participant',
+    'defendant_agent': 'participant',
+    'other_participant': 'member'
+}
 
 @login_required(login_url='/login/')
 def participants_list(request):
@@ -179,7 +189,7 @@ def find_contact(participant):
     contact = False
     if participant.address or participant.phone:
         current_contacts = Contact.objects.filter(surname=participant.surname)
-        if current_contacts and current_contacts[0].status == participant.status:
+        if current_contacts:
             current_contact = current_contacts[0]
             if participant.name:
                 if current_contact.name and current_contact.name != participant.name:
@@ -204,10 +214,13 @@ def find_contact(participant):
             contact = current_contact
 
         else:
-            contact = Contact(surname=participant.surname, name=participant.name, status=participant.status,
-                address=participant.address, phone=participant.phone, info=participant.info)
+
+            contact = Contact(surname=participant.surname, name=participant.name, 
+                status=status_translate[participant.status], address=participant.address, 
+                phone=participant.phone, info=participant.info)
 
     return contact
+
 
 def edit_report(participant, report, *args):
     participants = ReportParticipants.objects.filter(report=report)
