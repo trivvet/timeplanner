@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'freports',
     'business_card',
+    'finance',
     'axes',
 ]
 

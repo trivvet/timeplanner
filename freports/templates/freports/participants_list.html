@@ -44,11 +44,11 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                            href="{% url 'forensic_participant_detail' participant.id %}">Детальна інформація</a>
+                            href="{% url 'freports:participant_detail' participant.id %}">Детальна інформація</a>
                         <a class="dropdown-item"
-                            href="{% url 'report_edit_participant' participant.report.id participant.id %}">Редагувати</a>
+                            href="{% url 'freports:edit_participant' participant.report.id participant.id %}">Редагувати</a>
                         <a class="dropdown-item"
-                            href="{% url 'report_delete_participant' participant.report.id participant.id %}">Видалити</a>
+                            href="{% url 'freports:delete_participant' participant.report.id participant.id %}">Видалити</a>
                     </div>
                 </div>
             </td>
@@ -62,7 +62,7 @@
 
 {% if participants.has_other_pages %}
 
-{% include "freports/pagination.html" with items=participants url_next="forensic_participants_list" %}
+{% include "freports/pagination.html" with items=participants url_next="freports:participants_list" %}
 
 {% endif %}
 

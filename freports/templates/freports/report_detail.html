@@ -25,10 +25,10 @@
                     <td>
                         {% if participants.plaintiff %}
                         {% for plaintiff in participants.plaintiff %}
-                        <a class="no-style-link report-detail-item" href="{% url 'forensic_participant_detail' plaintiff.id %}">
+                        <a class="no-style-link report-detail-item" href="{% url 'freports:participant_detail' plaintiff.id %}">
                             {{ plaintiff.surname }} {{ plaintiff.name }}</a>
                         {% if forloop.last %}
-                        <a class="btn btn-outline-success badge modal-button" href="{% url 'report_add_participant' report.id 'plaintiff' %}"
+                        <a class="btn btn-outline-success badge modal-button" href="{% url 'freports:add_participant' report.id 'plaintiff' %}"
                             hidden>Додати позивача</a>
                         {% else %}
                         </br>
@@ -36,7 +36,7 @@
                         {% endfor %}
 
                         {% else %}
-                        <a class="no-style-link" href="{% url 'report_add_participant' report.id 'plaintiff' %}"
+                        <a class="no-style-link" href="{% url 'freports:add_participant' report.id 'plaintiff' %}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>
@@ -46,17 +46,17 @@
                     <td>
                         {% if participants.defendant %}
                         {% for defendant in participants.defendant %}
-                        <a class="no-style-link report-detail-item" href="{% url 'forensic_participant_detail' defendant.id %}">
+                        <a class="no-style-link report-detail-item" href="{% url 'freports:participant_detail' defendant.id %}">
                             {{ defendant.surname }} {{ defendant.name }}</a>
                         {% if forloop.last %}
-                        <a class="btn btn-outline-success badge modal-button" href="{% url 'report_add_participant' report.id 'defendant' %}"
+                        <a class="btn btn-outline-success badge modal-button" href="{% url 'freports:add_participant' report.id 'defendant' %}"
                             hidden>Додати відповідача</a></br>
                         {% else %}
                         </br>
                         {% endif %}
                         {% endfor %}
                         {% else %}
-                        <a class="no-style-link" href="{% url 'report_add_participant' report.id 'defendant' %}"
+                        <a class="no-style-link" href="{% url 'freports:add_participant' report.id 'defendant' %}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>
@@ -64,7 +64,7 @@
                 <tr>
                     <th scope="row">Суддя</th>
                     <td>
-                        <a class="no-style-link report-detail-item" href="{% url 'forensic_judge_detail' report.judge_name.id %}">
+                        <a class="no-style-link report-detail-item" href="{% url 'freports:judge_detail' report.judge_name.id %}">
                             {{ report.judge_name }}</a>
                     </td>
                 </tr>
@@ -73,18 +73,18 @@
                     <td>
                         {% if subjects %}
                         {% for subject in subjects %}
-                        <a class="no-style-link report-detail-item" href="{% url 'forensic_subject_detail' subject.id %}">
+                        <a class="no-style-link report-detail-item" href="{% url 'freports:subject_detail' subject.id %}">
                             {{ subject.subject_type }}, {% if subject.full_address|length < 50 %}{{ subject.full_address }}
                                 {% else %}{{ subject.short_address }}{% endif %}</a>
                         {% if forloop.last %}
-                        <a class="btn btn-outline-success badge modal-button" href="{% url 'report_add_subject' report.id %}"
+                        <a class="btn btn-outline-success badge modal-button" href="{% url 'freports:add_subject' report.id %}"
                             hidden>Додати об'єкт дослідження</a></br>
                         {% else %}
                         </br>
                         {% endif %}
                         {% endfor %}
                         {% else %}
-                        <a class="no-style-link" href="{% url 'report_add_subject' report.id %}"
+                        <a class="no-style-link" href="{% url 'freports:add_subject' report.id %}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>
@@ -93,7 +93,7 @@
                 <tr>
                     <th scope="row">{{ participant.status }}</th>
                     <td>
-                        <a class="no-style-link" href="{% url 'forensic_participant_detail' participant.id %}">
+                        <a class="no-style-link" href="{% url 'freports:participant_detail' participant.id %}">
                             {{ participant.surname }} {{ participant.name }}</a>
                     </td>
                 </tr>
@@ -136,9 +136,9 @@
                             <li class="list-group-item">
                                 {{ task.time }} - {{ task.kind }}
                                 <span class="group-buttons">
-                                    <a class="modal-button" href="{% url 'forensic_delete_task' task.id %}?next_page={% url 'report_details_list' report.id %}"><i class="fa fa-trash-o"></i></a>
-                                    <a class="modal-button" href="{% url 'forensic_edit_task' task.id %}?next_page={% url 'report_details_list' report.id %}"><i class="fa fa-pencil"></i></a>
-                                    <span class="modal-button try" data-url="{% url 'change_status_task' %}" data-pk="{{ task.id }}"><i class="fa fa-check"></i></span>
+                                    <a class="modal-button" href="{% url 'freports:delete_task' task.id %}?next_page={% url 'freports:details_list' report.id %}"><i class="fa fa-trash-o"></i></a>
+                                    <a class="modal-button" href="{% url 'freports:edit_task' task.id %}?next_page={% url 'freports:details_list' report.id %}"><i class="fa fa-pencil"></i></a>
+                                    <span class="modal-button try" data-url="{% url 'freports:change_status_task' %}" data-pk="{{ task.id }}"><i class="fa fa-check"></i></span>
                                 </span>    
                             </li>
                             {% endfor %}
@@ -151,14 +151,14 @@
                     <td>
                         {% if report.address != '-' and report.plaintiff != '-' and  report.defendant != '-' and report.object_name != '-' and report.research_kind != '-' %}
                             <a type="button" class="btn btn-info modal-button"
-                                href="{% url 'forensic_edit_report' report.id %}?next=report_details_list">Редагувати основну інформацію</a>
+                                href="{% url 'freports:edit_report' report.id %}?next=report_details_list">Редагувати основну інформацію</a>
                         {% endif %}
                         {% if report.address == '-' and report.plaintiff == '-' and  report.defendant == '-' and report.object_name == '-' and report.research_kind == '-' %}
                             <a type="button" class="btn btn-danger modal-button"
-                                href="{% url 'forensic_delete_report' report.id %}?next=report_details_list">Видалити провадження</a>
+                                href="{% url 'freports:delete_report' report.id %}?next=freports:details_list">Видалити провадження</a>
                         {% endif %}
                         <a type="button" class="btn btn-success modal-button"
-                            href="{% url 'report_add_participant' report.id 'other_participant' %}">Додати іншого учасника провадження</a>
+                            href="{% url 'freports:add_participant' report.id 'other_participant' %}">Додати іншого учасника провадження</a>
                     </td>
                 </tr> 
                 <tr>
@@ -189,14 +189,14 @@
                 <div class="dropdown-menu" id="add-event" aria-labelledby="dropdownMenuButton">
                     {% for key,specific in content.items %}
                     {% if key != 'first_arrived' %}
-                    <a class="dropdown-item modal-button" href="{% url 'report_add_detail' report.id key %}">{{ specific.0|capfirst }}</a>
+                    <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id key %}">{{ specific.0|capfirst }}</a>
                     {% endif %}
                     {% endfor %}
                 </div>
             </div>
             {% endif %}
             <a class="btn btn-outline-info align-top float-right modal-button dropdown"
-                href="{% url 'forensic_add_task' %}?next_page={% url 'report_details_list' report.id %}&report={{ report.id }}">Додати завдання</a>
+                href="{% url 'freports:add_task' %}?next_page={% url 'freports:report_detail' report.id %}&report={{ report.id }}">Додати завдання</a>
         </div>
 
         <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
@@ -224,9 +224,9 @@
                                         Дія
                                     </button>
                                     <div class="dropdown-menu" id="edit-event" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item modal-button" href="{% url 'report_edit_detail' report.id detail.id %}">Редагувати</a>
+                                        <a class="dropdown-item modal-button" href="{% url 'freports:edit_detail' report.id detail.id %}">Редагувати</a>
                                         {% if detail.name != 'first_arrived' %}
-                                        <a class="dropdown-item modal-button" href="{% url 'report_delete_detail' report.id detail.id %}">Видалити</a>
+                                        <a class="dropdown-item modal-button" href="{% url 'freports:delete_detail' report.id detail.id %}">Видалити</a>
                                         {% endif %}
                                     </div>
                                 </div>

@@ -4,22 +4,10 @@
 
 <div class="col">
     <span class="h1">{{ header }}</span>
-<!-- </div> -->
-<!-- <div class="col-4"> -->
     <a class="btn btn-outline-info modal-button"
-        id="add-report" href="{% url 'forensic_add_judge' %}">Додати суддю</a>
+        id="add-report" href="{% url 'freports:add_judge' %}">Додати суддю</a>
 </div>
 
-<!-- <nav class="navbar navbar-expand-xl navbar-dark" style="background-color: #69a9ee;">
-    <a class="navbar-brand" href="">{{ header }}</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <a class="btn btn-sm align-middle btn-outline-warning"
-                id="add-report" href="{% url 'forensic_add_judge' %}">Додати суддю</a>
-    </div>
-</nav> -->
 {% endblock title %}
 
 {% block extra_messages %}
@@ -43,7 +31,7 @@
     <tbody>
 
         {% for judge in judges %}
-        <tr data-href="{% url 'forensic_judge_detail' judge.id %}">
+        <tr data-href="{% url 'freports:judge_detail' judge.id %}">
 
             <td class="td-link" scope="row">{{ judge.surname }} {{ judge.first_name }} {{ judge.second_name }}
                 <span class="badge badge-success">{{ judge.cases_amount }}</span>
@@ -60,22 +48,6 @@
                    Адреса: {{ judge.address }}
                 {% endif %}
             </td>
-            <!-- <td>
-                <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Дія
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item"
-                            href="{% url 'forensic_judge_detail' judge.id %}">Детальна інформація</a>
-                        <a class="dropdown-item"
-                            href="{% url 'forensic_edit_judge' judge.id %}">Редагувати</a>
-                        <a class="dropdown-item"
-                            href="{% url 'forensic_delete_judge' judge.id %}">Видалити</a>
-                    </div>
-                </div>
-            </td> -->
         </tr>
         {% endfor %}
 

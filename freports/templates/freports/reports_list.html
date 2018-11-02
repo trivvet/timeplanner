@@ -6,7 +6,7 @@
 <!-- </div> -->
 <!-- <div class="col-4"> -->
     <a class="btn btn-outline-info modal-button"
-        id="add-report" href="{% url 'forensic_add_new_report' %}">Додати провадження</a>
+        id="add-report" href="{% url 'freports:add_new_report' %}">Додати провадження</a>
 </div>
 {% endblock title %}
 
@@ -20,7 +20,7 @@
     {% if request.GET.date_until %}<li>провадження відкриті до {{ request.GET.date_until }}</li>{% endif %}
     {% if request.GET.day_count %}<li>у провадженні більше ніж {{ request.GET.day_count }}</li>{% endif %}
     </ul>
-    <a class="btn btn-outline-secondary" href="{% url 'forensic_reports_list' %}">Скинути фільтр</a>
+    <a class="btn btn-outline-secondary" href="{% url 'freports:reports_list' %}">Скинути фільтр</a>
 </div>
 {% endif %}
 {% endblock extra_messages %}
@@ -28,16 +28,16 @@
 {% block content %}
 
 <nav class="nav nav-pills nav-justified" id="navbar-list">
-    <a class="nav-item nav-link {% if request.GET.status == 'all' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=all">Усі <span class="badge badge-info">{{ content.open_reports }}</span></a>
-    <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'forensic_reports_list' %}">Активні <span class="badge badge-success">{{ content.active_reports }}</span></a>
-    <a class="nav-link nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=deactivate">Призупинені <span class="badge badge-secondary">{{ content.deactivate_reports }}</span></a>
-    <a class="nav-link nav-item {% if request.GET.status == 'executed' %}active{% endif %}" href="{% url 'forensic_reports_list' %}?status=executed">Закриті <span class="badge badge-light">{{ content.closed_reports }}</span></a>
+    <a class="nav-item nav-link {% if request.GET.status == 'all' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=all">Усі <span class="badge badge-info">{{ content.open_reports }}</span></a>
+    <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'freports:reports_list' %}">Активні <span class="badge badge-success">{{ content.active_reports }}</span></a>
+    <a class="nav-link nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=deactivate">Призупинені <span class="badge badge-secondary">{{ content.deactivate_reports }}</span></a>
+    <a class="nav-link nav-item {% if request.GET.status == 'executed' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=executed">Закриті <span class="badge badge-light">{{ content.closed_reports }}</span></a>
 </nav>
 <button class="btn btn-outline-secondary" id="filter-button" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">Фільтр</button>
 <div class="collapse" id="filter">
     <div class="card card-body">
         <div class="filter">
-            <form class="form-inline row" action="{% url 'forensic_reports_list' %}{% if request.GET.status %}?{{ request.GET.status }}{% endif %}" method="get" enctype="multipart/form-data" role="form">
+            <form class="form-inline row" action="{% url 'freports:reports_list' %}{% if request.GET.status %}?{{ request.GET.status }}{% endif %}" method="get" enctype="multipart/form-data" role="form">
                 <input type="hidden" name="filter_status" value="success" />
                 <div class="form-group mb-1 mt-1 col-10">
                     <label for="inputDateArrived">Дата надходження від</label>
@@ -65,7 +65,7 @@
     <thead class="thead-light">
         <tr>
             <th scope="col">
-                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=number
+                <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=number
 {% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
                     № {% if order_by == '' or order_by == 'number' and reverse != '1' %}&uarr;
                     {% elif order_by == 'number' and reverse == '1' %}&darr;{% endif %}
@@ -79,7 +79,7 @@
             <th scope="col">Дата надходження</th>
             {% if request.GET.status == 'executed' %}
             <th scope="col">
-                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=date_executed
+                <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=date_executed
 {% if order_by == 'date_executed' and reverse != '1' %}&reverse=1{% endif %}">
                     Дата виконання {% if order_by == 'date_executed' and reverse != '1' %}&uarr;
                     {% elif order_by == 'date_executed' and reverse == '1' %}&darr;{% endif %}
@@ -88,7 +88,7 @@
             {% endif %}
             {% if not request.GET.status %}
             <th scope="col">
-                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=active_days_amount
+                <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=active_days_amount
 {% if order_by == 'active_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
                     Днів у виконанні {% if order_by == 'active_days_amount' and reverse != '1' %}&uarr;
                     {% elif order_by == 'active_days_amount' and reverse == '1' %}&darr;{% endif %}
@@ -98,7 +98,7 @@
             {% endif %}
             {% if request.GET.status == 'deactivate' %}
             <th scope="col">
-                <a href="{% url 'forensic_reports_list' %}?status={{ status }}&order_by=waiting_days_amount
+                <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=waiting_days_amount
 {% if order_by == 'waiting_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
                     Днів в очікуванні {% if order_by == 'waiting_days_amount' and reverse != '1' %}&uarr;
                     {% elif order_by == 'waiting_days_amount' and reverse == '1' %}&darr;{% endif %}
@@ -119,7 +119,7 @@
                 table-warning
             {% endif %}
             "
-            data-href="{% if report.active is None %}{% url 'report_add_order' report.id %}{% else %}{% url 'report_details_list' report.id %}{% endif %}">
+            data-href="{% if report.active is None %}{% url 'freports:add_order' report.id %}{% else %}{% url 'freports:report_detail' report.id %}{% endif %}">
             <th class="td-link" scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
             <td class="td-link">{{ report.address|truncatechars:25 }}</td>
             <td class="td-link">{{ report.plaintiff|truncatechars:20 }}</td>
@@ -163,7 +163,7 @@
 
 {% if request.GET.status == 'all' or request.GET.status == 'executed' %}
     {% if reports.has_other_pages %}
-        {% include 'freports/pagination.html' with items=reports url_next="forensic_reports_list" extra=request.GET.status order_by=request.GET.order_by reverse=request.GET.reverse %}
+        {% include 'freports/pagination.html' with items=reports url_next="freports:reports_list" extra=request.GET.status order_by=request.GET.order_by reverse=request.GET.reverse %}
     {% endif %}
 {% endif %}
 

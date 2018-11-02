@@ -5,7 +5,7 @@
     <span class="h1">{{ header }}</span>
     <span class="badge badge-info">Alpha</span>
     <a class="btn btn-outline-info modal-button"
-        id="add-report" href="{% url 'forensic_add_contact' %}">Додати контакт</a>
+        id="add-report" href="{% url 'freports:add_contact' %}">Додати контакт</a>
 </div>
 {% endblock title %}
 
@@ -15,10 +15,10 @@
 {% block content %}
 
 <nav class="nav nav-pills nav-justified" id="navbar-list">
-    <a class="nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'contacts_list' %}">Усі</a>
-    <a class=" nav-item nav-link {% if request.GET.status == 'members' %}active{% endif %}" href="{% url 'contacts_list' %}?status=members">Учасники справи</a>
-    <a class="nav-link nav-item {% if request.GET.status == 'participants' %}active{% endif %}" href="{% url 'contacts_list' %}?status=participants">Представники</a>
-    <a class="nav-link nav-item {% if request.GET.status == 'customers' %}active{% endif %}" href="{% url 'contacts_list' %}?status=customers">Замовники</a>
+    <a class="nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'freports:contacts_list' %}">Усі</a>
+    <a class=" nav-item nav-link {% if request.GET.status == 'members' %}active{% endif %}" href="{% url 'freports:contacts_list' %}?status=members">Учасники справи</a>
+    <a class="nav-link nav-item {% if request.GET.status == 'participants' %}active{% endif %}" href="{% url 'freports:contacts_list' %}?status=participants">Представники</a>
+    <a class="nav-link nav-item {% if request.GET.status == 'customers' %}active{% endif %}" href="{% url 'freports:contacts_list' %}?status=customers">Замовники</a>
 </nav>
 
 {% if contacts %}
@@ -52,11 +52,11 @@
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                            href="{% url 'forensic_contact_detail' contact.id %}">Детальна інформація</a>
+                            href="{% url 'freports:contact_detail' contact.id %}">Детальна інформація</a>
                         <a class="dropdown-item modal-button"
-                            href="{% url 'forensic_edit_contact' contact.id %}">Редагувати</a>
+                            href="{% url 'freports:edit_contact' contact.id %}">Редагувати</a>
                         <a class="dropdown-item modal-button"
-                            href="{% url 'forensic_delete_contact' contact.id %}">Видалити</a>
+                            href="{% url 'freports:delete_contact' contact.id %}">Видалити</a>
                     </div>
                 </div>
             </td>
@@ -68,7 +68,7 @@
 
 </table>
 {% if contacts.has_other_pages %}
-{% include "freports/pagination.html" with items=contacts url_next="contacts_list" %}
+{% include "freports/pagination.html" with items=contacts url_next="freports:contacts_list" %}
 {% endif %}
 
 {% else %}
