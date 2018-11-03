@@ -99,5 +99,5 @@ urlpatterns = [
     url(r'^tasks/(?P<tid>\d+)/delete/$', views.delete_task, 
         name='delete_task'),
     url(r'^tasks/delete_old/$', views.delete_old_tasks, 
-        name='delete_old'),
+        name='delete_old_tasks'),
 ]

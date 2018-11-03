@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'freports',
     'business_card',
     'finance',
+    'login',
     'axes',
 ]
 

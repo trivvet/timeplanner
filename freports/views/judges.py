@@ -17,7 +17,8 @@ def judges_list(request):
         judge.cases_amount = Report.objects.filter(judge_name=judge, executed=False).count()
         judge.executed_amount = Report.objects.filter(judge_name=judge, executed=True).count()
     header = 'Список суддів'
-    return render(request, 'freports/judges_list.html', {'judges': judges, 'header': header})
+    return render(request, 'freports/judges_list.html', 
+        {'judges': judges, 'header': header})
 
 @login_required(login_url='/login/')
 def judge_detail(request, jid):
@@ -26,8 +27,9 @@ def judge_detail(request, jid):
     cases_executed = Report.objects.filter(judge_name=judge, executed=True)
     next_url = request.GET.get('next')
     header = u'Детальна інформація про суддю {}'.format(judge.full_name())
-    return render(request, 'freports/judge_detail.html', {'content': judge, 'header': header, 'cases': cases,
-        'next_url': next_url, 'cases_executed': cases_executed})
+    return render(request, 'freports/judge_detail.html', 
+        {'content': judge, 'header': header, 'cases': cases,
+         'next_url': next_url, 'cases_executed': cases_executed})
 
 @login_required(login_url='/login/')
 def add_judge(request):
@@ -35,9 +37,10 @@ def add_judge(request):
     courts = Court.objects.all()
     if request.method == 'POST':
         if request.POST.get('cancel_next'):
-            next_url = reverse(request.POST.get('cancel_next'), args=[request.POST.get('next_id')])
+            next_url = reverse(request.POST.get('cancel_next'), 
+                args=[request.POST.get('next_id')])
         else:
-            next_url = reverse('judges_list')
+            next_url = reverse('freports:judges_list')
         if request.POST.get('save_button'):
             valid_data = valid_judge(request.POST)
             errors = valid_data['errors']
@@ -45,11 +48,13 @@ def add_judge(request):
             if errors:
                 messages.error(request, u"Виправте наступні помилки")
                 return render(request, 'freports/judge_form.html',
-                    {'content': new_judge, 'errors': errors, 'header': header, 'courts': courts})
+                    {'content': new_judge, 'errors': errors, 
+                     'header': header, 'courts': courts})
             else:
                 new_item = Judge(**new_judge)
                 new_item.save()
-                messages.success(request, u"Суддя %s успішно доданий" % new_item.short_name())
+                messages.success(request, 
+                    u"Суддя %s успішно доданий" % new_item.short_name())
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання судді скасовано")
 
@@ -61,7 +66,8 @@ def add_judge(request):
         content = {}
         if court_id:
             content['court_name'] = Court.objects.get(pk=court_id)
-        return render(request, 'freports/judge_form.html', {'header': header, 'courts': courts, 'content': content,
+        return render(request, 'freports/judge_form.html', 
+            {'header': header, 'courts': courts, 'content': content,
             'cancel_url': next_url})
 
 @login_required(login_url='/login/')
@@ -71,9 +77,10 @@ def edit_judge(request, jid):
     header = u"Редагування інформацію про суддю {}".format(judge.short_name())
     if request.method == 'POST':
         if request.POST.get('cancel_next'):
-            next_url = reverse(request.POST.get('cancel_next'), args=[jid])
+            next_url = reverse(request.POST.get('cancel_next'), 
+                args=[jid])
         else:
-            next_url = reverse('judges_list')
+            next_url = reverse('freports:judges_list')
         if request.POST.get('save_button'):
             valid_data = valid_judge(request.POST)
             errors = valid_data['errors']
@@ -81,20 +88,23 @@ def edit_judge(request, jid):
             if errors:
                 messages.error(request, u"Виправте наступні помилки")
                 return render(request, 'freports/judge_form.html',
-                    {'content': edit_judge, 'errors': errors, 'header': header, 'courts': courts})
+                    {'content': edit_judge, 'errors': errors, 
+                     'header': header, 'courts': courts})
             else:
                 edit_item = Judge(**edit_judge)
                 edit_item.id = jid
                 edit_item.save()
                 messages.success(request, u"Інформація про суддю {} успішно змінена".format(edit_item.short_name()))
         elif request.POST.get('cancel_button'):
-            messages.warning(request, u"Редагування інформації про суддю скасовано")
+            messages.warning(request, 
+                u"Редагування інформації про суддю скасовано")
 
         return HttpResponseRedirect(next_url)
     else:
         next_url = request.GET.get('next', '')
-        return render(request, 'freports/judge_form.html', {'header': header, 'courts': courts, 'content': judge,
-            'cancel_url': next_url})
+        return render(request, 'freports/judge_form.html', 
+            {'header': header, 'courts': courts, 'content': judge,
+             'cancel_url': next_url})
 
 @login_required(login_url='/login/')
 def delete_judge(request, jid):
@@ -103,9 +113,10 @@ def delete_judge(request, jid):
     content = u"Ви дійсно бажаєте видалити інформацію про суддю %s" % judge
     if request.method == "GET":
         next_url = request.GET.get('next', '')
-        return render(request, 'freports/delete_form.html', {'content': content, 'header': header, 'cancel_url': next_url})
+        return render(request, 'freports/delete_form.html', 
+            {'content': content, 'header': header, 'cancel_url': next_url})
     else:
-        next_url = reverse('judges_list')
+        next_url = reverse('freports:judges_list')
         if request.POST.get('cancel_button'):
             if request.POST.get('cancel_next'):
                 next_url = reverse(request.POST.get('cancel_next'), args=[jid])
@@ -118,12 +129,13 @@ def delete_judge(request, jid):
             else:
                 next_url = ''
                 judge.delete()
-                messages.success(request, u"Інформація про суддю %s успішно видалена" % judge)
+                messages.success(request, 
+                    u"Інформація про суддю %s успішно видалена" % judge)
 
         if next_url:
             return HttpResponseRedirect(next_url)
         else:
-            return HttpResponseRedirect(reverse('judges_list'))
+            return HttpResponseRedirect(reverse('freports:judges_list'))
 
 
 def valid_judge(request_info):

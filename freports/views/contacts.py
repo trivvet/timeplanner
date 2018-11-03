@@ -76,13 +76,15 @@ def add_contact(request):
                 new_contact.save()
                 messages.success(request, 
                     u"Контакт {} успішно додано".format(new_contact.surname))
-                return HttpResponseRedirect(reverse('contacts_list'))
+                return HttpResponseRedirect(reverse(
+                    'freports:contacts_list'))
             messages.error(request, u"Виправте наступні помилки")
             content = contact
 
         elif request.POST.get('cancel_button', ''):
             messages.warning(request, u"Додавання контакту скасовано")
-            return HttpResponseRedirect(reverse('contacts_list'))
+            return HttpResponseRedirect(reverse(
+                'freports:contacts_list'))
 
     return render(request, 'freports/contact_form.html', {
         'header': header, 'status_list': contacts_status_list.iteritems(),
@@ -97,7 +99,7 @@ def edit_contact(request, cid):
         if request.POST.get('next_url', ''):
             next_url = request.POST.get('next_url')
         else:
-            next_url = reverse('contacts_list')
+            next_url = reverse('freports:contacts_list')
         if request.POST.get('save_button', ''):
             data = request.POST
             answer = valid_contact(data)
@@ -135,7 +137,7 @@ def delete_contact(request, cid):
             contact.delete()
             messages.success(request,
                 u"Контакт {} {} успішно видалений".format(contact.surname, contact.name))
-        return HttpResponseRedirect(reverse('contacts_list'))
+        return HttpResponseRedirect(reverse('freports:contacts_list'))
     else:
         header = u"Видалення контакту {}".format(contact.surname)
         content = u"Ви дійсно бажаєте видалити інформацію про контакт {} {}".format(contact.surname, contact.name)

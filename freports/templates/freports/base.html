@@ -39,7 +39,7 @@
                     {% url "freports:judges_list" as url_judges %}
                     {% url "freports:courts_list" as url_courts %} 
                     {% url "freports:tasks_list" as url_tasks %} 
-                    {% url "freports:accounts_list" as url_accounts %} 
+                    {% url "finance:accounts_list" as url_accounts %} 
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == url_reports %}active{% endif %}"
@@ -75,7 +75,7 @@
                     </ul>
                     <div class="btn-group" role="group">
                         {% if TODAY_TASKS == True %}
-                        <button id="btnGroupDrop1" type="button" class="btn btn-danger" href="{% url 'tasks_today_list' %}"
+                        <button id="btnGroupDrop1" type="button" class="btn btn-danger" href="{% url 'freports:tasks_today_list' %}"
                             aria-haspopup="true" aria-expanded="false">Сьогодні</button>
                         {% else %}
                         <button type="button" class="btn" aria-haspopup="true" aria-expanded="false">
@@ -87,8 +87,8 @@
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                             <a class="dropdown-item" href="{% url 'freports:reports_update' %}">Оновлення даних</a>
-                            <a class="dropdown-item" href="{% url 'login:login_attempts' %}">Записи логування</a>
-                            <a class="dropdown-item" href="{% url 'login:logout_url' %}">Вийти</a>
+                            <a class="dropdown-item" href="{% url 'login:attempts' %}">Записи логування</a>
+                            <a class="dropdown-item" href="{% url 'login:out' %}">Вийти</a>
                         </div>
                     </div>
                 </div>

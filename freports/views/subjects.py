@@ -23,14 +23,16 @@ def subjects_list(request):
         except EmptyPage:
             subjects = paginator.page(paginator.num_page)
     header = u"Список об'єктів дослідження"
-    return render(request, 'freports/subjects_list.html', {'subjects': subjects, 'header': header})
+    return render(request, 'freports/subjects_list.html', 
+        {'subjects': subjects, 'header': header})
 
 @login_required(login_url='/login/')
 def subject_detail(request, sid):
     subject = ReportSubject.objects.get(pk=sid)
     header = u"Детальна інформація про об'єкт '%s' провадження №%s/%s" % (
         subject.subject_type, subject.report.number, subject.report.number_year)
-    return render(request, 'freports/subject_detail.html', {'content': subject, 'header': header})
+    return render(request, 'freports/subject_detail.html', 
+        {'content': subject, 'header': header})
 
 @login_required(login_url='/login/')
 def add_subject(request, rid):
@@ -52,7 +54,8 @@ def add_subject(request, rid):
                 new_element['street_name'] = request.POST.get('street_name')
                 messages.error(request, u"Виправте наступні недоліки")
                 return render(request, 'freports/subject_form.html',
-                    {'header': header, 'new_content': new_element, 'errors': errors})
+                    {'header': header, 'new_content': new_element, 
+                     'errors': errors})
             else:
                 new_subject = ReportSubject(**new_element)
                 new_subject.save()
@@ -63,10 +66,12 @@ def add_subject(request, rid):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання об'єкту до провадження скасовано")
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:report_detail', 
+            args=[rid]))
 
     else:
-        return render(request, 'freports/subject_form.html', {'header': header})
+        return render(request, 'freports/subject_form.html', 
+            {'header': header})
 
 @login_required(login_url='/login/')
 def edit_subject(request, rid, sid):
@@ -87,7 +92,9 @@ def edit_subject(request, rid, sid):
                 new_data['settlement_name'] = request.POST.get('settlement_name')
                 new_data['street_type'] = request.POST.get('street_type')[0:4]
                 new_data['street_name'] = request.POST.get('street_name')
-                return render(request, 'freports/subject_form.html', {'new_content': new_data, 'errors': errors, 'header': header})
+                return render(request, 'freports/subject_form.html', 
+                    {'new_content': new_data, 'errors': errors, 
+                    'header': header})
 
             else:
                 edit_subject = ReportSubject(**new_data)
@@ -101,10 +108,12 @@ def edit_subject(request, rid, sid):
             messages.warning(request, u"Редагування об'єкту '%s' провадження №%s/%s  скасоване" %
                 (subject.subject_type, report.number, report.number_year))
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:report_detail', 
+            args=[rid]))
 
     else:
-        return render(request, 'freports/subject_form.html', {'new_content': subject, 'header': header})
+        return render(request, 'freports/subject_form.html', 
+            {'new_content': subject, 'header': header})
 
 @login_required(login_url='/login/')
 def delete_subject(request, rid, sid):
@@ -115,7 +124,8 @@ def delete_subject(request, rid, sid):
     header = u"Видалення об'єкту '%s' провадження №%s/%s" % (subject.subject_type, report.number, report.number_year)
 
     if request.method == 'GET':
-        return render(request, 'freports/delete_form.html', {'report': report, 'content': content, 'header': header})
+        return render(request, 'freports/delete_form.html', 
+            {'report': report, 'content': content, 'header': header})
 
     elif request.method == 'POST':
         if request.POST.get('delete_button'):
@@ -129,7 +139,8 @@ def delete_subject(request, rid, sid):
             messages.warning(request, u"Видалення об'єкту '%s' провадження №%s/%s скасоване" % (
                 subject.subject_type, report.number, report.number_year))
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:report_detail', 
+            args=[rid]))
 
 def valid_detail(request_info, report_id):
     errors = {}

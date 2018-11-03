@@ -44,7 +44,7 @@ def details_list(request, rid):
     details = ReportEvents.objects.filter(report=report).order_by('date')
 
     if len(details.filter(name='first_arrived')) < 1:
-        return HttpResponseRedirect(reverse('report_add_order', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:add_order', args=[rid]))
 
     report.last_event = details.reverse()[0]
 
@@ -127,7 +127,8 @@ def add_order(request, rid):
                 report.save()
                 new_detail.save()
                 messages.success(request, u"Ухвала про призначення експертизи успішно додана")
-                return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+                return HttpResponseRedirect(reverse(
+                    'freports:report_detail', args=[rid]))
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання ухвали про призначення експертизи скасовано")
@@ -135,7 +136,7 @@ def add_order(request, rid):
                 report.delete()
                 messages.success(request, u"Провадження №%s/017 успішно видалено" % report.number)
 
-        return HttpResponseRedirect(reverse('forensic_reports_list'))
+        return HttpResponseRedirect(reverse('freports:reports_list'))
 
     elif request.method == 'GET':
         if request.is_ajax() and request.GET.get('court', ''):
@@ -143,9 +144,11 @@ def add_order(request, rid):
             judges = Judge.objects.filter(court_name=court)
             new_list = []
             for judge in judges:
-                new_item = {'id': judge.id, 'short_name': judge.short_name()}
+                new_item = {'id': judge.id, 
+                    'short_name': judge.short_name()}
                 new_list.append(new_item)
-            return JsonResponse({'status': 'success', 'judges': new_list, 'court_number': court.number})
+            return JsonResponse({'status': 'success', 
+                'judges': new_list, 'court_number': court.number})
         else:
             new_content = {}
             if report.judge_name:
@@ -156,7 +159,8 @@ def add_order(request, rid):
                     new_content['case'] = u"{}/".format(judge.court_name.number)
                 judges = Judge.objects.filter(court_name=judge.court_name)
 
-        return render(request, 'freports/add_order_form.html', {'header': header, 'content': content, 'courts': courts,
+        return render(request, 'freports/add_order_form.html', {
+            'header': header, 'content': content, 'courts': courts,
             'new_content': new_content, 'judges': judges})
 
 @login_required(login_url='/login/')
@@ -218,7 +222,8 @@ def add_detail(request, rid, kind):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання деталей провадження скасовано")
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:report_detail',
+            args=[rid]))
 
     else:
         return render(request, 'freports/detail_form.html', {'header': header, 
@@ -274,7 +279,8 @@ def edit_detail(request, rid, did):
                 messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])
 
         elif request.POST.get('cancel_button'):
-            messages.warning(request, u"Редагування деталей провадження скасовано")
+            messages.warning(request, 
+                u"Редагування деталей провадження скасовано")
 
         return HttpResponseRedirect(next_url)
 
@@ -285,7 +291,8 @@ def edit_detail(request, rid, did):
             new_content.time = timezone.localtime(new_content.time).isoformat()
         if new_content.decision_date:
             new_content.decision_date = new_content.decision_date.isoformat()
-        return render(request, 'freports/detail_form.html', {'new_content': new_content, 'content': content, 'header': header})
+        return render(request, 'freports/detail_form.html', 
+            {'new_content': new_content, 'content': content, 'header': header})
 
 @login_required(login_url='/login/')
 def delete_detail(request, rid, did):
@@ -295,7 +302,8 @@ def delete_detail(request, rid, did):
     header = u"Видалення події провадження №%s/%s" % (report.number, report.number_year)
 
     if request.method == 'GET':
-        return render(request, 'freports/delete_form.html', {'report': report, 'content': content, 'header': header})
+        return render(request, 'freports/delete_form.html', 
+            {'report': report, 'content': content, 'header': header})
 
     elif request.method == 'POST':
         if request.POST.get('delete_button'):
@@ -318,7 +326,8 @@ def delete_detail(request, rid, did):
             messages.warning(request,
                 u"Видалення події '%s' до провадження №%s/%s скасоване" % (kind_specific[detail.name][0], report.number, report.number_year))
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:report_detail',
+            args=[rid]))
 
 def valid_detail(request_info, report_id):
     errors = {}

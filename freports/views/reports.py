@@ -96,7 +96,7 @@ def add_new_report(request):
         if request.POST.get('cancel_next'):
             next_url = reverse(request.POST.get('cancel_next'), args=[judge_id])
         else:
-            next_url = reverse('forensic_reports_list')
+            next_url = reverse('freports:reports_list')
         if request.POST.get('save_button'):
             data = request.POST
             errors, new_data = {}, {}
@@ -144,13 +144,14 @@ def edit_report(request, rid):
     header = 'Редагування провадження'
     content = Report.objects.get(pk=rid)
     courts = Court.objects.all()
-    judges = Judge.objects.filter(court_name=content.judge_name.court_name)
+    judges = Judge.objects.filter(
+        court_name=content.judge_name.court_name)
 
     if request.method == 'POST':
         if request.POST.get('next'):
             next_url = reverse(request.POST.get('next'), args=[rid])
         else:
-            next_url = reverse('forensic_reports_list')
+            next_url = reverse('freports:reports_list')
 
         if request.POST.get('save_button'):
 
@@ -214,7 +215,7 @@ def delete_report(request, rid):
         return render(request, 'freports/delete_form.html', {'report': report, 'header': header, 
             'content': content, 'cancel_url': next_url})
     elif request.method == 'POST':
-        next_url = reverse('forensic_reports_list')
+        next_url = reverse('freports:reports_list')
 
         if request.POST.get('delete_button'):
             current_report = Report.objects.get(pk=rid)
@@ -244,7 +245,7 @@ def update_info(request):
     update_dates_info(reports)
 
     messages.success(request, u"Дані проваджень оновлено успішно")
-    return HttpResponseRedirect(reverse('forensic_reports_list'))    
+    return HttpResponseRedirect(reverse('freports:reports_list'))    
 
 def valid_report(data_post):
     errors = {}

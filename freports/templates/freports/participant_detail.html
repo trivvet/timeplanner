@@ -9,7 +9,7 @@
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
         <a type="button" class="btn btn-light" id="back-button"
-            href="{% url 'report_details_list' content.report.id %}">Повернутись до деталей провадження</a>
+            href="{% url 'freports:report_detail' content.report.id %}">Повернутись до деталей провадження</a>
         <table class="table table-bordered table-hover">
             <thead></thead>
             <tbody>
@@ -48,8 +48,8 @@
             </tbody>
 
         </table>
-        <a type="button" class="btn btn-info" href="{% url 'report_edit_participant' content.report.id content.id %}">Редагувати</a>
-        <a type="button" class="btn btn-danger" href="{% url 'report_delete_participant' content.report.id content.id %}">Видалити</a>
+        <a type="button" class="btn btn-info" href="{% url 'freports:edit_participant' content.report.id content.id %}">Редагувати</a>
+        <a type="button" class="btn btn-danger" href="{% url 'freports:delete_participant' content.report.id content.id %}">Видалити</a>
     </div>
 </div>
 {% endblock content %}

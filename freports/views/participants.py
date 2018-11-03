@@ -43,14 +43,16 @@ def participants_list(request):
         except EmptyPage:
             participants = paginator.page(paginator.num_page)
     header = u'Список учасників проваджень'
-    return render(request, 'freports/participants_list.html', {'participants': participants, 'header': header})
+    return render(request, 'freports/participants_list.html', 
+        {'participants': participants, 'header': header})
 
 @login_required(login_url='/login/')
 def participant_detail(request, rid):
     participant = ReportParticipants.objects.get(pk=rid)
     participant.status = status_list[participant.status]
     header = u'Детальна інформація про учасника провадження №%s/%s' % (participant.report.number, participant.report.number_year)
-    return render(request, 'freports/participant_detail.html', {'content': participant, 'header': header})
+    return render(request, 'freports/participant_detail.html', 
+        {'content': participant, 'header': header})
 
 @login_required(login_url='/login/')
 def add_participant(request, rid, status):
@@ -67,7 +69,8 @@ def add_participant(request, rid, status):
             if errors:
                 messages.error(request, u"Виправте наступні недоліки")
                 return render(request, 'freports/participant_form.html',
-                    {'content': new_element, 'errors': errors, 'header': header, 'status': status})
+                    {'content': new_element, 'errors': errors, 
+                     'header': header, 'status': status})
 
             else:
                 new_participant = ReportParticipants(**new_element)
@@ -82,10 +85,11 @@ def add_participant(request, rid, status):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання учасника провадження скасовано")
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:report_detail', args=[rid]))
 
     else:
-        return render(request, 'freports/participant_form.html', {'header': header, 'status': status})
+        return render(request, 'freports/participant_form.html', 
+            {'header': header, 'status': status})
 
 @login_required(login_url='/login/')
 def edit_participant(request, rid, did):
@@ -121,11 +125,12 @@ def edit_participant(request, rid, did):
             messages.warning(request, u"Редагування учасника провадження №%s/%s '%s %s' скасоване" %
                 (report.number, report.number_year, status_list[participant.status], participant.surname))
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:report_detail', args=[rid]))
 
     else:
         content = participant
-        return render(request, 'freports/participant_form.html', {'content': content, 'header': header})
+        return render(request, 'freports/participant_form.html', 
+            {'content': content, 'header': header})
 
 @login_required(login_url='/login/')
 def delete_participant(request, rid, did):
@@ -137,7 +142,8 @@ def delete_participant(request, rid, did):
         status_list[participant.status], participant.surname, report.number, report.number_year)
 
     if request.method == 'GET':
-        return render(request, 'freports/delete_form.html', {'report': report, 'content': content, 'header': header})
+        return render(request, 'freports/delete_form.html', 
+            {'report': report, 'content': content, 'header': header})
 
     elif request.method == 'POST':
         if request.POST.get('delete_button'):
@@ -151,7 +157,8 @@ def delete_participant(request, rid, did):
             messages.warning(request, u"Видалення учасника провадження №%s/%s '%s %s' скасоване" % (
                 report.number, report.number_year, status_list[participant.status], participant.surname))
 
-        return HttpResponseRedirect(reverse('report_details_list', args=[rid]))
+        return HttpResponseRedirect(reverse('freports:report_detail', 
+            args=[rid]))
 
 def valid_detail(request_info, report_id, main_status):
     errors = {}

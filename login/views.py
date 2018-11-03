@@ -19,7 +19,7 @@ def login_auth(request):
     if login_attempts_last > 2:
         messages.error(request, 
             "Кількість спроб перевищила допустиму, спробуйте пізніше")
-        return render(request, 'freports/login_form_locked.html', {})
+        return render(request, 'login/form_locked.html', {})
 
     if request.method == "POST":
         username = request.POST.get('username')
@@ -33,22 +33,22 @@ def login_auth(request):
             messages.success(request, 
                 "Ви успішно увійшли як %s" % username)
             return HttpResponseRedirect(
-                reverse('forensic_reports_list'))
+                reverse('freports:reports_list'))
         else:
             messages.error(request, 
                 "Невірно введене ім'я користувача або пароль")
             login_attempts_last += 1
 
-    return render(request, 'freports/login_form.html', {})
+    return render(request, 'login/form.html', {})
 
 def logout_auth(request):
     logout(request)
-    return HttpResponseRedirect(reverse('login_form'))
+    return HttpResponseRedirect(reverse('login:form'))
 
 @login_required(login_url='/login/')
 def login_attempts(request):
     attempts = AccessAttempt.objects.all()
-    return render(request, 'freports/login_attempts.html', 
+    return render(request, 'login/attempts.html', 
         {'attempts': attempts})
 
 @login_required(login_url='/login/')
@@ -60,4 +60,4 @@ def delete_old_attempts(request):
             task.delete()
     messages.success(request, 
         u"Завдання, виконані більше місяця тому, успішно видалено")
-    return HttpResponseRedirect(reverse('tasks_list'))
+    return HttpResponseRedirect(reverse('freports:tasks_list'))

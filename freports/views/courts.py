@@ -21,7 +21,8 @@ def courts_list(request):
             court.cases_amount += Report.objects.filter(judge_name=judge, executed=False).count()
             court.executed_amount += Report.objects.filter(judge_name=judge, executed=True).count()
     header = 'Список судів'
-    return render(request, 'freports/courts_list.html', {'courts': courts, 'header': header})
+    return render(request, 'freports/courts_list.html', 
+        {'courts': courts, 'header': header})
 
 @login_required(login_url='/login/')
 def court_detail(request, cid):
@@ -31,8 +32,9 @@ def court_detail(request, cid):
     for judge in judges:
         cases_amount += Report.objects.filter(judge_name=judge, executed=False).count()
     header = u'Детальна інформація про {}'.format(court.name)
-    return render(request, 'freports/court_detail.html', {'content': court, 'header': header, 'judges': judges,
-        'cases_amount': cases_amount})
+    return render(request, 'freports/court_detail.html', 
+        {'content': court, 'header': header, 'judges': judges,
+         'cases_amount': cases_amount})
 
 @login_required(login_url='/login/')
 def add_court(request):
@@ -44,7 +46,9 @@ def add_court(request):
             new_court = valid_data['new_court']
             if errors:
                 messages.error(request, u"Виправте наступні помилки")
-                return render(request, 'freports/court_form.html', {'content': new_court, 'errors': errors, 'header': header})
+                return render(request, 'freports/court_form.html', 
+                    {'content': new_court, 'errors': errors, 
+                     'header': header})
             else:
                 new_item = Court(**new_court)
                 new_item.save()
@@ -52,10 +56,11 @@ def add_court(request):
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання суду скасовано")
 
-        return HttpResponseRedirect(reverse('courts_list'))
+        return HttpResponseRedirect(reverse('freports:courts_list'))
 
     else:
-        return render(request, 'freports/court_form.html', {'header': header})
+        return render(request, 'freports/court_form.html', 
+            {'header': header})
 
 @login_required(login_url='/login/')
 def edit_court(request, cid):
@@ -78,9 +83,10 @@ def edit_court(request, cid):
                 new_item.save()
                 messages.success(request, u"Інформація про %s успішно змінена" % new_item)
         elif request.POST.get('cancel_button'):
-            messages.warning(request, u"Редагування інформації про {} скасовано".format(court.name))
+            messages.warning(request, 
+                u"Редагування інформації про {} скасовано".format(court.name))
         if next_url == '':
-            next_url = reverse('courts_list')
+            next_url = reverse('freports:courts_list')
 
         return HttpResponseRedirect(next_url)
 
@@ -88,8 +94,9 @@ def edit_court(request, cid):
         next_url_name, next_url = request.GET.get('next', ''), ''
         if next_url_name:
             next_url = reverse(next_url_name, args=[cid])
-        return render(request, 'freports/court_form.html', {'header': header, 'content': court, 'judges': judges,
-            'next_url':next_url})
+        return render(request, 'freports/court_form.html', 
+            {'header': header, 'content': court, 'judges': judges,
+             'next_url':next_url})
 
 @login_required(login_url='/login/')
 def delete_court(request, cid):
@@ -101,7 +108,8 @@ def delete_court(request, cid):
         if next_url_name:
             next_url = reverse(next_url_name, args=[cid])
         return render(request, 'freports/delete_form.html', 
-            {'content': content, 'header': header, 'cancel_url': next_url})
+            {'content': content, 'header': header, 
+             'cancel_url': next_url})
     else:
         if request.POST.get('cancel_button'):
             messages.warning(request, u"Видалення інформації про {} скасовано".format(court.name))
@@ -119,7 +127,7 @@ def delete_court(request, cid):
         if next_url:
             return HttpResponseRedirect(next_url)
         else:
-            return HttpResponseRedirect(reverse('courts_list'))
+            return HttpResponseRedirect(reverse('freports:courts_list'))
 
 
 def valid_court(request_info):

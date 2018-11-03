@@ -55,12 +55,17 @@ def change_status_task(request):
             executed_task.execute = True
             executed_task.save()
             if executed_task.event and executed_task.event.name == 'schedule':
-                next_url = reverse('report_add_detail', 
-                    kwargs={'rid': executed_task.report.id, 'kind': 'inspected'})
+                next_url = reverse('freports:add_detail', 
+                    kwargs={
+                        'rid': executed_task.report.id, 
+                        'kind': 'inspected'
+                    })
             else:
                 next_url = ''
-            return JsonResponse({'status': 'success', 
-                'next_url': next_url})
+            return JsonResponse({
+                'status': 'success', 
+                'next_url': next_url
+            })
         else:
             try:
                 executed_task = Task.objects.get(pk=request.GET.get('pk'))
@@ -73,7 +78,10 @@ def change_status_task(request):
                 return HttpResponseRedirect(reverse('report_add_detail', 
                     kwargs={'rid': executed_task.report.id, 'kind': 'inspected'}))
             report_id = request.GET.get('report')
-            return JsonResponse({'status': 'success', 'modal': 'false'})
+            return JsonResponse({
+                'status': 'success', 
+                'modal': 'false'
+            })
 
 @login_required(login_url='/login/')
 def tasks_today_list(request):
@@ -112,7 +120,7 @@ def add_task(request):
         if next_page:
             url = next_page
         else:
-            url = reverse('tasks_list')
+            url = reverse('freports:tasks_list')
         return HttpResponseRedirect(url)
 
     else:
@@ -127,7 +135,7 @@ def add_detail_task(detail):
     if new_task['valid']:
         new_item = Task(**new_task['task_data'])
         new_item.save()
-    return HttpResponseRedirect(reverse('tasks_list'))
+    return HttpResponseRedirect(reverse('freports:tasks_list'))
 
 @login_required(login_url='/login/')
 def edit_task(request, tid):
@@ -159,7 +167,8 @@ def edit_task(request, tid):
         if next_page:
             url = next_page
         else:
-            url = "%s?status=%s" % (reverse('tasks_list'), task.execute or '')
+            url = "%s?status=%s" % (reverse('freports:tasks_list'), 
+                task.execute or '')
         return HttpResponseRedirect(url)
     else:
         task.time = localtime(task.time).isoformat()
@@ -176,7 +185,7 @@ def edit_detail_task(detail):
         if edit_task:
             new_item.id = edit_task[0].id
         new_item.save()
-    return HttpResponseRedirect(reverse('tasks_list'))
+    return HttpResponseRedirect(reverse('freports:tasks_list'))
 
 @login_required(login_url='/login/')
 def delete_task(request, tid):
@@ -187,7 +196,7 @@ def delete_task(request, tid):
             messages.success(request, u"Завдання успішно видалене")
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання завдання скасовано")
-        return HttpResponseRedirect(reverse('tasks_list'))
+        return HttpResponseRedirect(reverse('freports:tasks_list'))
     else:
         header = u'Видалення завдання'
         content = u"Ви дійсно бажаєте видалити інформацію про завдання {name} яке призначене на {date}?".format(
@@ -202,7 +211,7 @@ def delete_old_tasks(request):
         if substract.days > 31:
             task.delete()
     messages.success(request, u"Завдання, виконані більше місяця тому, успішно видалено")
-    return HttpResponseRedirect(reverse('tasks_list'))
+    return HttpResponseRedirect(reverse('freports:tasks_list'))
 
 def valid_task(request_info):
     errors, new_task = {}, {}

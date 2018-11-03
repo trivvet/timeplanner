@@ -64,16 +64,16 @@
                             {% for judge in judges %}
                             <li class="list-group-item">
                                 <a class="no-style-link report-detail-item"
-                                    href="{% url 'forensic_judge_detail' judge.id %}?next=forensic_court_detail">
+                                    href="{% url 'freports:judge_detail' judge.id %}?next=freports:court_detail">
                                     {{ judge.full_name }}</a>
                             </li>
                             {% endfor %}
                             <a class="btn btn-outline-success badge" style="margin-top: 10px;"
-                                href="{% url 'forensic_add_judge' %}?court={{ content.id }}&next=forensic_court_detail"
+                                href="{% url 'freports:add_judge' %}?court={{ content.id }}&next=freports:court_detail"
                                 hidden>Додати суддю</a>
                         </ul>
                         {% else %}
-                        <a class="no-style-link" href="{% url 'forensic_add_judge' %}?court={{ content.id }}&next_id={{ content.id }}"
+                        <a class="no-style-link" href="{% url 'freports:add_judge' %}?court={{ content.id }}&next_id={{ content.id }}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>
@@ -81,8 +81,8 @@
             </tbody>
 
         </table>
-        <a type="button" class="btn btn-info" href="{% url 'forensic_edit_court' content.id %}?next=forensic_court_detail">Редагувати</a>
-        <a type="button" class="btn btn-danger" href="{% url 'forensic_delete_court' content.id %}?next=forensic_court_detail">Видалити</a>
+        <a type="button" class="btn btn-info" href="{% url 'freports:edit_court' content.id %}?next=freports:court_detail">Редагувати</a>
+        <a type="button" class="btn btn-danger" href="{% url 'freports:delete_court' content.id %}?next=freports:court_detail">Видалити</a>
     </div>
 </div>
 {% endblock content %}
