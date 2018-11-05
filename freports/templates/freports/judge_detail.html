@@ -39,7 +39,7 @@
                 </tr>
                 <tr>
                     <th scope="row">Місце роботи</th>
-                    <td>{{ content.court_name }}</td>
+                    <td><a class="no-style-link text-body" href="{% url 'freports:court_detail' content.court_name.id %}">{{ content.court_name }}</a></td>
                 </tr>
                 {% if content.personal_phone %}
                 <tr>
@@ -74,14 +74,13 @@
                                 {% endif %}
                             </li>
                             {% endfor %}
-                            <a class="btn btn-outline-success badge" style="margin-top: 10px;"
-                                href="{% url 'freport:add_new_report' %}?judge={{ content.id }}&next=freports:judge_detail"
+                            <a class="btn btn-outline-success badge modal-button" style="margin-top: 10px;"
+                                href="{% url 'freports:add_new_report' %}?judge={{ content.id }}&next=freports:judge_detail"
                                 hidden>Додати справу</a>
                         </ul>
                         {% else %}
-                        <a class="no-style-link"
-                            href="{% url 'freports:add_new_report' %}?judge={{ content.id }}&next=freports:judge_detail"
-                            style="color:black">Немає призначених справ</a>
+                        <a class="no-style-link text-body modal-button"
+                            href="{% url 'freports:add_new_report' %}?judge={{ content.id }}&next=freports:judge_detail">Немає призначених справ</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -105,8 +104,8 @@
             </tbody>
 
         </table>
-        <a type="button" class="btn btn-info" href="{% url 'freports:edit_judge' content.id %}?next=freports:judge_detail">Редагувати</a>
-        <a type="button" class="btn btn-danger" href="{% url 'freports:delete_judge' content.id %}?next=freports:judge_detail">Видалити</a>
+        <a type="button" class="btn btn-info modal-button" href="{% url 'freports:edit_judge' content.id %}?next=freports:judge_detail">Редагувати</a>
+        <a type="button" class="btn btn-danger modal-button" href="{% url 'freports:delete_judge' content.id %}?next=freports:judge_detail">Видалити</a>
     </div>
 </div>
 {% endblock content %}

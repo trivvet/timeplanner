@@ -16,8 +16,8 @@
     <input type="hidden" name="next_url" value="{{ next_url }}">
 
     <div class="form-group row">
-        <label for="inputName" class="col-sm-3 col-form-label">Назва <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputName" class="col-sm-4 col-form-label">Назва <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputName" value="{{ content.name }}"
                 placeholder="Введіть назву суду" name="name">
@@ -28,8 +28,8 @@
     </div>
 
     <div class="form-group row">
-        <label for="inputAddress" class="col-sm-3 col-form-label">Адреса</label>
-        <div class="col-sm-4">
+        <label for="inputAddress" class="col-sm-4 col-form-label">Адреса</label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.address %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputAddress" value="{{ content.address }}"
                 placeholder="Введіть адресу розміщення суду" name="address">
@@ -40,8 +40,8 @@
     </div>
 
     <div class="form-group row">
-        <label for="inputNumber" class="col-sm-3 col-form-label">Код справ</label>
-        <div class="col-sm-4">
+        <label for="inputNumber" class="col-sm-4 col-form-label">Код справ</label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputNumber" value="{% if content.number %}{{ content.number }}{% endif %}"
                 placeholder="Введіть номер справ суду" name="number">
@@ -53,8 +53,8 @@
 
     {% if judges %}
     <div class="form-group row">
-        <label for="inputChair" class="col-sm-3 col-form-label">Голова суду</label>
-        <div class="col-sm-4">
+        <label for="inputChair" class="col-sm-4 col-form-label">Голова суду</label>
+        <div class="col-sm-6">
             <select class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputChair" name="chair" value="{{ content.chair }}">
                 <option value=''>-----------</option>
@@ -71,7 +71,7 @@
     {% endif %}
 
     <div class="form-group row">
-        <div class="col-sm-3"></div>
+        <div class="col-sm-4"></div>
         <div class="col-sm-6">
           <input type="submit" class="btn btn-primary" value="Зберегти"
                  name="save_button" />

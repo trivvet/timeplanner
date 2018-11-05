@@ -24,9 +24,11 @@ def judges_list(request):
 def judge_detail(request, jid):
     judge = Judge.objects.get(pk=jid)
     cases = Report.objects.filter(judge_name=judge, executed=False)
-    cases_executed = Report.objects.filter(judge_name=judge, executed=True)
+    cases_executed = Report.objects.filter(judge_name=judge, 
+        executed=True)
     next_url = request.GET.get('next')
-    header = u'Детальна інформація про суддю {}'.format(judge.full_name())
+    header = u'Детальна інформація про суддю {}'.format(
+        judge.full_name())
     return render(request, 'freports/judge_detail.html', 
         {'content': judge, 'header': header, 'cases': cases,
          'next_url': next_url, 'cases_executed': cases_executed})

@@ -1,11 +1,8 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col">
-        <h2>{{ header }}</h2>
-    </div>
+<div class="col">
+    <h2 class="text-center">{{ header }}</h2>
 </div>
 {% endblock title %}
 
@@ -17,8 +14,8 @@
 
     <!-- Прізвище * -->
     <div class="form-group row">
-        <label for="inputSurname" class="col-sm-3 col-form-label">Прізвище <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputSurname" class="col-sm-4 col-form-label">Прізвище <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.surname %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputSurname" value="{{ content.surname }}"
                 placeholder="Введіть прізвище судді" name="surname">
@@ -30,8 +27,8 @@
 
     <!-- Ім'я * -->
     <div class="form-group row">
-        <label for="inputFirstName" class="col-sm-3 col-form-label">Ім'я <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputFirstName" class="col-sm-4 col-form-label">Ім'я <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.first_name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputFirstName" value="{{ content.first_name }}"
                 placeholder="Введіть ім'я судді" name="first_name">
@@ -43,8 +40,8 @@
 
     <!-- Ім'я по батькові * -->
     <div class="form-group row">
-        <label for="inputSecondName" class="col-sm-3 col-form-label">Ім'я по батькові <strong>*</strong></label>
-        <div class="col-sm-4">
+        <label for="inputSecondName" class="col-sm-4 col-form-label">Ім'я по батькові <strong>*</strong></label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.second_name %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputSecondName" value="{{ content.second_name }}"
                 placeholder="Введіть ім'я по батькові судді" name="second_name">
@@ -56,8 +53,8 @@
 
     <!-- Суд * -->
     <div class="form-group row">
-        <label for="inputCourt" class="col-sm-3 col-form-label">Назва суду</label>
-        <div class="col-sm-4">
+        <label for="inputCourt" class="col-sm-4 col-form-label">Назва суду</label>
+        <div class="col-sm-6">
             <select class="form-control {% if errors.court %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputCourt" name="court" value="{{ content.court_name }}">
                 <option value=''>-----------</option>
@@ -74,8 +71,8 @@
 
     <!-- Особистий телефон -->
     <div class="form-group row">
-        <label for="inputPersonalPhone" class="col-sm-3 col-form-label">Особистий телефон</label>
-        <div class="col-sm-4">
+        <label for="inputPersonalPhone" class="col-sm-4 col-form-label">Особистий телефон</label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputPersonalPhone" value="{{ content.personal_phone }}"
                 placeholder="Введіть номер особистого телефону" name="personal_phone">
@@ -87,8 +84,8 @@
 
     <!-- Робочий телефон -->
     <div class="form-group row">
-        <label for="inputWorkPhone" class="col-sm-3 col-form-label">Робочий телефон</label>
-        <div class="col-sm-4">
+        <label for="inputWorkPhone" class="col-sm-4 col-form-label">Робочий телефон</label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputWorkPhone" value="{{ content.work_phone }}"
                 placeholder="Введіть номер робочого телефону" name="work_phone">
@@ -100,8 +97,8 @@
 
     <!-- Адреса -->
     <div class="form-group row">
-        <label for="inputAddress" class="col-sm-3 col-form-label">Адреса розташування</label>
-        <div class="col-sm-4">
+        <label for="inputAddress" class="col-sm-4 col-form-label">Адреса розташування</label>
+        <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.address %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputAddress" value="{{ content.address }}"
                 placeholder="Введіть адресу робочого місця" name="address">
@@ -112,7 +109,7 @@
     </div>
 
     <div class="form-group row">
-        <div class="col-sm-3"></div>
+        <div class="col-sm-4"></div>
         <div class="col-sm-6">
           <input type="submit" class="btn btn-primary" value="Зберегти"
                  name="save_button" />
