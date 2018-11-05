@@ -45,7 +45,7 @@
                 <a href=""><i class="fa fa-trash-o"></i></a>
                 <a href=""><i class="fa fa-pencil"></i></a>
             </td>       
-        </tr>
+        </tr>2
         {% endfor %}
 
 
@@ -60,4 +60,62 @@
 {% endblock content %}
 
 {% block extra_content %}
+
+<span class="h1">Список замовлень</span><span class="badge badge-info">Alpha</span>
+<!-- </div>
+<div class="col-4"> -->
+     <a class="btn btn-outline-info modal-button mb-3 ml-3"
+        href="#">Додати замовлення</a>
+
+{% if orders %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Назва замовлення</th>
+            <th scope="col">Провадження</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Кошторисна вартість</th>
+            <th scope="col">Оплачена вартість</th>
+            <th scope="col">Вартість виконаних робіт</th>
+            <th scope="col">Кількість необхідних тасків</th>
+            <th scope="col" class="group-buttons"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <th scope="row">{{ order.name }}</th>
+            <td>{{ order.report }}</td>
+            <td>{{ order.get_status_display }}</td>
+            <td>{{ order.total_sum }}</td>
+            <td>{{ order.paid_sum }}</td>
+            <td>{{ order.done_sum }}</td>
+            <td>
+            {% if order.tasks_number %}
+            {{ order.tasks_number }}
+            {% else %}
+            -
+            {% endif %}
+            </td>
+            <td class="group-buttons">
+                <a href=""><i class="fa fa-trash-o"></i></a>
+                <a href=""><i class="fa fa-pencil"></i></a>
+            </td>       
+        </tr>
+        {% endfor %}
+        <tr>
+            <th colspan="3" class="text-center">Всього</th>
+            <td>{{ content.total_sum }}</td>
+            <td>{{ content.paid_sum }}</td>
+            <td>{{ content.done_sum }}</td>
+            <td colspan="2"></td>
+        </tr>
+
+    </tbody>
+</table>
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
 {% endblock extra_content %}
