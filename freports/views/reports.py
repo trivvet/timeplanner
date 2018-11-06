@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .days_counter import check_active, days_count, update_dates_info
@@ -42,7 +42,11 @@ def reports_list(request):
 
         date_from = request.GET.get('date_from')
         if date_from:
-            reports = reports.filter(date_arrived__gt=date_from)
+            try:
+                reports = reports.filter(date_arrived__gt=date_from)
+            except ValidationError:
+                messages.warning(request, 
+                    u"Некоректне значення дати для фільтрування")
 
         date_until = request.GET.get('date_until')
         if date_until:

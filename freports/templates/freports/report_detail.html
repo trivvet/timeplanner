@@ -36,7 +36,7 @@
                         {% endfor %}
 
                         {% else %}
-                        <a class="no-style-link" href="{% url 'freports:add_participant' report.id 'plaintiff' %}"
+                        <a class="no-style-link modal-button" href="{% url 'freports:add_participant' report.id 'plaintiff' %}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>
@@ -56,7 +56,7 @@
                         {% endif %}
                         {% endfor %}
                         {% else %}
-                        <a class="no-style-link" href="{% url 'freports:add_participant' report.id 'defendant' %}"
+                        <a class="no-style-link modal-button" href="{% url 'freports:add_participant' report.id 'defendant' %}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>
@@ -84,7 +84,7 @@
                         {% endif %}
                         {% endfor %}
                         {% else %}
-                        <a class="no-style-link" href="{% url 'freports:add_subject' report.id %}"
+                        <a class="no-style-link modal-button" href="{% url 'freports:add_subject' report.id %}"
                             style="color:red">Дані відсутні</a>
                         {% endif %}
                     </td>
@@ -151,7 +151,7 @@
                     <td>
                         {% if report.address != '-' and report.plaintiff != '-' and  report.defendant != '-' and report.object_name != '-' and report.research_kind != '-' %}
                             <a type="button" class="btn btn-info modal-button"
-                                href="{% url 'freports:edit_report' report.id %}?next=report_details_list">Редагувати основну інформацію</a>
+                                href="{% url 'freports:edit_report' report.id %}?next=freports:report_detail">Редагувати основну інформацію</a>
                         {% endif %}
                         {% if report.address == '-' and report.plaintiff == '-' and  report.defendant == '-' and report.object_name == '-' and report.research_kind == '-' %}
                             <a type="button" class="btn btn-danger modal-button"

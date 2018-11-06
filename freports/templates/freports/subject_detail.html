@@ -28,8 +28,8 @@
             </tbody>
 
         </table>
-        <a type="button" class="btn btn-info" href="{% url 'freports:edit_subject' content.report.id content.id %}">Редагувати</a>
-        <a type="button" class="btn btn-danger" href="{% url 'freports:delete_subject' content.report.id content.id %}">Видалити</a>
+        <a type="button" class="btn btn-info modal-button" href="{% url 'freports:edit_subject' content.report.id content.id %}">Редагувати</a>
+        <a type="button" class="btn btn-danger modal-button" href="{% url 'freports:delete_subject' content.report.id content.id %}">Видалити</a>
     </div>
 </div>
 {% endblock content %}

@@ -1,7 +1,9 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<h2>{{ header }}</h2>
+<div class="col">
+    <h2>{{ header }}</h2>
+</div>
 {% endblock title %}
 
 {% block content %}
@@ -35,8 +37,8 @@
         <div class="form-group col-sm-4 col-form-label">
             <label for="inputTypeSettlement">Населений пункт <strong>*</strong></label>
         </div>
-        <div class="form-group col-sm-1">
-            <select class="form-control {% if errors %}is-valid{% endif %}" style="min-width:70px"
+        <div class="form-group col-sm-2">
+            <select class="form-control {% if errors %}is-valid{% endif %}" style="max-width:110px"
                 name="settlement_type" value="{{ new_content.settlement_type }}">
                 <option {% if new_content.settlement_type == 'м.' %}selected{% endif %}>м.</option>
                 <option {% if new_content.settlement_type == 'с.' %}selected{% endif %}>с.</option>
@@ -44,7 +46,7 @@
                 <option {% if new_content.settlement_type == '' %}selected{% endif %} value=''>-</option>
             </select>
         </div>
-        <div class="form-group col-sm-6" style="max-width:270px">
+        <div class="form-group col-sm-6" style="max-width:248px">
             <input type="text" id="inputSettlement" placeholder="Назва населеного пункту" name="settlement_name"
                 class="form-control {% if errors.settlement %}is-invalid{% elif errors %}is-valid{% endif %}"
                 value="{{ new_content.settlement_name }}">
@@ -72,8 +74,8 @@
         <div class="form-group col-sm-4 col-form-label">
             <label for="inputStreet">Вулиця <strong>*</strong></label>
         </div>
-        <div class="form-group col-sm-1">
-            <select class="form-control {% if errors %}is-valid{% endif %}" style="min-width:100px"
+        <div class="form-group col-sm-2">
+            <select class="form-control {% if errors %}is-valid{% endif %}" style="max-width:110px"
                 name="street_type" value="{{ new_content.street_type }}">
                 <option {% if new_content.street_type == '' %}selected{% endif %} value=''>-</option>
                 <option {% if new_content.street_type == 'вул.' %}selected{% endif %}>вул.</option>
@@ -83,7 +85,7 @@
                 <option {% if new_content.street_type == 'сад.' %}selected{% endif %}>сад.тов.</option>
             </select>
         </div>
-        <div class="form-group col-sm-6" style="max-width:270px">
+        <div class="form-group col-sm-6" style="max-width:248px">
             <input type="text" id="inputStreet" placeholder="Назва" name="street_name"
                 class="form-control {% if errors.street %}is-invalid{% elif errors %}is-valid{% endif %}"
                 value="{{ new_content.street_name }}">

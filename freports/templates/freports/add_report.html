@@ -66,10 +66,10 @@
 
     <!-- Вибір суду -->
     <div class="form-group row">
-        <label for="inputCourt" class="col-sm-4 col-form-label">Назва суду <strong>*</strong></label>
+        <label for="inputCourtForOrder" class="col-sm-4 col-form-label">Назва суду <strong>*</strong></label>
         <div class="col-sm-8">
             <select class="form-control {% if errors.court_name %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputCourt" name="court" value="{{ content.court }}">
+                id="inputCourtForOrder" name="court" value="{{ content.court }}">
                 <option value=''>-----------</option>
                 {% for court in courts %}
                 <option value='{{ court.id }}'
@@ -190,7 +190,7 @@
         <label for="inputCost" class="col-sm-4 col-form-label">
         Вартість</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control" id="inputCost" name="cost" placeholder="Введість вартість" value="{% if content.cost %}{{ content.cost }}{% endif %}">
+            <input type="text" class="form-control" id="inputCost" name="cost" placeholder="Введіть вартість" value="{% if content.cost %}{{ content.cost }}{% endif %}">
         </div>
     </div>
     <div class="form-group row">

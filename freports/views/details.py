@@ -244,7 +244,7 @@ def edit_detail(request, rid, did):
         if request.POST.get('next'):
             next_url = reverse(request.POST.get('next'), args=[rid])
         else:
-            next_url = reverse('report_details_list', args=[rid])
+            next_url = reverse('freports:report_detail', args=[rid])
 
         if request.POST.get('save_button'):
 
