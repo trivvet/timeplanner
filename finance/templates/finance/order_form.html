@@ -1,0 +1,117 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="col">
+    <h2>{{ header }}</h2>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+
+    <input type="hidden" name="next_url" value="{{ next_url }}">
+
+    <!-- Order Name -->
+    <div class="form-group row">
+        <label for="inputName" class="col-sm-4 col-form-label">Назва замовлення <strong>*</strong></label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.name %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputName" value="{{ item.name }}"
+                placeholder="Введіть назву замовлення" name="name">
+            <div class="invalid-feedback">
+                {{ errors.name }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Total Sum -->
+    <div class="form-group row">
+        <label for="inputTotalSum" class="col-sm-4 col-form-label">Кошторисна вартість <strong>*</strong></label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.total_sum %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputTotalSum" value="{{ item.total_sum }}"
+                placeholder="Введіть кошторисну варість в грн" name="total_sum">
+            <div class="invalid-feedback">
+                {{ errors.total_sum }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Paid Sum -->
+    <div class="form-group row">
+        <label for="inputPaidSum" class="col-sm-4 col-form-label">Оплачена сума</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.paid_sum %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputPaidSum" value="{{ item.paid_sum }}"
+                placeholder="Введіть оплачену суму" name="paid_sum">
+            <div class="invalid-feedback">
+                {{ errors.paid_sum }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Done Sum -->
+    <div class="form-group row">
+        <label for="inputDoneSum" class="col-sm-4 col-form-label">Вартість виконаних робіт</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.done_sum %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputDoneSum" value="{{ item.done_sum }}"
+                placeholder="Введіть вартість виконаних робіт" name="done_sum">
+            <div class="invalid-feedback">
+                {{ errors.done_sum }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Tasks Number -->
+    <div class="form-group row">
+        <label for="inputTusksNumber" class="col-sm-4 col-form-label">Кількість необхідних тасків</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control {% if errors.tasks_number %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputTusksNumber" value="{{ item.tasks_number }}"
+                placeholder="Введіть кількість необхідних тасків" name="tasks_number">
+            <div class="invalid-feedback">
+                {{ errors.tasks_number }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Status -->
+    <div class="form-group">
+        <div class="row">
+            <label for="inputStatus" class="col-sm-4 col-form-label">Статус виконання</label>
+            <div class="col-sm-6">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="inputStatus" value="active" checked>
+                    <label class="form-check-label" for="inputStatus">
+                      Активне
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="inputStatus2" value="inactive">
+                    <label class="form-check-label" for="inputStatus2">
+                      Призупинене
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" id="inputStatus3" value="done">
+                    <label class="form-check-label" for="inputStatus3">
+                      Виконане
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-6">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" id="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}

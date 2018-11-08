@@ -31,7 +31,7 @@ class Order(models.Model):
         null=False)
 
     paid_sum = models.IntegerField(
-        verbose_name=u"Оплачена вартість",
+        verbose_name=u"Оплачена сума",
         blank=False,
         null=False,
         default=0)

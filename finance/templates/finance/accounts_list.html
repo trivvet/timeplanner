@@ -65,7 +65,7 @@
 <!-- </div>
 <div class="col-4"> -->
      <a class="btn btn-outline-info modal-button mb-3 ml-3"
-        href="#">Додати замовлення</a>
+        href="{% url 'finance:add_order' %}">Додати замовлення</a>
 
 {% if orders %}
 <table class="table table-hover table-responsive-lg">
@@ -85,7 +85,11 @@
         {% for order in orders %}
         <tr>
             <th scope="row">{{ order.name }}</th>
-            <td>{{ order.report }}</td>
+            <td>
+                {% if order.report %}
+                {{ order.report }}
+                {% endif %}
+            </td>
             <td>{{ order.get_status_display }}</td>
             <td>{{ order.total_sum }}</td>
             <td>{{ order.paid_sum }}</td>

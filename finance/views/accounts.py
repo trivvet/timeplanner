@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import Account, Order
+from ..models import Account, Order
 
 @login_required(login_url='/login/')
 def accounts_list(request):

@@ -193,6 +193,7 @@ function initForm(form, modal, link) {
             } else {
                 $('#message .col').html(html.find('.alert'));
                 $('#main-content').html(html.find('#main-content').html());
+                $('#extra-content').html(html.find('#extra-content').html());
                 initFormPage();
                 addPlusButton();
                 initRowMakeLink();
@@ -234,26 +235,6 @@ function initSelectCourt(link) {
     if ($('#inputCourtForOrder').val()) {
         inputNumberField();
     }
-    // $('#inputCourt').change(function() {
-    //     $.ajax('', {
-    //         'url': link,
-    //         'type': 'GET',
-    //         'async': true,
-    //         'dataType': 'json',
-    //         'data': {'court': $(this).val()},
-    //         'error': function(xhr, status, error) {
-    //             alert(error);
-    //         },
-    //         'success': function(data, status, xhr) {
-    //             $('#inputJudge').parent().parent().removeAttr('hidden');
-    //             $('#inputJudge').html('<option value="">-----</option>');
-    //             for (i=0, len=data.judges.length; i<len; i++) {
-    //                 option = '<option value=' + data.judges[i].id + '>' + data.judges[i].short_name + '</option>'
-    //                 $('#inputJudge').append(option);
-    //             }
-    //         },
-    //     });
-    // });
 }
 
 function inputNumberField() {
