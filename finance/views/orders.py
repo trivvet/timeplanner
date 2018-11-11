@@ -37,6 +37,54 @@ def add_order(request):
         return render(request, 'finance/order_form.html', 
             {'header': header})
 
+@login_required(login_url='/login/')
+def edit_order(request, oid):
+    header = u"Редагування замовлення"
+    order = Order.objects.get(pk=oid)
+    if request.method == 'POST':
+        if request.POST.get('save_button', ''):
+            info = valid_data(request.POST)
+            checked_data = info['new_order']
+            errors = info['errors']
+            if errors:
+                messages.errors(request,
+                    u"Випавте наступні помилки")
+                return render(request, 'finance/order_form.html',
+                    {'header': header, 'errors': errors,
+                     'item': checked_data})
+            else:
+                edit_order = Order(**checked_data)
+                edit_order.id = order.id
+                edit_order.save()
+                messages.success(request, 
+                    u"{} успішно змінене".format(
+                        edit_order))
+        elif request.POST.get('cancel_button', ''):
+            messages.warning(request,
+                u"Редагування замовлення скасовано")
+        return HttpResponseRedirect(reverse('finance:accounts_list'))
+    else:
+        return render(request, 'finance/order_form.html',
+            {'header': header, 'item': order})
+
+@login_required(login_url='/login/')
+def delete_order(request, oid):
+    order = Order.objects.get(pk=oid)
+    header = u"Видалення замовлення"
+    content = u"Ви дійсно бажаєте видалити {}".format(order)
+    if request.method == 'POST':
+        if request.POST.get('delete_button', ''):
+            order.delete()
+            messages.success(request, 
+                u"{} успішно видалене".format(order))
+        elif request.POST.get('cancel_button', ''):
+            messages.warning(request,
+                u"Видалення замовлення скасовано")
+        return HttpResponseRedirect(reverse('finance:accounts_list'))
+    else:
+        return render(request, 'freports/delete_form.html',
+            {'header': header, 'content': content})
+
 def valid_data(form_data):
     new_order, errors = {}, {}
     name = form_data.get('name')

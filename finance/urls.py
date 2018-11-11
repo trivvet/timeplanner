@@ -9,4 +9,8 @@ urlpatterns = [
         name='add_account'),
     url(r'^orders/add/$', views.add_order,
         name='add_order'),
+    url(r'^orders/(?P<oid>\d+)/edit/$', views.edit_order,
+        name='edit_order'),
+    url(r'^orders/(?P<oid>\d+)/delete/$', views.delete_order,
+        name='delete_order'),
 ]

@@ -102,8 +102,8 @@
             {% endif %}
             </td>
             <td class="group-buttons">
-                <a href=""><i class="fa fa-trash-o"></i></a>
-                <a href=""><i class="fa fa-pencil"></i></a>
+                <a href="{% url 'finance:delete_order' order.id %}" class="modal-button"><i class="fa fa-trash-o"></i></a>
+                <a href="{% url 'finance:edit_order' order.id %}" class="modal-button"><i class="fa fa-pencil"></i></a>
             </td>       
         </tr>
         {% endfor %}
