@@ -47,7 +47,7 @@ def edit_order(request, oid):
             checked_data = info['new_order']
             errors = info['errors']
             if errors:
-                messages.errors(request,
+                messages.error(request,
                     u"Випавте наступні помилки")
                 return render(request, 'finance/order_form.html',
                     {'header': header, 'errors': errors,

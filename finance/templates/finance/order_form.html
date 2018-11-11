@@ -69,7 +69,7 @@
         <label for="inputTusksNumber" class="col-sm-4 col-form-label">Кількість необхідних тасків</label>
         <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.tasks_number %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputTusksNumber" value="{{ item.tasks_number }}"
+                id="inputTusksNumber" value="{% if item.tasks_number %}{{ item.tasks_number }}{% endif %}"
                 placeholder="Введіть кількість необхідних тасків" name="tasks_number">
             <div class="invalid-feedback">
                 {{ errors.tasks_number }}
