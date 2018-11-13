@@ -39,6 +39,7 @@
                     {% url "freports:judges_list" as url_judges %}
                     {% url "freports:courts_list" as url_courts %} 
                     {% url "freports:tasks_list" as url_tasks %} 
+                    {% url "finance:orders_list" as url_orders %}
                     {% url "finance:accounts_list" as url_accounts %} 
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
@@ -69,8 +70,14 @@
                             <a class="nav-link {% if request.path == url_tasks %}active{% endif %}"
                                 href="{{ url_tasks }}">Завдання</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == url_accounts %}active{% endif %}" href="{{ url_accounts }}">Фінанси</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {% if request.path == url_accounts or request.path == url_orders %}active{% endif %}" href="{{ url_orders }}" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Фінанси
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url_orders }}">Список замовлень</a>
+                                <a class="dropdown-item" href="{{ url_accounts }}">Список рахунків</a>
+                            </div>
                         </li>
                     </ul>
                     <div class="btn-group" role="group">

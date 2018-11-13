@@ -10,6 +10,36 @@ from django.urls import reverse
 from ..models import Order
 
 @login_required(login_url='/login/')
+def orders_list(request):
+    orders = Order.objects.all()
+    orders_active = orders.filter(status='active')
+    orders_inactive = orders.filter(status='inactive')
+    orders_done = orders.filter(status='done')
+    header = u'Список замовлень'
+    content = {
+        'total_sum': 0,
+        'paid_sum': 0,
+        'done_sum': 0,
+        'all_orders': orders.count(),
+        'active_orders': orders_active.count(),
+        'inactive_orders': orders_inactive.count(),
+        'done_orders': orders_done.count()
+    }
+    status = request.GET.get('status', '')
+    if status == 'inactive':
+        orders = orders_inactive
+    elif status == 'done':
+        orders = orders_done
+    elif not request.GET.get('status', ''):
+        orders = orders_active
+    for order in orders:
+        content['total_sum'] += order.total_sum
+        content['paid_sum'] += order.paid_sum
+        content['done_sum'] += order.done_sum
+    return render(request, 'finance/orders_list.html', 
+        {'header': header, 'orders': orders, 'content': content})
+
+@login_required(login_url='/login/')
 def add_order(request):
     header = u"Додавання замовлення"
     if request.method == 'POST':
@@ -32,7 +62,7 @@ def add_order(request):
         elif request.POST.get('cancel_button', ''):
             messages.warning(request, 
                 u"Додавання замовлення скасовано")
-        return HttpResponseRedirect(reverse('finance:accounts_list'))
+        return HttpResponseRedirect(reverse('finance:orders_list'))
     else:
         return render(request, 'finance/order_form.html', 
             {'header': header})
@@ -62,7 +92,7 @@ def edit_order(request, oid):
         elif request.POST.get('cancel_button', ''):
             messages.warning(request,
                 u"Редагування замовлення скасовано")
-        return HttpResponseRedirect(reverse('finance:accounts_list'))
+        return HttpResponseRedirect(reverse('finance:orders_list'))
     else:
         return render(request, 'finance/order_form.html',
             {'header': header, 'item': order})
@@ -80,7 +110,7 @@ def delete_order(request, oid):
         elif request.POST.get('cancel_button', ''):
             messages.warning(request,
                 u"Видалення замовлення скасовано")
-        return HttpResponseRedirect(reverse('finance:accounts_list'))
+        return HttpResponseRedirect(reverse('finance:orders_list'))
     else:
         return render(request, 'freports/delete_form.html',
             {'header': header, 'content': content})

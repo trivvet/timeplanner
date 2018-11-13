@@ -7,24 +7,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from ..models import Account, Order
+from ..models import Account
 
 @login_required(login_url='/login/')
 def accounts_list(request):
     accounts = Account.objects.all().order_by('title')
-    orders = Order.objects.all()
-    content = {}
-    content['total_sum'] = 0
-    content['paid_sum'] = 0
-    content['done_sum'] = 0
-    for order in orders:
-        content['total_sum'] += order.total_sum
-        content['paid_sum'] += order.paid_sum
-        content['done_sum'] += order.done_sum
     header = u'Список рахунків'
     return render(request, 'finance/accounts_list.html', 
-        {'accounts': accounts, 'header': header, 'orders': orders,
-         'content': content})
+        {'accounts': accounts, 'header': header})
 
 @login_required(login_url='/login/')
 def add_account(request):

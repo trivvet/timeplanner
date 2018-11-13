@@ -31,7 +31,7 @@
         <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.total_sum %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputTotalSum" value="{{ item.total_sum }}"
-                placeholder="Введіть кошторисну варість в грн" name="total_sum">
+                placeholder="Введіть кошторисну вартість в грн" name="total_sum">
             <div class="invalid-feedback">
                 {{ errors.total_sum }}
             </div>
