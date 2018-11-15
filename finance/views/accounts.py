@@ -27,17 +27,66 @@ def add_account(request):
             if errors:
                 messages.error(request, u"Виправте наступні помилки")
                 return render(request, 'finance/account_form.html', 
-                    {'header': header, 'errors': errors, 'content': checked_data})
+                    {'header': header, 'errors': errors, 
+                    'content': checked_data})
             else:
                 new_account = Account(**checked_data)
                 new_account.save()
-                messages.success(request, u"Рахунок {} успішно доданий".format(new_account.title))
+                messages.success(request, 
+                    u"Рахунок {} успішно доданий".format(new_account.title))
         else:
             messages.warning(request, u"Додавання рахунку скасовано")
         return HttpResponseRedirect(reverse('finance:accounts_list'))
     else:
         return render(request, 'finance/account_form.html', 
         {'header': header})
+
+@login_required(login_url='/login/')
+def edit_account(request, aid):
+    header = u"Редагування рахунку"
+    account = Account.objects.get(pk=aid)
+    if request.method == 'POST':
+        if request.POST.get('save_button', ''):
+            info = valid_data(request.POST)
+            checked_data = info['new_account']
+            errors = info['errors']
+            if errors:
+                messages.error(request, u"Виправте наступні помилки")
+                return render(request, 'finance/account_form.html', 
+                    {'header': header, 'errors': errors, 
+                    'content': checked_data})
+            else:
+                edit_account = Account(**checked_data)
+                edit_account.id = aid
+                edit_account.save()
+                messages.success(request, 
+                    "Аккаунт {} успішно змінено".format(
+                        edit_account.title))
+        elif request.POST.get('cancel_button', ''):
+            messages.warning(request, "Редагування рахунку скасовано")
+        return HttpResponseRedirect(reverse('finance:accounts_list'))
+    else:
+        return render(request, 'finance/account_form.html',
+            {'header': header, 'content': account})
+    
+@login_required(login_url='/login/')
+def delete_account(request, aid):
+    account = Account.objects.get(pk=aid)
+    header = u"Видалення рахунку"
+    content = u"Ви дійсно бажаєте видалити рахунок {}?".format(
+        account.title)
+    if request.method == 'POST':
+        if request.POST.get('delete_button', ''):
+            account.delete()
+            messages.success(request, 
+                u"Рахунок {} успішно видалене".format(account.title))
+        elif request.POST.get('cancel_button', ''):
+            messages.warning(request,
+                u"Видалення рахунку скасовано")
+        return HttpResponseRedirect(reverse('finance:accounts_list'))
+    else:
+        return render(request, 'freports/delete_form.html',
+            {'header': header, 'content': content})
 
 def valid_data(form_data):
     new_account, errors = {}, {}
@@ -49,7 +98,11 @@ def valid_data(form_data):
 
     total_sum = form_data.get('total_sum')
     if total_sum:
-        new_account['total_sum'] = total_sum
+        try:
+            new_account['total_sum'] = int(total_sum)
+        except ValueError:
+            new_account['total_sum'] = total_sum
+            errors['total_sum'] = u"Будь-ласка введіть ціле число"
     else:
         errors['total_sum'] = u"Сума на рахунку є обов'язковою"
 

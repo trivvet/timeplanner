@@ -26,6 +26,7 @@
             <th scope="col">Вид рахунку</th>
             <th scope="col">Вид зберезення</th>
             <th scope="col">Сума</th>
+            <th scope="col">Надано в кредит</th>
             <th scope="col" class="group-buttons"></th>
 <!--             <th scope="col">Дії</th> -->
         </tr>
@@ -39,11 +40,12 @@
 
             <th scope="row">{{ account.title }}</th>
             <td>{{ account.get_status_display }}</td>
-            <td>{{ account.cash }}</td>
+            <td>{% if account.cash %}Готівка{% else %}Безнал{% endif %}</td>
             <td>{{ account.total_sum }}</td>
+            <td>{% if account.credit_cash %}{{ account.credit_cash }}{% endif %}</td>
             <td class="group-buttons">
-                <a href=""><i class="fa fa-trash-o"></i></a>
-                <a href=""><i class="fa fa-pencil"></i></a>
+                <a class="modal-button" href="{% url 'finance:delete_account' account.id %}"><i class="fa fa-trash-o"></i></a>
+                <a class="modal-button" href="{% url 'finance:edit_account' account.id %}"><i class="fa fa-pencil"></i></a>
             </td>       
         </tr>
         {% endfor %}

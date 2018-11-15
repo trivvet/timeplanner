@@ -3,12 +3,19 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    # account URLs
     url(r'^accounts/$', views.accounts_list, 
-        name='accounts_list'),
-    url(r'^orders/$', views.orders_list, 
-        name='orders_list'),    
+        name='accounts_list'), 
     url(r'^accounts/add/$', views.add_account, 
         name='add_account'),
+    url(r'^accounts/(?P<aid>\d+)/edit/$', views.edit_account,
+        name='edit_account'),
+    url(r'^accounts/(?P<aid>\d+)/delete/$', views.delete_account,
+        name='delete_account'),
+
+    # order URLs
+    url(r'^orders/$', views.orders_list, 
+        name='orders_list'),   
     url(r'^orders/add/$', views.add_order,
         name='add_order'),
     url(r'^orders/(?P<oid>\d+)/edit/$', views.edit_order,

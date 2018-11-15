@@ -1,4 +1,9 @@
-from .accounts import accounts_list, add_account
+from .accounts import (
+    accounts_list, 
+    add_account, 
+    edit_account,
+    delete_account
+    )
 from .orders import (
     orders_list,
     add_order, 

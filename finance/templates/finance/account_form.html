@@ -42,36 +42,39 @@
     <div class="form-group row">
         <label for="inputCredit" class="col-sm-4 col-form-label">Кредитні кошти</label>
         <div class="col-sm-6">
-            <input type="text" class="form-control {% if errors.credit_sum %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputCredit" value="{{ content.credit_sum }}"
-                placeholder="Введіть суму в кредиті" name="credit_sum">
+            <input type="text" class="form-control {% if errors.credit_cash %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputCredit" value="{{ content.credit_cash }}"
+                placeholder="Введіть суму в кредиті" name="credit_cash">
             <div class="invalid-feedback">
-                {{ errors.credit_sum }}
+                {{ errors.credit_cash }}
             </div>
         </div>
     </div>
 
     <!-- Account Cash -->
     <div class="form-group row">
-        <label for="inputCash" class="col-sm-4 col-form-label">Готівкова форма</label>
+        <div class="col-sm-4 text-right">Готівкова форма</div>
         <div class="col-sm-6">
-            <input class="form-control" type="checkbox" id="inputCash" name="cash" value="True"> 
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="inputCash" name="cash" value="True" {% if content.cash %}checked{% endif %}> 
+            </div>
+            
         </div>
     </div>
 
-    <!-- Account Cash -->
+    <!-- Account Status -->
     <div class="form-group">
         <div class="row">
             <label for="inputStatus" class="col-sm-4 col-form-label">Статус рахунку</label>
             <div class="col-sm-6">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="status" id="inputStatus" value="self" checked>
+                    <input class="form-check-input" type="radio" name="status" id="inputStatus" value="self" {% if content.status == 'self' or not content.status %}checked{% endif %}>
                     <label class="form-check-label" for="inputStatus">
                       Особистий
                     </label>
                 </div>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="status" id="inputStatus2" value="work">
+                    <input class="form-check-input" type="radio" name="status" id="inputStatus2" value="work" {% if content.status == 'work' %}checked{% endif %}>
                     <label class="form-check-label" for="inputStatus2">
                       Робочий
                     </label>
