@@ -105,49 +105,81 @@
 
         {% endif %}
 
-        <!-- Start Container -->
-        <div class="container">
-            <div class="row" id="second-header">
+        <div class="wrapper">
+
+            <!-- Sidebar -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Bootstrap Sidebar</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    <p>Dummy Heading</p>
+                    <li>
+                        <a href="#">About</a>
+                    </li>
+                    <li>
+                        <a href="#">Portfolio</a>
+                    </li>
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Page Content -->
+            <div id="content">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="container-fluid">
+
+                        <button type="button" id="sidebarCollapse" class="btn btn-info">
+                            <i class="fas fa-align-left"></i>
+                            <span>Toggle Sidebar</span>
+                        </button>
+
+                    </div>
+                </nav>
+                <div class="row" id="second-header">
                     {% block title %}{% endblock title %}
-            </div>
+                </div>
 
-            <div class="row" id="message">
-                <div class="col">
-                    {% block messages %}
-                        {% if messages %}
-                        {% for message in messages %}
-                        <div class="alert alert-{% if message.tags == 'error' %}danger
-                             {% else %}{{ message.tags }}{% endif %}
-                             "
-                             role="alert">{{ message }}</div>
-                        {% endfor %}
-                        {% endif %}
-                    {% endblock messages %}
-                    {% block extra_messages %}
-                    {% endblock extra_messages %}
+                <div class="row" id="message">
+                    <div class="col">
+                        {% block messages %}
+                            {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger
+                                 {% else %}{{ message.tags }}{% endif %}
+                                 "
+                                 role="alert">{{ message }}</div>
+                            {% endfor %}
+                            {% endif %}
+                        {% endblock messages %}
+                        {% block extra_messages %}
+                        {% endblock extra_messages %}
+                    </div>
+                </div>
+
+                <div class="row" id="main-content">
+                    <div class="col-12">
+                        {% block content %}{% endblock content %}
+                    </div>
+                </div>
+                <div class="row" id="extra-content">
+                    <div class="col-12">
+                        {% block extra_content %}{% endblock extra_content %}
+                    </div>
+                </div>
+
+                <div class="row" id="footer">
+                    <div class="col-12">
+                        <hr />
+                        <p>{% if user.is_authenticated %}Time Planner, 2017-2018 &copy; <a href="{% url 'myadmin:index' %}">Адмінка</a>{% endif %}</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="row" id="main-content">
-                <div class="col-12">
-                    {% block content %}{% endblock content %}
-                </div>
-            </div>
-            <div class="row" id="extra-content">
-                <div class="col-12">
-                    {% block extra_content %}{% endblock extra_content %}
-                </div>
-            </div>
-
-            <div class="row" id="footer">
-                <div class="col-12">
-                    <hr />
-                    <p>{% if user.is_authenticated %}Time Planner, 2017-2018 &copy; <a href="{% url 'myadmin:index' %}">Адмінка</a>{% endif %}</p>
-                </div>
-            </div>
-
-        </div>
-        <!-- Ent Container -->
+        </div> 
 
         <!-- Start Modal -->
         <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="modalForm">
