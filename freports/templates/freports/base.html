@@ -6,6 +6,7 @@
     <head>
         <meta charset="UTF-8" />
         <title>BudExpert</title>
+        <link rel="shortcut icon" href="{{ PORTAL_URL }}{% static 'apple-icon-60x60.png' %}">
 
         <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:400,700|Nunito:400,700" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
@@ -13,11 +14,8 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" 
             href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0/css/tempusdominus-bootstrap-4.min.css" />
-<!--         <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.standalone.min.css" /> -->
-         <!-- <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker.min.css" /> -->
         <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'css/main.css' %}" type="text/css">
+        <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'css/sidebar.css' %}" type="text/css">
     </head>
 
     <body>
@@ -109,38 +107,37 @@
 
             <!-- Sidebar -->
             <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Bootstrap Sidebar</h3>
-                </div>
+                <div>
+                    <div id="dismiss">
+                        <i class="fa fa-arrow-left"></i>
+                    </div>
+                    <div class="sidebar-header">
+                        <h3>Список проваджень</h3>
+                    </div>
 
-                <ul class="list-unstyled components">
-                    <p>Dummy Heading</p>
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
-                    </li>
-                </ul>
+                    <ul class="list-unstyled components">
+                        <p>Dummy Heading</p>
+                        <li>
+                            <a href="#">About</a>
+                        </li>
+                        <li>
+                            <a href="#">Portfolio</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
 
             <!-- Page Content -->
-            <div id="content">
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <div class="container-fluid">
-
-                        <button type="button" id="sidebarCollapse" class="btn btn-info">
-                            <i class="fas fa-align-left"></i>
-                            <span>Toggle Sidebar</span>
-                        </button>
-
-                    </div>
-                </nav>
+            <div id="content" class="container">
                 <div class="row" id="second-header">
                     {% block title %}{% endblock title %}
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
                 </div>
 
                 <div class="row" id="message">

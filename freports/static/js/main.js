@@ -206,7 +206,6 @@ function initForm(form, modal, link) {
 }
 
 function initSelectCourt(link) {
-    console.log(link);
     $('#inputCourtForOrder').change(function() {
         $.ajax('', {
             'url': link,
@@ -304,6 +303,16 @@ function clickExecuteTask() {
     });
 }
 
+function showSidebar() {
+    $('#dismiss').on('click', function () {
+        // hide sidebar
+        $('#sidebar').addClass('active');
+    });
+    $('#sidebarCollapse').on('click', function() {
+        $('#sidebar').toggleClass('active');
+    })
+}
+
 $(document).ready(function(){
     initDateFields();
     initDateTimeFields();
@@ -314,4 +323,5 @@ $(document).ready(function(){
     addPlusButton();
     showButtons();
     clickExecuteTask();
+    showSidebar();
 })
