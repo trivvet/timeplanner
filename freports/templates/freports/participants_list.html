@@ -1,11 +1,34 @@
 {% extends "freports/base.html" %}
 
-{% block title %}
-<div class="col">
-    <span class="h1">{{ header }}</span>
-    <span class="badge badge-info">Alpha</span>
-</div>
-{% endblock title %}
+{% block sidebar %}
+<!-- Sidebar -->
+<nav id="sidebar" {% if request.COOKIES.sidebar %}class="active"{% endif %}>
+    <div>
+        <div class="sidebar-header">
+            <h2>{{ header }}</h2>
+            <span class="badge badge-info">Alpha</span>
+        </div>
+
+        <ul class="list-unstyled components">
+            {% if request.path != url_reports %}
+            <li class="active">
+                <a href="{{ url_reports }}">Список проваджень</a>
+            </li>
+            {% endif %}
+            {% if request.path != url_participants %}
+            <li>
+                <a href="{{ url_participants }}">Учасники проваджень</a>
+            </li>
+            {% endif %}
+            {% if request.path != url_subjects %}
+            <li>
+                <a href="{{ url_subjects }}">Об'єкти проваджень</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+{% endblock sidebar %}
 
 {% block extra_messages %}
 {% endblock extra_messages %}

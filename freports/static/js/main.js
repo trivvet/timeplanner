@@ -304,12 +304,20 @@ function clickExecuteTask() {
 }
 
 function showSidebar() {
-    $('#dismiss').on('click', function () {
-        // hide sidebar
+    if ($.cookie("sidebar")) {
         $('#sidebar').addClass('active');
-    });
+        $(this).addClass('active');
+    }
     $('#sidebarCollapse').on('click', function() {
         $('#sidebar').toggleClass('active');
+        $(this).toggleClass('active');
+        if ($('#sidebar').hasClass('active')) {
+            console.log('not removeCookie');
+            $.cookie("sidebar", 'active');
+        } else {
+            console.log('removeCookie')
+            $.removeCookie('sidebar');
+        }
     })
 }
 

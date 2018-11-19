@@ -1,14 +1,35 @@
 {% extends "freports/base.html" %}
 
-{% block title %}
-<div class="col">
-    <span class="h1">Список проваджень</span>
-<!-- </div> -->
-<!-- <div class="col-4"> -->
-    <a class="btn btn-outline-info modal-button"
-        id="add-report" href="{% url 'freports:add_new_report' %}">Додати провадження</a>
-</div>
-{% endblock title %}
+{% block sidebar %}
+<!-- Sidebar -->
+<nav id="sidebar" {% if request.COOKIES.sidebar %}class="active"{% endif %}>
+    <div>
+        <div class="sidebar-header">
+            <h2>Список проваджень</h2>
+            <a class="btn btn-info modal-button mt-3"
+                id="add-report" href="{% url 'freports:add_new_report' %}">Додати провадження</a>
+        </div>
+
+        <ul class="list-unstyled components">
+            {% if request.path != url_reports %}
+            <li class="active">
+                <a href="{{ url_reports }}">Список проваджень</a>
+            </li>
+            {% endif %}
+            {% if request.path != url_participants %}
+            <li>
+                <a href="{{ url_participants }}">Учасники проваджень</a>
+            </li>
+            {% endif %}
+            {% if request.path != url_subjects %}
+            <li>
+                <a href="{{ url_subjects }}">Об'єкти проваджень</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+{% endblock sidebar %}
 
 {% block extra_messages %}
 {% if request.GET.filter_status == 'success' %}

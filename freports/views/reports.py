@@ -16,6 +16,7 @@ from ..models import Report, ReportEvents, Judge, Court, ReportParticipants, Rep
 
 @login_required(login_url='/login/')
 def reports_list(request):
+    sidebar = request.COOKIES.get('sidebar', '')
     content = {}
     days_count = ''
     reports_all = Report.objects.all()
@@ -81,7 +82,8 @@ def reports_list(request):
             reports = paginator.page(paginator.num_page)
 
     return render(request, 'freports/reports_list.html', 
-        {'reports': reports, 'content': content})
+        {'reports': reports, 'content': content, 
+         'sidebar': sidebar})
 
 @login_required(login_url='/login/')
 def add_new_report_first(request):

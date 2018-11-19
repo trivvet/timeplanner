@@ -1,16 +1,23 @@
 {% extends "freports/base.html" %}
 
-{% block title %}
+{% block sidebar %}
+<!-- Sidebar -->
+<nav id="sidebar" {% if request.COOKIES.sidebar %}class="active"{% endif %}>
+    <div>
+        <div class="sidebar-header">
+            <span class="h1">{{ header }}</span><span class="badge badge-info">Alpha</span>
+             <a class="btn btn-info modal-button mt-3"
+                href="{% url 'finance:add_order' %}">Додати замовлення</a>
+        </div>
 
-<div class="col">
-    <span class="h1">{{ header }}</span><span class="badge badge-info">Alpha</span>
-<!-- </div>
-<div class="col-4"> -->
-     <a class="btn btn-outline-info modal-button mb-3 ml-3"
-        href="{% url 'finance:add_order' %}">Додати замовлення</a>
-</div>
-
-{% endblock title %}
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="{{ url_accounts }}">Список рахунків</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock sidebar %}
 
 {% block extra_messages %}
 {% endblock extra_messages %}
