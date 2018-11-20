@@ -1,13 +1,31 @@
 {% extends "freports/base.html" %}
 
-{% block title %}
+{% block sidebar %}
+<!-- Sidebar -->
+<nav id="sidebar" {% if request.COOKIES.sidebar %}class="active"{% endif %}>
+    <div>
+        <div class="sidebar-header">
+            <span class="h2">Суди</span>
+        </div>
 
+        <ul class="list-unstyled components">
+            <li>
+                <a href="{{ url_courts }}">Список судів</a>
+            </li>
+            <li class="active">
+                <a href="{{ url_judges }}">Список суддей</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock sidebar %}
+
+{% block title %}
 <div class="col">
-    <span class="h1">{{ header }}</span>
+    <span class="h1">Список суддей</span>
     <a class="btn btn-outline-info modal-button"
         id="add-report" href="{% url 'freports:add_judge' %}">Додати суддю</a>
 </div>
-
 {% endblock title %}
 
 {% block extra_messages %}

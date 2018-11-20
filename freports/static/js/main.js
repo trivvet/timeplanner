@@ -306,16 +306,17 @@ function clickExecuteTask() {
 function showSidebar() {
     if ($.cookie("sidebar")) {
         $('#sidebar').addClass('active');
-        $(this).addClass('active');
+        $('#sidebarCollapse').addClass('active');
+    } else {
+        $('#sidebar').removeClass('active');
+        $('#sidebarCollapse').removeClass('active');
     }
     $('#sidebarCollapse').on('click', function() {
         $('#sidebar').toggleClass('active');
         $(this).toggleClass('active');
         if ($('#sidebar').hasClass('active')) {
-            console.log('not removeCookie');
             $.cookie("sidebar", 'active');
         } else {
-            console.log('removeCookie')
             $.removeCookie('sidebar');
         }
     })

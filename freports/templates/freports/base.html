@@ -41,7 +41,7 @@
                     {% url "finance:accounts_list" as url_accounts %} 
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == url_reports %}active{% endif %}"
+                            <a class="nav-link {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects %}active{% endif %}"
                                 href="{{ url_reports }}">Провадження</a>
                         </li>
                         <li class="nav-item">
@@ -49,11 +49,7 @@
                                 href="{{ url_contacts }}">Контакти</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == url_judges %}active{% endif %}"
-                                href="{{ url_judges }}">Судді</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == url_courts %}active{% endif %}"
+                            <a class="nav-link {% if request.path == url_courts or request.path == url_judges %}active{% endif %}"
                                 href="{{ url_courts }}">Суди</a>
                         </li>
                         <li class="nav-item">
@@ -61,7 +57,7 @@
                                 href="{{ url_tasks }}">Завдання</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == url_orders %}active{% endif %}"
+                            <a class="nav-link {% if request.path == url_orders or request.path == url_accounts %}active{% endif %}"
                                 href="{{ url_orders }}">Фінанси</a>
                         </li>
                     </ul>
@@ -91,21 +87,22 @@
         {% endif %}
 
         <div class="wrapper">
+            <!-- Sidbar -->
             {% block sidebar %}{% endblock sidebar %}
 
             <!-- Page Content -->
             <div id="content" class="container">
-                <div class="row" id="second-header">
-                    {% block title %}{% endblock title %}
-                    {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects %}
+                <div class="row">
                     <div class="col">
-                        <button type="button" id="sidebarCollapse" class="navbar-btn active">
+                        <button type="button" id="sidebarCollapse" class="navbar-btn {% if request.COOKIES.sidebar %}active{% endif %}">
                             <span></span>
                             <span></span>
                             <span></span>
                         </button>
                     </div>
-                    {% endif %}
+                </div>
+                <div class="row" id="second-header">
+                    {% block title %}{% endblock title %}
                 </div>
 
                 <div class="row" id="message">

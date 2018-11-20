@@ -5,19 +5,28 @@
 <nav id="sidebar" {% if request.COOKIES.sidebar %}class="active"{% endif %}>
     <div>
         <div class="sidebar-header">
-            <span class="h1">{{ header }}</span><span class="badge badge-info">Alpha</span>
-             <a class="btn btn-outline-info modal-button mt-3"
-                id="add-report" href="{% url 'finance:add_account' %}">Додати рахунок</a>
+            <span class="h2">Фінанси</span>
         </div>
 
         <ul class="list-unstyled components">
             <li>
-                <a href="{{ url_orders }}">Список замовлень</a>
+                <a href="{{ url_orders }}">Список замовлень <span class="badge badge-info">Alpha</span></a>
+            </li>
+            <li class="active">
+                <a href="{{ url_accounts }}">Список рахунків <span class="badge badge-info">Alpha</span></a>
             </li>
         </ul>
     </div>
 </nav>
 {% endblock sidebar %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список рахунків</span> <span class="badge badge-info">Alpha</span>
+    <a class="btn btn-outline-info modal-button"
+        id="add-report" href="{% url 'finance:add_account' %}">Додати рахунок</a>
+</div>
+{% endblock title %}
 
 {% block extra_messages %}
 {% endblock extra_messages %}

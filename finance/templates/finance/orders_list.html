@@ -5,19 +5,29 @@
 <nav id="sidebar" {% if request.COOKIES.sidebar %}class="active"{% endif %}>
     <div>
         <div class="sidebar-header">
-            <span class="h1">{{ header }}</span><span class="badge badge-info">Alpha</span>
-             <a class="btn btn-info modal-button mt-3"
-                href="{% url 'finance:add_order' %}">Додати замовлення</a>
+            <span class="h2">Фінанси</span>
         </div>
 
         <ul class="list-unstyled components">
             <li class="active">
-                <a href="{{ url_accounts }}">Список рахунків</a>
+                <a href="{{ url_orders }}">Список замовлень <span class="badge badge-info">Alpha</span></a>
             </li>
+            <li>
+                <a href="{{ url_accounts }}">Список рахунків <span class="badge badge-info">Alpha</span></a>
+            </li>
+
         </ul>
     </div>
 </nav>
 {% endblock sidebar %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список замовлень</span> <span class="badge badge-info">Alpha</span>
+    <a class="btn btn-outline-info modal-button" id="add-report"
+        href="{% url 'finance:add_order' %}">Додати замовлення</a>
+</div>
+{% endblock title %}
 
 {% block extra_messages %}
 {% endblock extra_messages %}
@@ -37,7 +47,9 @@
         <tr>
             <th scope="col">Назва замовлення</th>
             <th scope="col">Провадження</th>
+            {% if request.GET.status == 'all' %}
             <th scope="col">Статус</th>
+            {% endif %}
             <th scope="col">Кошторисна вартість</th>
             <th scope="col">Оплачено</th>
             <th scope="col">Виконано</th>
@@ -48,7 +60,7 @@
     <tbody>
         {% for order in orders %}
         <tr>
-            <th scope="row">{{ order.name }}</th>
+            <th scope="row" class="{% if order.status == 'active' %}text-success{% endif %}">{{ order.name }}</th>
             <td>
                 {% if order.report %}
                 <a href="{% url 'freports:report_detail' order.report.id %}">
@@ -56,7 +68,9 @@
                 </a>
                 {% endif %}
             </td>
+            {% if request.GET.status == 'all' %}
             <td>{{ order.get_status_display }}</td>
+            {% endif %}
             <td>{{ order.total_sum }}</td>
             <td>{{ order.paid_sum }}</td>
             <td>{{ order.done_sum }}</td>

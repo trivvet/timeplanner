@@ -22,9 +22,8 @@ def subjects_list(request):
             subjects = paginator.page(1)
         except EmptyPage:
             subjects = paginator.page(paginator.num_page)
-    header = u"Список об'єктів дослідження"
     return render(request, 'freports/subjects_list.html', 
-        {'subjects': subjects, 'header': header})
+        {'subjects': subjects})
 
 @login_required(login_url='/login/')
 def subject_detail(request, sid):

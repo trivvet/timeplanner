@@ -15,7 +15,6 @@ def orders_list(request):
     orders_active = orders.filter(status='active')
     orders_inactive = orders.filter(status='inactive')
     orders_done = orders.filter(status='done')
-    header = u'Список замовлень'
     content = {
         'total_sum': 0,
         'paid_sum': 0,
@@ -37,7 +36,7 @@ def orders_list(request):
         content['paid_sum'] += order.paid_sum
         content['done_sum'] += order.done_sum
     return render(request, 'finance/orders_list.html', 
-        {'header': header, 'orders': orders, 'content': content})
+        {'orders': orders, 'content': content})
 
 @login_required(login_url='/login/')
 def add_order(request):
