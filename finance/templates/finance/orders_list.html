@@ -2,7 +2,7 @@
 
 {% block sidebar %}
 <!-- Sidebar -->
-<nav id="sidebar" {% if request.COOKIES.sidebar %}class="active"{% endif %}>
+<nav id="sidebar" {% if request.COOKIES.sidebar == 'active' %}class="active"{% endif %}>
     <div>
         <div class="sidebar-header">
             <span class="h2">Фінанси</span>
@@ -60,7 +60,7 @@
     <tbody>
         {% for order in orders %}
         <tr>
-            <th scope="row" class="{% if order.status == 'active' %}text-success{% endif %}">{{ order.name }}</th>
+            <th scope="row" class="{% if order.status == 'active' %}text-success{% elif order.status == 'inactive' %}text-secondary{% elif order.status == 'done' %}text-info{% endif %}">{{ order.name }}</th>
             <td>
                 {% if order.report %}
                 <a href="{% url 'freports:report_detail' order.report.id %}">

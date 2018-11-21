@@ -19,6 +19,10 @@ body {
     perspective: 1500px; 
 }
 
+#questionsHeader {
+  margin-top: 50px;
+}
+
 #second-header {
   color: #221d5a;
   margin-bottom: 15px;
@@ -297,7 +301,7 @@ td.group-buttons {
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
-.checkmark:after {
+.checkmar<link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'css/home.css' %}" type="text/css">k:after {
   content: "";
   position: absolute;
   display: none;

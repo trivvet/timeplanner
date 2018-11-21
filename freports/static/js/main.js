@@ -304,10 +304,11 @@ function clickExecuteTask() {
 }
 
 function showSidebar() {
-    if ($.cookie("sidebar")) {
+    var sidebar = $.cookie("sidebar");
+    if (sidebar == 'active') {
         $('#sidebar').addClass('active');
         $('#sidebarCollapse').addClass('active');
-    } else {
+    } else if (sidebar == '' || sidebar == 'inactive') {
         $('#sidebar').removeClass('active');
         $('#sidebarCollapse').removeClass('active');
     }
@@ -315,11 +316,11 @@ function showSidebar() {
         $('#sidebar').toggleClass('active');
         $(this).toggleClass('active');
         if ($('#sidebar').hasClass('active')) {
-            $.cookie("sidebar", 'active');
+            $.cookie("sidebar", 'active', {path: '/'});
         } else {
-            $.removeCookie('sidebar');
+            $.cookie("sidebar", 'inactive', {path: '/'});
         }
-    })
+    });
 }
 
 $(document).ready(function(){
