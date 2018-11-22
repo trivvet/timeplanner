@@ -2,10 +2,10 @@
 
 {% block sidebar %}
 <!-- Sidebar -->
-<nav id="sidebar" {% if request.COOKIES.sidebar %}class="active"{% endif %}>
+<nav id="sidebar" {% if request.COOKIES.sidebar == 'active' %}class="active"{% endif %}>
     <div>
         <div class="sidebar-header">
-            <h2>Провадження</h2>
+            <h2 class="text-center">Провадження</h2>
         </div>
 
         <ul class="list-unstyled components">

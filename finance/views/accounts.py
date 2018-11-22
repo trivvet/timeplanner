@@ -60,7 +60,7 @@ def edit_account(request, aid):
                 edit_account.id = aid
                 edit_account.save()
                 messages.success(request, 
-                    "Аккаунт {} успішно змінено".format(
+                    "Рахунок {} успішно змінений".format(
                         edit_account.title))
         elif request.POST.get('cancel_button', ''):
             messages.warning(request, "Редагування рахунку скасовано")
@@ -79,7 +79,7 @@ def delete_account(request, aid):
         if request.POST.get('delete_button', ''):
             account.delete()
             messages.success(request, 
-                u"Рахунок {} успішно видалене".format(account.title))
+                u"Рахунок {} успішно видалений".format(account.title))
         elif request.POST.get('cancel_button', ''):
             messages.warning(request,
                 u"Видалення рахунку скасовано")

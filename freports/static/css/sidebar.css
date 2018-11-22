@@ -34,20 +34,14 @@
 }
 
 #sidebar .sidebar-header {
-    padding: 40px;
-    background: #6d7fcc;
-    margin-bottom: 30px;
-}
-
-#sidebar ul.components {
-    padding: 20px 0;
-    margin: 10px 0;
-    border-bottom: 1px solid #47748b;
-}
-
-#sidebar ul p {
     color: #fff;
-    padding: 10px;
+    padding: 40px 0;
+}
+
+#sidebar ul li {
+    color: #fff;
+    background-color: #5a6066;
+    margin: 6px 0;
 }
 
 #sidebar a, #sidebar a:hover, #sidebar a:focus {
@@ -62,14 +56,11 @@
     display: block;
 }
 
-#sidebar ul li a:hover, #sidebar ul li.active a {
+#sidebar ul li:hover, #sidebar ul li.active {
     color: #7386D5;
     background: #fff;
-}
-
-#sidebar ul li.active a {
-    border: #6d7fcc 5px solid;
-    border-radius: 5px;
+    transition: all 0.3s;
+    border-left: 5px solid #e4b215;
 }
 
 #sidebarCollapse {

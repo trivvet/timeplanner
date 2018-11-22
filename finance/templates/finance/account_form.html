@@ -43,7 +43,7 @@
         <label for="inputCredit" class="col-sm-4 col-form-label">Кредитні кошти</label>
         <div class="col-sm-6">
             <input type="text" class="form-control {% if errors.credit_cash %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputCredit" value="{{ content.credit_cash }}"
+                id="inputCredit" value="{% if content.credit_cash %}{{ content.credit_cash }}{% endif %}"
                 placeholder="Введіть суму в кредиті" name="credit_cash">
             <div class="invalid-feedback">
                 {{ errors.credit_cash }}

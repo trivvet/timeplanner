@@ -304,14 +304,6 @@ function clickExecuteTask() {
 }
 
 function showSidebar() {
-    var sidebar = $.cookie("sidebar");
-    if (sidebar == 'active') {
-        $('#sidebar').addClass('active');
-        $('#sidebarCollapse').addClass('active');
-    } else if (sidebar == '' || sidebar == 'inactive') {
-        $('#sidebar').removeClass('active');
-        $('#sidebarCollapse').removeClass('active');
-    }
     $('#sidebarCollapse').on('click', function() {
         $('#sidebar').toggleClass('active');
         $(this).toggleClass('active');
