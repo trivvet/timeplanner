@@ -13,10 +13,14 @@ body {
 }
 
 .wrapper {
-    display: flex;
-    width: 100%;
-    align-items: stretch;
-    perspective: 1500px; 
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+  perspective: 1500px; 
+}
+
+#content {
+  margin-top: 70px;
 }
 
 #questionsHeader {
