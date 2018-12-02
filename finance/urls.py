@@ -22,4 +22,8 @@ urlpatterns = [
         name='edit_order'),
     url(r'^orders/(?P<oid>\d+)/delete/$', views.delete_order,
         name='delete_order'),
+
+    # income URLs
+    url(r'^incomes/$', views.incomes_list,
+        name='incomes_list'),
 ]

@@ -10,3 +10,7 @@ from .orders import (
     edit_order, 
     delete_order
     )
+
+from .incomes import (
+    incomes_list,
+    )

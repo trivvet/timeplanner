@@ -1,24 +1,7 @@
 {% extends "freports/base.html" %}
 
 {% block sidebar %}
-<!-- Sidebar -->
-<nav id="sidebar" {% if request.COOKIES.sidebar == 'active' %}class="active"{% endif %}>
-    <div>
-        <div class="sidebar-header">
-            <h2 class="text-center">Фінанси</h2>
-        </div>
-
-        <ul class="list-unstyled components">
-            <li class="active">
-                <a href="{{ url_orders }}">Список замовлень <span class="badge badge-info">Alpha</span></a>
-            </li>
-            <li>
-                <a href="{{ url_accounts }}">Список рахунків <span class="badge badge-info">Alpha</span></a>
-            </li>
-
-        </ul>
-    </div>
-</nav>
+{% include 'finance/sidebar.html' %}
 {% endblock sidebar %}
 
 {% block title %}

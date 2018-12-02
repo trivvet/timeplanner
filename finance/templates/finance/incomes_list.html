@@ -1,0 +1,59 @@
+{% extends "freports/base.html" %}
+
+{% block sidebar %}
+{% include 'finance/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список надходжень</span> <span class="badge badge-info">Alpha</span>
+    <a class="btn btn-outline-info modal-button" id="add-report"
+        href="">Додати надходження</a>
+</div>
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+{% if incomes %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Дата</th>
+            <th scope="col">Замовлення</th>
+            <th scope="col">Рахунок</th>
+            <th scope="col">Сума</th>
+            <th scope="col">Платник</th>
+            <th scope="col" class="group-buttons"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for income in incomes %}
+        <tr>
+            <th scope="row">{{ income.date }}</th>
+            <td>{{ income.order.name }}</td>
+            <td>{{ income.account.title }}</td>
+            <td>{{ income.amount }}</td>
+            <td>
+            {% if income.payer %}
+            {{ income.payer }}
+            {% else %}
+            -
+            {% endif %}
+            </td>
+            <td class="group-buttons">
+                <a href="" class="modal-button"><i class="fa fa-trash-o"></i></a>
+                <a href="" class="modal-button"><i class="fa fa-pencil"></i></a>
+            </td>       
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}

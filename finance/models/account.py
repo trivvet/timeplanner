@@ -5,6 +5,11 @@ from django.db import models
 
 
 class Account(models.Model):
+    STATUS_VARIANT = (
+        ('self', u'Особистий'),
+        ('work', u'Робочий'),
+    )
+
     class Meta(object):
         verbose_name=u"Рахунок"
         verbose_name_plural=u"Рахунки"
