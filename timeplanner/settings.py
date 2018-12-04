@@ -21,12 +21,16 @@ from .env_settings import SECRET_KEY, DEBUG, TEMPLATE_DEBUG, PORTAL_URL, ALLOWED
 # Application definition
 
 INSTALLED_APPS = [
+    # DJANGO APPS
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # EXTERNAL APPS
+    'crispy_forms',
+    # INTERNAL APPS
     'freports',
     'business_card',
     'finance',
@@ -109,3 +113,5 @@ STATIC_URL = '/static/'
 AXES_LOGIN_FAILURE_LIMIT = 5
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = 10
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

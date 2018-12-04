@@ -1,0 +1,26 @@
+{% extends "freports/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<div class="col">
+    <h2>Формочка</h2>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+
+    {% crispy form %}
+
+    <div class="form-group row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-6">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" id="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}

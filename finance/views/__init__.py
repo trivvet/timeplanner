@@ -13,4 +13,5 @@ from .orders import (
 
 from .incomes import (
     incomes_list,
+    IncomeCreate
     )
