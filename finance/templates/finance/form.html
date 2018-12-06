@@ -3,15 +3,16 @@
 
 {% block title %}
 <div class="col">
-    <h2>Формочка</h2>
+    <h2>{{ header }}</h2>
 </div>
 {% endblock title %}
 
 {% block content %}
-<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+
+{% crispy form %}
+<!-- <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
 
-    {% crispy form %}
 
     <div class="form-group row">
         <div class="col-sm-4"></div>
@@ -22,5 +23,5 @@
                  name="cancel_button" value="Скасувати" />
         </div>
     </div>
-</form>
+</form> -->
 {% endblock content %}

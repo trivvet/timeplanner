@@ -1,0 +1,29 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="col">
+    <h2 class="text-center">{{ header }}</h2>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+    <input type="hidden" name="cancel_next" value="{{ cancel_url }}">
+    <div class="form-group row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <p>Ви дійсно бажаєте видалити {{ object }}?</p>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-6">
+          <input type="submit" class="btn btn-danger" value="Видалити"
+                 name="delete_button" />
+          <input type="submit" class="btn btn-link" data-dismiss="modal"
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}

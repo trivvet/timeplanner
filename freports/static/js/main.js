@@ -174,6 +174,7 @@ function initForm(form, modal, link) {
     initDateTimeFields();
     initDateDecisionField();
     initSelectCourt(link);
+    closeModalForm();
 
     form.ajaxForm({
         url: link,
@@ -202,6 +203,12 @@ function initForm(form, modal, link) {
                 $('#modalForm').modal('hide');
             }
         }
+    });
+}
+
+function closeModalForm() {
+    $('#button-id-submit').on("click", function() {
+        $('#modalForm').modal('hide');
     });
 }
 

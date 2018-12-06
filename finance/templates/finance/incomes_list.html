@@ -33,7 +33,7 @@
         {% for income in incomes %}
         <tr>
             <th scope="row">{{ income.date }}</th>
-            <td>{{ income.order.name }}</td>
+            <td>{{ income.order.name }} (id="{{ income.id }}")</td>
             <td>{{ income.account.title }}</td>
             <td>{{ income.amount }}</td>
             <td>
@@ -44,7 +44,7 @@
             {% endif %}
             </td>
             <td class="group-buttons">
-                <a href="" class="modal-button"><i class="fa fa-trash-o"></i></a>
+                <a href="{% url 'finance:delete_income' income.id %}" class="modal-button"><i class="fa fa-trash-o"></i></a>
                 <a href="" class="modal-button"><i class="fa fa-pencil"></i></a>
             </td>       
         </tr>

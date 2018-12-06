@@ -1,26 +1,43 @@
 # -*- coding: utf-8 -*-
-from django.forms import ModelForm
+from django import forms
+from django.db import models
 
+from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, ButtonHolder
+from crispy_forms.layout import Submit, Layout, Button
 
-from .models import Income
+from .models import Income, Order
 
-class IncomeForm(ModelForm):
+class IncomeForm(forms.ModelForm):
+    order = forms.ModelChoiceField(
+        label=u"Замовлення",
+        queryset=Order.objects.filter(status="inactive"), 
+        empty_label="---")
+
+    date = forms.DateField(
+        label=u"Дата отримання",
+        # input_formats='%Y-%m-%d',
+        widget=forms.DateInput(attrs={
+            'id': 'inputDate',
+            'data-toggle': 'datetimepicker',
+            'data-target': "#inputDate"}))
+
     def __init__(self, *args, **kwargs):
         super(IncomeForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
+        self.helper = FormHelper(self)
+
         self.helper.form_class = 'form-horizontal'
         self.helper.form_method = 'post'
         self.helper.label_class = 'col-sm-4'
         self.helper.field_class = 'col-sm-6'
 
-        self.helper.add_input(
-            Submit('submit', u'Зберегти', 
-                # css_class='btn btn-primary'
-                ))
-        self.helper.add_input(
-            Submit('cancel', u'Скасувати'))
+        self.helper.layout.append(Layout(
+            FormActions(
+                Submit('submit', u'Зберегти'),
+                Button('submit', u'Скасувати', 
+                    css_class='btn-link'),
+            )
+        ))
 
     class Meta:
         model = Income

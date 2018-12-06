@@ -43,4 +43,5 @@ class Account(models.Model):
         null=True)
 
     def __unicode__(self):
-        return u"Рахунок {} ({})".format(self.title, self.status)
+        return u"Рахунок {} ({})".format(
+            self.title, dict(self.STATUS_VARIANT)[self.status])
