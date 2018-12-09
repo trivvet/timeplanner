@@ -175,6 +175,7 @@ function initForm(form, modal, link) {
     initDateDecisionField();
     initSelectCourt(link);
     closeModalForm();
+    initGetOrderAmount(link);
 
     form.ajaxForm({
         url: link,
@@ -241,6 +242,25 @@ function initSelectCourt(link) {
     if ($('#inputCourtForOrder').val()) {
         inputNumberField();
     }
+}
+
+function initGetOrderAmount(link) {
+    $('#id_order').change(function() {
+        $.ajax('', {
+            'url': link,
+            'type': 'GET',
+            'async': true,
+            'dataType': 'json',
+            'data': {'order_id': $(this).val(), 'format': 'json'},
+            'error': function(xhr, status, error) {
+                alert(error);
+            },
+            'success': function(data, status, xhr) {
+                console.log(data.pk);
+                $('#id_amount').val(data.total_sum);
+            },
+        });
+    });
 }
 
 function inputNumberField() {

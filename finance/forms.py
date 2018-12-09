@@ -6,7 +6,7 @@ from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Button
 
-from .models import Income, Order
+from .models import Income, Order, Account
 
 class IncomeForm(forms.ModelForm):
     order = forms.ModelChoiceField(
@@ -43,12 +43,14 @@ class IncomeForm(forms.ModelForm):
         model = Income
         fields = ['order', 'date', 'account', 'amount', 'payer']
 
-
-
-
-
-        # self.helper.form_class = 'form-horizontal'
-        # self.helper.form_method = 'post'
-        # self.helper.form_action = 'submit_survey'
-
-        # self.helper.add_input(Submit('submit', 'Submit'))
+    def clean(self, *args, **kwargs):
+        data = self.data
+        money = int(data['amount'])
+        order = Order.objects.get(pk=data['order'])
+        account = Account.objects.get(pk=data['account'])
+        order.status = 'active'
+        order.paid_sum += money
+        order.save()
+        account.total_sum += money
+        account.save()
+        return super(IncomeForm, self).clean(*args, **kwargs)
