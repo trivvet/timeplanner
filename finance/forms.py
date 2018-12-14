@@ -11,8 +11,7 @@ from .models import Income, Order, Account
 class IncomeForm(forms.ModelForm):
     order = forms.ModelChoiceField(
         label=u"Замовлення",
-        queryset=Order.objects.filter(status="inactive"), 
-        empty_label="---")
+        queryset=Order.objects.filter(status="inactive"))
 
     date = forms.DateField(
         label=u"Дата отримання",

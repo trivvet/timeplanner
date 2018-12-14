@@ -256,7 +256,6 @@ function initGetOrderAmount(link) {
                 alert(error);
             },
             'success': function(data, status, xhr) {
-                console.log(data.pk);
                 $('#id_amount').val(data.total_sum);
             },
         });
