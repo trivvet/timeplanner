@@ -17,6 +17,9 @@ function initDateFields() {
             showClose: true
         }
     });
+    $('#inputDate').on("blur", function(e) {
+        $(this).datetimepicker("hide"); 
+    });
 }
 
 function initDateDecisionField() {
@@ -74,7 +77,7 @@ function initChangeDecisionDate() {
             }
         }
         
-    });
+    }).blur();
 }
 
 function initTodayTasksPage() {

@@ -9,9 +9,9 @@ from crispy_forms.layout import Submit, Layout, Button
 from .models import Income, Order, Account
 
 class IncomeForm(forms.ModelForm):
-    order = forms.ModelChoiceField(
-        label=u"Замовлення",
-        queryset=Order.objects.filter(status="inactive"))
+    # order = forms.ModelChoiceField(
+    #     label=u"Замовлення",
+    #     queryset=Order.objects.filter(status="inactive"))
 
     date = forms.DateField(
         label=u"Дата отримання",
@@ -41,15 +41,5 @@ class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
         fields = ['order', 'date', 'account', 'amount', 'payer']
+        
 
-    def clean(self, *args, **kwargs):
-        data = self.data
-        money = int(data['amount'])
-        order = Order.objects.get(pk=data['order'])
-        account = Account.objects.get(pk=data['account'])
-        order.status = 'active'
-        order.paid_sum += money
-        order.save()
-        account.total_sum += money
-        account.save()
-        return super(IncomeForm, self).clean(*args, **kwargs)
