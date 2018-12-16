@@ -41,5 +41,15 @@ class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
         fields = ['order', 'date', 'account', 'amount', 'payer']
+
+    def clean_amount(self):
+        amount = self.cleaned_data['amount']
+        order = self.cleaned_data['order']
+        remainder = order.total_sum - order.paid_sum + self.initial.get('amount', 0)
+        if amount > remainder:
+            raise forms.ValidationError(
+                u"Сума усіх надходжень не може бути більша кошторисної вартості замовлення!")
+        return amount
+
         
 

@@ -71,7 +71,7 @@
         </tr>
         {% endfor %}
         <tr>
-            <th colspan="3" class="text-center">
+            <th colspan="{% if request.GET.status == 'all' %}3{% else %}2{% endif %}" class="text-center">
                 Всього
                 {% if request.GET.status == 'inactive' %}
                     по призупинених замовленнях

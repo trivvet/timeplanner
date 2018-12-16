@@ -42,8 +42,6 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
         return context
 
     def render_to_response(self, context):
-        # import pdb;pdb.set_trace()
-        # Look for a 'format=json' GET argument
         if self.request.GET.get('format') == 'json':
             order_id = self.request.GET.get('order_id')
             order = Order.objects.get(pk=order_id)
