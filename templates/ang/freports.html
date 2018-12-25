@@ -1,0 +1,32 @@
+{% extends "freports/base.html" %}
+
+{% block sidebar %}
+<!-- Sidebar -->
+<nav id="sidebar" {% if request.COOKIES.sidebar == 'active' %}class="active"{% endif %}>
+    <div>
+        <div class="sidebar-header">
+            <h2 class="text-center">Провадження</h2>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="{{ url_reports }}">Список проваджень</a>
+            </li>
+            <li>
+                <a href="{{ url_participants }}">Учасники проваджень</a>
+            </li>
+            <li>
+                <a href="{{ url_subjects }}">Об'єкти проваджень</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock sidebar %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список проваджень</span>
+    <a class="btn btn-outline-info modal-button"
+        id="add-report" href="{% url 'freports:add_new_report' %}">Додати провадження</a>
+</div>
+{% endblock title %}

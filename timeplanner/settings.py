@@ -14,7 +14,7 @@ import os
 from .sensitive_data import DATABASES
 from .env_settings import SECRET_KEY, DEBUG, TEMPLATE_DEBUG, PORTAL_URL, ALLOWED_HOSTS, STATIC_ROOT
 
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # EXTERNAL APPS
     'crispy_forms',
+    'rest_framework',
     # INTERNAL APPS
     'freports',
     'business_card',
@@ -53,7 +54,7 @@ ROOT_URLCONF = 'timeplanner.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
