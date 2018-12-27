@@ -3,6 +3,7 @@ from django.views.generic.base import TemplateView
 
 from freports.admin import admin_site
 from business_card import views as business_card
+from ang import AngularTemplateView
 
 urlpatterns = [
     url(r'^$', business_card.first_page, name='first_page'),
@@ -10,7 +11,7 @@ urlpatterns = [
     url(r'^login/', include('login.urls', namespace='login')),
     url(r'^finance/', include('finance.urls', namespace='finance')),
 
-    url(r'^freports/api', include('freports.api.urls', 
+    url(r'^api/freports/', include('freports.api.urls', 
         namespace='freports_api')),
     url(r'^myadmin/', admin_site.urls),
 
@@ -18,4 +19,6 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^angular/', TemplateView.as_view(template_name="ang/base.html")),
+    url(r'^api/templates/(?P<item>[A-Za-z0-9\-\_\.\/]+)\.html$', 
+        AngularTemplateView.as_view()),
 ]

@@ -3,6 +3,7 @@
 angular.module('reports', [
     // external
     'ngResource',
-    'ngRoute'
+    'ngRoute',
     
+    'reportList'
     ]);

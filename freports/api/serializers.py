@@ -6,12 +6,12 @@ class ReportListSerializer(ModelSerializer):
     class Meta:
         model = Report
         fields = (
-            'number',
-            'number_year',
+            'full_number',
             'address',
             'judge_name',
             'plaintiff',
             'defendant',
             'object_name',
             'research_kind',
+            'date_arrived'
         )
