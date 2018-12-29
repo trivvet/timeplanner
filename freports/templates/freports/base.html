@@ -40,6 +40,7 @@
                     {% url "finance:orders_list" as url_orders %}
                     {% url "finance:accounts_list" as url_accounts %} 
                     {% url "finance:incomes_list" as url_incomes %}
+                    {% url "finance:executions_list" as url_executions %}
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects %}active{% endif %}"
@@ -58,7 +59,7 @@
                                 href="{{ url_tasks }}">Завдання</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == url_orders or request.path == url_accounts %}active{% endif %}"
+                            <a class="nav-link {% if request.path == url_orders or request.path == url_accounts or request.path == url_incomes or request.path == url_executions %}active{% endif %}"
                                 href="{{ url_orders }}">Фінанси</a>
                         </li>
                     </ul>
@@ -139,7 +140,7 @@
                 <div class="row" id="footer">
                     <div class="col-12">
                         <hr />
-                        <p>{% if user.is_authenticated %}Time Planner, 2017-2018 &copy; <a href="{% url 'myadmin:index' %}">Адмінка</a>{% endif %}</p>
+                        <p>{% if user.is_authenticated %}Time Planner, 2017-2018 &copy; <a href="{% url 'admin:index' %}">Адмінка</a>{% endif %}</p>
                     </div>
                 </div>
             </div>

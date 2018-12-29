@@ -33,4 +33,8 @@ urlpatterns = [
         name="edit_income"),
     url(r'^incomes/(?P<pk>\d+)/delete/$', IncomeDelete.as_view(),
         name="delete_income"),
+
+    # execution URLs
+    url(r'^executions/$', views.executions_list,
+        name='executions_list'),
 ]

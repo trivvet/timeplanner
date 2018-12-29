@@ -1,0 +1,53 @@
+{% extends "freports/base.html" %}
+
+{% block sidebar %}
+{% include 'finance/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список виконань</span> <span class="badge badge-info">Alpha</span>
+    <a class="btn btn-outline-info modal-button" id="add-report"
+        href="">Додати виконання</a>
+</div>
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+{% if executions %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Дата</th>
+            <th scope="col">Замовлення</th>
+            <th scope="col">Рахунок</th>
+            <th scope="col">Сума</th>
+            <th scope="col">Закриті таски</th>
+            <th scope="col" class="group-buttons"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for execution in executions %}
+        <tr>
+            <th scope="row">{{ execution.date }}</th>
+            <td>{{ execution.order.name }}</td>
+            <td>{{ execution.account.title }}</td>
+            <td>{{ execution.amount }}</td>
+            <td>{{ execution.closed_tasks }}</td>
+            <td class="group-buttons">
+                <a href="" class="modal-button"><i class="fa fa-trash-o"></i></a>
+                <a href="" class="modal-button"><i class="fa fa-pencil"></i></a>
+            </td>       
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}
