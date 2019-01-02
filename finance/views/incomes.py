@@ -44,8 +44,9 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
         if self.request.GET.get('format') == 'json':
             order_id = self.request.GET.get('order_id')
             order = Order.objects.get(pk=order_id)
+            must_pay = order.total_sum - order.paid_sum
             return JsonResponse(
-                {'total_sum': order.total_sum}
+                {'total_sum': must_pay}
             )
         else:
             return super(IncomeCreate, self).render_to_response(context)

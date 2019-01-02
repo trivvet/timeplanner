@@ -37,11 +37,7 @@
             <td>{{ income.account.title }}</td>
             <td>{{ income.amount }}</td>
             <td>
-            {% if income.payer %}
-            {{ income.payer }}
-            {% else %}
-            -
-            {% endif %}
+            {{ income.payer|default_if_none:"-" }}
             </td>
             <td class="group-buttons">
                 <a href="{% url 'finance:delete_income' income.id %}" class="modal-button"><i class="fa fa-trash-o"></i></a>

@@ -178,7 +178,7 @@ function initForm(form, modal, link) {
     initDateDecisionField();
     initSelectCourt(link);
     closeModalForm();
-    initGetOrderAmount(link);
+    initGetOrderValues(link);
 
     form.ajaxForm({
         url: link,
@@ -247,7 +247,7 @@ function initSelectCourt(link) {
     }
 }
 
-function initGetOrderAmount(link) {
+function initGetOrderValues(link) {
     $('#id_order').change(function() {
         if ($(this).val()) {
             $.ajax('', {
@@ -261,6 +261,8 @@ function initGetOrderAmount(link) {
                 },
                 'success': function(data, status, xhr) {
                     $('#id_amount').val(data.total_sum);
+                    $('#id_account').val(data.account_id);
+                    $('#id_closed_tasks').val(data.tasks_number);
                 },
             });
         } else {

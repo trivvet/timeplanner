@@ -8,7 +8,7 @@
 <div class="col">
     <span class="h1">Список виконань</span> <span class="badge badge-info">Alpha</span>
     <a class="btn btn-outline-info modal-button" id="add-report"
-        href="">Додати виконання</a>
+        href="{% url 'finance:add_execution' %}">Додати виконання</a>
 </div>
 {% endblock title %}
 
@@ -36,10 +36,10 @@
             <td>{{ execution.order.name }}</td>
             <td>{{ execution.account.title }}</td>
             <td>{{ execution.amount }}</td>
-            <td>{{ execution.closed_tasks }}</td>
+            <td>{{ execution.closed_tasks|default_if_none:"-" }}</td>
             <td class="group-buttons">
-                <a href="" class="modal-button"><i class="fa fa-trash-o"></i></a>
-                <a href="" class="modal-button"><i class="fa fa-pencil"></i></a>
+                <a href="{% url 'finance:delete_execution' execution.id %}" class="modal-button"><i class="fa fa-trash-o"></i></a>
+                <a href="{% url 'finance:edit_execution' execution.id %}" class="modal-button"><i class="fa fa-pencil"></i></a>
             </td>       
         </tr>
         {% endfor %}
