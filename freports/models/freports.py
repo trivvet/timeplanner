@@ -140,3 +140,7 @@ class Research(BaseReport):
 
     def full_number(self):
         return u"{}ед/{}".format(self.number, self.number_year)
+
+    def time_after_update(self):
+        time_amount = date.today() - self.change_date
+        return time_amount.days

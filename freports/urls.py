@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from . import views
+from .views import ResearchListView, ResearchCreate
 
 urlpatterns = [
     # report urls
@@ -17,6 +18,12 @@ urlpatterns = [
         name='delete_report'),
     url(r'^update_info/$', views.update_info, 
         name='reports_update'),
+
+    # research urls
+    url(r'^researches/$', ResearchListView.as_view(), 
+        name='researches_list'),
+    url(r'^researches/add/$', ResearchCreate.as_view(), 
+        name="add_research"),
 
     # event urls
     url(r'^(?P<rid>\d+)/details/$', views.details_list, 

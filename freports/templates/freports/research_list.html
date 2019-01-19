@@ -9,7 +9,7 @@
         </div>
 
         <ul class="list-unstyled components">
-            <li class="active">
+            <li>
                 <a href="{{ url_reports }}">Список проваджень</a>
             </li>
             <li>
@@ -18,7 +18,7 @@
             <li>
                 <a href="{{ url_subjects }}">Об'єкти проваджень</a>
             </li>
-            <li>
+            <li class="active">
                 <a href="{{ url_researches }}">Список досліджень</a>
             </li>
         </ul>
@@ -28,80 +28,40 @@
 
 {% block title %}
 <div class="col">
-    <span class="h1">Список проваджень</span>
+    <span class="h1">Список експертних досліджень</span>
     <a class="btn btn-outline-info modal-button"
-        id="add-report" href="{% url 'freports:add_new_report' %}">Додати провадження</a>
+        id="add-report" href="{% url 'freports:add_research' %}">Додати дослідження</a>
 </div>
 {% endblock title %}
 
-{% block extra_messages %}
-{% if request.GET.filter_status == 'success' %}
-<div class="alert alert-info"role="alert">
-    <ul>Застосований фільтр:
-    {% if request.GET.active == 'True' %}<li>тільки активні провадження</li>
-    {% elif request.GET.active == 'False' %}<li>тільки призупинені провадження</li>{% endif %}
-    {% if request.GET.date_from %}<li>провадження відкриті після {{ request.GET.date_from }}</li>{% endif %}
-    {% if request.GET.date_until %}<li>провадження відкриті до {{ request.GET.date_until }}</li>{% endif %}
-    {% if request.GET.day_count %}<li>у провадженні більше ніж {{ request.GET.day_count }}</li>{% endif %}
-    </ul>
-    <a class="btn btn-outline-secondary" href="{% url 'freports:reports_list' %}">Скинути фільтр</a>
-</div>
-{% endif %}
-{% endblock extra_messages %}
 
 {% block content %}
-
-<nav class="nav nav-pills nav-justified" id="navbar-list">
+<!-- <nav class="nav nav-pills nav-justified" id="navbar-list">
     <a class="nav-item nav-link {% if request.GET.status == 'all' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=all">Усі <span class="badge badge-info">{{ content.open_reports }}</span></a>
     <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'freports:reports_list' %}">Активні <span class="badge badge-success">{{ content.active_reports }}</span></a>
     <a class="nav-link nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=deactivate">Призупинені <span class="badge badge-secondary">{{ content.deactivate_reports }}</span></a>
     <a class="nav-link nav-item {% if request.GET.status == 'executed' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=executed">Закриті <span class="badge badge-light">{{ content.closed_reports }}</span></a>
-</nav>
-<button class="btn btn-outline-secondary" id="filter-button" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">Фільтр</button>
-<div class="collapse" id="filter">
-    <div class="card card-body">
-        <div class="filter">
-            <form class="form-inline row" action="{% url 'freports:reports_list' %}{% if request.GET.status %}?{{ request.GET.status }}{% endif %}" method="get" enctype="multipart/form-data" role="form">
-                <input type="hidden" name="filter_status" value="success" />
-                <div class="form-group mb-1 mt-1 col-10">
-                    <label for="inputDateArrived">Дата надходження від</label>
-                    <input type="text" id="inputDateArrived"
-                        class="input-date dateinput form-control" name="date_from" value="{{ request.GET.date_from }}" placeholder="2018-10-20" style="max-width:110px"/>
-                    до<input type="text" class="input-date dateinput form-control" name="date_until" placeholder="2018-05-15"
-                        value="{{ request.GET.date_until }}" style="max-width:110px"/>
-                    <label for="selectDayCount">Днів у виконанні</label>
-                    <input class="input-date form-control" type="number" name="day_count" value="{{ request.GET.day_count }}" />
-                    
-                </div>
-                <div class="form-group mb-1 mt-1 col-2" id="filter-button">
-                    <input type="submit" class="btn btn-outline-info" value="Застосувати"
-                        name="apply_button" />
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+</nav> -->
 
-{% if reports %}
+{% if object_list %}
 {% with order_by=request.GET.order_by reverse=request.GET.reverse status=request.GET.status %}
 
 <table class="table table-hover table-responsive-lg">
     <thead class="thead-light">
         <tr>
             <th scope="col">
-                <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=number
+                <a href="{% url 'freports:researches_list' %}?status={{ status }}&order_by=number
 {% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
                     № {% if order_by == '' or order_by == 'number' and reverse != '1' %}&uarr;
                     {% elif order_by == 'number' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
             <th scope="col">Адреса</th>
-            <th scope="col">Позивач</th>
-            <th scope="col">Відповідач</th>
+            <th scope="col">Заявник</th>
             <th scope="col">Тип Об'єкту</th>
             <th scope="col">Вид Дослідження</th>
             <th scope="col">Дата надходження</th>
-            {% if request.GET.status == 'executed' %}
+            <!-- {% if request.GET.status == 'executed' %}
             <th scope="col">
                 <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=date_executed
 {% if order_by == 'date_executed' and reverse != '1' %}&reverse=1{% endif %}">
@@ -117,10 +77,10 @@
                     Днів у виконанні {% if order_by == 'active_days_amount' and reverse != '1' %}&uarr;
                     {% elif order_by == 'active_days_amount' and reverse == '1' %}&darr;{% endif %}
                 </a>
-            </th>
-            <th scope="col">Остання дія</th>
-            {% endif %}
-            {% if request.GET.status == 'deactivate' %}
+            </th> -->
+            <!-- <th scope="col">Остання дія</th>
+            {% endif %} -->
+           <!--  {% if request.GET.status == 'deactivate' %}
             <th scope="col">
                 <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=waiting_days_amount
 {% if order_by == 'waiting_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
@@ -129,13 +89,13 @@
                 </a>
             </th>
             <th scope="col">Остання дія</th>
-            {% endif %}
+            {% endif %} -->
         </tr>
     </thead>
 
     <tbody>
 
-        {% for report in reports %}
+        {% for report in object_list %}
         <tr class="
             {% if report.active is None %}
                 table-danger
@@ -146,12 +106,11 @@
             data-href="{% if report.active is None %}{% url 'freports:add_order' report.id %}{% else %}{% url 'freports:report_detail' report.id %}{% endif %}">
             <th class="td-link" scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
             <td class="td-link">{{ report.address|truncatechars:25 }}</td>
-            <td class="td-link">{{ report.plaintiff|truncatechars:20 }}</td>
-            <td class="td-link">{{ report.defendant|truncatechars:20 }}</td>
+            <td class="td-link">{{ report.applicant|truncatechars:30 }}</td>
             <td class="td-link">{{ report.object_name|truncatechars:20 }}</td>
             <td class="td-link">{{ report.research_kind|truncatechars:20 }}</td>
             <td class="td-link td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
-            {% if request.GET.status == 'executed' %}
+            <!-- {% if request.GET.status == 'executed' %}
             <td class="td-link td-date">{{ report.date_executed|truncatechars:10 }}</td>
             {% endif %}
             {% if not request.GET.status %}
@@ -163,17 +122,7 @@
                 {% endif %}
             </td>
             <td class="td-link">{{ report.last_event.short_info }}</td>
-            {% endif %}
-            {% if request.GET.status == 'deactivate' %}
-            <td class="td-link">
-                {% if report.waiting_days_amount %}
-                {{ report.waiting_days_amount|add:report.time_after_update }}
-                {% else %}
-                Відомості відсутні
-                {% endif %}
-            </td>
-            <td class="td-link">{{ report.last_event.short_info }}</td>
-            {% endif %}
+            {% endif %} -->
         </tr>
         {% endfor %}
 
@@ -185,11 +134,11 @@
 
 {% endwith %}
 
-{% if request.GET.status == 'all' or request.GET.status == 'executed' %}
+<!-- {% if request.GET.status == 'all' or request.GET.status == 'executed' %}
     {% if reports.has_other_pages %}
         {% include 'freports/pagination.html' with items=reports url_next="freports:reports_list" extra=request.GET.status order_by=request.GET.order_by reverse=request.GET.reverse %}
     {% endif %}
-{% endif %}
+{% endif %} -->
 
 
 {% else %}
