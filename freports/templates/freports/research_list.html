@@ -30,7 +30,7 @@
 <div class="col">
     <span class="h1">Список експертних досліджень</span>
     <a class="btn btn-outline-info modal-button"
-        id="add-report" href="{% url 'freports:add_research' %}">Додати дослідження</a>
+        id="add-report" href="{% url 'freports:add_new_research' %}">Додати дослідження</a>
 </div>
 {% endblock title %}
 
@@ -61,35 +61,7 @@
             <th scope="col">Тип Об'єкту</th>
             <th scope="col">Вид Дослідження</th>
             <th scope="col">Дата надходження</th>
-            <!-- {% if request.GET.status == 'executed' %}
-            <th scope="col">
-                <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=date_executed
-{% if order_by == 'date_executed' and reverse != '1' %}&reverse=1{% endif %}">
-                    Дата виконання {% if order_by == 'date_executed' and reverse != '1' %}&uarr;
-                    {% elif order_by == 'date_executed' and reverse == '1' %}&darr;{% endif %}
-                </a>
-            </th>
-            {% endif %}
-            {% if not request.GET.status %}
-            <th scope="col">
-                <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=active_days_amount
-{% if order_by == 'active_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
-                    Днів у виконанні {% if order_by == 'active_days_amount' and reverse != '1' %}&uarr;
-                    {% elif order_by == 'active_days_amount' and reverse == '1' %}&darr;{% endif %}
-                </a>
-            </th> -->
-            <!-- <th scope="col">Остання дія</th>
-            {% endif %} -->
-           <!--  {% if request.GET.status == 'deactivate' %}
-            <th scope="col">
-                <a href="{% url 'freports:reports_list' %}?status={{ status }}&order_by=waiting_days_amount
-{% if order_by == 'waiting_days_amount' and reverse != '1' %}&reverse=1{% endif %}">
-                    Днів в очікуванні {% if order_by == 'waiting_days_amount' and reverse != '1' %}&uarr;
-                    {% elif order_by == 'waiting_days_amount' and reverse == '1' %}&darr;{% endif %}
-                </a>
-            </th>
-            <th scope="col">Остання дія</th>
-            {% endif %} -->
+            <th scope="col">Дії</th>
         </tr>
     </thead>
 
@@ -104,25 +76,28 @@
             {% endif %}
             "
             data-href="{% if report.active is None %}{% url 'freports:add_order' report.id %}{% else %}{% url 'freports:report_detail' report.id %}{% endif %}">
-            <th class="td-link" scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
-            <td class="td-link">{{ report.address|truncatechars:25 }}</td>
-            <td class="td-link">{{ report.applicant|truncatechars:30 }}</td>
-            <td class="td-link">{{ report.object_name|truncatechars:20 }}</td>
-            <td class="td-link">{{ report.research_kind|truncatechars:20 }}</td>
-            <td class="td-link td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
-            <!-- {% if request.GET.status == 'executed' %}
-            <td class="td-link td-date">{{ report.date_executed|truncatechars:10 }}</td>
-            {% endif %}
-            {% if not request.GET.status %}
-            <td class="td-link">
-                {% if report.active_days_amount != 0 %}
-                {{ report.active_days_amount|add:report.time_after_update }}
-                {% else %}
-                Відомості відсутні
-                {% endif %}
+            <th scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
+            <td>{{ report.address|truncatechars:25 }}</td>
+            <td>{{ report.applicant|truncatechars:30 }}</td>
+            <td>{{ report.object_name|truncatechars:20 }}</td>
+            <td>{{ report.research_kind|truncatechars:20 }}</td>
+            <td class="td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Дія
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            href="{% url 'freports:research_detail' report.id %}">Детальна інформація</a>
+                        <a class="dropdown-item"
+                            href="">Редагувати</a>
+                        <a class="modal-button dropdown-item"
+                            href="{% url 'freports:delete_research' report.id %}">Видалити</a>
+                    </div>
+                </div>
             </td>
-            <td class="td-link">{{ report.last_event.short_info }}</td>
-            {% endif %} -->
         </tr>
         {% endfor %}
 

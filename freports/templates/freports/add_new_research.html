@@ -12,15 +12,13 @@
 {% block content %}
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
-    <input type="hidden" name='judge_id' value="{{ judge_id }}">
-    <input type="hidden" name="cancel_next" value="{{ cancel_url }}">
     <div class="form-group row">
-        <label for="inputNumber" class="col-3 col-form-label"></label>
-        <div class="col-md-9 col-lg-4" id="divInputNumber">
-            <input type="text" class="form-control col-5 {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
-            <p id="dual-number">/</p>
-            <select class="form-control col-sm-5" name="number_year">
+        <label for="inputNumber" class="col-md-3 col-form-label"></label>
+        <div class="col-md-9 col-lg-5" id="divInputNumber">
+            <input type="text" class="form-control col-4 {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputNumber" name="number" value="{{ content.number }}">
+            <p id="dual-number">ед /</p>
+            <select class="form-control col-sm-4" name="number_year">
                 <option {% if content.number_year == '012' %}selected{% endif %}>012</option>
                 <option {% if content.number_year == '013' %}selected{% endif %}>013</option>
                 <option {% if content.number_year == '014' %}selected{% endif %}>014</option>
@@ -51,4 +49,3 @@
     </div>
 </form>
 {% endblock content %}
-

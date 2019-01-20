@@ -1,6 +1,5 @@
 from .reports import (
     reports_list, 
-    add_new_report_first, 
     add_new_report, 
     edit_report, 
     delete_report, 
@@ -58,4 +57,10 @@ from .tasks import (
     delete_old_tasks
     )
 
-from .researches import ResearchListView, ResearchCreate
+from .researches import (
+    ResearchListView, 
+    ResearchDetailView,
+    add_new_research,
+    ResearchCreate,
+    ResearchDelete
+    )
