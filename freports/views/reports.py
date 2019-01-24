@@ -146,7 +146,7 @@ def add_new_report(request):
         last_report = Report.objects.all().order_by('number').last()
         last_research = Research.objects.all().order_by('number').last()
         content = {}
-        if last_report.number > last_research.number:
+        if not last_research or last_report.number > last_research.number:
             content['number'] = last_report.number + 1
         elif last_report.number < last_research.number:
             content['number'] = last_research.number + 1

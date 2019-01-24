@@ -6,6 +6,7 @@ from .views import (
     ResearchListView,
     ResearchDetailView, 
     ResearchCreate, 
+    ResearchEdit,
     ResearchDelete
     )
 
@@ -31,6 +32,8 @@ urlpatterns = [
         name='add_new_research'),
     url(r'^researches/add/$', ResearchCreate.as_view(), 
         name="add_research"),
+    url(r'^researches/(?P<pk>\d+)/edit/$', ResearchEdit.as_view(), 
+        name='edit_research'),
     url(r'^researches/(?P<pk>\d+)/delete/$', ResearchDelete.as_view(), 
         name='delete_research'),
 

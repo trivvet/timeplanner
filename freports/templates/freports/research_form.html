@@ -1,12 +1,13 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<h2>Додавання експертного дослідження</h2>
+<h2>{{ header }}</h2>
 {% endblock title %}
 
 {% block content %}
 
-<form method="post">{% csrf_token %}
+<form class="form-horizontal" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Save">
 </form>

@@ -197,6 +197,7 @@ function initForm(form, modal, link) {
                 initForm(newform, modal, link);
             } else {
                 $('#message .col').html(html.find('.alert'));
+                $('#second-header').html(html.find('#second-header').html());
                 $('#main-content').html(html.find('#main-content').html());
                 $('#extra-content').html(html.find('#extra-content').html());
                 initFormPage();

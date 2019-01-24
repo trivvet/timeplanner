@@ -71,7 +71,7 @@
         <tr class="
             {% if report.active is None %}
                 table-danger
-            {% elif report.address == '-' or report.plaintiff == '-' or  report.defendant == '-' or report.object_name == '-' or report.research_kind == '-' %}
+            {% elif report.address == '-' or report.applicant == '-' or report.object_name == '-' or report.research_kind == '-' %}
                 table-warning
             {% endif %}
             "
@@ -92,7 +92,7 @@
                         <a class="dropdown-item"
                             href="{% url 'freports:research_detail' report.id %}">Детальна інформація</a>
                         <a class="dropdown-item"
-                            href="">Редагувати</a>
+                            href="{% url 'freports:edit_research' report.id %}">Редагувати</a>
                         <a class="modal-button dropdown-item"
                             href="{% url 'freports:delete_research' report.id %}">Видалити</a>
                     </div>

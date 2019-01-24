@@ -63,5 +63,6 @@ from .researches import (
     ResearchDetailView,
     add_new_research,
     ResearchCreate,
+    ResearchEdit,
     ResearchDelete
     )

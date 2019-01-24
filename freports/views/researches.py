@@ -9,7 +9,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
 from ..models import Report, Research
@@ -73,7 +73,7 @@ def add_new_research(request):
         last_report = Report.objects.all().order_by('number').last()
         last_research = Research.objects.all().order_by('number').last()
         content = {}
-        if last_report.number > last_research.number:
+        if not last_research or last_report.number > last_research.number:
             content['number'] = last_report.number + 1
         elif last_report.number < last_research.number:
             content['number'] = last_research.number + 1
@@ -86,6 +86,23 @@ class ResearchCreate(CreateView):
     model = Research
     fields = ['number', 'number_year', 'address', 
         'applicant', 'object_name', 'research_kind']
+
+    def get_context_data(self, **kwargs):
+        context = super(ResearchEdit, self).get_context_data(**kwargs)
+        context['header'] = u"Додавання експертного дослідження"
+        return context
+
+@method_decorator(login_required, name='dispatch')
+class ResearchEdit(UpdateView):
+    model = Research
+    fields = ['number', 'number_year', 'address', 
+        'applicant', 'object_name', 'research_kind', 'active']
+    success_url = reverse_lazy('freports:researches_list')
+
+    def get_context_data(self, **kwargs):
+        context = super(ResearchEdit, self).get_context_data(**kwargs)
+        context['header'] = u"Редагування експертного дослідження"
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
