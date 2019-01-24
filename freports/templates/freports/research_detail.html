@@ -1,0 +1,49 @@
+{% extends "freports/base.html" %}
+{% load get_item %}
+
+{% block title %}
+    <div class="col-3"></div>
+    <div class="col-9">
+        <h2 id="report-detail-header">Детальна інформація про експертне дослідження №{{ object.full_number }}</h2>
+    </div>
+
+{% endblock title %}
+
+{% block content %}
+
+<!-- Головні учасники справи -->
+<div class="row" id="main-participants">
+    <div class="col-sm-12">
+        <table class="table table-sm table-lg-responsive table-hover">
+            <tbody>
+                <tr>
+                    <th scope="row">Заявник</th>
+                    <td>
+                        {{ object.applicant }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Об'єкт дослідження</th>
+                    <td>
+                        {{ object.object_name }}
+                    </td>
+                </tr>
+                {% if object.cost %}
+                <tr>
+                    <th scope="row">Вартість</th>
+                    <td>{{ object.cost }}грн</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th scope="row">Днів у виконанні</th>
+                    <td>
+                        {{ object.active_days_amount|add:object.time_after_update }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock content %}

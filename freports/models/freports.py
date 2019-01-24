@@ -9,7 +9,7 @@ from .fdetails import ReportEvents
 
 # Create your models here.
 
-class Report(models.Model):
+class BaseReport(models.Model):
     number = models.IntegerField(
         blank=False,
         null=False)
@@ -19,27 +19,7 @@ class Report(models.Model):
         blank=False,
         null=True)
 
-    case_number = models.CharField(
-        max_length=128,
-        blank=True,
-        null=True)
-
     address = models.CharField(
-        max_length=128,
-        blank=False,
-        null=False)
-
-    judge_name = models.ForeignKey('Judge',
-        verbose_name=u"Суддя",
-        blank=True,
-        null=True)
-
-    plaintiff = models.CharField(
-        max_length=128,
-        blank=False,
-        null=False)
-
-    defendant = models.CharField(
         max_length=128,
         blank=False,
         null=False)
@@ -81,6 +61,31 @@ class Report(models.Model):
         blank=False,
         default=0)
 
+    class Meta:
+        abstract = True
+
+
+class Report(BaseReport):
+    case_number = models.CharField(
+        max_length=128,
+        blank=True,
+        null=True)
+
+    judge_name = models.ForeignKey('Judge',
+        verbose_name=u"Суддя",
+        blank=True,
+        null=True)
+
+    plaintiff = models.CharField(
+        max_length=128,
+        blank=False,
+        null=False)
+
+    defendant = models.CharField(
+        max_length=128,
+        blank=False,
+        null=False)
+
     waiting_days_amount = models.IntegerField(
         blank=True,
         null=True)
@@ -103,6 +108,38 @@ class Report(models.Model):
 
     def full_number(self):
         return u"{}/{}".format(self.number, self.number_year)
+
+    def time_after_update(self):
+        time_amount = date.today() - self.change_date
+        return time_amount.days
+
+
+class Research(BaseReport):
+    applicant = models.CharField(
+        max_length=128,
+        blank=False,
+        null=False)
+
+    def __unicode__(self):
+        return u"{number}ед/{number_year} ({applicant})".format(
+            number=self.number, number_year=self.number_year, 
+            address=self.address, applicant=self.applicant)
+
+    def filled_info(self):
+        if self.address == '-' or self.applicant == '-' or self.object_name == '-' or self.research_kind == '-':
+            answer = False
+        else:
+            answer = True
+        return answer
+
+    def short_name(self):
+        return u"{number}/{number_year}-{address}-{applicant}-{object_name}-{research_kind}".format(
+            number=self.number, number_year=self.number_year, 
+            address=self.address, plaintiff=self.applicant,
+            object_name=self.object_name, research_kind=self.research_kind)
+
+    def full_number(self):
+        return u"{}ед/{}".format(self.number, self.number_year)
 
     def time_after_update(self):
         time_amount = date.today() - self.change_date

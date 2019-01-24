@@ -31,6 +31,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     {% url "freports:reports_list" as url_reports %}
+                    {% url "freports:researches_list" as url_researches %}
                     {% url "freports:participants_list" as url_participants %}
                     {% url "freports:subjects_list" as url_subjects  %}
                     {% url "freports:contacts_list" as url_contacts %}
@@ -94,7 +95,7 @@
 
             <!-- Page Content -->
             <div id="content" class="container">
-                {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects or request.path == url_judges or request.path == url_courts or request.path == url_orders or request.path == url_accounts or request.path == url_incomes %}
+                {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects or request.path == url_judges or request.path == url_courts or request.path == url_orders or request.path == url_accounts or request.path == url_incomes or request.path == url_researches %}
                 <div class="row">
                     <div class="col">
                         <button type="button" id="sidebarCollapse" class="navbar-btn {% if request.COOKIES.sidebar == 'active' %}active{% endif %}">
