@@ -56,6 +56,8 @@ urlpatterns = [
 
     # contact urls
     url(r'^contacts/$', views.contacts_list, name='contacts_list'),
+    url(r'^contacts/update/$', views.update_contacts_status, 
+        name='contacts_update_status'),
     url(r'^contacts/(?P<cid>\d+)/detail/$', views.contact_detail, 
         name="contact_detail"),
     url(r'^contacts/add/$', views.add_contact, 
