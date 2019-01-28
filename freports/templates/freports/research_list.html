@@ -60,6 +60,8 @@
             <th scope="col">Заявник</th>
             <th scope="col">Тип Об'єкту</th>
             <th scope="col">Вид Дослідження</th>
+            <th scope="col">Активний статус</th>
+            <th scope="col">Статус виконання</th>
             <th scope="col">Дата надходження</th>
             <th scope="col">Дії</th>
         </tr>
@@ -81,6 +83,8 @@
             <td>{{ report.applicant|truncatechars:30 }}</td>
             <td>{{ report.object_name|truncatechars:20 }}</td>
             <td>{{ report.research_kind|truncatechars:20 }}</td>
+            <td>{{ report.active }}</td>
+            <td>{{ report.executed }}</td>
             <td class="td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
             <td>
                 <div class="dropdown">
@@ -91,7 +95,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
                             href="{% url 'freports:research_detail' report.id %}">Детальна інформація</a>
-                        <a class="dropdown-item"
+                        <a class="modal-button dropdown-item"
                             href="{% url 'freports:edit_research' report.id %}">Редагувати</a>
                         <a class="modal-button dropdown-item"
                             href="{% url 'freports:delete_research' report.id %}">Видалити</a>

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -13,6 +14,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
 
 from ..models import Report, Research
+from ..forms import ResearchForm
 
 @method_decorator(login_required, name='dispatch')
 class ResearchListView(ListView):
@@ -93,16 +95,54 @@ class ResearchCreate(CreateView):
         return context
 
 @method_decorator(login_required, name='dispatch')
-class ResearchEdit(UpdateView):
+class ResearchEdit(SuccessMessageMixin, UpdateView):
     model = Research
-    fields = ['number', 'number_year', 'address', 
-        'applicant', 'object_name', 'research_kind', 'active']
+    form_class = ResearchForm
     success_url = reverse_lazy('freports:researches_list')
 
     def get_context_data(self, **kwargs):
         context = super(ResearchEdit, self).get_context_data(**kwargs)
-        context['header'] = u"Редагування експертного дослідження"
+        context['header'] = u"Редагування експертного дослідження {}".format(
+            context['research'].full_number())
+        # import pdb;pdb.set_trace()
+        research = self.get_object()
+        if research.active:
+            status = 'active'
+        elif research.executed:
+            status = 'done'
+        else: 
+            status = 'noactive'
+        context['form'].initial['status'] = status
         return context
+
+    def form_invalid(self, form):
+        response = super(ResearchEdit, self).form_invalid(form)
+        # import pdb;pdb.set_trace()
+        print form.errors
+        if self.request.is_ajax():
+            return response
+        else:
+            return response
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        status = data['status']
+        # import pdb;pdb.set_trace()
+        if status == 'active':
+            form.instance.active = True
+        else:
+            form.instance.active = False
+        if status == 'done':
+            form.instance.executed = True
+        else:
+            form.instance.executed = False
+        return super(ResearchEdit, self).form_valid(form)
+
+    def get_success_message(self, cleaned_data):
+        research = self.object
+        message = u"{} успішно змінене!".format(
+            research)
+        return message
 
 
 @method_decorator(login_required, name='dispatch')

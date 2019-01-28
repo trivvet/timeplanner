@@ -1,4 +1,5 @@
 {% extends "freports/base.html" %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 <h2>{{ header }}</h2>
@@ -6,10 +7,6 @@
 
 {% block content %}
 
-<form class="form-horizontal" method="post" enctype="multipart/form-data" role="form">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save">
-</form>
+{% crispy form %}
 
 {% endblock content %}

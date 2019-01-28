@@ -20,21 +20,25 @@ class BaseReport(models.Model):
         null=True)
 
     address = models.CharField(
+        verbose_name=u"Адреса",
         max_length=128,
         blank=False,
         null=False)
 
     object_name = models.CharField(
+        verbose_name=u"Назва об'єкта",
         max_length=128,
         blank=False,
         null=False)
 
     research_kind = models.CharField(
+        verbose_name=u"Вид дослідження",
         max_length=128,
         blank=False,
         null=False)
 
     active = models.NullBooleanField(
+        verbose_name=u"Активний статус",
         blank=False)
 
     cost = models.IntegerField(
@@ -116,6 +120,7 @@ class Report(BaseReport):
 
 class Research(BaseReport):
     applicant = models.CharField(
+        verbose_name=u"Замовник",
         max_length=128,
         blank=False,
         null=False)
