@@ -16,10 +16,14 @@ class IncomeForm(forms.ModelForm):
     date = forms.DateField(
         label=u"Дата отримання",
         # input_formats='%Y-%m-%d',
-        widget=forms.DateInput(attrs={
-            'id': 'inputDate',
-            'data-toggle': 'datetimepicker',
-            'data-target': "#inputDate"}))
+        widget=forms.DateInput(
+            format=('%Y-%m-%d'),
+            attrs={
+                'id': 'inputDate',
+                'data-toggle': 'datetimepicker',
+                'data-target': "#inputDate"}
+            )
+        )
 
     def __init__(self, *args, **kwargs):
         super(IncomeForm, self).__init__(*args, **kwargs)
@@ -56,10 +60,14 @@ class ExecutionForm(forms.ModelForm):
     date = forms.DateField(
         label=u"Дата виконання",
         # input_formats='%Y-%m-%d',
-        widget=forms.DateInput(attrs={
-            'id': 'inputDate',
-            'data-toggle': 'datetimepicker',
-            'data-target': "#inputDate"}))
+        widget=forms.DateInput(
+            format=('%Y-%m-%d'),
+            attrs={
+                'id': 'inputDate',
+                'data-toggle': 'datetimepicker',
+                'data-target': "#inputDate"}
+            )
+        )
 
     def __init__(self, *args, **kwargs):
         super(ExecutionForm, self).__init__(*args, **kwargs)
@@ -90,6 +98,17 @@ class ExecutionForm(forms.ModelForm):
             raise forms.ValidationError(
                 u"Сума усіх виконань не може бути більша кошторисної вартості замовлення!")
         return amount
+
+    def clean_date(self):
+        date = self.cleaned_data['date']
+        order_id = self.data['order']
+        incomes = Income.objects.filter(order=order_id)
+        if incomes:
+            first_income = incomes.order_by('date').first()
+            if date < first_income.date:
+                raise forms.ValidationError(
+                    u"Виконання не може бути раніше дня першого надходження по замовленню")
+        return date
 
         
 

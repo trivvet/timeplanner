@@ -1,9 +1,12 @@
 function initDateFields() {
+    $('#inputDate').attr('autocomplete', 'off');
     var startDate = $('#inputDate input').val(), currentDate = new Date();
-    if (!startDate) {
+    var startDate2 = $('#inputDate').val();
+    if (!startDate && !startDate2) {
         var startDate = currentDate;
+    } else if (startDate2) {
+        var startDate =startDate2;
     }
-    // $('#inputDateDecision').parent().hide();
     $('#inputDate').datetimepicker({
         format: 'YYYY-MM-DD',
         locale: 'uk',
@@ -353,7 +356,7 @@ function showSidebar() {
 }
 
 $(document).ready(function(){
-    initDateFields();
+    // initDateFields();
     initDateTimeFields();
     initRowMakeLink();
     initTodayTasksPage()
