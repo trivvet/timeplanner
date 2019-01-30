@@ -69,7 +69,7 @@
 </table>
 
 <a class="btn btn-outline-secondary mb-3"
-    href="{% url 'freports:contacts_update_status' %}">Оновити статуси контаків</a>
+    href="{% url 'freports:contacts_update_status' %}">Оновити статуси контактів</a>
 
 {% if contacts.has_other_pages %}
 {% include "freports/pagination.html" with items=contacts url_next="freports:contacts_list" %}

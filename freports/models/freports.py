@@ -126,7 +126,7 @@ class Research(BaseReport):
         null=False)
 
     def __unicode__(self):
-        return u"{number}ед/{number_year} ({applicant})".format(
+        return u"Дослідження {number}ед/{number_year} ({applicant})".format(
             number=self.number, number_year=self.number_year, 
             address=self.address, applicant=self.applicant)
 

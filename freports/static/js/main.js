@@ -1,11 +1,19 @@
 function initDateFields() {
-    $('#inputDate').attr('autocomplete', 'off');
+    $('#inputDate, #inputDate2').attr('autocomplete', 'off');
     var startDate = $('#inputDate input').val(), currentDate = new Date();
-    var startDate2 = $('#inputDate').val();
-    if (!startDate && !startDate2) {
+    var startDateOne = $('#inputDate').val();
+    if (!startDate && !startDateOne) {
         var startDate = currentDate;
-    } else if (startDate2) {
-        var startDate =startDate2;
+    } else if (startDateOne) {
+        var startDate =startDateOne;
+    }
+    var startDate2 = $('#inputDate2').val();
+    if (!startDate2) {
+        if (startDateOne) {
+            startDate2 = startDateOne;
+        } else {
+            startDate2 = startDate
+        }
     }
     $('#inputDate').datetimepicker({
         format: 'YYYY-MM-DD',
@@ -20,8 +28,35 @@ function initDateFields() {
             showClose: true
         }
     });
-    $('#inputDate').on("blur", function(e) {
+    $('#inputDate2').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'uk',
+        date: startDate2,
+        maxDate: currentDate,
+        defaultDate: startDate2,
+        useCurrent: false,
+        daysOfWeekDisabled: [0],
+        buttons: {
+            showToday: true,
+            showClose: true
+        }
+    });
+    $('#inputDate, #inputDate2').on("blur", function(e) {
         $(this).datetimepicker("hide"); 
+    });
+}
+
+function showExecutedDate() {
+    var status = $("#id_id_status_0_3").is(":checked");
+    if (!status) {
+        $("#div_id_date_executed").hide();
+    }
+    $('#div_id_status input:radio').on("click", function() {
+        if (this.value == "done") {
+            $("#div_id_date_executed").show();
+        } else {
+            $("#div_id_date_executed").hide();
+        }
     });
 }
 
@@ -177,6 +212,7 @@ function activateModalPage(link) {
 
 function initForm(form, modal, link) {
     initDateFields();
+    showExecutedDate()
     initDateTimeFields();
     initDateDecisionField();
     initSelectCourt(link);

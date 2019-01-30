@@ -22,11 +22,27 @@ class ResearchForm(forms.ModelForm):
 
     date_arrived = forms.DateField(
         label=u"Дата надходження заяви",
-        # input_formats='%Y-%m-%d',
-        widget=forms.DateInput(attrs={
-            'id': 'inputDate',
-            'data-toggle': 'datetimepicker',
-            'data-target': "#inputDate"}))
+        widget=forms.DateInput(
+            format=('%Y-%m-%d'),
+            attrs={
+                'id': 'inputDate',
+                'data-toggle': 'datetimepicker',
+                'data-target': "#inputDate"
+                }
+            )
+        )
+
+    date_executed = forms.DateField(
+        label=u"Дата виконання дослідження",
+        widget=forms.DateInput(
+            format=('%Y-%m-%d'),
+            attrs={
+                'id': 'inputDate2',
+                'data-toggle': 'datetimepicker',
+                'data-target': "#inputDate2"
+                }
+            )
+        )
 
     def __init__(self, *args, **kwargs):
         super(ResearchForm, self).__init__(*args, **kwargs)

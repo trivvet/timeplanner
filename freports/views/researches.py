@@ -104,7 +104,6 @@ class ResearchEdit(SuccessMessageMixin, UpdateView):
         context = super(ResearchEdit, self).get_context_data(**kwargs)
         context['header'] = u"Редагування експертного дослідження {}".format(
             context['research'].full_number())
-        # import pdb;pdb.set_trace()
         research = self.get_object()
         if research.active:
             status = 'active'
@@ -113,11 +112,11 @@ class ResearchEdit(SuccessMessageMixin, UpdateView):
         else: 
             status = 'noactive'
         context['form'].initial['status'] = status
+        context['form'].initial['date_executed'] = research.date_executed
         return context
 
     def form_invalid(self, form):
         response = super(ResearchEdit, self).form_invalid(form)
-        # import pdb;pdb.set_trace()
         print form.errors
         if self.request.is_ajax():
             return response
@@ -127,15 +126,17 @@ class ResearchEdit(SuccessMessageMixin, UpdateView):
     def form_valid(self, form):
         data = form.cleaned_data
         status = data['status']
-        # import pdb;pdb.set_trace()
+        date_executed = data['date_executed']
         if status == 'active':
             form.instance.active = True
         else:
             form.instance.active = False
         if status == 'done':
             form.instance.executed = True
+            form.instance.date_executed = date_executed
         else:
             form.instance.executed = False
+            form.instance.date_executed = None
         return super(ResearchEdit, self).form_valid(form)
 
     def get_success_message(self, cleaned_data):

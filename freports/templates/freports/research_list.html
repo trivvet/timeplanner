@@ -19,7 +19,7 @@
                 <a href="{{ url_subjects }}">Об'єкти проваджень</a>
             </li>
             <li class="active">
-                <a href="{{ url_researches }}">Список досліджень</a>
+                <a href="{{ url_researches }}">Список досліджень <span class="badge badge-info">Alpha</span></a>
             </li>
         </ul>
     </div>
@@ -28,7 +28,7 @@
 
 {% block title %}
 <div class="col">
-    <span class="h1">Список експертних досліджень</span>
+    <span class="h1">Список експертних досліджень</span> <span class="badge badge-info">Alpha</span>
     <a class="btn btn-outline-info modal-button"
         id="add-report" href="{% url 'freports:add_new_research' %}">Додати дослідження</a>
 </div>
@@ -60,9 +60,8 @@
             <th scope="col">Заявник</th>
             <th scope="col">Тип Об'єкту</th>
             <th scope="col">Вид Дослідження</th>
-            <th scope="col">Активний статус</th>
-            <th scope="col">Статус виконання</th>
             <th scope="col">Дата надходження</th>
+            <th scope="col">Дата виконання</th>
             <th scope="col">Дії</th>
         </tr>
     </thead>
@@ -83,9 +82,8 @@
             <td>{{ report.applicant|truncatechars:30 }}</td>
             <td>{{ report.object_name|truncatechars:20 }}</td>
             <td>{{ report.research_kind|truncatechars:20 }}</td>
-            <td>{{ report.active }}</td>
-            <td>{{ report.executed }}</td>
             <td class="td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
+            <td class="td-date">{{ report.date_executed|date:"d M Y"|truncatechars:12 }}</td>
             <td>
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -113,11 +111,9 @@
 
 {% endwith %}
 
-<!-- {% if request.GET.status == 'all' or request.GET.status == 'executed' %}
-    {% if reports.has_other_pages %}
-        {% include 'freports/pagination.html' with items=reports url_next="freports:reports_list" extra=request.GET.status order_by=request.GET.order_by reverse=request.GET.reverse %}
-    {% endif %}
-{% endif %} -->
+{% if is_paginated %}
+    {% include 'freports/pagination.html' with items=page_obj url_next="freports:researches_list" order_by=request.GET.order_by reverse=request.GET.reverse %}
+{% endif %}
 
 
 {% else %}
