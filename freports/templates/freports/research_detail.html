@@ -13,13 +13,19 @@
 
 <!-- Головні учасники справи -->
 <div class="row" id="main-participants">
-    <div class="col-sm-12">
-        <table class="table table-sm table-lg-responsive table-hover">
+    <div class="col-sm-6 offset-sm-3">
+        <table class="table table-md table-hover">
             <tbody>
                 <tr>
                     <th scope="row">Заявник</th>
                     <td>
                         {{ object.applicant }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Адреса</th>
+                    <td>
+                        {{ object.address }}
                     </td>
                 </tr>
                 <tr>

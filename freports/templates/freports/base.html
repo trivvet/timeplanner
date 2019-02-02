@@ -44,7 +44,7 @@
                     {% url "finance:executions_list" as url_executions %}
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects %}active{% endif %}"
+                            <a class="nav-link {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects or request.path == url_researches %}active{% endif %}"
                                 href="{{ url_reports }}">Провадження</a>
                         </li>
                         <li class="nav-item">

@@ -44,19 +44,19 @@
 </nav> -->
 
 {% if object_list %}
-{% with order_by=request.GET.order_by reverse=request.GET.reverse status=request.GET.status %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse status=request.GET.status all_pages=request.GET.all_pages %}
 
 <table class="table table-hover table-responsive-lg">
     <thead class="thead-light">
         <tr>
             <th scope="col">
                 <a href="{% url 'freports:researches_list' %}?status={{ status }}&order_by=number
-{% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}">
+{% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}{% if all_pages %}&all_pages=1{% endif %}">
                     № {% if order_by == '' or order_by == 'number' and reverse != '1' %}&uarr;
                     {% elif order_by == 'number' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
-            <th scope="col">Адреса</th>
+            <th scope="col">Адреса{{ all_pages }}</th>
             <th scope="col">Заявник</th>
             <th scope="col">Тип Об'єкту</th>
             <th scope="col">Вид Дослідження</th>

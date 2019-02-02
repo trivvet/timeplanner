@@ -125,6 +125,11 @@ class Research(BaseReport):
         blank=False,
         null=False)
 
+    addition_info = models.TextField(
+        blank=True,
+        max_length=256,
+        verbose_name=u"Додаткова інформація")
+
     def __unicode__(self):
         return u"Дослідження {number}ед/{number_year} ({applicant})".format(
             number=self.number, number_year=self.number_year, 

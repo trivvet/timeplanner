@@ -23,8 +23,32 @@ class ResearchListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ResearchListView, self).get_context_data(**kwargs)
-        # context['now'] = timezone.now()
+        all_pages = self.request.GET.get("all_pages", '')
+
+        if all_pages:
+            order_by = self.request.GET.get("order_by", '')
+            reverse = self.request.GET.get("reverse", '')
+            if order_by:
+                object_list = Research.objects.order_by(order_by)
+                if reverse:
+                    object_list = object_list.reverse()
+            else:
+                object_list = Research.objects.order_by('number')
+            context['object_list'] = object_list
+            context['is_paginated'] = False
+
         return context
+
+    def get_queryset(self):
+        order_by = self.request.GET.get("order_by", '')
+        reverse = self.request.GET.get("reverse", '')
+        if order_by:
+            object_list = Research.objects.order_by(order_by)
+            if reverse:
+                object_list = object_list.reverse()
+        else:
+            object_list = Research.objects.order_by('number')
+        return object_list
 
 
 @method_decorator(login_required, name='dispatch')

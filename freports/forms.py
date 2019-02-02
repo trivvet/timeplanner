@@ -64,4 +64,7 @@ class ResearchForm(forms.ModelForm):
     class Meta:
         model = Research
         fields = ['date_arrived', 'address', 'applicant', 'object_name', 
-        'research_kind']
+        'research_kind', 'addition_info']
+        widgets = {
+            'addition_info': forms.Textarea(attrs={'rows': 4}),
+        }
