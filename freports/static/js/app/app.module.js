@@ -4,6 +4,10 @@ angular.module('reports', [
     // external
     'ngResource',
     'ngRoute',
+    'angularUtils.directives.dirPagination',
     
-    'reportList'
+    'reportList',
+    'showSidebar',
+    'navBar',
+    'sideBar'
     ]);

@@ -14,12 +14,14 @@
     <link rel="stylesheet" 
         href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0/css/tempusdominus-bootstrap-4.min.css" />
     <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'css/main.css' %}" type="text/css">
-<!--     <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'css/sidebar.css' %}" type="text/css"> -->
+    <link rel="stylesheet" href="{{ PORTAL_URL }}{% static 'css/sidebar.css' %}" type="text/css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.5/angular-cookies.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular-resource.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.5/angular-route.js"></script>
+
+    <script src="{{ PORTAL_URL }}{% static 'js/external/dirPagination.js' %}"></script>
 
     <script src="{{ PORTAL_URL }}{% static 'js/app/app.module.js' %}"></script>
     <script src="{{ PORTAL_URL }}{% static 'js/app/app.config.js' %}"></script>
@@ -30,18 +32,48 @@
     <script src="{{ PORTAL_URL }}{% static 'js/app/report-list/report-list.module.js' %}"></script>
     <script src="{{ PORTAL_URL }}{% static 'js/app/report-list/report-list.component.js' %}"></script>
 
+    <script src="{{ PORTAL_URL }}{% static 'js/app/utils/show-sidebar/show-sidebar.module.js' %}"></script>
+    <script src="{{ PORTAL_URL }}{% static 'js/app/utils/show-sidebar/show-sidebar.directive.js' %}"></script>
+
+    <script src="{{ PORTAL_URL }}{% static 'js/app/utils/nav-bar/nav-bar.module.js' %}"></script>
+    <script src="{{ PORTAL_URL }}{% static 'js/app/utils/nav-bar/nav-bar.directive.js' %}"></script>
+
+    <script src="{{ PORTAL_URL }}{% static 'js/app/utils/side-bar/side-bar.module.js' %}"></script>
+    <script src="{{ PORTAL_URL }}{% static 'js/app/utils/side-bar/side-bar.directive.js' %}"></script>
+
 </head>
 
 
 <body>
 
-    <h1>Angular Budexpert service</h1>
+    <nav-bar></nav-bar>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <!-- <report-list></report-list> -->
-                <div ng-view></div>
+    <div class="wrapper">
+        <side-bar></side-bar>
+
+        <div id="content" class="container">
+            <div class="row">
+                <div class="col">
+                    <button type="button" id="sidebarCollapse" class="navbar-btn" show-sidebar>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <!-- <report-list></report-list> -->
+                    <div ng-view></div>
+                </div>
+            </div>
+
+            <div class="row" id="footer">
+                <div class="col-12">
+                    <hr />
+                    <p>Time Planner, 2017-2019 &copy; <a href="#">Адмінка</a></p>
+                </div>
             </div>
         </div>
     </div>

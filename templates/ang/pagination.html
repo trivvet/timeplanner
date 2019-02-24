@@ -1,0 +1,23 @@
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        <li class="page-item" ng-class="{ disabled : pagination.current == 1 }">
+            <a class="page-link" href="#" ng-click="setCurrent(pagination.current - 1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+            <li class="page-item" ng-class="{ active : pageNumber == pagination.current }" ng-repeat="pageNumber in pages track by tracker(pageNumber, $index)">
+                <a class="page-link" href="#" ng-click="setCurrent(pageNumber)">
+                    {{ pageNumber }}
+                </a>
+            </li>
+        <li class="page-item" ng-class="{ disabled : pagination.current == pages.length }">
+            <a class="page-link" href="#" ng-click="setCurrent(pagination.current + 1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+        <a class="btn btn-outline-primary ml-2" href="#">Показати всі</a>
+    </ul>
+    
+</nav>

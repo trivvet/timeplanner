@@ -20,7 +20,7 @@
     </thead>
 
     <tbody>
-        <tr ng-repeat="item in items">
+        <tr dir-paginate="item in items | itemsPerPage: 10 as reportItems" pagination-id="listReports">
             <th class="td-link" scope="row"><p class="">{{ item.full_number }}</p></th>
             <td class="td-link">{{ item.address }}</td>
             <td class="td-link">{{ item.plaintiff }}</td>
@@ -33,3 +33,5 @@
     </tbody>
 
 </table>
+
+<dir-pagination-controls on-page-change="pageChanged(newPageNumber)" template-url="/api/templates/pagination.html" ng-show="items" pagination-id="listReports"></dir-pagination-controls>
