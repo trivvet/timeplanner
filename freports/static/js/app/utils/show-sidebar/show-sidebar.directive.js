@@ -7,6 +7,7 @@ angular.module('showSidebar').
             link: function (scope, element, attr) {
                 element.bind('click', function(event) {
                     console.log("OK");
+
                 });
                 // var msg = attr.confirmClick || "Are you sure?";
                 // var clickAction = attr.confirmedClick;

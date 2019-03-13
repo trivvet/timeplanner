@@ -33,6 +33,11 @@
     transform: rotateY(100deg); /* Rotate sidebar vertically by 100 degrees. */
 }
 
+side-bar.active>nav {
+    margin-left: -250px;
+    transform: rotateY(100deg);
+}
+
 #sidebar .sidebar-header {
     color: #fff;
     padding: 40px 0;

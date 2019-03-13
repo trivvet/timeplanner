@@ -49,12 +49,12 @@
     <nav-bar></nav-bar>
 
     <div class="wrapper">
-        <side-bar></side-bar>
+        <side-bar ng-class="{ 'active': ! showSidebar }"></side-bar>
 
         <div id="content" class="container">
             <div class="row">
                 <div class="col">
-                    <button type="button" id="sidebarCollapse" class="navbar-btn" show-sidebar>
+                    <button type="button" id="sidebarCollapse" class="navbar-btn" show-sidebar ng-click="showSidebar = ! showSidebar" ng-class="{ 'active': ! showSidebar }">
                         <span></span>
                         <span></span>
                         <span></span>
