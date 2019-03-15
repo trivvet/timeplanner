@@ -13,5 +13,7 @@ class ReportListSerializer(ModelSerializer):
             'defendant',
             'object_name',
             'research_kind',
-            'date_arrived'
+            'date_arrived',
+            'active',
+            'executed'
         )

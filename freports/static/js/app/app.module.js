@@ -7,7 +7,6 @@ angular.module('reports', [
     'angularUtils.directives.dirPagination',
     
     'reportList',
-    'showSidebar',
     'navBar',
     'sideBar'
     ]);

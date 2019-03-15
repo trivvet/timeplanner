@@ -2,6 +2,12 @@
 <a class="btn btn-outline-info modal-button"
     id="add-report" href="">Додати провадження</a>
 
+<nav class="nav nav-pills nav-justified" id="navbar-list">
+    <a class="nav-item nav-link" href="" data="all" ng-click="setStatus($event)" ng-class="navButtonClass1">Усі <span class="badge badge-info">1</span></a>
+    <a class="nav-item nav-link" href="" data="active" ng-click="setStatus($event)" ng-class="navButtonClass2">Активні <span class="badge badge-success">1</span></a>
+    <a class="nav-link nav-item" href="" data="deactivate" ng-click="setStatus($event)" ng-class="navButtonClass3">Призупинені <span class="badge badge-secondary">1</span></a>
+    <a class="nav-link nav-item" href="" data="executed" ng-click="setStatus($event)" ng-class="navButtonClass4">Закриті <span class="badge badge-light">1</span></a>
+</nav>
 
 <table class="table table-hover table-responsive-lg">
     <thead class="thead-light">
@@ -20,8 +26,8 @@
     </thead>
 
     <tbody>
-        <tr dir-paginate="item in items | itemsPerPage: 10 as reportItems" pagination-id="listReports">
-            <th class="td-link" scope="row"><p class="">{{ item.full_number }}</p></th>
+        <tr dir-paginate="item in items | filter: filterStatus | orderBy: 'full_number' | itemsPerPage: 10 as reportItems" pagination-id="listReports" ng-class="itemRowColor(item)">
+            <th class="td-link" ng-class="itemNumberColor(item)"scope="row"><p class="">{{ item.full_number }}</p></th>
             <td class="td-link">{{ item.address }}</td>
             <td class="td-link">{{ item.plaintiff }}</td>
             <td class="td-link">{{ item.defendant }}</td>
