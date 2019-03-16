@@ -7,10 +7,27 @@ angular.module('reportList').
             $routeParams, $rootScope, $scope){
             
             $scope.navButtonClass2 = "active";
+            $scope.reportItems = 10;
 
             Report.query(function(data){
                 $scope.items = data;
+                $scope.activeReports = $scope.items.filter(function(item) {
+                    if (item.active != false) {
+                        return item;
+                    }
+                });
+                $scope.deactivatedReports = $scope.items.filter(function(item) {
+                    if (item.active == false && item.executed == false) {
+                        return item;
+                    }
+                });
+                $scope.executedReports = $scope.items.filter(function(item) {
+                    if (item.executed) {
+                        return item
+                    }
+                });
             });
+            
 
             $scope.filterStatus = function(item) {
                 if ($scope.status == "active" || !$scope.status) {
@@ -35,6 +52,7 @@ angular.module('reportList').
             $scope.setStatus = function(event) {
                 var elementAttributes = event.currentTarget.attributes;
                 $scope.status = elementAttributes.data.value;
+                $scope.reportItems = 10;
                 $scope.navButtonClass1 = "";
                 $scope.navButtonClass3 = "";
                 $scope.navButtonClass4 = "";
@@ -71,6 +89,15 @@ angular.module('reportList').
                 } else if (item.research_kind == '-') {
                     return "table-warning";
                 }
+            }
+
+            $scope.showAll = function() {
+                if ($scope.reportItems != $scope.items.length) {
+                    $scope.reportItems = $scope.items.length;
+                } else {
+                    $scope.reportItems = 10;
+                }
+                
             }
         }
     })

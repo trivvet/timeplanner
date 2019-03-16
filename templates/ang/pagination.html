@@ -1,4 +1,4 @@
-<nav aria-label="Page navigation">
+<nav aria-label="Page navigation" ng-hide="pages.length < 2">
     <ul class="pagination">
         <li class="page-item" ng-class="{ disabled : pagination.current == 1 }">
             <a class="page-link" href="#" ng-click="setCurrent(pagination.current - 1)" aria-label="Previous">
@@ -17,7 +17,6 @@
                 <span class="sr-only">Next</span>
             </a>
         </li>
-        <a class="btn btn-outline-primary ml-2" href="#">Показати всі</a>
     </ul>
     
 </nav>
