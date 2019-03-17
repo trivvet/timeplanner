@@ -344,11 +344,11 @@ function showButtons() {
 
 function clickExecuteTask() {
     $('.checkbox-container input, .try').click(function() {
-        var box = $(this);
+        var box = $(this), tackKey = "";
         if (box.val()) {
-            var taskKey = box.val();
+            taskKey = box.val();
         } else {
-            var taskKey = box.data('pk');
+            taskKey = box.data('pk');
         }
         $.ajax(box.data('url'), {
             'type': 'POST',

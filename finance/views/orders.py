@@ -151,12 +151,29 @@ def valid_data(form_data):
     tasks_number = form_data.get('tasks_number')
     if tasks_number:
         try:
-            new_order['tasks_number'] = int(tasks_number)
+            new_order['tasks_number'] = float(tasks_number.replace(",", '.'))
         except ValueError:
             new_order['tasks_number'] = tasks_number
-            errors['tasks_number'] = u"Будь-ласка введіть ціле число"
+            errors['tasks_number'] = u"Будь-ласка введіть число"
 
     status = form_data.get('status')
     new_order['status'] = status
 
     return {'new_order': new_order, 'errors': errors}
+
+def order_auto_create(detail):
+    new_order = {
+        'name': u'Висновок №{}'.format(detail.report.full_number()),
+        'report': detail.report,
+        'total_sum': detail.cost,
+        'status': 'inactive'
+    }
+    return Order(**new_order)
+
+def order_auto_edit(detail):
+    try:
+        edit_order = Order.objects.get(report=detail.report)
+        edit_order.total_sum = detail.cost
+    except:
+        edit_order = order_create(detail)
+    return edit_order

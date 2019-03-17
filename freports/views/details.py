@@ -14,6 +14,14 @@ from .days_counter import check_active, days_count, update_dates_info
 from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge, Task
 from .tasks import add_detail_task, edit_detail_task
 
+from finance.models import Order, Income
+from finance.views import (
+    order_auto_create,
+    order_auto_edit,
+    income_auto_create,
+    income_auto_edit
+    )
+
 petition_type = [u'Про надання додаткових матеріалів', u'Про уточнення питань', u'Про надання справи']
 done_type = [u'Висновок експерта', u'Повідомлення про неможливість', u'Залишення без виконання']
 inspected_type = [u'Проведено успішно', u'Не надано доступ', u'Відмінено']
@@ -21,14 +29,14 @@ bill_type = [u'Направлено рекомендованого листа', 
 paid_type = [u'На банківський рахунок', u'Готівкою']
 message_type = ['Направлене клопотання', u'Надіслані листи', u'Повідомлено телефоном', u'Повідомлено особисто']
 kind_specific = {
-        'first_arrived': ['надходження ухвали', ['date', 'info', 'received', 'decision_date']],
-        'arrived': ['надходження з суду', ['date', 'info', 'received']],
-        'petition': ['направлення клопотання', ['date', 'info', 'type', 'necessary', 'sending'], petition_type],
-        'bill': ['направлення рахунку', ['date', 'info', 'cost', 'address', 'type'], bill_type],
-        'paid': ['оплата', ['date', 'info', 'type'], paid_type],
-        'schedule': ['призначення виїзду', ['date', 'info', 'time', 'type'], message_type],
-        'inspected': ['проведення огляду', ['date', 'info', 'type'], inspected_type],
-        'done': ['відправлення до суду', ['date', 'info', 'sending', 'type'], done_type]}
+        'first_arrived': [u'надходження ухвали', ['date', 'info', 'received', 'decision_date']],
+        'petition': [u'направлення клопотання', ['date', 'info', 'type', 'necessary', 'sending'], petition_type],
+        'arrived': [u'надходження з суду', ['date', 'info', 'received']],
+        'bill': [u'направлення рахунку', ['date', 'info', 'cost', 'address', 'type'], bill_type],
+        'paid': [u'оплата', ['date', 'info', 'type'], paid_type],
+        'schedule': [u'призначення виїзду', ['date', 'info', 'time', 'type'], message_type],
+        'inspected': [u'проведення огляду', ['date', 'info', 'type'], inspected_type],
+        'done': [u'відправлення до суду', ['date', 'info', 'sending', 'type'], done_type]}
 
 status_list = {
     'judge': 'Суддя',
@@ -215,7 +223,12 @@ def add_detail(request, rid, kind):
                 update_dates_info(reports)
                 if new_detail.name == 'bill':
                     report.cost = new_detail.cost
+                    new_order = order_auto_create(new_detail)
+                    new_order.save()
                 report.save()
+                if new_detail.name == 'paid':
+                    new_income = income_auto_create(new_detail)
+                    new_income.save()
                 add_detail_task(new_detail)
                 messages.success(request, u"Подія '%s' успішно додана" % kind_specific[new_detail.name][0])
 
@@ -274,6 +287,8 @@ def edit_detail(request, rid, did):
                 update_dates_info(reports)
                 if edit_detail.name == 'bill':
                     report.cost = edit_detail.cost
+                    edit_order = order_auto_edit(edit_detail)
+                    edit_order.save()
                 report.save()
                 edit_detail_task(edit_detail)
                 messages.success(request, u"Подія '%s' успішно змінена" % kind_specific[edit_detail.name][0])
@@ -318,6 +333,8 @@ def delete_detail(request, rid, did):
             update_dates_info(reports)
             if current_detail.name == 'bill':
                 report.cost = None
+                order = Order.objects.get(report=current_detail.report)
+                order.delete()
             report.save()
 
             messages.success(request,
@@ -421,4 +438,3 @@ def valid_detail(request_info, report_id):
         new_element['activate'] = False
 
     return {'errors': errors, 'data': new_element}
-
