@@ -159,16 +159,27 @@ class IncomeDelete(DeleteView):
 
 
 def income_auto_create(detail):
+    detail.cost = detail.report.cost
     try:
         order = Order.objects.get(report=detail.report)
+        if not detail.cost:
+            detail.cost = order.total_sum
     except:
+        if not detail.cost:
+            detail.cost = 10000
         order = order_auto_create(detail)
         order.save()
+    if detail.subspecies == 'bank':
+        print 'bank'
+        account = Account.objects.filter(status='work', cash=False)
+    else:
+        print 'cash'
+        account = Account.objects.filter(status='work', cash=True)
     new_income = {
         'order': order,
         'date': detail.date,
         'account': Account.objects.all().first(),
-        'amount': detail.report.cost
+        'amount': detail.cost
     }
     return Income(**new_income)
 
