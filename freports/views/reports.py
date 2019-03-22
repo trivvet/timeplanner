@@ -177,7 +177,7 @@ def edit_report(request, rid):
             if errors:
                 messages.error(request, "Виправте наступні недоліки")
                 new_report['judge_name'] = content.judge_name
-                return render(request, 'freports/add_report.html', {'header': header, 'content': new_report,
+                return render(request, 'freports/edit_report.html', {'header': header, 'content': new_report,
                     'errors': errors, 'courts': courts, 'judges': judges})
 
             else:
@@ -217,7 +217,7 @@ def edit_report(request, rid):
             if content.executed:
                 content.date_executed = content.date_executed.isoformat()
             next_url = request.GET.get('next', '')
-            return render(request, 'freports/add_report.html', {'header': header, 'content': content, 'courts': courts,
+            return render(request, 'freports/edit_report.html', {'header': header, 'content': content, 'courts': courts,
                 'judges': judges, 'next_url': next_url})
 
 @login_required(login_url='/login/')
