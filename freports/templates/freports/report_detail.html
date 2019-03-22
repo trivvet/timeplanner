@@ -138,7 +138,7 @@
                                 <span class="group-buttons">
                                     <a class="modal-button" href="{% url 'freports:delete_task' task.id %}?next_page={% url 'freports:report_detail' report.id %}"><i class="fa fa-trash-o"></i></a>
                                     <a class="modal-button" href="{% url 'freports:edit_task' task.id %}?next_page={% url 'freports:report_detail' report.id %}"><i class="fa fa-pencil"></i></a>
-                                    <span class="modal-button try" data-url="{% url 'freports:change_status_task' %}" data-pk="{{ task.id }}"><i class="fa fa-check"></i></span>
+                                    <span class="try" data-url="{% url 'freports:change_status_task' %}" data-pk="{{ task.id }}"><i class="fa fa-check"></i></span>
                                 </span>    
                             </li>
                             {% endfor %}
@@ -173,6 +173,7 @@
 </div>
 
 {% if details %}
+{{ content.items }}
 
 <div id="accordion" role="tablist">
     <div class="card">

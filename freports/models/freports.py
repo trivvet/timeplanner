@@ -117,6 +117,11 @@ class Report(BaseReport):
         time_amount = date.today() - self.change_date
         return time_amount.days
 
+    def final_document(self):
+        events = ReportEvents.objects.filter(report=self).order_by('date')
+        report_type = events.last().subspecies
+        return report_type
+
 
 class Research(BaseReport):
     applicant = models.CharField(
@@ -127,7 +132,6 @@ class Research(BaseReport):
 
     addition_info = models.TextField(
         blank=True,
-        max_length=256,
         verbose_name=u"Додаткова інформація")
 
     def __unicode__(self):

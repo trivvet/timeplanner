@@ -19,6 +19,7 @@ from django.utils.decorators import method_decorator
 
 from ..models import Income, Order, Account
 from ..forms import IncomeForm
+from . import order_auto_create
 
 @login_required(login_url='/login/')
 def incomes_list(request):
@@ -155,3 +156,21 @@ class IncomeDelete(DeleteView):
         messages.success(self.request, success_message)
         return super(IncomeDelete, self).delete(
             self, request, *args, **kwargs)
+
+
+def income_auto_create(detail):
+    try:
+        order = Order.objects.get(report=detail.report)
+    except:
+        order = order_auto_create(detail)
+        order.save()
+    new_income = {
+        'order': order,
+        'date': detail.date,
+        'account': Account.objects.all().first(),
+        'amount': detail.report.cost
+    }
+    return Income(**new_income)
+
+def income_auto_edit(detail):
+    return detail

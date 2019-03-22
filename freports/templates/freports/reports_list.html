@@ -109,6 +109,9 @@
                     {% elif order_by == 'date_executed' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
+            <th scope="col">
+                Заключний документ
+            </th>
             {% endif %}
             {% if not request.GET.status %}
             <th scope="col">
@@ -153,6 +156,7 @@
             <td class="td-link td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
             {% if request.GET.status == 'executed' %}
             <td class="td-link td-date">{{ report.date_executed|truncatechars:10 }}</td>
+            <td class="td-link">{{ report.final_document }}</td>
             {% endif %}
             {% if not request.GET.status %}
             <td class="td-link">

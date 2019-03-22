@@ -42,7 +42,7 @@ class Order(models.Model):
         null=False,
         default=0)
 
-    tasks_number = models.IntegerField(
+    tasks_number = models.FloatField(
         verbose_name=u"Кількість необхідних тасків",
         blank=True,
         null=True)
