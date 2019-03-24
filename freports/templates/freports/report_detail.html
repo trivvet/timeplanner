@@ -57,7 +57,7 @@
                         {% endfor %}
                         {% else %}
                         <a class="no-style-link modal-button" href="{% url 'freports:add_participant' report.id 'defendant' %}"
-                            style="color:red">Дані відсутні</a>
+                            class="text-danger">Дані відсутні</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -85,7 +85,7 @@
                         {% endfor %}
                         {% else %}
                         <a class="no-style-link modal-button" href="{% url 'freports:add_subject' report.id %}"
-                            style="color:red">Дані відсутні</a>
+                            class="text-danger">Дані відсутні</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -98,18 +98,27 @@
                     </td>
                 </tr>
                 {% endfor %}
-                {% if report.cost %}
+
                 <tr>
                     <th scope="row">Вартість</th>
-                    <td>{{ report.cost }}грн</td>
+                    <td>
+                        {% if report.cost %}
+                        <a class="no-style-link" href="">{{ report.cost }}грн</a>
+                        {% else %}
+                        <a class="no-style-link modal-button text-warning" 
+                           href="{% url 'freports:add_detail' report.id 'bill' %}">
+                        Не визначено
+                        {% endif %}
+                    </td>
                 </tr>
-                {% endif %}
+
                 <tr>
                     <th scope="row">Днів у виконанні</th>
                     <td>
                         {{ report.active_days_amount|add:report.time_after_update }}
                     </td>
                 </tr>
+
                 <tr>
                     <th scope="row">Статус провадження</th>
                     <td>
@@ -118,10 +127,11 @@
                         {% else %}<span style="color:grey">Призупинене {{ report.waiting_days_amount|add:report.time_after_update }} днів тому</span>{% endif %}
                     </td>
                 </tr>
+
                 <tr>
                     <th scope="row">Остання подія</th>
                     <td>
-                        {{ report.last_event.date }}, {{ content|get_item:report.last_event.name }}
+                        {{ report.last_event.date }}, {{ content.kind_specific|get_item:report.last_event.name }}
                         {{ report.last_event.subspecies }}
                     </td>
                 </tr>
@@ -187,8 +197,8 @@
                     Додати подію
                 </button>
                 <div class="dropdown-menu" id="add-event" aria-labelledby="dropdownMenuButton">
-                    {% for key,specific in content.items %}
-                    {% if key != 'first_arrived' %}
+                    {% for key,specific in content.kind_specific.items %}
+                    {% if key not in content.not_show_items %}
                     <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id key %}">{{ specific.0|capfirst }}</a>
                     {% endif %}
                     {% endfor %}
@@ -215,7 +225,7 @@
                         {% for detail in details %}
                         <tr>
                             <th scope="row">{{ detail.date }}</td>
-                            <td>{{ content|get_item:detail.name }}</td>
+                            <td>{{ content.kind_specific|get_item:detail.name }}</td>
                             <td>{{ detail.detail_info }}</td>
                             <td>
                                 <div class="dropdown">
@@ -245,7 +255,5 @@
 {% else %}
 <p>Інформація про події провадження ще не внесена</p>
 {% endif %}
-
-
 
 {% endblock content %}

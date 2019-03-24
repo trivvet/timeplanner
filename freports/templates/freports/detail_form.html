@@ -101,8 +101,8 @@
             <select class="form-control {% if errors.subspecies %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputType" name="subspecies" value="{{ new_content.subspecies }}">
                 <option value=''>-----------</option>
-                {% for item, name in content.select_type %}
-                <option {% if new_content.subspecies == item %}selected{% endif %} value="{{ item }}">{{ name }}</option>
+                {% for item in content.select_type %}
+                <option {% if new_content.subspecies == item %}selected{% endif %}>{{ item }}</option>
                 {% endfor %}
             </select>
             <div class="invalid-feedback">

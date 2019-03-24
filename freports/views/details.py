@@ -53,6 +53,7 @@ status_list = {
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
     details = ReportEvents.objects.filter(report=report).order_by('date')
+    content = {}
 
     if len(details.filter(name='first_arrived')) < 1:
         return HttpResponseRedirect(reverse('freports:add_order', args=[rid]))
@@ -72,14 +73,16 @@ def details_list(request, rid):
         else:
             participant.status = status_list[participant.status]
             participants['other'].append(participant)
-    content = kind_specific
+    not_show_items = ('first_arrived', 'bill')
+    content['kind_specific'] = kind_specific
+    content['not_show_items'] = not_show_items
     time_after_update = date.today() - report.change_date
     report.time_after_update = time_after_update.days
     tasks = Task.objects.filter(report=report).exclude(execute=True)
 
     return render(request, 'freports/report_detail.html',
         {'details': details, 'report': report, 'participants': participants, 
-        'content': content, 'subjects': subjects, 'tasks': tasks })
+        'content': content, 'subjects': subjects, 'tasks': tasks})
 
 @login_required(login_url='/login/')
 def add_order(request, rid):
@@ -229,9 +232,9 @@ def add_detail(request, rid, kind):
                     new_order = order_auto_create(new_detail)
                     new_order.save()
                 report.save()
-                if new_detail.name == 'paid':
-                    new_income = income_auto_create(new_detail)
-                    new_income.save()
+                # if new_detail.name == 'paid':
+                    #n ew_income = income_auto_create(new_detail)
+                    # new_income.save()
                 add_detail_task(new_detail)
                 messages.success(request, u"Подія '%s' успішно додана" % kind_specific[new_detail.name][0])
 
@@ -242,8 +245,9 @@ def add_detail(request, rid, kind):
             args=[rid]))
 
     else:
-        return render(request, 'freports/detail_form.html', {'header': header, 
-            'content': content, 'new_content': new_content})
+        return render(request, 'freports/detail_form.html', {
+            'header': header, 'content': content, 
+            'new_content': new_content})
 
 @login_required(login_url='/login/')
 def edit_detail(request, rid, did):
