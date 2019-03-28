@@ -199,11 +199,11 @@
                     Додати подію
                 </button>
                 <div class="dropdown-menu" id="add-event" aria-labelledby="dropdownMenuButton">
-                    {% for key,specific in content.kind_specific.items %}
-                    {% if key not in content.not_show_items %}
-                    <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id key %}">{{ specific.0|capfirst }}</a>
-                    {% endif %}
-                    {% endfor %}
+                    <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'petition' %}">Направлення клопотання</a>
+                    <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'arrived' %}">Надходження з суду</a>
+                    <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'schedule' %}">Призначення виїзду</a>
+                    <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'inspected' %}">Проведення огляду</a>
+                    <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'done' %}">Відправлення до суду</a>
                 </div>
             </div>
             {% endif %}

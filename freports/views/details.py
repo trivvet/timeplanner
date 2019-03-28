@@ -11,10 +11,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
 from .days_counter import check_active, days_count, update_dates_info
-from ..models import Report, ReportEvents, ReportParticipants, ReportSubject, Court, Judge, Task
+from ..models import (
+    Report, 
+    ReportEvents, 
+    ReportParticipants, 
+    ReportSubject, 
+    Court, 
+    Judge, 
+    Task
+    )
 from .tasks import add_detail_task, edit_detail_task
 
-from finance.models import Order, Income
+from finance.models import Order, Income, Account
 from finance.views import (
     order_auto_create,
     order_auto_edit,
@@ -22,24 +30,72 @@ from finance.views import (
     income_auto_edit
     )
 
-petition_type = [u'Про надання додаткових матеріалів', u'Про уточнення питань', u'Про надання справи']
-done_type = [u'Висновок експерта', u'Повідомлення про неможливість', u'Залишення без виконання']
-inspected_type = [u'Проведено успішно', u'Не надано доступ', u'Відмінено']
-bill_type = [u'Направлено рекомендованого листа', u'Вручено особисто', u'Вручено представнику', u'Направлено електронного листа']
-paid_type = [
-    ('bank', u'На банківський рахунок'), 
-    ('cash', u'Готівкою')
-]
-message_type = ['Направлене клопотання', u'Надіслані листи', u'Повідомлено телефоном', u'Повідомлено особисто']
+petition_type = [
+    u'Про надання додаткових матеріалів', 
+    u'Про уточнення питань', 
+    u'Про надання справи'
+    ]
+done_type = [
+    u'Висновок експерта', 
+    u'Повідомлення про неможливість', 
+    u'Залишення без виконання'
+    ]
+inspected_type = [
+    u'Проведено успішно', 
+    u'Не надано доступ', 
+    u'Відмінено'
+    ]
+bill_type = [
+    u'Направлено рекомендованого листа', 
+    u'Вручено особисто', 
+    u'Вручено представнику', 
+    u'Направлено електронного листа'
+    ]
+message_type = [
+    u'Направлене клопотання', 
+    u'Надіслані листи', 
+    u'Повідомлено телефоном', 
+    u'Повідомлено особисто'
+    ]
 kind_specific = {
-        'first_arrived': [u'надходження ухвали', ['date', 'info', 'received', 'decision_date']],
-        'petition': [u'направлення клопотання', ['date', 'info', 'type', 'necessary', 'sending'], petition_type],
-        'arrived': [u'надходження з суду', ['date', 'info', 'received']],
-        'bill': [u'направлення рахунку', ['date', 'info', 'cost', 'address', 'type'], bill_type],
-        'paid': [u'оплата', ['date', 'info', 'type'], paid_type],
-        'schedule': [u'призначення виїзду', ['date', 'info', 'time', 'type'], message_type],
-        'inspected': [u'проведення огляду', ['date', 'info', 'type'], inspected_type],
-        'done': [u'відправлення до суду', ['date', 'info', 'sending', 'type'], done_type]}
+        'first_arrived': [
+            u'Надходження ухвали', 
+            ['date', 'info', 'received', 'decision_date']
+            ],
+        'petition': [
+            u'Направлення клопотання', 
+            ['date', 'info', 'type', 'necessary', 'sending'], 
+            petition_type
+            ],
+        'arrived': [
+            u'Надходження з суду', 
+            ['date', 'info', 'received']
+            ],
+        'bill': [
+            u'Направлення рахунку', 
+            ['date', 'info', 'cost', 'address', 'type'], 
+            bill_type
+            ],
+        'paid': [
+            u'Оплата', 
+            ['date', 'info', 'account'], 
+            ],
+        'schedule': [
+            u'Призначення виїзду', 
+            ['date', 'info', 'time', 'type'], 
+            message_type
+            ],
+        'inspected': [
+            u'Проведення огляду', 
+            ['date', 'info', 'type'], 
+            inspected_type
+            ],
+        'done': [
+            u'Відправлення до суду', 
+            ['date', 'info', 'sending', 'type'], 
+            done_type
+            ]
+        }
 
 status_list = {
     'judge': 'Суддя',
@@ -178,7 +234,8 @@ def add_order(request, rid):
 @login_required(login_url='/login/')
 def add_detail(request, rid, kind):
     report = Report.objects.get(pk=rid)
-    details = ReportEvents.objects.filter(report=report).order_by('date').reverse()
+    details = ReportEvents.objects.filter(
+        report=report).order_by('date').reverse()
     content, new_content = {}, {}
     header = {}
     header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
@@ -186,6 +243,8 @@ def add_detail(request, rid, kind):
     content['obvious_fields'] = kind_specific[kind][1]
     if 'type' in content['obvious_fields']:
         content['select_type'] = kind_specific[kind][2]
+    if 'account' in content['obvious_fields']:
+        content['accounts'] = Account.objects.filter(status='work')
     content['kind'] = kind
     for detail in details:
         if detail.name in ('arrived', 'first_arrived'):
@@ -257,7 +316,8 @@ def edit_detail(request, rid, did):
     content = {'obvious_fields': kind_specific[detail.name][1], 'kind': detail.name}
     if 'type' in content['obvious_fields']:
         content['select_type'] = kind_specific[detail.name][2]
-
+    if 'account' in content['obvious_fields']:
+        content['accounts'] = Account.objects.filter(status='work')
     if request.method == 'POST':
         if request.POST.get('next'):
             next_url = reverse(request.POST.get('next'), args=[rid])
@@ -396,7 +456,7 @@ def valid_detail(request_info, report_id):
         else:
             new_element['received'] = received
 
-    if name in ['petition', 'bill', 'paid', 'done', 'inspected']:
+    if name in ['petition', 'bill', 'done', 'inspected']:
         subspecies = request_info.get('subspecies')
         if not subspecies:
             errors['subspecies'] = u"Інформація про підтип події є обов'язковою"
@@ -432,6 +492,12 @@ def valid_detail(request_info, report_id):
             except ValueError:
                 errors['cost'] = u"Введіть вартість в числовому вигляді"
                 new_element['cost'] = cost
+
+    if name == 'paid':
+        account = Account.objects.get(pk=request_info.get('account'))
+        subspecies = u'На рахунок {}'.format(
+            account.title)
+        new_element['subspecies'] = subspecies
 
     new_element['sending'] = request_info.get('sending')
     new_element['address'] = request_info.get('address', '')

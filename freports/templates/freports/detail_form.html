@@ -112,6 +112,25 @@
     </div>
     {% endif %}
 
+     <!-- Тип оплати -->
+    {% if 'account' in content.obvious_fields %}
+    <div class="form-group row">
+        <label for="inputAccount" class="col-sm-4 col-form-label">Рахунок<strong>*</strong></label>
+        <div class="col-sm-8">
+            <select class="form-control {% if errors.account %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputAccount" name="account" value="{{ new_content.account }}">
+                <option value=''>-----------</option>
+                {% for item in content.accounts %}
+                <option {% if item.title in new_content.subspecies %}selected{% endif %} value="{{ item.id }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.account }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Необхідні матеріали -->
     {% if 'necessary' in content.obvious_fields %}
     <div class="form-group row">
