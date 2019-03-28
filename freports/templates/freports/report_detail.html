@@ -102,8 +102,10 @@
                 <tr>
                     <th scope="row">Вартість</th>
                     <td>
-                        {% if report.cost %}
-                        <a class="no-style-link" href="">{{ report.cost }}грн</a>
+                        {% if report.cost and report.is_paid %}
+                        {{ report.cost }}грн
+                        {% elif report.cost %}
+                        <a class="no-style-link modal-button" href="{% url 'freports:add_detail' report.id 'paid' %}">{{ report.cost }}грн (не оплачено)</a>
                         {% else %}
                         <a class="no-style-link modal-button text-warning" 
                            href="{% url 'freports:add_detail' report.id 'bill' %}">

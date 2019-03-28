@@ -46,7 +46,6 @@ def tasks_list(request):
 def change_status_task(request):
     if request.is_ajax():
         if request.method == "POST":
-            print "We're here!!!!"
             try:
                 executed_task = Task.objects.get(pk=request.POST.get('pk'))
             except:
@@ -189,6 +188,7 @@ def edit_detail_task(detail):
 
 @login_required(login_url='/login/')
 def delete_task(request, tid):
+    next_page= request.GET.get('next_page', reverse('freports:tasks_list'))
     task = Task.objects.get(pk=tid)
     if request.method == 'POST':
         if request.POST.get('delete_button'):
@@ -196,7 +196,7 @@ def delete_task(request, tid):
             messages.success(request, u"Завдання успішно видалене")
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання завдання скасовано")
-        return HttpResponseRedirect(reverse('freports:tasks_list'))
+        return HttpResponseRedirect(next_page)
     else:
         header = u'Видалення завдання'
         content = u"Ви дійсно бажаєте видалити інформацію про завдання {name} яке призначене на {date}?".format(

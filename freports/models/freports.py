@@ -117,6 +117,10 @@ class Report(BaseReport):
         time_amount = date.today() - self.change_date
         return time_amount.days
 
+    def is_paid(self):
+        paid = ReportEvents.objects.filter(report=self, name='paid')
+        return paid.exists()
+
     def final_document(self):
         events = ReportEvents.objects.filter(report=self).order_by('date')
         report_type = events.last().subspecies

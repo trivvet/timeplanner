@@ -33,7 +33,7 @@ class ResearchListView(ListView):
                 if reverse:
                     object_list = object_list.reverse()
             else:
-                object_list = Research.objects.order_by('number')
+                object_list = Research.objects.order_by('number').reverse()
             context['object_list'] = object_list
             context['is_paginated'] = False
 
@@ -47,7 +47,7 @@ class ResearchListView(ListView):
             if reverse:
                 object_list = object_list.reverse()
         else:
-            object_list = Research.objects.order_by('number')
+            object_list = Research.objects.order_by('number').reverse()
         return object_list
 
 

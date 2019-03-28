@@ -73,9 +73,7 @@ def details_list(request, rid):
         else:
             participant.status = status_list[participant.status]
             participants['other'].append(participant)
-    not_show_items = ('first_arrived', 'bill')
     content['kind_specific'] = kind_specific
-    content['not_show_items'] = not_show_items
     time_after_update = date.today() - report.change_date
     report.time_after_update = time_after_update.days
     tasks = Task.objects.filter(report=report).exclude(execute=True)
@@ -340,8 +338,11 @@ def delete_detail(request, rid, did):
             update_dates_info(reports)
             if current_detail.name == 'bill':
                 report.cost = None
-                order = Order.objects.get(report=current_detail.report)
-                order.delete()
+                try:
+                    order = Order.objects.get(report=current_detail.report)
+                    order.delete()
+                except:
+                    pass
             report.save()
 
             messages.success(request,
