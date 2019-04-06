@@ -175,5 +175,5 @@ def order_auto_edit(detail):
         edit_order = Order.objects.get(report=detail.report)
         edit_order.total_sum = detail.cost
     except:
-        edit_order = order_create(detail)
+        edit_order = order_auto_create(detail)
     return edit_order

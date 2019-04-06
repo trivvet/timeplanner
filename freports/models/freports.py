@@ -121,6 +121,15 @@ class Report(BaseReport):
         paid = ReportEvents.objects.filter(report=self, name='paid')
         return paid.exists()
 
+    def is_cost(self):
+        cost = self.cost
+        if not self.cost:
+            bill = ReportEvents.objects.filter(report=self, name='bill')
+            if bill.exists():
+                cost = bill.first().cost
+        return cost
+
+
     def final_document(self):
         events = ReportEvents.objects.filter(report=self).order_by('date')
         report_type = events.last().subspecies
