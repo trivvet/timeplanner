@@ -41,9 +41,10 @@ function initDateFields() {
             showClose: true
         }
     });
-    $('#inputDate, #inputDate2').on("blur", function(e) {
-        $(this).datetimepicker("hide"); 
-    });
+    // $('#inputDate input').on("blur", function(e) {
+    //     var decisionDate = $('#inputDate input').val();
+    //     console.log(decisionDate); 
+    // });
 }
 
 function showExecutedDate() {
@@ -101,8 +102,18 @@ function initChangeDecisionDate() {
             var inputDateValue = new Date(inputDate.children('input').val());
             var eventDate = new Date($(this).children('input').val());
             var maxDate = new Date($(this).children('input').val());
+            eventDate.setDate(eventDate.getDate() - 10);
             if (inputDateValue > eventDate || maxDate > eventDate) {
-                eventDate.setDate(eventDate.getDate() - 10);
+                inputDate.datetimepicker('destroy');
+                $('#inputDateDecision').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    locale: 'uk',
+                    date: eventDate,
+                    maxDate: maxDate,
+                    useCurrent: false,
+                    daysOfWeekDisabled: [0,6]
+                });
+            } else if (!inputDateValue) {
                 inputDate.datetimepicker('destroy');
                 $('#inputDateDecision').datetimepicker({
                     format: 'YYYY-MM-DD',
@@ -113,7 +124,7 @@ function initChangeDecisionDate() {
                     daysOfWeekDisabled: [0,6]
                 });
             }
-        }
+        } 
         
     }).blur();
 }

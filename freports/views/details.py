@@ -209,7 +209,7 @@ def add_order(request, rid):
     elif request.method == 'GET':
         if request.is_ajax() and request.GET.get('court', ''):
             court = Court.objects.get(pk=request.GET.get('court'))
-            judges = Judge.objects.filter(court_name=court)
+            judges = Judge.objects.filter(court_name=court).order_by('surname')
             new_list = []
             for judge in judges:
                 new_item = {'id': judge.id, 

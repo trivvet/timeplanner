@@ -36,8 +36,7 @@
                         {% endfor %}
 
                         {% else %}
-                        <a class="no-style-link modal-button" href="{% url 'freports:add_participant' report.id 'plaintiff' %}"
-                            style="color:red">Дані відсутні</a>
+                        <a class="no-style-link modal-button text-danger" href="{% url 'freports:add_participant' report.id 'plaintiff' %}">Дані відсутні</a>
                         {% endif %}
                     </td>
                 </tr>
