@@ -1,0 +1,46 @@
+{% extends "freports/base.html" %}
+
+{% block sidebar %}
+{% include 'finance/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список транзакцій по рахунку {{ object.title }}</span> <span class="badge badge-info">Alpha</span>
+</div>
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+{% if transactions %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Дата</th>
+            <th scope="col">Тип транзакції</th>
+            <th scope="col">Замовлення</th>
+            <th scope="col">Рахунок</th>
+            <th scope="col">Сума</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr class="{% if transaction.model_name == 'Виконання' %}text-danger{% else %}text-success{% endif %}">
+            <th scope="row">{{ transaction.date }}</th>
+            <td>{{ transaction.model_name }}
+            <td>{{ transaction.order.name }}</td>
+            <td>{{ transactionaccount.title }}</td>
+            <td>{{ transaction.amount }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}

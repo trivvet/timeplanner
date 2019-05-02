@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 
-
 class Execution(models.Model):
     class Meta(object):
         verbose_name=u"Виконання"
@@ -42,3 +41,6 @@ class Execution(models.Model):
     def __unicode__(self):
         return u"Виконання {}".format(
             self.order)
+
+    def model_name(self):
+        return 'Виконання'

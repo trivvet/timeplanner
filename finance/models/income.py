@@ -42,3 +42,6 @@ class Income(models.Model):
     def __unicode__(self):
         return u"Надходження стосовно {} на {}".format(
             self.order, self.account)
+
+    def model_name(self):
+        return u'Надходження'

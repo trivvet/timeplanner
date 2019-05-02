@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from itertools import chain
+from operator import attrgetter
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.generic import DetailView
 
-from ..models import Account
+from ..models import Account, Income, Execution
 
 @login_required(login_url='/login/')
 def accounts_list(request):
@@ -15,6 +18,20 @@ def accounts_list(request):
     header = u'Список рахунків'
     return render(request, 'finance/accounts_list.html', 
         {'accounts': accounts, 'header': header})
+
+class AccountDetail(DetailView):
+    model = Account
+    template_name = 'books/acme_list.html'
+    template_name = 'finance/account_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AccountDetail, self).get_context_data(**kwargs)
+        incomes = Income.objects.filter(account=self.object)
+        executions = Execution.objects.filter(account=self.object)
+        transactions = sorted(chain(incomes, executions),
+            key=attrgetter('date'))
+        context['transactions'] = transactions
+        return context
 
 @login_required(login_url='/login/')
 def add_account(request):

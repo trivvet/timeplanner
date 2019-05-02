@@ -38,7 +38,7 @@
         {% for account in accounts %}
         <tr>
 
-            <th scope="row">{{ account.title }}</th>
+            <th scope="row"><a href="{% url 'finance:detail_account' account.id %}">{{ account.title }}</a></th>
             <td>{{ account.get_status_display }}</td>
             <td>{% if account.cash %}Готівка{% else %}Безнал{% endif %}</td>
             <td>{{ account.total_sum }}</td>

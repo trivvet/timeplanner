@@ -1,5 +1,6 @@
 from .accounts import (
-    accounts_list, 
+    accounts_list,
+    AccountDetail, 
     add_account, 
     edit_account,
     delete_account

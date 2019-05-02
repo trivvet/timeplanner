@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from . import views
 from .views import (
+    AccountDetail,
     IncomeCreate, 
     IncomeEdit, 
     IncomeDelete,
@@ -14,6 +15,8 @@ urlpatterns = [
     # account URLs
     url(r'^accounts/$', views.accounts_list, 
         name='accounts_list'), 
+    url(r'^account/(?P<pk>\d+)/detail/$', AccountDetail.as_view(),
+        name='detail_account'),
     url(r'^accounts/add/$', views.add_account, 
         name='add_account'),
     url(r'^accounts/(?P<aid>\d+)/edit/$', views.edit_account,
