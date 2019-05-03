@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.generic import DetailView
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView
 
 from ..models import Account, Income, Execution
 
@@ -19,18 +20,63 @@ def accounts_list(request):
     return render(request, 'finance/accounts_list.html', 
         {'accounts': accounts, 'header': header})
 
-class AccountDetail(DetailView):
+@method_decorator(login_required, name='dispatch')
+class AccountDetail(ListView):
     model = Account
     template_name = 'books/acme_list.html'
     template_name = 'finance/account_detail.html'
+    paginate_by = 10  # if pagination is desired
+
+    def get_queryset(self):
+        account = self.kwargs['pk']
+        incomes = Income.objects.filter(account=account)
+        executions = Execution.objects.filter(account=account)
+        object_list = sorted(chain(incomes, executions),
+            key=attrgetter('date'), reverse=True)
+        return object_list
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ResearchListView, self).get_context_data(**kwargs)
+        all_pages = self.request.GET.get("all_pages", '')
+
+        if all_pages:
+            order_by = self.request.GET.get("order_by", '')
+            reverse = self.request.GET.get("reverse", '')
+            if order_by:
+                object_list = Research.objects.order_by(order_by)
+                if reverse:
+                    object_list = object_list.reverse()
+            else:
+                object_list = Research.objects.order_by('number').reverse()
+            context['object_list'] = object_list
+            context['is_paginated'] = False
+
+        return context
 
     def get_context_data(self, **kwargs):
         context = super(AccountDetail, self).get_context_data(**kwargs)
-        incomes = Income.objects.filter(account=self.object)
-        executions = Execution.objects.filter(account=self.object)
-        transactions = sorted(chain(incomes, executions),
-            key=attrgetter('date'))
-        context['transactions'] = transactions
+        all_pages = self.request.GET.get("all_pages", '')
+        account = self.kwargs['pk']
+
+        if all_pages:
+            order_by = self.request.GET.get("order_by", '')
+            reverse = self.request.GET.get("reverse", '')
+            incomes = Income.objects.filter(account=account)
+            executions = Execution.objects.filter(account=account)
+            if order_by:
+                object_list = sorted(chain(incomes, executions),
+                    key=attrgetter('date'))
+                if reverse:
+                    object_list = sorted(chain(incomes, executions),
+                        key=attrgetter('date'), reverse=True)
+            else:
+                object_list = sorted(chain(incomes, executions),
+                    key=attrgetter('date'), reverse=True)
+            context['object_list'] = object_list
+            context['is_paginated'] = False
+
+        context['object'] = Account.objects.get(pk=account)
         return context
 
 @login_required(login_url='/login/')
