@@ -41,7 +41,7 @@
 </table>
 
 {% if is_paginated %}
-    {% include 'freports/pagination.html' with items=page_obj url_next="finance:detail_account" parametr=object.id order_by=request.GET.order_by reverse=request.GET.reverse %}
+    {% include 'finance/pagination.html' with items=page_obj url_next="finance:detail_account" parametr=object.id order_by=request.GET.order_by reverse=request.GET.reverse %}
 {% endif %}
 
 {% else %}

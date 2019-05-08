@@ -92,10 +92,7 @@
         <div class="wrapper">
             <!-- Sidbar -->
             {% block sidebar %}{% endblock sidebar %}
-
-            <!-- Page Content -->
-            <div id="content" class="container">
-                {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects or request.path == url_judges or request.path == url_courts or request.path == url_orders or request.path == url_accounts or request.path == url_incomes or request.path == url_researches or request.path == url_executions %}
+{% if request.path == url_reports or request.path == url_participants or request.path == url_subjects or request.path == url_judges or request.path == url_courts or request.path == url_orders or request.path == url_accounts or request.path == url_incomes or request.path == url_researches or request.path == url_executions %}
                 <div class="row">
                     <div class="col">
                         <button type="button" id="sidebarCollapse" class="navbar-btn {% if request.COOKIES.sidebar == 'active' %}active{% endif %}">
@@ -106,6 +103,9 @@
                     </div>
                 </div>
                 {% endif %}
+            <!-- Page Content -->
+            <div id="content" class="container">
+                
                 <div class="row" id="second-header">
                     {% block title %}{% endblock title %}
                 </div>
