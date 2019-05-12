@@ -96,7 +96,6 @@ function initDateTimeFields() {
 
 function initChangeDecisionDate() {
     $('#inputDate').focusout(function() {
-        // $('#inputDateDecision').parent().show();
         var inputDate = $('#inputDateDecision');
         if (inputDate) {
             var inputDateValue = new Date(inputDate.children('input').val());
@@ -246,6 +245,7 @@ function initForm(form, modal, link) {
                 modal.find('.modal-body').prepend(html.find('#second-header h3'));
                 initForm(newform, modal, link);
             } else {
+                $('#navbarSupportedContent').html(html.find('#navbarSupportedContent'));
                 $('#message .col').html(html.find('.alert'));
                 $('#second-header').html(html.find('#second-header').html());
                 $('#main-content').html(html.find('#main-content').html());

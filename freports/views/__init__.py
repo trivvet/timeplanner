@@ -10,7 +10,8 @@ from .details import (
     add_order, 
     add_detail, 
     edit_detail, 
-    delete_detail
+    delete_detail,
+    add_schedule
     )
 from .participants import (
     participants_list, 

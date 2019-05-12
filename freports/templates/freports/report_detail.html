@@ -198,7 +198,7 @@
                 <div class="dropdown-menu" id="add-event" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'petition' %}">Направлення клопотання</a>
                     <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'arrived' %}">Надходження з суду</a>
-                    <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'schedule' %}">Призначення виїзду</a>
+                    <a class="dropdown-item modal-button" href="{% url 'freports:add_schedule' report.id %}">Призначення виїзду</a>
                     <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'inspected' %}">Проведення огляду</a>
                     <a class="dropdown-item modal-button" href="{% url 'freports:add_detail' report.id 'done' %}">Відправлення до суду</a>
                 </div>

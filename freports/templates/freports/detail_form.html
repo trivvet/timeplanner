@@ -2,13 +2,12 @@
 
 {% block title %}
 <div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col">
+    <div class="col text-center">
         <h2>{{ header.main }}</h2>
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-4"></div>
+    <div class="col-sm-5"></div>
     <div class="col">
         <h3 class="event-second-header">{{ header.second }}</h3>
     </div>
@@ -23,8 +22,8 @@
     <!-- Дата події -->
     {% if 'date' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputDate" class="col-sm-4 col-form-label">Дата події <strong>*</strong></label>
-        <div class="col-sm-8 input-group date" id="inputDate" 
+        <label for="inputDate" class="col-sm-5 col-form-label">Дата події <strong>*</strong></label>
+        <div class="col-sm-7 input-group date" id="inputDate" 
             data-target-input="nearest">
             <input type="text" class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#inputDate" placeholder="напр. 01.01.2018"
             name="date" value="{{ new_content.date }}" />
@@ -35,7 +34,7 @@
     </div>
     {% if errors.date %}
     <div class="form-group row form-error">
-        <div class="col-sm-4"></div>
+        <div class="col-sm-5"></div>
         <div class="col">
             {{ errors.date }}
         </div>
@@ -46,8 +45,8 @@
     <!-- Дата винесення ухвали -->
     {% if 'decision_date' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputDateDecision" class="col-sm-4 col-form-label">Дата винесення ухвали <strong>*</strong></label>
-        <div class="col-sm-8 input-group date" id="inputDateDecision" 
+        <label for="inputDateDecision" class="col-sm-5 col-form-label">Дата винесення ухвали <strong>*</strong></label>
+        <div class="col-sm-7 input-group date" id="inputDateDecision" 
             data-target-input="nearest">
             <input type="text" class="form-control {% if errors.decision_date %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" 
                 data-target="#inputDateDecision" placeholder="напр. 01.01.2018"
@@ -59,7 +58,7 @@
     </div>
     {% if errors.decision_date %}
     <div class="form-group row form-error">
-        <div class="col-sm-4"></div>
+        <div class="col-sm-5"></div>
         <div class="col">
             {{ errors.decision_date }}
         </div>
@@ -70,8 +69,8 @@
     <!-- Дата та час огляду -->
     {% if 'time' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputTime" class="col-sm-4 col-form-label">Дата та час проведення огляду <strong>*</strong></label>
-        <div class="col-sm-8">
+        <label for="inputTime" class="col-sm-5 col-form-label">Дата та час проведення огляду <strong>*</strong></label>
+        <div class="col-sm-7">
             <div class="form-group">
                 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                     <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" placeholder="напр. 10.08.2018 10:00"
@@ -85,7 +84,7 @@
     </div>
     {% if errors.time %}
     <div class="form-group row form-error">
-        <div class="col-sm-4"></div>
+        <div class="col-sm-5"></div>
         <div class="col">
             {{ errors.time }}
         </div>
@@ -96,8 +95,8 @@
     <!-- Тип документу -->
     {% if 'type' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputType" class="col-sm-4 col-form-label">{% if content.kind == 'schedule' %}Тип повідомлення{% elif content.kind == 'paid' %}Тип оплати{% else %}Підтип події{% endif %} <strong>*</strong></label>
-        <div class="col-sm-8">
+        <label for="inputType" class="col-sm-5 col-form-label">{% if content.kind == 'schedule' %}Тип повідомлення{% elif content.kind == 'paid' %}Тип оплати{% else %}Підтип події{% endif %} <strong>*</strong></label>
+        <div class="col-sm-7">
             <select class="form-control {% if errors.subspecies %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputType" name="subspecies" value="{{ new_content.subspecies }}">
                 <option value=''>-----------</option>
@@ -115,8 +114,8 @@
      <!-- Тип оплати -->
     {% if 'account' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputAccount" class="col-sm-4 col-form-label">Рахунок<strong>*</strong></label>
-        <div class="col-sm-8">
+        <label for="inputAccount" class="col-sm-5 col-form-label">Рахунок<strong>*</strong></label>
+        <div class="col-sm-7">
             <select class="form-control {% if errors.account %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputAccount" name="account" value="{{ new_content.account }}">
                 <option value=''>-----------</option>
@@ -134,8 +133,8 @@
     <!-- Необхідні матеріали -->
     {% if 'necessary' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputNecessary" class="col-sm-4 col-form-label">Зміст клопотання <strong>*</strong></label>
-        <div class="col-sm-8">
+        <label for="inputNecessary" class="col-sm-5 col-form-label">Зміст клопотання <strong>*</strong></label>
+        <div class="col-sm-7">
             <textarea type="text" class="form-control {% if errors.necessary %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputNecessary" name="necessary" rows="4"
                 placeholder="Введіть деталі направленого клопотання">{{ new_content.necessary }}</textarea>
@@ -149,8 +148,8 @@
     <!-- Додатки -->
     {% if 'sending' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputSending" class="col-sm-4 col-form-label">Додатки</label>
-        <div class="col-sm-8">
+        <label for="inputSending" class="col-sm-5 col-form-label">Додатки</label>
+        <div class="col-sm-7">
             <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputSending" name="sending" rows="2"
                 placeholder="Введіть додатки, які направляються в суд (у разі наявності)">{{ new_content.sending }}</textarea>
@@ -161,8 +160,8 @@
     <!-- Вартість -->
     {% if 'cost' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputCost" class="col-sm-4 col-form-label">Вартість робіт <strong>*</strong></label>
-        <div class="col-sm-8">
+        <label for="inputCost" class="col-sm-5 col-form-label">Вартість робіт <strong>*</strong></label>
+        <div class="col-sm-7">
             <input type="text" id="inputCost" placeholder="Введіть вартість висновку" name="cost"
                     class="form-control {% if errors.cost %}is-invalid{% elif errors %}is-valid{% endif %}"
                     value="{{ new_content.cost }}">
@@ -176,8 +175,8 @@
     <!-- Отримані матеріали -->
     {% if 'received' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputReceived" class="col-sm-4 col-form-label">Отримані матеріали <strong>*</strong></label>
-        <div class="col-sm-8">
+        <label for="inputReceived" class="col-sm-5 col-form-label">Отримані матеріали <strong>*</strong></label>
+        <div class="col-sm-7">
             <textarea type="text" class="form-control {% if errors.received %}is-invalid{% elif errors %}is-valid{% endif %}"
                 id="inputReceived" name="received" rows="4"
                 placeholder="Введіть матеріали справи, що надійшли з суду">{{ new_content.received }}</textarea>
@@ -191,8 +190,8 @@
     <!-- Адреса для рахунку -->
     {% if 'address' in content.obvious_fields %}
     <div class="form-group row">
-        <label for="inputAddress" class="col-sm-4 col-form-label">Адреса</label>
-        <div class="col-sm-8">
+        <label for="inputAddress" class="col-sm-5 col-form-label">Адреса</label>
+        <div class="col-sm-7">
             <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputAddress" name="address" rows="2"
                 placeholder="Введіть адресу, на яку направлено листа (у разі відправки листа)">{{ new_content.address }}</textarea>
@@ -202,8 +201,8 @@
 
     <!-- Додаткова інформація -->
     <div class="form-group row">
-        <label for="inputInfo" class="col-sm-4 col-form-label">Додаткова інформація</label>
-        <div class="col-sm-8">
+        <label for="inputInfo" class="col-sm-5 col-form-label">Додаткова інформація</label>
+        <div class="col-sm-7">
             <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
                 id="inputInfo" name="info" rows="2"
                 placeholder="Введіть додаткову інформацію (у разі наявності)">{{ new_content.info }}</textarea>
@@ -212,8 +211,8 @@
 
     <!-- Кнопки -->
     <div class="form-group row button-group">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-8">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-7">
           <input type="submit" class="btn btn-primary" value="Зберегти"
                  name="save_button" />
           <input type="submit" class="btn btn-link"

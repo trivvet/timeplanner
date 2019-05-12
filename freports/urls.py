@@ -48,6 +48,8 @@ urlpatterns = [
         views.edit_detail, name='edit_detail'),
     url(r'^(?P<rid>\d+)/details/(?P<did>\d+)/delete/$', 
         views.delete_detail, name='delete_detail'),
+    url(r'^(?P<rid>\d+)/details/schedule/add/$',
+        views.add_schedule, name='add_schedule'),
 
     # participant urls
     url(r'^partisipants/$', views.participants_list, 

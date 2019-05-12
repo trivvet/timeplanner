@@ -51,12 +51,6 @@ bill_type = [
     u'Вручено представнику', 
     u'Направлено електронного листа'
     ]
-message_type = [
-    u'Направлене клопотання', 
-    u'Надіслані листи', 
-    u'Повідомлено телефоном', 
-    u'Повідомлено особисто'
-    ]
 kind_specific = {
         'first_arrived': [
             u'Надходження ухвали', 
@@ -82,8 +76,7 @@ kind_specific = {
             ],
         'schedule': [
             u'Призначення виїзду', 
-            ['date', 'info', 'time', 'type'], 
-            message_type
+            ['date', 'info', 'time', 'type']
             ],
         'inspected': [
             u'Проведення огляду', 
@@ -512,3 +505,45 @@ def valid_detail(request_info, report_id):
         new_element['activate'] = False
 
     return {'errors': errors, 'data': new_element}
+
+@login_required(login_url='/login/')
+def add_schedule(request, rid):
+    report = Report.objects.get(pk=rid)
+    details = ReportEvents.objects.filter(
+        report=report).order_by('date').reverse()
+    content, new_content = {}, {}
+    header = {}
+    header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
+    header['second'] = u"Призначення виїзду"
+    content['report_number'] = report.full_number
+    content['message_type'] = [
+        u'Направлене клопотання', 
+        u'Надіслані листи', 
+        u'Повідомлено телефоном', 
+        u'Повідомлено особисто'
+    ]
+
+    if request.method == 'POST':
+        if request.POST.get('save_button'):
+
+            valid_data = valid_detail(request.POST, rid)
+            errors = valid_data['errors']
+            new_element = valid_data['data']
+
+            if errors:
+                messages.error(request, u"Виправте наступні недоліки")
+                return render(request, 'freports/schedule_form.html',
+                    {'header': header, 'errors': errors})
+
+            else:
+                messages.success(request, u"Подія успішно додана")
+
+        elif request.POST.get('cancel_button'):
+            messages.warning(request, u"Додавання деталей провадження скасовано")
+
+        return HttpResponseRedirect(reverse('freports:report_detail',
+            args=[rid]))
+
+    else:
+        return render(request, 'freports/schedule_form.html', {
+            'header': header, 'content': content})
