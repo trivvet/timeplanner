@@ -418,7 +418,7 @@ def valid_detail(request_info, report_id):
         new_element['report'] = report[0]
 
     name = request_info.get('name')
-    if name in ['first_arrived', 'arrived', 'petition', 'bill', 'paid', 'schedule', 'inspected', 'done']:
+    if name in ['first_arrived', 'arrived', 'petition', 'bill', 'paid', 'inspected', 'done']:
         new_element['name'] = request_info.get('name')
     else:
         errors['name'] = u"На сервер відправлені неправельні дані. Будь-ласка спробуйте пізніше"
@@ -455,18 +455,6 @@ def valid_detail(request_info, report_id):
             errors['subspecies'] = u"Інформація про підтип події є обов'язковою"
         else:
             new_element['subspecies'] = subspecies
-
-    if name in ['schedule']:
-        time = request_info.get('time')
-        pz = timezone.get_current_timezone()
-        if not time:
-            errors['time'] = u"Дата та час огляду є обов'язковими"
-        else:
-            try:
-                naive_time = datetime.strptime(time, '%Y-%m-%d %H:%M')
-                new_element['time'] = pz.localize(naive_time)
-            except ValueError:
-                errors['time'] = u"Введіть коректний формат дати та часу"
 
     if name == 'petition':
         necessary = request_info.get('necessary')
@@ -511,6 +499,8 @@ def add_schedule(request, rid):
     report = Report.objects.get(pk=rid)
     details = ReportEvents.objects.filter(
         report=report).order_by('date').reverse()
+    participants = ReportParticipants.objects.filter(
+        report=report)
     content, new_content = {}, {}
     header = {}
     header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
@@ -522,21 +512,23 @@ def add_schedule(request, rid):
         u'Повідомлено телефоном', 
         u'Повідомлено особисто'
     ]
+    content['participants'] = participants
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
 
-            valid_data = valid_detail(request.POST, rid)
+            valid_data = valid_schedule(request.POST, rid)
             errors = valid_data['errors']
             new_element = valid_data['data']
 
             if errors:
                 messages.error(request, u"Виправте наступні недоліки")
                 return render(request, 'freports/schedule_form.html',
-                    {'header': header, 'errors': errors})
+                    {'header': header, 'errors': errors, 
+                     'content': content, 'new_content': new_element})
 
             else:
-                messages.success(request, u"Подія успішно додана")
+                messages.success(request, u"Виїзд успішно призначений")
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання деталей провадження скасовано")
@@ -547,3 +539,69 @@ def add_schedule(request, rid):
     else:
         return render(request, 'freports/schedule_form.html', {
             'header': header, 'content': content})
+
+
+def valid_schedule(request_info, report_id):
+    errors = {}
+    new_element = {}
+
+    report = Report.objects.filter(pk=report_id)
+    if len(report) != 1:
+        errors['report'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте пізніше'
+    else:
+        new_element['report'] = report[0]
+
+    new_element['name'] = 'schedule'
+
+    date = request_info.get('date')
+    if not date:
+        errors['date'] = u"Дата події є обов'язковою"
+    else:
+        try:
+            new_element['date'] = date
+        except ValueError:
+            errors['date'] = u"Введіть коректний формат дати"
+
+    time = request_info.get('time')
+    pz = timezone.get_current_timezone()
+    if not time:
+        errors['time'] = u"Дата та час огляду є обов'язковими"
+    else:
+        try:
+            naive_time = datetime.strptime(time, '%Y-%m-%d %H:%M')
+            new_element['time'] = pz.localize(naive_time)
+        except ValueError:
+            errors['time'] = u"Введіть коректний формат дати та часу"
+
+    subspecies = request_info.get('subspecies')
+    if not subspecies:
+        errors['subspecies'] = u"Інформація про повідомлення є обов'язковою"
+    else:
+        new_element['subspecies'] = subspecies
+
+    participants = request_info.getlist('person')
+    addresses = request_info.getlist('address')
+
+    info = request_info.get('info')
+    if participants:
+        if not info:
+            info = "Повідомлені учасники справи: "
+        for idx, participant in enumerate(participants):
+            try:
+                person = ReportParticipants.objects.get(pk=participant)
+                if(addresses[idx]):
+                    info += u"{} ({}); ".format(
+                        person.full_name(), addresses[idx])
+                else:
+                    errors['person'] = u'Будь-ласка введдіть адреси повідомлених сторін'
+            except ValueError:
+                errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте пізніше'
+    new_element['info'] = info
+    
+    new_element['activate'] = False
+
+    if errors:
+        new_element['time'] = time
+
+    return {'errors': errors, 'data': new_element}
+

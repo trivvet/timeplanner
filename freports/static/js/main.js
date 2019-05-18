@@ -228,6 +228,7 @@ function initForm(form, modal, link) {
     initSelectCourt(link);
     closeModalForm();
     initGetOrderValues(link);
+    showAddressInput();
 
     form.ajaxForm({
         url: link,
@@ -400,6 +401,17 @@ function showSidebar() {
             $.cookie("sidebar", 'inactive', {path: '/'});
         }
     });
+}
+
+function showAddressInput() {
+    $('input.person-сheckbox').on('change', function() {
+        inputAddress = $(this).next().children('input');
+        if($(this).is(':checked')) {
+            inputAddress.removeAttr('hidden');;
+        } else {
+            inputAddress.attr('hidden', true);
+        }
+    })
 }
 
 $(document).ready(function(){

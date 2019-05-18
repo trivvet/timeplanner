@@ -326,3 +326,7 @@ td.group-buttons {
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
 }
+
+.person-checkboxes {
+  max-width: 350px;
+}

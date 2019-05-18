@@ -6,6 +6,15 @@ from django.utils import timezone
 
 # Create your models here.
 
+status_list = {
+    'judge': 'Суддя',
+    'plaintiff': 'Позивач',
+    'defendant': 'Відповідач',
+    'plaintiff_agent': 'Представник позивача',
+    'defendant_agent': 'Представник відповідача',
+    'other_participant': 'Інший учасник'
+}
+
 class ReportEvents(models.Model):
 
     class Meta(object):
@@ -169,4 +178,12 @@ class ReportParticipants(models.Model):
 
     def __unicode__(self):
         return u"%s %s (report %s/%s)" % (self.status, self.surname, self.report.number, self.report.number_year)
+
+    def full_info(self):
+        return u"{} {} ({})".format(
+            self.surname, self.name, status_list[self.status])
+
+    def full_name(self):
+        return u"{} {}".format(
+            self.surname, self.name)
 
