@@ -51,6 +51,12 @@ bill_type = [
     u'Вручено представнику', 
     u'Направлено електронного листа'
     ]
+message_type = [
+    u'Направлене клопотання', 
+    u'Надіслані листи', 
+    u'Повідомлено телефоном', 
+    u'Повідомлено особисто'
+    ]
 kind_specific = {
         'first_arrived': [
             u'Надходження ухвали', 
@@ -76,7 +82,8 @@ kind_specific = {
             ],
         'schedule': [
             u'Призначення виїзду', 
-            ['date', 'info', 'time', 'type']
+            ['date', 'info', 'time', 'type'],
+            message_type
             ],
         'inspected': [
             u'Проведення огляду', 
@@ -101,7 +108,7 @@ status_list = {
 @login_required(login_url='/login/')
 def details_list(request, rid):
     report = Report.objects.get(pk=rid)
-    details = ReportEvents.objects.filter(report=report).order_by('date')
+    details = ReportEvents.objects.filter(report=report).order_by('date', 'id')
     content = {}
 
     if len(details.filter(name='first_arrived')) < 1:
@@ -528,6 +535,16 @@ def add_schedule(request, rid):
                      'content': content, 'new_content': new_element})
 
             else:
+                new_schedule = ReportEvents(**new_element)
+                new_schedule.save()
+                report.change_date = datetime.utcnow().date()
+                report = check_active(report)
+                report.active_days_amount = days_count(report, 'active')
+                report.waiting_days_amount = days_count(report, 'waiting')
+                reports = Report.objects.all()
+                update_dates_info(reports)
+                report.save()
+                add_detail_task(new_schedule)
                 messages.success(request, u"Виїзд успішно призначений")
 
         elif request.POST.get('cancel_button'):

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
+from django.utils import timezone
 
 from axes.models import AccessAttempt
 
@@ -53,11 +54,17 @@ def login_attempts(request):
 
 @login_required(login_url='/login/')
 def delete_old_attempts(request):
-    attempts = Task.objects.all()
+    attempts = AccessAttempt.objects.all()
+    old_logs = 0
     for attempt in attempts:
-        substract = timezone.now().date() - task.time.date()
+        substract = timezone.now().date() - attempt.attempt_time.date()
         if substract.days > 31:
-            task.delete()
-    messages.success(request, 
-        u"Завдання, виконані більше місяця тому, успішно видалено")
-    return HttpResponseRedirect(reverse('freports:tasks_list'))
+            attempt.delete()
+            old_logs += 1
+    if old_logs > 0:
+        messages.success(request, 
+            u"Логи, записані більше місяця тому, успішно видалено")
+    else:
+        messages.warning(request,
+            u"Давніх спроб входу не виявлено")
+    return HttpResponseRedirect(reverse('login:attempts'))
