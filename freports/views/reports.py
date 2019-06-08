@@ -69,9 +69,12 @@ def reports_list(request):
     reverse_apply = request.GET.get('reverse', '')
     if order_by in ('research_kind', 'number', 'active_days_amount', 'waiting_days_amount', 'date_arrived',
         'date_executed'):
+        
         reports = reports.order_by(order_by)
         if reverse_apply:
             reports = reports.reverse()
+    elif status == 'executed':
+        reports = reports.reverse()
 
     if status == 'deactivate' or status == '':
         for report in reports:

@@ -1,7 +1,10 @@
 function initDateFields() {
     $('#inputDate, #inputDate2').attr('autocomplete', 'off');
-    var startDate = $('#inputDate input').val(), currentDate = new Date();
-    var startDateOne = $('#inputDate').val();
+    var startDate = $('#inputDate input').val(), 
+        currentDate = moment(),
+        startDateOne = $('#inputDate').val();
+    var maxDate = moment().millisecond(0).second(0).minute(0).hour(0);
+    maxDate.add(1, 'd');
     if (!startDate && !startDateOne) {
         var startDate = currentDate;
     } else if (startDateOne) {
@@ -19,7 +22,7 @@ function initDateFields() {
         format: 'YYYY-MM-DD',
         locale: 'uk',
         date: startDate,
-        maxDate: currentDate,
+        maxDate: maxDate,
         defaultDate: startDate,
         useCurrent: false,
         daysOfWeekDisabled: [0],
@@ -331,7 +334,7 @@ function inputNumberField() {
             end_of_array = current_value.indexOf('/', 5);
             $(this).get(0).setSelectionRange(4,end_of_array);
         } else {
-            $('#inputCase').val(current_value + ' /17');
+            $('#inputCase').val(current_value + ' /18');
             $(this).get(0).setSelectionRange(4,5);
         }
     });

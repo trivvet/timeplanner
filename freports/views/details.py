@@ -141,7 +141,7 @@ def details_list(request, rid):
 @login_required(login_url='/login/')
 def add_order(request, rid):
     report = Report.objects.get(pk=rid)
-    courts = Court.objects.all()
+    courts = Court.objects.all().order_by('name')
     kind = 'first_arrived'
     content, judges = {}, {}
     header = u'Провадження №%s/%s' % (report.number, report.number_year)
@@ -423,9 +423,20 @@ def valid_detail(request_info, report_id):
         errors['report'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте пізніше'
     else:
         new_element['report'] = report[0]
+    
+    allowed_names = (
+        'first_arrived', 
+        'arrived', 
+        'petition', 
+        'bill', 
+        'paid', 
+        'schedule', 
+        'inspected', 
+        'done'
+    )
 
     name = request_info.get('name')
-    if name in ['first_arrived', 'arrived', 'petition', 'bill', 'paid', 'inspected', 'done']:
+    if name in allowed_names:
         new_element['name'] = request_info.get('name')
     else:
         errors['name'] = u"На сервер відправлені неправельні дані. Будь-ласка спробуйте пізніше"
@@ -456,12 +467,24 @@ def valid_detail(request_info, report_id):
         else:
             new_element['received'] = received
 
-    if name in ['petition', 'bill', 'done', 'inspected']:
+    if name in ['petition', 'bill', 'done', 'inspected', 'schedule']:
         subspecies = request_info.get('subspecies')
         if not subspecies:
             errors['subspecies'] = u"Інформація про підтип події є обов'язковою"
         else:
             new_element['subspecies'] = subspecies
+
+    if name in ['schedule']:
+        time = request_info.get('time')
+        pz = timezone.get_current_timezone()
+        if not time:
+            errors['time'] = u"Дата та час огляду є обов'язковими"
+        else:
+            try:
+                naive_time = datetime.strptime(time, '%Y-%m-%d %H:%M')
+                new_element['time'] = pz.localize(naive_time)
+            except ValueError:
+                errors['time'] = u"Введіть коректний формат дати та часу"
 
     if name == 'petition':
         necessary = request_info.get('necessary')
