@@ -7,7 +7,7 @@ angular.module('reportList').
             $routeParams, $rootScope, $scope){
             
             $scope.navButtonClass2 = "active";
-            $scope.reportItems = 10;
+            $scope.reportItems = 15;
 
             Report.query(function(data){
                 $scope.items = data;
@@ -52,7 +52,7 @@ angular.module('reportList').
             $scope.setStatus = function(event) {
                 var elementAttributes = event.currentTarget.attributes;
                 $scope.status = elementAttributes.data.value;
-                $scope.reportItems = 10;
+                $scope.reportItems = 15;
                 $scope.navButtonClass1 = "";
                 $scope.navButtonClass3 = "";
                 $scope.navButtonClass4 = "";
@@ -66,6 +66,7 @@ angular.module('reportList').
                 } else {
                     $scope.navButtonClass1 = "active";
                 }
+                $scope.listReports__currentPage = 1;
             }
 
             $scope.itemNumberColor = function(item) {
@@ -95,7 +96,7 @@ angular.module('reportList').
                 if ($scope.reportItems != $scope.items.length) {
                     $scope.reportItems = $scope.items.length;
                 } else {
-                    $scope.reportItems = 10;
+                    $scope.reportItems = 15;
                 }
                 
             }

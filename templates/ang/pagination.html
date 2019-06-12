@@ -11,7 +11,7 @@
                     {{ pageNumber }}
                 </a>
             </li>
-        <li class="page-item" ng-class="{ disabled : pagination.current == pages.length }">
+        <li class="page-item" ng-class="{ disabled : pagination.current == pagination.last }">
             <a class="page-link" href="#" ng-click="setCurrent(pagination.current + 1)" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>

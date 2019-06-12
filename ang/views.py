@@ -9,7 +9,6 @@ class AngularTemplateView(View):
         template_dir_path = settings.TEMPLATES[0]["DIRS"][0]
         final_path = os.path.join(template_dir_path, "ang",
             item + '.html')
-        print final_path
         try:
             html = open(final_path)
             return HttpResponse(html)
