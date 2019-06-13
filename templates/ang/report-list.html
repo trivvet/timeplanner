@@ -1,5 +1,5 @@
 <span class="h1">Список проваджень</span>
-<a class="btn btn-outline-info modal-button"
+<a class="btn btn-outline-info"
     id="add-report" href="">Додати провадження</a>
 
 <nav class="nav nav-pills nav-justified" id="navbar-list">
@@ -13,8 +13,9 @@
     <thead class="thead-light">
         <tr>
             <th scope="col">
-                <a href="">
-                    №
+                <a href="" ng-click="sortBy('number')">
+                    № <span ng-show="reverse">&darr;</span>
+                    <span ng-show="!reverse">&uarr;</span>
                 </a>
             </th>
             <th scope="col">Адреса</th>
@@ -26,7 +27,7 @@
     </thead>
 
     <tbody>
-        <tr dir-paginate="item in items | filter: filterStatus | orderBy: 'full_number' | itemsPerPage: reportItems as itemsPaginated" pagination-id="listReports" ng-class="itemRowColor(item)">
+        <tr dir-paginate="item in items | filter: filterStatus | itemsPerPage: reportItems as itemsPaginated" pagination-id="listReports" ng-class="itemRowColor(item)">
             <th class="td-link" ng-class="itemNumberColor(item)"scope="row"><p class="">{{ item.full_number }}</p></th>
             <td class="td-link">{{ item.address }}</td>
             <td class="td-link">{{ item.plaintiff }}</td>

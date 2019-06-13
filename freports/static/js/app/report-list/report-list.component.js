@@ -4,13 +4,15 @@ angular.module('reportList').
     component('allList', {
         templateUrl: "/api/templates/report-list.html",
         controller: function(Report, $location,
-            $routeParams, $rootScope, $scope){
+            $routeParams, $rootScope, $scope, $filter){
             
             $scope.navButtonClass2 = "active";
             $scope.reportItems = 15;
+            $scope.propertyName = 'number';
 
             Report.query(function(data){
                 $scope.items = data;
+                console.log(data)
                 $scope.activeReports = $scope.items.filter(function(item) {
                     if (item.active != false) {
                         return item;
@@ -67,6 +69,8 @@ angular.module('reportList').
                     $scope.navButtonClass1 = "active";
                 }
                 $scope.listReports__currentPage = 1;
+                $scope.reverse = null;
+                $scope.items = $filter('orderBy')($scope.items, $scope.propertyName, $scope.reverse);
             }
 
             $scope.itemNumberColor = function(item) {
@@ -99,6 +103,12 @@ angular.module('reportList').
                     $scope.reportItems = 15;
                 }
                 
+            }
+            
+            $scope.sortBy = function(propertyName) {
+                $scope.reverse = (propertyName !== null && $scope.propertyName == propertyName) ? !$scope.reverse : false;
+                $scope.propertyName = propertyName;
+                $scope.items = $filter('orderBy')($scope.items, $scope.propertyName, $scope.reverse);
             }
         }
     })

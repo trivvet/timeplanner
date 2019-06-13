@@ -7,6 +7,7 @@ class ReportListSerializer(ModelSerializer):
         model = Report
         fields = (
             'full_number',
+            'number',
             'address',
             'judge_name',
             'plaintiff',

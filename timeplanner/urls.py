@@ -18,7 +18,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    url(r'^angular/', TemplateView.as_view(template_name="ang/base.html")),
+    url(r'^angular/', TemplateView.as_view(template_name="ang/base.html"),
+        name="angular_page"),
     url(r'^api/templates/(?P<item>[A-Za-z0-9\-\_\.\/]+)\.html$', 
         AngularTemplateView.as_view()),
 ]
