@@ -4,4 +4,3 @@ from .contacts import Contact
 from .subjects import ReportSubject
 from .courts import Court, Judge
 from .tasks import Task
-from .finances import Account
