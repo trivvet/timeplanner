@@ -32,6 +32,9 @@
     <script src="{{ PORTAL_URL }}{% static 'js/app/report-list/report-list.module.js' %}"></script>
     <script src="{{ PORTAL_URL }}{% static 'js/app/report-list/report-list.component.js' %}"></script>
 
+    <script src="{{ PORTAL_URL }}{% static 'js/app/report-detail/report-detail.module.js' %}"></script>
+    <script src="{{ PORTAL_URL }}{% static 'js/app/report-detail/report-detail.component.js' %}"></script>
+
     <script src="{{ PORTAL_URL }}{% static 'js/app/utils/nav-bar/nav-bar.module.js' %}"></script>
     <script src="{{ PORTAL_URL }}{% static 'js/app/utils/nav-bar/nav-bar.directive.js' %}"></script>
 
@@ -61,7 +64,6 @@
 
             <div class="row">
                 <div class="col-12">
-                    <!-- <report-list></report-list> -->
                     <div ng-view></div>
                 </div>
             </div>

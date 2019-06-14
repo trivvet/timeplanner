@@ -12,7 +12,6 @@ angular.module('reportList').
 
             Report.query(function(data){
                 $scope.items = data;
-                console.log(data)
                 $scope.activeReports = $scope.items.filter(function(item) {
                     if (item.active != false) {
                         return item;
@@ -110,5 +109,9 @@ angular.module('reportList').
                 $scope.propertyName = propertyName;
                 $scope.items = $filter('orderBy')($scope.items, $scope.propertyName, $scope.reverse);
             }
+
+            $scope.showDetail = function(reportId) {
+                 $location.path('/' + reportId);
+            };
         }
-    })
+    });

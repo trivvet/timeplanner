@@ -6,7 +6,9 @@ angular.module('reports', [
     'ngRoute',
     'angularUtils.directives.dirPagination',
     
+    // internal
     'reportList',
+    'reportDetail',
     'navBar',
     'sideBar'
     ]);

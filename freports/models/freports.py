@@ -107,3 +107,9 @@ class Report(models.Model):
     def time_after_update(self):
         time_amount = date.today() - self.change_date
         return time_amount.days
+
+    def active_days(self):
+        return self.active_days_amount + self.time_after_update()
+
+    def waiting_days(self):
+        return self.waiting_days_amount + self.time_after_update()

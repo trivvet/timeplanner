@@ -8,14 +8,14 @@
     <a class="nav-link nav-item" href="" data="deactivate" ng-click="setStatus($event)" ng-class="navButtonClass3">Призупинені <span class="badge badge-secondary">{{ deactivatedReports.length }}</span></a>
     <a class="nav-link nav-item" href="" data="executed" ng-click="setStatus($event)" ng-class="navButtonClass4">Закриті <span class="badge badge-light">{{ executedReports.length }}</span></a>
 </nav>
-
+{{ status }}
 <table class="table table-hover table-responsive-lg">
     <thead class="thead-light">
         <tr>
             <th scope="col">
                 <a href="" ng-click="sortBy('number')">
                     № <span ng-show="reverse">&darr;</span>
-                    <span ng-show="!reverse">&uarr;</span>
+                    <span ng-show="!reverse">&uarr;</span>  
                 </a>
             </th>
             <th scope="col">Адреса</th>
@@ -24,10 +24,13 @@
             <th scope="col">Тип Об'єкту</th>
             <th scope="col">Вид Дослідження</th>
             <th scope="col">Дата надходження</th>
+            <th scope="col" ng-show="status=='active' || !status">Днів у виконанні</th>
+            <th scope="col" ng-show="status=='deactivate'">Днів в очікуванні</th>
+            <th scope="col" ng-show="status=='executed'">Дата виконання</th>
     </thead>
 
     <tbody>
-        <tr dir-paginate="item in items | filter: filterStatus | itemsPerPage: reportItems as itemsPaginated" pagination-id="listReports" ng-class="itemRowColor(item)">
+        <tr dir-paginate="item in items | filter: filterStatus | itemsPerPage: reportItems as itemsPaginated" pagination-id="listReports" ng-class="itemRowColor(item)" ng-click="showDetail(item.id)">
             <th class="td-link" ng-class="itemNumberColor(item)"scope="row"><p class="">{{ item.full_number }}</p></th>
             <td class="td-link">{{ item.address }}</td>
             <td class="td-link">{{ item.plaintiff }}</td>
@@ -35,6 +38,9 @@
             <td class="td-link">{{ item.object_name }}</td>
             <td class="td-link">{{ item.research_kind }}</td>
             <td class="td-link td-date">{{ item.date_arrived }}</td>
+            <td class="td-link td-date" ng-show="status=='active' || !status">{{ item.active_days }}</td>
+            <td class="td-link td-date" ng-show="status=='deactivate'">{{ item.waiting_days }}</td>
+            <td class="td-link td-date" ng-show="status=='executed'">{{ item.date_executed }}</td>
         </tr>
 
     </tbody>

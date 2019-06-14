@@ -16,6 +16,9 @@ angular.module('reports').
                 when("/", {
                     template: "<all-list></all-list>"
                 }).
+                when("/:id", {
+                    template: "<report-detail></report-detail>"
+                }).
                 otherwise({
                     template: "<h1>Not Found</h1>"
                 })

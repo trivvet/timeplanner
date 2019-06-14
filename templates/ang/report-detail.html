@@ -1,0 +1,62 @@
+<div class="row" id="second-header">
+	<div class="col-3"></div>
+	<div class="col-9">
+	    <h2 id="report-detail-header">Детальна інформація про провадження №{{ report.full_number }}</h2>
+	</div>
+</div>
+
+<div class="row" id="main-content">
+	<div class="col-sm-12">
+		<!-- Головні учасники справи -->
+		<div class="row" id="main-participants">
+		    <div class="col-sm-12">
+		        <table class="table table-sm table-lg-responsive table-hover">
+		            <tbody>
+		                <tr>
+		                    <th scope="row">Номер справи</th>
+		                    <td>№{{ report.case_number }}</td>
+		                </tr>
+		                <tr>
+	                    	<th scope="row">Суддя</th>
+		                    <td>
+		                        <a class="no-style-link report-detail-item" href="">
+		                            {{ report.judge_name.description }}</a>
+		                    </td>
+		                </tr>
+		                <tr ng-show="report.cost">
+		                    <th scope="row">Вартість</th>
+		                    <td>{{ report.cost }}грн</td>
+		                </tr>
+		                <tr>
+		                    <th scope="row">Днів у виконанні</th>
+		                    <td>
+		                        {{ report.active_days }}
+		                    </td>
+		                </tr>
+		                <tr>
+		                    <th scope="row">Статус провадження</th>
+		                    <td>
+		                        <span class="text-primary" ng-show="report.executed">Закрите</span>
+		                        <span class="text-success" ng-show="report.active">Активне</span>
+		                        <span class="text-secondary" ng-show="!report.executed && !report.active">Призупинене {{ report.waiting_days }} днів тому</span>
+		                    </td>
+		                </tr>
+<!-- 		                <tr>
+		                    <th scope="row">Позивачі</th>
+		                    <td ng-if="participants.plaintiff">
+                                <a class="no-style-link report-detail-item" href="" ng-repeat="plaintiff in participants.plaintiff">{{ plaintiff.surname }} {{ plaintiff.name }}</a>
+                                </br>
+		                        <a class="btn btn-outline-success badge modal-button" href="">Додати позивача</a>
+		                    </td>
+		                    <td ng-if="!participants.plaintiff">
+		                        <a class="no-style-link modal-button" href="{% url 'freports:add_participant' report.id 'plaintiff' %}"
+		                            style="color:red">Дані відсутні</a>
+		                    </td>
+		                </tr> -->
+		            </tbody>
+		        </table>
+		    </div>
+		</div>
+	</div>
+
+</div>
