@@ -113,3 +113,16 @@ class Report(models.Model):
 
     def waiting_days(self):
         return self.waiting_days_amount + self.time_after_update()
+
+    @property
+    def events(self):
+        instance = self
+        qs = ReportEvents.objects.filter(report=instance)
+        return qs
+
+    @property
+    def last_event(self):
+        events = self.events
+        return events.last()
+    
+    

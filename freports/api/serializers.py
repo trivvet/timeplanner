@@ -3,20 +3,16 @@ from rest_framework.serializers import (
     SerializerMethodField
 )
 
-from ..models import Report, Judge
+from ..models import Report, Judge, ReportEvents
 
 class ReportListSerializer(ModelSerializer):
-    judge_name = SerializerMethodField()
     class Meta:
         model = Report
         fields = (
             'id',
             'full_number',
             'number',
-            'case_number',
             'address',
-            'cost',
-            'judge_name',
             'plaintiff',
             'defendant',
             'object_name',
@@ -29,34 +25,43 @@ class ReportListSerializer(ModelSerializer):
             'waiting_days'
         )
 
-    def get_judge_name(self, obj):
-        return JudgeDetailSerializer(obj.judge_name, many=False).data
-
 class ReportDetailSerializer(ModelSerializer):
     judge_name = SerializerMethodField()
+    events = SerializerMethodField()
+    last_event = SerializerMethodField()
     class Meta:
         model = Report
         fields = (
             'id',
             'full_number',
-            'number',
             'case_number',
-            'address',
             'cost',
             'judge_name',
-            'plaintiff',
-            'defendant',
-            'object_name',
-            'research_kind',
-            'date_arrived',
             'active',
             'executed',
             'active_days',
-            'waiting_days'
+            'waiting_days',
+            'events',
+            'last_event'
         )
 
     def get_judge_name(self, obj):
         return JudgeDetailSerializer(obj.judge_name, many=False).data
+
+    def get_events(self, obj):
+        return ReportEventsSerializer(obj.events, many=True).data
+
+    def get_last_event(self, obj):
+        return ReportEventsSerializer(obj.last_event, many=False).data
+
+class ReportEventsSerializer(ModelSerializer):
+    class Meta:
+        model = ReportEvents
+        fields = (
+            'date',
+            'name',
+            'subspecies'
+        )
 
 class JudgeDetailSerializer(ModelSerializer):
     class Meta:

@@ -41,6 +41,13 @@
 		                        <span class="text-secondary" ng-show="!report.executed && !report.active">Призупинене {{ report.waiting_days }} днів тому</span>
 		                    </td>
 		                </tr>
+		                <tr>
+		                	<th scope="row">Остання подія</th>
+		                	<td>
+		                        {{ report.last_event.date }}, {{ report.last_event.name }}
+		                        {{ report.last_event.subspecies }}
+                    </td>
+		                </tr>
 <!-- 		                <tr>
 		                    <th scope="row">Позивачі</th>
 		                    <td ng-if="participants.plaintiff">
