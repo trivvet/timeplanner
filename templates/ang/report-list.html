@@ -27,6 +27,7 @@
             <th scope="col" ng-show="status=='active' || !status">Днів у виконанні</th>
             <th scope="col" ng-show="status=='deactivate'">Днів в очікуванні</th>
             <th scope="col" ng-show="status=='executed'">Дата виконання</th>
+            <th scope="col" ng-show="status=='active' || status=='deactivate' || !status">Остання дія</th>
     </thead>
 
     <tbody>
@@ -41,6 +42,7 @@
             <td class="td-link td-date" ng-show="status=='active' || !status">{{ item.active_days }}</td>
             <td class="td-link td-date" ng-show="status=='deactivate'">{{ item.waiting_days }}</td>
             <td class="td-link td-date" ng-show="status=='executed'">{{ item.date_executed }}</td>
+            <td class="td-link td-date" ng-show="status=='active' || status=='deactivate' || !status">{{ item.last_event.short_info }}</td>
         </tr>
 
     </tbody>

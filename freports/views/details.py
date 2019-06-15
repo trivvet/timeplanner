@@ -46,8 +46,6 @@ def details_list(request, rid):
     if len(details.filter(name='first_arrived')) < 1:
         return HttpResponseRedirect(reverse('freports:add_order', args=[rid]))
 
-    report.last_event = details.reverse()[0]
-
     participants_list = ReportParticipants.objects.filter(report=report)
     participants = {'other': []}
     subjects = ReportSubject.objects.filter(report=report)

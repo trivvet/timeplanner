@@ -3,9 +3,10 @@ from rest_framework.serializers import (
     SerializerMethodField
 )
 
-from ..models import Report, Judge, ReportEvents
+from ..models import Report, Judge, ReportEvents, ReportParticipants
 
 class ReportListSerializer(ModelSerializer):
+    last_event = SerializerMethodField()
     class Meta:
         model = Report
         fields = (
@@ -22,13 +23,18 @@ class ReportListSerializer(ModelSerializer):
             'active',
             'executed',
             'active_days',
-            'waiting_days'
+            'waiting_days',
+            'last_event'
         )
+
+    def get_last_event(self, obj):
+        return ReportEventsSerializer(obj.last_event, many=False).data
 
 class ReportDetailSerializer(ModelSerializer):
     judge_name = SerializerMethodField()
     events = SerializerMethodField()
     last_event = SerializerMethodField()
+    participants = SerializerMethodField()
     class Meta:
         model = Report
         fields = (
@@ -42,7 +48,8 @@ class ReportDetailSerializer(ModelSerializer):
             'active_days',
             'waiting_days',
             'events',
-            'last_event'
+            'last_event',
+            'participants'
         )
 
     def get_judge_name(self, obj):
@@ -54,13 +61,17 @@ class ReportDetailSerializer(ModelSerializer):
     def get_last_event(self, obj):
         return ReportEventsSerializer(obj.last_event, many=False).data
 
+    def get_participants(self, obj):
+        return ReportParticipantSerializer(obj.participants, many=True).data
+
 class ReportEventsSerializer(ModelSerializer):
     class Meta:
         model = ReportEvents
         fields = (
             'date',
             'name',
-            'subspecies'
+            'subspecies',
+            'short_info'
         )
 
 class JudgeDetailSerializer(ModelSerializer):
@@ -69,4 +80,12 @@ class JudgeDetailSerializer(ModelSerializer):
         fields = (
             'id',
             'description',
+        )
+
+class ReportParticipantSerializer(ModelSerializer):
+    class Meta:
+        model = ReportParticipants
+        fields = (
+            'status',
+            'full_name'
         )

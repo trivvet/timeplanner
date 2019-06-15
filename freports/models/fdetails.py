@@ -109,6 +109,7 @@ class ReportEvents(models.Model):
 
         return description + '. ' + self.info
 
+    @property
     def short_info(self):
         descriptions = {
             'first_arrived': u"Надійшла ухвала",
@@ -169,4 +170,9 @@ class ReportParticipants(models.Model):
 
     def __unicode__(self):
         return u"%s %s (report %s/%s)" % (self.status, self.surname, self.report.number, self.report.number_year)
+
+    @property
+    def full_name(self):
+        return "{} {}".format(self.surname, self.name)
+    
 

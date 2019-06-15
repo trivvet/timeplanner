@@ -17,6 +17,35 @@
 		                    <td>№{{ report.case_number }}</td>
 		                </tr>
 		                <tr>
+		                    <th scope="row">Позивач<span ng-if="plaintiffs.length > 1">і</span></th>
+	                        <td ng-if="plaintiffs.length">
+	                        	<a ng-repeat="plaintiff in plaintiffs" class="no-style-link report-detail-item" href="">
+		                            {{ plaintiff.full_name }}</a>
+		                        <br ng-if="plaintiffs.length > 1">
+		                        <a class="btn btn-outline-success badge modal-button" href="">Додати позивача</a>
+	                        </td>
+	                        <td ng-if="!plaintiffs.length">
+	                        	<a class="no-style-link modal-button text-danger" href=""
+	                            >Дані відсутні</a>
+	                        </td>
+		                </tr>
+		                <tr>
+		                    <th scope="row">Відповідач<span ng-if="defendants.length > 1">і</span></th>
+	                        <td ng-if="defendants.length">
+	                        	<span ng-repeat="defendant in defendants">
+	                        	    <a class="no-style-link report-detail-item" href="">
+		                                {{ defendant.full_name }}</a>
+		                            <br ng-hide="$last">
+		                        </span>
+		                        
+		                        <a class="btn btn-outline-success badge modal-button" href="">Додати відповідача</a>
+	                        </td>
+	                        <td ng-if="!defendants.length">
+	                        	<a class="no-style-link modal-button text-danger" href=""
+	                            >Дані відсутні</a>
+	                        </td>
+		                </tr>
+		                <tr>
 	                    	<th scope="row">Суддя</th>
 		                    <td>
 		                        <a class="no-style-link report-detail-item" href="">
@@ -44,22 +73,10 @@
 		                <tr>
 		                	<th scope="row">Остання подія</th>
 		                	<td>
-		                        {{ report.last_event.date }}, {{ report.last_event.name }}
+		                        {{ report.last_event.date }}, {{ report.last_event.short_info }},
 		                        {{ report.last_event.subspecies }}
-                    </td>
+                            </td>
 		                </tr>
-<!-- 		                <tr>
-		                    <th scope="row">Позивачі</th>
-		                    <td ng-if="participants.plaintiff">
-                                <a class="no-style-link report-detail-item" href="" ng-repeat="plaintiff in participants.plaintiff">{{ plaintiff.surname }} {{ plaintiff.name }}</a>
-                                </br>
-		                        <a class="btn btn-outline-success badge modal-button" href="">Додати позивача</a>
-		                    </td>
-		                    <td ng-if="!participants.plaintiff">
-		                        <a class="no-style-link modal-button" href="{% url 'freports:add_participant' report.id 'plaintiff' %}"
-		                            style="color:red">Дані відсутні</a>
-		                    </td>
-		                </tr> -->
 		            </tbody>
 		        </table>
 		    </div>

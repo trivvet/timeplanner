@@ -5,7 +5,7 @@ from datetime import date
 from django.db import models
 from django.utils import timezone
 
-from .fdetails import ReportEvents
+from .fdetails import ReportEvents, ReportParticipants
 
 # Create your models here.
 
@@ -122,7 +122,14 @@ class Report(models.Model):
 
     @property
     def last_event(self):
-        events = self.events
+        events = self.events.order_by('date')
         return events.last()
+
+    @property
+    def participants(self):
+        instance = self
+        qs = ReportParticipants.objects.filter(report=instance)
+        return qs
+    
     
     

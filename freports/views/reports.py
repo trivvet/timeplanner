@@ -65,12 +65,6 @@ def reports_list(request):
         if reverse_apply:
             reports = reports.reverse()
 
-    if status == 'deactivate' or status == '':
-        for report in reports:
-            report_events = ReportEvents.objects.filter(report=report).order_by('date').reverse()
-            if report_events.count() > 0:
-                report.last_event = report_events[0]
-
     if status in ['executed', 'all'] and all_pages == '':
         paginator = Paginator(reports, 15)
         page = request.GET.get('page', '')
