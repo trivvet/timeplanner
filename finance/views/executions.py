@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from datetime import date, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -12,6 +13,7 @@ from django.views.generic.edit import (
     DeleteView
     )
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from ..models import Execution, Order, Income
@@ -21,6 +23,22 @@ from ..forms import ExecutionForm
 @login_required(login_url='/login/')
 def executions_list(request):
     executions = Execution.objects.all().order_by('date').reverse()
+    period = request.GET.get('period')
+    now = timezone.now()
+    start_current_month = date(now.year, now.month, 1)
+    start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
+    start_current_year = date(now.year, 1, 1)
+    start_previous_year = date(now.year - 1, 1, 1)
+    if period == 'current_month':
+        executions = executions.filter(date__gt=start_current_month - timedelta(days=1))
+    elif period == 'previous_month':
+        executions = executions.filter(date__gt=start_previous_month - timedelta(days=1)).filter(
+            date__lt=start_current_month)
+    elif period == 'current_year':
+        executions = executions.filter(date__gt=start_current_year - timedelta(days=1))
+    elif period == 'previous_year':
+        executions = executions.filter(date__gt=start_previous_year - timedelta(days=1)).filter(
+            date__lt=start_current_year)
     return render(request, 'finance/executions_list.html', 
         {'executions': executions})
 
