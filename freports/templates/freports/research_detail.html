@@ -11,9 +11,12 @@
 
 {% block content %}
 
-<!-- Головні учасники справи -->
 <div class="row" id="main-participants">
     <div class="col-sm-6 offset-sm-3">
+
+        <a type="button" class="btn btn-light mb-3"
+            href="{% url 'freports:researches_list' %}">Повернутись до списку досліджень</a>
+
         <table class="table table-md table-hover">
             <tbody>
                 <tr>
@@ -46,6 +49,23 @@
                         {{ object.active_days_amount|add:object.time_after_update }}
                     </td>
                 </tr>
+                <tr>
+                    <th scope="row">Статус дослідження</th>
+                    <td>
+                        {% if object.executed %}<span class="text-primary">Закрите</span>
+                        {% elif object.active %}<span class="text-success">Активне</span>
+                        {% else %}<span class="text-secondary">Призупинене</span>{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td>
+                        <a type="button" class="btn btn-info modal-button"
+                            href="{% url 'freports:edit_research' object.id %}?next=freports:research_detail">Редагувати основну інформацію</a>
+                        <a type="button" class="btn btn-danger modal-button"
+                            href="{% url 'freports:delete_research' object.id %}?next=freports:researches_list">Видалити дослідження</a>
+                    </td>
+                </tr> 
             </tbody>
         </table>
     </div>

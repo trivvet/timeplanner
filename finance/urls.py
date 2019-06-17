@@ -3,6 +3,7 @@ from django.conf.urls import url
 from . import views
 from .views import (
     AccountDetail,
+    OrderDetail,
     IncomeCreate, 
     IncomeEdit, 
     IncomeDelete,
@@ -26,7 +27,9 @@ urlpatterns = [
 
     # order URLs
     url(r'^orders/$', views.orders_list, 
-        name='orders_list'),   
+        name='orders_list'),
+    url(r'^orders/(?P<pk>\d+)/detail/$', OrderDetail.as_view(),
+        name='detail_order'),   
     url(r'^orders/add/$', views.add_order,
         name='add_order'),
     url(r'^orders/(?P<oid>\d+)/edit/$', views.edit_order,

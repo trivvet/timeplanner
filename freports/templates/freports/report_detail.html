@@ -100,7 +100,11 @@
                     <th scope="row">Вартість</th>
                     <td>
                         {% if report.is_cost and report.is_paid %}
-                        {{ report.is_cost }}грн
+                        <span class="report-detail-item">{{ report.is_cost }}грн</span>
+                            {% if report.order %}
+                            <a class="btn btn-outline-info badge" href="{% url 'finance:detail_order' report.order.id %}"
+                            hidden>Інформація по замовленню</a>
+                            {% endif %}
                         {% elif report.is_cost %}
                         <a class="no-style-link modal-button" href="{% url 'freports:add_detail' report.id 'paid' %}">{{ report.is_cost }}грн (не оплачено)</a>
                         {% else %}

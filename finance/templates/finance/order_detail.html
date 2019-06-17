@@ -2,7 +2,7 @@
 
 {% block title %}
 <div class="col">
-    <span class="h1">Список транзакцій по рахунку {{ object.title }}</span> <span class="badge badge-info">Alpha</span>
+    <span class="h1">Список транзакцій по замовленню {{ object.name }}</span> <span class="badge badge-info">Alpha</span>
 </div>
 {% endblock title %}
 
@@ -12,7 +12,11 @@
 {% block content %}
 
 <a type="button" class="btn btn-light mb-3"
-    href="{% url 'finance:accounts_list' %}">Повернутись до списку рахунків</a>
+    href="{% url 'finance:orders_list' %}">Повернутись до списку замовлень</a>
+{% if object.report %}
+<a class="btn btn-outline-info mb-3 ml-3" 
+    href="{% url 'freports:report_detail' object.report.id %}">Деталі провадження</a>
+{% endif %}
 
 {% if object_list %}
 <table class="table table-hover table-responsive-lg">
@@ -20,7 +24,7 @@
         <tr>
             <th scope="col">Дата</th>
             <th scope="col">Тип транзакції</th>
-            <th scope="col">Замовлення</th>
+            <th scope="col">Рахунок</th>
             <th scope="col">Сума</th>
         </tr>
     </thead>
@@ -29,20 +33,16 @@
         <tr class="{% if transaction.model_name == 'Виконання' %}text-danger{% else %}text-success{% endif %}">
             <th scope="row">{{ transaction.date }}</th>
             <td>{{ transaction.model_name }}
-            <td>{{ transaction.order.name }}</td>
+            <td>{{ transaction.account.title }}</td>
             <td>{{ transaction.amount }}</td>
         </tr>
         {% endfor %}
         <tr>
             <td colspan="2"></td>
-            <th scope="row" class="text-center table-info h5">Залишок по рахунку</th>
+            <th scope="row" class="text-center table-info h5">Невиконаний залишок</th>
             <td class="{% if object.remainder >= 0 %}text-success{% else %}text-danger {% endif %} table-info h5">{{ object.remainder }}</td>
     </tbody>
 </table>
-
-{% if is_paginated %}
-    {% include 'finance/pagination.html' with items=page_obj url_next="finance:detail_account" parametr=object.id order_by=request.GET.order_by reverse=request.GET.reverse %}
-{% endif %}
 
 {% else %}
 <p>Ще немає даних</p>

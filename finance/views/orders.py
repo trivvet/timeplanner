@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from itertools import chain
+from operator import attrgetter
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView
 
-from ..models import Order
+from ..models import Order, Income, Execution
 
 @login_required(login_url='/login/')
 def orders_list(request):
@@ -37,6 +41,25 @@ def orders_list(request):
         content['done_sum'] += order.done_sum
     return render(request, 'finance/orders_list.html', 
         {'orders': orders, 'content': content})
+
+@method_decorator(login_required, name='dispatch')
+class OrderDetail(ListView):
+    model = Order
+    template_name = 'finance/order_detail.html'
+
+    def get_queryset(self):
+        order = self.kwargs['pk']
+        incomes = Income.objects.filter(order=order)
+        executions = Execution.objects.filter(order=order)
+        object_list = sorted(chain(incomes, executions),
+            key=attrgetter('date'), reverse=True)
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderDetail, self).get_context_data(**kwargs)
+        order = self.kwargs['pk']
+        context['object'] = Order.objects.get(pk=order)
+        return context
 
 @login_required(login_url='/login/')
 def add_order(request):

@@ -342,9 +342,9 @@ function inputNumberField() {
 
 function addPlusButton() {
     $('.report-detail-item').parent().parent().mouseenter(function() {
-        $(this).find('.btn-outline-success').removeAttr('hidden');
+        $(this).find('.btn-outline-success, .btn-outline-info').removeAttr('hidden');
         $(this).mouseleave(function() {
-            $(this).find('.btn-outline-success').attr('hidden', '1');
+            $(this).find('.btn-outline-success, .btn-outline-info').attr('hidden', '1');
         });
     });
 }

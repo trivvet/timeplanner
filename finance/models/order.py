@@ -60,3 +60,8 @@ class Order(models.Model):
                 self.name, self.report)
         else:
             return u"Замовлення {}".format(self.name)
+
+    @property
+    def remainder(self):
+        return self.paid_sum - self.done_sum
+    

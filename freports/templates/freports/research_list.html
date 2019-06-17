@@ -62,7 +62,6 @@
             <th scope="col">Вид Дослідження</th>
             <th scope="col">Дата надходження</th>
             <th scope="col">Дата виконання</th>
-            <th scope="col">Дії</th>
         </tr>
     </thead>
 
@@ -70,36 +69,18 @@
 
         {% for report in object_list %}
         <tr class="
-            {% if report.active is None %}
-                table-danger
-            {% elif report.address == '-' or report.applicant == '-' or report.object_name == '-' or report.research_kind == '-' %}
+            {% if report.address == '-' or report.applicant == '-' or report.object_name == '-' or report.research_kind == '-' %}
                 table-warning
             {% endif %}
             "
-            data-href="{% if report.active is None %}{% url 'freports:add_order' report.id %}{% else %}{% url 'freports:report_detail' report.id %}{% endif %}">
-            <th scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
-            <td>{{ report.address|truncatechars:25 }}</td>
-            <td>{{ report.applicant|truncatechars:30 }}</td>
-            <td>{{ report.object_name|truncatechars:20 }}</td>
-            <td>{{ report.research_kind|truncatechars:20 }}</td>
-            <td class="td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
-            <td class="td-date">{{ report.date_executed|date:"d M Y"|truncatechars:12 }}</td>
-            <td>
-                <div class="dropdown">
-                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Дія
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item"
-                            href="{% url 'freports:research_detail' report.id %}">Детальна інформація</a>
-                        <a class="modal-button dropdown-item"
-                            href="{% url 'freports:edit_research' report.id %}">Редагувати</a>
-                        <a class="modal-button dropdown-item"
-                            href="{% url 'freports:delete_research' report.id %}">Видалити</a>
-                    </div>
-                </div>
-            </td>
+            data-href="{% url 'freports:research_detail' report.id %}">
+            <th class="td-link" scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
+            <td class="td-link">{{ report.address|truncatechars:25 }}</td>
+            <td class="td-link">{{ report.applicant|truncatechars:30 }}</td>
+            <td class="td-link">{{ report.object_name|truncatechars:20 }}</td>
+            <td class="td-link">{{ report.research_kind|truncatechars:20 }}</td>
+            <td class="td-date td-link">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
+            <td class="td-date td-link">{{ report.date_executed|date:"d M Y"|truncatechars:12 }}</td> 
         </tr>
         {% endfor %}
 

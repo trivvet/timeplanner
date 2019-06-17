@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 
 from .fdetails import ReportEvents
+from finance.models import Order
 
 # Create your models here.
 
@@ -134,6 +135,15 @@ class Report(BaseReport):
         events = ReportEvents.objects.filter(report=self).order_by('date')
         report_type = events.last().subspecies
         return report_type
+
+    @property
+    def order(self):
+        orders_list = Order.objects.filter(report=self)
+        if orders_list:
+            order = orders_list[0]
+        else:
+            order = None
+        return order
 
 
 class Research(BaseReport):

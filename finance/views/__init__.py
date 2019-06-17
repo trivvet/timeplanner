@@ -7,6 +7,7 @@ from .accounts import (
     )
 from .orders import (
     orders_list,
+    OrderDetail,
     add_order, 
     edit_order, 
     delete_order,
