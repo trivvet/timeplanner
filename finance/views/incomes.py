@@ -23,7 +23,7 @@ from . import order_auto_create
 
 @login_required(login_url='/login/')
 def incomes_list(request):
-    incomes = Income.objects.all()
+    incomes = Income.objects.all().order_by('date')
     return render(request, 'finance/incomes_list.html', 
         {'incomes': incomes})
 
