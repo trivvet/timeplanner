@@ -14,7 +14,7 @@ from ..models import Report, ReportSubject
 def subjects_list(request):
     subjects = ReportSubject.objects.all()
     if request.GET.get('all_pages', '') == '':
-        paginator = Paginator(subjects, 10)
+        paginator = Paginator(subjects, 15)
         page = request.GET.get('page', '')
         try:
             subjects = paginator.page(page)

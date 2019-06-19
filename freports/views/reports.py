@@ -83,7 +83,7 @@ def reports_list(request):
                 report.last_event = report_events[0]
 
     if status in ['executed', 'all'] and all_pages == '':
-        paginator = Paginator(reports, 15)
+        paginator = Paginator(reports, 20)
         page = request.GET.get('page', '')
         try:
             reports = paginator.page(page)

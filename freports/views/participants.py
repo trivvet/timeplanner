@@ -34,7 +34,7 @@ def participants_list(request):
     for participant in participants:
         participant.status = status_list[participant.status]
     if request.GET.get('all_pages', '') == '':
-        paginator = Paginator(participants, 10)
+        paginator = Paginator(participants, 25)
         page = request.GET.get('page', '')
         try:
             participants = paginator.page(page)

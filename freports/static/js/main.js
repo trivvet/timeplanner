@@ -18,7 +18,7 @@ function initDateFields() {
             startDate2 = startDate
         }
     }
-    $('#inputDate').datetimepicker({
+    $('#inputDate, #inputDate3').datetimepicker({
         format: 'YYYY-MM-DD',
         locale: 'uk',
         date: startDate,
@@ -44,10 +44,9 @@ function initDateFields() {
             showClose: true
         }
     });
-    // $('#inputDate input').on("blur", function(e) {
-    //     var decisionDate = $('#inputDate input').val();
-    //     console.log(decisionDate); 
-    // });
+    $('#inputDate, #inputDate2, #inputDate3').on("blur", function(e) {
+        $(this).off("focus").datetimepicker('hide');
+    });
 }
 
 function showExecutedDate() {
@@ -406,6 +405,12 @@ function showSidebar() {
     });
 }
 
+function clickFilterButton() {
+    if ($('#filter')) {
+        initDateFields();
+    }
+}
+
 function showAddressInput() {
     $('input.person-сheckbox').on('change', function() {
         inputAddress = $(this).next().children('input');
@@ -414,7 +419,7 @@ function showAddressInput() {
         } else {
             inputAddress.attr('hidden', true);
         }
-    })
+    });
 }
 
 $(document).ready(function(){
@@ -428,4 +433,5 @@ $(document).ready(function(){
     showButtons();
     clickExecuteTask();
     showSidebar();
+    clickFilterButton();
 })

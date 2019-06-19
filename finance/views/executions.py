@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -29,18 +29,23 @@ def executions_list(request):
     start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
     start_current_year = date(now.year, 1, 1)
     start_previous_year = date(now.year - 1, 1, 1)
-    if period == 'current_month':
-        executions = executions.filter(date__gt=start_current_month - timedelta(days=1))
-    elif period == 'previous_month':
-        executions = executions.filter(date__gt=start_previous_month - timedelta(days=1)).filter(
-            date__lt=start_current_month)
-    elif period == 'current_year':
-        executions = executions.filter(date__gt=start_current_year - timedelta(days=1))
-    elif period == 'previous_year':
-        executions = executions.filter(date__gt=start_previous_year - timedelta(days=1)).filter(
-            date__lt=start_current_year)
+    errors = {}
+    if request.GET.get('filter_status'):
+        date_from_datetime = datetime.strptime(request.GET.get('date_from'), '%Y-%m-%d')
+        date_until_datetime = datetime.strptime(request.GET.get('date_until'), '%Y-%m-%d')
+        if date_from_datetime > date_until_datetime:
+            errors['wrong_date'] = True
+        executions = executions.filter(date__gt=date_from_datetime - timedelta(days=1), 
+            date__lt=date_until_datetime + timedelta(days=1))
+    else:
+        if period == 'current_month':
+            executions = executions.filter(date__gt=start_current_month - timedelta(days=1))
+        elif period == 'previous_month':
+            executions = executions.filter(date__gt=start_previous_month - timedelta(days=1)).filter(
+                date__lt=start_current_month)
+
     return render(request, 'finance/executions_list.html', 
-        {'executions': executions})
+        {'executions': executions, 'errors': errors})
 
 
 @method_decorator(login_required, name='dispatch')

@@ -23,6 +23,7 @@ def orders_list(request):
         'total_sum': 0,
         'paid_sum': 0,
         'done_sum': 0,
+        'remainder_sum': 0,
         'all_orders': orders.count(),
         'active_orders': orders_active.count(),
         'inactive_orders': orders_inactive.count(),
@@ -39,6 +40,7 @@ def orders_list(request):
         content['total_sum'] += order.total_sum
         content['paid_sum'] += order.paid_sum
         content['done_sum'] += order.done_sum
+        content['remainder_sum'] += order.remainder
     return render(request, 'finance/orders_list.html', 
         {'orders': orders, 'content': content})
 

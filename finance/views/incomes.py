@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from datetime import date, datetime, timedelta
 
 from django import forms
 from django.contrib import messages
@@ -15,6 +16,7 @@ from django.views.generic.edit import (
     DeleteView
     )
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 
 from ..models import Income, Order, Account
@@ -23,9 +25,31 @@ from . import order_auto_create
 
 @login_required(login_url='/login/')
 def incomes_list(request):
-    incomes = Income.objects.all().order_by('date')
+    incomes = Income.objects.all().order_by('date').reverse()
+    period = request.GET.get('period')
+    now = timezone.now()
+    start_current_month = date(now.year, now.month, 1)
+    start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
+    start_current_year = date(now.year, 1, 1)
+    start_previous_year = date(now.year - 1, 1, 1)
+    errors = {}
+    if request.GET.get('filter_status'):
+        date_from_datetime = datetime.strptime(request.GET.get('date_from'), 
+            '%Y-%m-%d')
+        date_until_datetime = datetime.strptime(request.GET.get('date_until'), 
+            '%Y-%m-%d')
+        if date_from_datetime > date_until_datetime:
+            errors['wrong_date'] = True
+        incomes = incomes.filter(date__gt=date_from_datetime - timedelta(days=1), 
+            date__lt=date_until_datetime + timedelta(days=1))
+    else:
+        if period == 'current_month':
+            incomes = incomes.filter(date__gt=start_current_month - timedelta(days=1))
+        elif period == 'previous_month':
+            incomes = incomes.filter(date__gt=start_previous_month - timedelta(days=1)).filter(
+                date__lt=start_current_month)
     return render(request, 'finance/incomes_list.html', 
-        {'incomes': incomes})
+        {'incomes': incomes, 'errors': errors})
 
 @method_decorator(login_required, name='dispatch')
 class IncomeCreate(SuccessMessageMixin, CreateView):
@@ -56,12 +80,9 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
         data = form.cleaned_data
         money = int(data['amount'])
         order = data['order']
-        account = data['account']
         order.status = 'active'
         order.paid_sum += money
         order.save()
-        account.total_sum += money
-        account.save()
         return super(IncomeCreate, self).form_valid(form)
 
     def get_success_message(self, cleaned_data):
@@ -113,16 +134,8 @@ class IncomeEdit(SuccessMessageMixin, UpdateView):
         account = Account.objects.get(pk=account_id)
         if data['amount'] != initial_data['amount']:
             difference_sum = data['amount'] - initial_data['amount']
-            account.total_sum += difference_sum
             data['order'].paid_sum += difference_sum
-            account.save()
             data['order'].save()
-        if data['account'] != account:
-            account.total_sum -= data['amount']
-            account.save()
-            new_account = data['account']
-            new_account.total_sum += data['amount']
-            new_account.save()
         return super(IncomeEdit, self).form_valid(form)
 
     def get_success_message(self, cleaned_data):

@@ -19,9 +19,9 @@ class IncomeForm(forms.ModelForm):
         widget=forms.DateInput(
             format=('%Y-%m-%d'),
             attrs={
-                'id': 'inputDate',
+                'id': 'inputDate3',
                 'data-toggle': 'datetimepicker',
-                'data-target': "#inputDate"}
+                'data-target': "#inputDate3"}
             )
         )
 
@@ -63,9 +63,9 @@ class ExecutionForm(forms.ModelForm):
         widget=forms.DateInput(
             format=('%Y-%m-%d'),
             attrs={
-                'id': 'inputDate',
+                'id': 'inputDate3',
                 'data-toggle': 'datetimepicker',
-                'data-target': "#inputDate"}
+                'data-target': "#inputDate3"}
             )
         )
 

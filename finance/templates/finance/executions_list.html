@@ -17,10 +17,37 @@
 
 {% block content %}
 
-<a class="btn btn-outline-primary mb-3" href="{% url 'finance:executions_list' %}?period=current_month">За поточний місяць</a>
-<a class="btn btn-outline-info mb-3" href="{% url 'finance:executions_list' %}?period=previous_month">За минулий місяць</a>
-<a class="btn btn-outline-secondary mb-3" href="{% url 'finance:executions_list' %}?period=current_year">За поточний рік</a>
-<a class="btn btn-outline-secondary mb-3" href="{% url 'finance:executions_list' %}?period=previous_year">За минулий рік</a>
+<div id="executions_list_filters" class="mb-3">
+    <a class="btn btn-outline-primary" href="{% url 'finance:executions_list' %}?period=current_month">За поточний місяць</a>
+    <a class="btn btn-outline-info" href="{% url 'finance:executions_list' %}?period=previous_month">За минулий місяць</a>
+    <button class="btn btn-outline-secondary" id="filter-button" data-toggle="collapse" href="#filter" role="button" aria-expanded="{% if request.GET.filter_status %}true{% else %}false{% endif %}" aria-controls="collapseExample">Інший проміжок</button>
+</div>
+
+<div class="collapse {% if request.GET.filter_status %}show{% endif %}" id="filter">
+    <div class="card card-body">
+        {% if errors %}
+        <div class="alert alert-danger" role="alert">
+          Некоректно задано часовий проміжок!
+        </div>
+        {% endif %}
+        <div class="filter">
+            <form class="form-inline" action="{% url 'finance:executions_list' %}{% if request.GET.status %}?{{ request.GET.status }}{% endif %}" method="get" enctype="multipart/form-data" role="form">
+                <input type="hidden" name="filter_status" value="success" />
+                <div class="form-group mb-1 mt-1">
+                    <label for="inputDateArrived">Від</label>
+                    <input type="text" id="inputDate"
+                        class="date-input form-control mr-2 ml-2" data-target="#inputDate" autocomplete="off" name="date_from" data-toggle='datetimepicker'value="{{ request.GET.date_from }}" placeholder="2018-10-01" style="max-width:110px"/>
+                    до<input type="text" class="date-input form-control mr-2 ml-2" data-target="#inputDate2" autocomplete="off" name="date_until" id="inputDate2" placeholder="2018-10-30" data-toggle='datetimepicker' 
+                        value="{{ request.GET.date_until }}" style="max-width:110px"/>
+                </div>
+                <div class="form-group mb-1 mt-1" id="filter-button">
+                    <input type="submit" class="btn btn-outline-info" value="Застосувати" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 {% if executions %}
 <table class="table table-hover table-responsive-lg">
