@@ -9,13 +9,13 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectTemplateResponseMixin
 from django.views.generic.edit import (
     CreateView, 
     UpdateView, 
     DeleteView
     )
+from django.views.generic.list import ListView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -25,38 +25,24 @@ from ..forms import IncomeForm
 from . import order_auto_create
 
 @method_decorator(login_required, name='dispatch')
-class IncomeList(SuccessMessageMixin, ListView):
+class IncomeList(ListView):
     model = Income
     context_object_name = 'incomes'
     template_name = 'finance/incomes_list.html'
+    ordering = '-date'
+    paginate_by = 5
 
     def get_queryset(self):
-        incomes = Income.objects.all().order_by('date').reverse()
-        period = self.request.GET.get('period')
-        now = timezone.now()
-        start_current_month = date(now.year, now.month, 1)
-        start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
-        start_current_year = date(now.year, 1, 1)
-        start_previous_year = date(now.year - 1, 1, 1)
-        date_from = self.request.GET.get('date_from')
-        date_until = self.request.GET.get('date_until')
-        filter_status = self.request.GET.get('filter_status')
-        if filter_status and date_from and date_until:
-            date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
-            date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
-            incomes = incomes.filter(date__gt=date_from_datetime - timedelta(days=1), 
-                date__lt=date_until_datetime + timedelta(days=1))
-        else:
-            if period == 'current_month':
-                incomes = incomes.filter(date__gt=start_current_month - timedelta(days=1))
-            elif period == 'previous_month':
-                incomes = incomes.filter(
-                    date__gt=start_previous_month - timedelta(days=1),
-                    date__lt=start_current_month)
-        return incomes
+        incomes = super(IncomeList, self).get_queryset()
+        return filter_by_date(self, incomes)
 
     def get_context_data(self, **kwargs):
+        all_pages = self.request.GET.get("all_pages", '')
         context = super(IncomeList, self).get_context_data(**kwargs)
+        if all_pages:
+            incomes = Income.objects.all().order_by('-date')
+            context['incomes'] = filter_by_date(self, incomes)
+            context['is_paginated'] = False
         date_from = self.request.GET.get('date_from')
         date_until = self.request.GET.get('date_until')
         filter_status = self.request.GET.get('filter_status')
@@ -216,3 +202,27 @@ def income_auto_create(detail):
 
 def income_auto_edit(detail):
     return detail
+
+def filter_by_date(self, items):
+    period = self.request.GET.get('period')
+    now = timezone.now()
+    start_current_month = date(now.year, now.month, 1)
+    start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
+    start_current_year = date(now.year, 1, 1)
+    start_previous_year = date(now.year - 1, 1, 1)
+    date_from = self.request.GET.get('date_from')
+    date_until = self.request.GET.get('date_until')
+    filter_status = self.request.GET.get('filter_status')
+    if filter_status and date_from and date_until:
+        date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
+        date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
+        items = items.filter(date__gt=date_from_datetime - timedelta(days=1), 
+            date__lt=date_until_datetime + timedelta(days=1))
+    else:
+        if period == 'current_month':
+            items = items.filter(date__gt=start_current_month - timedelta(days=1))
+        elif period == 'previous_month':
+            items = items.filter(
+                date__gt=start_previous_month - timedelta(days=1),
+                date__lt=start_current_month)
+    return items

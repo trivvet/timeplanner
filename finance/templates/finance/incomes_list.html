@@ -83,6 +83,10 @@
     </tbody>
 </table>
 
+{% if is_paginated %}
+    {% include 'finance/pagination.html' with items=page_obj url_next="finance:incomes_list" order_by=request.GET.order_by reverse=request.GET.reverse filter_status=request.GET.filter_status date_from=request.GET.date_from date_until=request.GET.date_until period=request.GET.period %}
+{% endif %}
+
 {% else %}
 <p>Ще немає даних</p>
 {% endif %}

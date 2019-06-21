@@ -7,12 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.generic import ListView
 from django.views.generic.edit import (
     CreateView, 
     UpdateView, 
     DeleteView
     )
+from django.views.generic.list import ListView
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator

@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView
+from django.views.generic.list import ListView
 
 from ..models import Account, Income, Execution
 
