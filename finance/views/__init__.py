@@ -1,5 +1,5 @@
 from .accounts import (
-    accounts_list,
+    AccountList,
     AccountDetail, 
     add_account, 
     edit_account,
@@ -16,7 +16,7 @@ from .orders import (
     )
 
 from .incomes import (
-    incomes_list,
+    IncomeList,
     IncomeCreate,
     IncomeEdit,
     IncomeDelete,
@@ -25,7 +25,7 @@ from .incomes import (
     )
 
 from .executions import (
-    executions_list,
+    ExecutionList,
     ExecutionCreate,
     ExecutionEdit,
     ExecutionDelete

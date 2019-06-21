@@ -27,7 +27,11 @@
     <div class="card card-body">
         {% if errors %}
         <div class="alert alert-danger" role="alert">
+          {% if errors.wrong_date %}
           Некоректно задано часовий проміжок!
+          {% elif errors.miss_date %}
+          Не заданий часовий проміжок!
+          {% endif %}
         </div>
         {% endif %}
         <div class="filter">

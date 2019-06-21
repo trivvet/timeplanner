@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
 from django.shortcuts import render
+from django.views.generic import ListView
 from django.views.generic.edit import (
     CreateView, 
     UpdateView, 
@@ -19,34 +20,52 @@ from django.utils.decorators import method_decorator
 from ..models import Execution, Order, Income
 from ..forms import ExecutionForm
 
+@method_decorator(login_required, name='dispatch')
+class ExecutionList(SuccessMessageMixin, ListView):
+    model = Execution
+    context_object_name = 'executions'
+    template_name = "finance/executions_list.html"
 
-@login_required(login_url='/login/')
-def executions_list(request):
-    executions = Execution.objects.all().order_by('date').reverse()
-    period = request.GET.get('period')
-    now = timezone.now()
-    start_current_month = date(now.year, now.month, 1)
-    start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
-    start_current_year = date(now.year, 1, 1)
-    start_previous_year = date(now.year - 1, 1, 1)
-    errors = {}
-    if request.GET.get('filter_status'):
-        date_from_datetime = datetime.strptime(request.GET.get('date_from'), '%Y-%m-%d')
-        date_until_datetime = datetime.strptime(request.GET.get('date_until'), '%Y-%m-%d')
-        if date_from_datetime > date_until_datetime:
-            errors['wrong_date'] = True
-        executions = executions.filter(date__gt=date_from_datetime - timedelta(days=1), 
-            date__lt=date_until_datetime + timedelta(days=1))
-    else:
-        if period == 'current_month':
-            executions = executions.filter(date__gt=start_current_month - timedelta(days=1))
-        elif period == 'previous_month':
-            executions = executions.filter(date__gt=start_previous_month - timedelta(days=1)).filter(
-                date__lt=start_current_month)
+    def get_queryset(self):
+        executions = Execution.objects.all().order_by('date').reverse()
+        period = self.request.GET.get('period')
+        now = timezone.now()
+        start_current_month = date(now.year, now.month, 1)
+        start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
+        start_current_year = date(now.year, 1, 1)
+        start_previous_year = date(now.year - 1, 1, 1)
+        date_from = self.request.GET.get('date_from')
+        date_until = self.request.GET.get('date_until')
+        filter_status = self.request.GET.get('filter_status')
+        if filter_status and date_from and date_until:
+            date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
+            date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
+            executions = executions.filter(
+                date__gt=date_from_datetime - timedelta(days=1), 
+                date__lt=date_until_datetime + timedelta(days=1)
+                )
+        else:
+            if period == 'current_month':
+                executions = executions.filter(date__gt=start_current_month - timedelta(days=1))
+            elif period == 'previous_month':
+                executions = executions.filter(
+                    date__gt=start_previous_month - timedelta(days=1),
+                    date__lt=start_current_month)
+        return executions
 
-    return render(request, 'finance/executions_list.html', 
-        {'executions': executions, 'errors': errors})
-
+    def get_context_data(self, **kwargs):
+        context = super(ExecutionList, self).get_context_data(**kwargs)
+        date_from = self.request.GET.get('date_from')
+        date_until = self.request.GET.get('date_until')
+        filter_status = self.request.GET.get('filter_status')
+        if filter_status and date_from and date_until:
+            date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
+            date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
+            if date_from_datetime > date_until_datetime:
+                context['errors'] = {'wrong_date': True}
+        elif filter_status:
+            context['errors'] = {'miss_date': True}
+        return context
 
 @method_decorator(login_required, name='dispatch')
 class ExecutionCreate(SuccessMessageMixin, CreateView):

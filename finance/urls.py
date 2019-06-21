@@ -2,11 +2,14 @@ from django.conf.urls import url
 
 from . import views
 from .views import (
+    AccountList,
     AccountDetail,
     OrderDetail,
+    IncomeList,
     IncomeCreate, 
     IncomeEdit, 
     IncomeDelete,
+    ExecutionList,
     ExecutionCreate,
     ExecutionEdit,
     ExecutionDelete,
@@ -14,7 +17,7 @@ from .views import (
 
 urlpatterns = [
     # account URLs
-    url(r'^accounts/$', views.accounts_list, 
+    url(r'^accounts/$', AccountList.as_view(), 
         name='accounts_list'), 
     url(r'^account/(?P<pk>\d+)/detail/$', AccountDetail.as_view(),
         name='detail_account'),
@@ -38,8 +41,7 @@ urlpatterns = [
         name='delete_order'),
 
     # income URLs
-    url(r'^incomes/$', views.incomes_list,
-        name='incomes_list'),
+    url(r'^incomes/$', IncomeList.as_view(), name="incomes_list"),
     url(r'^incomes/add/$', IncomeCreate.as_view(),
         name="add_income"),
     url(r'^incomes/(?P<pk>\d+)/edit/$', IncomeEdit.as_view(),
@@ -48,7 +50,7 @@ urlpatterns = [
         name="delete_income"),
 
     # execution URLs
-    url(r'^executions/$', views.executions_list,
+    url(r'^executions/$', ExecutionList.as_view(), 
         name='executions_list'),
     url(r'^executions/add/$', ExecutionCreate.as_view(),
         name="add_execution"),

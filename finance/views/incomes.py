@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.views.generic import ListView
 from django.views.generic.detail import SingleObjectTemplateResponseMixin
 from django.views.generic.edit import (
     CreateView, 
@@ -23,33 +24,50 @@ from ..models import Income, Order, Account
 from ..forms import IncomeForm
 from . import order_auto_create
 
-@login_required(login_url='/login/')
-def incomes_list(request):
-    incomes = Income.objects.all().order_by('date').reverse()
-    period = request.GET.get('period')
-    now = timezone.now()
-    start_current_month = date(now.year, now.month, 1)
-    start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
-    start_current_year = date(now.year, 1, 1)
-    start_previous_year = date(now.year - 1, 1, 1)
-    errors = {}
-    if request.GET.get('filter_status'):
-        date_from_datetime = datetime.strptime(request.GET.get('date_from'), 
-            '%Y-%m-%d')
-        date_until_datetime = datetime.strptime(request.GET.get('date_until'), 
-            '%Y-%m-%d')
-        if date_from_datetime > date_until_datetime:
-            errors['wrong_date'] = True
-        incomes = incomes.filter(date__gt=date_from_datetime - timedelta(days=1), 
-            date__lt=date_until_datetime + timedelta(days=1))
-    else:
-        if period == 'current_month':
-            incomes = incomes.filter(date__gt=start_current_month - timedelta(days=1))
-        elif period == 'previous_month':
-            incomes = incomes.filter(date__gt=start_previous_month - timedelta(days=1)).filter(
-                date__lt=start_current_month)
-    return render(request, 'finance/incomes_list.html', 
-        {'incomes': incomes, 'errors': errors})
+@method_decorator(login_required, name='dispatch')
+class IncomeList(SuccessMessageMixin, ListView):
+    model = Income
+    context_object_name = 'incomes'
+    template_name = 'finance/incomes_list.html'
+
+    def get_queryset(self):
+        incomes = Income.objects.all().order_by('date').reverse()
+        period = self.request.GET.get('period')
+        now = timezone.now()
+        start_current_month = date(now.year, now.month, 1)
+        start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
+        start_current_year = date(now.year, 1, 1)
+        start_previous_year = date(now.year - 1, 1, 1)
+        date_from = self.request.GET.get('date_from')
+        date_until = self.request.GET.get('date_until')
+        filter_status = self.request.GET.get('filter_status')
+        if filter_status and date_from and date_until:
+            date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
+            date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
+            incomes = incomes.filter(date__gt=date_from_datetime - timedelta(days=1), 
+                date__lt=date_until_datetime + timedelta(days=1))
+        else:
+            if period == 'current_month':
+                incomes = incomes.filter(date__gt=start_current_month - timedelta(days=1))
+            elif period == 'previous_month':
+                incomes = incomes.filter(
+                    date__gt=start_previous_month - timedelta(days=1),
+                    date__lt=start_current_month)
+        return incomes
+
+    def get_context_data(self, **kwargs):
+        context = super(IncomeList, self).get_context_data(**kwargs)
+        date_from = self.request.GET.get('date_from')
+        date_until = self.request.GET.get('date_until')
+        filter_status = self.request.GET.get('filter_status')
+        if filter_status and date_from and date_until:
+            date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
+            date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
+            if date_from_datetime > date_until_datetime:
+                context['errors'] = {'wrong_date': True}
+        elif filter_status:
+            context['errors'] = {'miss_date': True}
+        return context
 
 @method_decorator(login_required, name='dispatch')
 class IncomeCreate(SuccessMessageMixin, CreateView):
