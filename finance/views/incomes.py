@@ -30,29 +30,20 @@ class IncomeList(ListView):
     context_object_name = 'incomes'
     template_name = 'finance/incomes_list.html'
     ordering = '-date'
-    paginate_by = 5
+    paginate_by = 15
 
     def get_queryset(self):
         incomes = super(IncomeList, self).get_queryset()
-        return filter_by_date(self, incomes)
+        return filter_by_date(self, incomes)['items']
 
     def get_context_data(self, **kwargs):
         all_pages = self.request.GET.get("all_pages", '')
         context = super(IncomeList, self).get_context_data(**kwargs)
         if all_pages:
             incomes = Income.objects.all().order_by('-date')
-            context['incomes'] = filter_by_date(self, incomes)
+            context['incomes'] = filter_by_date(self, incomes)['items']
             context['is_paginated'] = False
-        date_from = self.request.GET.get('date_from')
-        date_until = self.request.GET.get('date_until')
-        filter_status = self.request.GET.get('filter_status')
-        if filter_status and date_from and date_until:
-            date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
-            date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
-            if date_from_datetime > date_until_datetime:
-                context['errors'] = {'wrong_date': True}
-        elif filter_status:
-            context['errors'] = {'miss_date': True}
+        context['errors'] = filter_by_date(self)['errors']
         return context
 
 @method_decorator(login_required, name='dispatch')
@@ -203,8 +194,9 @@ def income_auto_create(detail):
 def income_auto_edit(detail):
     return detail
 
-def filter_by_date(self, items):
+def filter_by_date(self, items=None):
     period = self.request.GET.get('period')
+    errors = {}
     now = timezone.now()
     start_current_month = date(now.year, now.month, 1)
     start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
@@ -216,13 +208,18 @@ def filter_by_date(self, items):
     if filter_status and date_from and date_until:
         date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
         date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
-        items = items.filter(date__gt=date_from_datetime - timedelta(days=1), 
-            date__lt=date_until_datetime + timedelta(days=1))
+        if items:
+            items = items.filter(date__gt=date_from_datetime - timedelta(days=1), 
+                date__lt=date_until_datetime + timedelta(days=1))
+        if date_from_datetime > date_until_datetime:
+             errors = {'wrong_date': True}
+    elif filter_status:
+        errors = {'miss_date': True}
     else:
-        if period == 'current_month':
+        if period == 'current_month' and items:
             items = items.filter(date__gt=start_current_month - timedelta(days=1))
-        elif period == 'previous_month':
+        elif period == 'previous_month' and items:
             items = items.filter(
                 date__gt=start_previous_month - timedelta(days=1),
                 date__lt=start_current_month)
-    return items
+    return {'items': items, 'errors': errors}

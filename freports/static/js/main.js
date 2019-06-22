@@ -4,7 +4,7 @@ function initDateFields() {
         currentDate = moment(),
         startDateOne = $('#inputDate').val();
     var maxDate = moment().millisecond(0).second(0).minute(0).hour(0);
-    maxDate.add(1, 'd');
+    maxDate.add(23, 'h');
     if (!startDate && !startDateOne) {
         var startDate = currentDate;
     } else if (startDateOne) {

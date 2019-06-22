@@ -17,6 +17,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
+from .incomes import filter_by_date
 from ..models import Execution, Order, Income
 from ..forms import ExecutionForm
 
@@ -25,46 +26,21 @@ class ExecutionList(SuccessMessageMixin, ListView):
     model = Execution
     context_object_name = 'executions'
     template_name = "finance/executions_list.html"
+    ordering = '-date'
+    paginate_by = 5
 
     def get_queryset(self):
-        executions = Execution.objects.all().order_by('date').reverse()
-        period = self.request.GET.get('period')
-        now = timezone.now()
-        start_current_month = date(now.year, now.month, 1)
-        start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
-        start_current_year = date(now.year, 1, 1)
-        start_previous_year = date(now.year - 1, 1, 1)
-        date_from = self.request.GET.get('date_from')
-        date_until = self.request.GET.get('date_until')
-        filter_status = self.request.GET.get('filter_status')
-        if filter_status and date_from and date_until:
-            date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
-            date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
-            executions = executions.filter(
-                date__gt=date_from_datetime - timedelta(days=1), 
-                date__lt=date_until_datetime + timedelta(days=1)
-                )
-        else:
-            if period == 'current_month':
-                executions = executions.filter(date__gt=start_current_month - timedelta(days=1))
-            elif period == 'previous_month':
-                executions = executions.filter(
-                    date__gt=start_previous_month - timedelta(days=1),
-                    date__lt=start_current_month)
-        return executions
+        executions = super(ExecutionList, self).get_queryset()
+        return filter_by_date(self, executions)['items']
 
     def get_context_data(self, **kwargs):
+        all_pages = self.request.GET.get("all_pages", '')
         context = super(ExecutionList, self).get_context_data(**kwargs)
-        date_from = self.request.GET.get('date_from')
-        date_until = self.request.GET.get('date_until')
-        filter_status = self.request.GET.get('filter_status')
-        if filter_status and date_from and date_until:
-            date_from_datetime = datetime.strptime(date_from, '%Y-%m-%d')
-            date_until_datetime = datetime.strptime(date_until, '%Y-%m-%d')
-            if date_from_datetime > date_until_datetime:
-                context['errors'] = {'wrong_date': True}
-        elif filter_status:
-            context['errors'] = {'miss_date': True}
+        if all_pages:
+            executions = Execution.objects.all().order_by('-date')
+            context['executions'] = filter_by_date(self, executions)['items']
+            context['is_paginated'] = False
+        context['errors'] = filter_by_date(self)['errors']
         return context
 
 @method_decorator(login_required, name='dispatch')
