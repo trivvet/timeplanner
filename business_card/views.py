@@ -3,7 +3,11 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 
+from timeplanner.sensitive_data import GOOGLE_API
+
 # Create your views here.
 
 def first_page(request):
-    return render(request, 'business_card/home.html', {})
+    google_api = GOOGLE_API
+    return render(request, 'business_card/home.html', 
+        {'google_api': google_api})

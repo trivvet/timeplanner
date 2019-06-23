@@ -16,3 +16,5 @@ DATABASES = {
         'NAME': 'timeplanner_db',
     }
 }
+
+GOOGLE_API = 'GOOGLE JAVASCRIPT MAP API KEY'
