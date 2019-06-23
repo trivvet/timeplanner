@@ -27,7 +27,7 @@ class ExecutionList(SuccessMessageMixin, ListView):
     context_object_name = 'executions'
     template_name = "finance/executions_list.html"
     ordering = '-date'
-    paginate_by = 5
+    paginate_by = 15
 
     def get_queryset(self):
         executions = super(ExecutionList, self).get_queryset()

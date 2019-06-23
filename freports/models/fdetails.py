@@ -191,3 +191,21 @@ class ReportParticipants(models.Model):
         return u"{} {}".format(
             self.surname, self.name)
 
+    @property
+    def status_name(self):
+        status_list = {
+            'judge': 'Суддя',
+            'plaintiff': 'Позивач',
+            'defendant': 'Відповідач',
+            'plaintiff_agent': 'Представник позивача',
+            'defendant_agent': 'Представник відповідача',
+            'other_participant': 'Інший учасник'
+        }
+        return status_list[self.status]
+    
+
+
+
+
+
+

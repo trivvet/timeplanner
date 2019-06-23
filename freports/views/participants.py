@@ -10,15 +10,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from ..models import Report, ReportEvents, ReportParticipants, Contact
 
-status_list = {
-    'judge': 'Суддя',
-    'plaintiff': 'Позивач',
-    'defendant': 'Відповідач',
-    'plaintiff_agent': 'Представник позивача',
-    'defendant_agent': 'Представник відповідача',
-    'other_participant': 'Інший учасник'
-}
-
 status_translate = {
     'judge': 'judge',
     'plaintiff': 'member',
@@ -30,9 +21,7 @@ status_translate = {
 
 @login_required(login_url='/login/')
 def participants_list(request):
-    participants = ReportParticipants.objects.all()
-    for participant in participants:
-        participant.status = status_list[participant.status]
+    participants = ReportParticipants.objects.all().order_by('name')
     if request.GET.get('all_pages', '') == '':
         paginator = Paginator(participants, 25)
         page = request.GET.get('page', '')

@@ -2,7 +2,7 @@
     <ul class="pagination">
         {% if items.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="{% url url_next %}?page={{ items.previous_page_number }}&order_by={{ order_by }}&reverse={{ reverse }}&filter_status={{ filter_status }}&date_from={{ date_from }}&date_until={{ date_until }}&period={{ period }}" aria-label="Previous">
+            <a class="page-link" href="{% if parametr %}{% url url_next parametr %}{% else %}{% url url_next %}{% endif %}?page={{ items.previous_page_number }}&order_by={{ order_by }}&reverse={{ reverse }}&filter_status={{ filter_status }}&date_from={{ date_from }}&date_until={{ date_until }}&period={{ period }}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">Previous</span>
             </a>
@@ -10,20 +10,20 @@
         {% endif %}
         {% for page in items.paginator.page_range %}
             <li class="page-item {% if items.number == page %}active{% endif %}">
-                <a class="page-link" href="{% url url_next %}?page={{ page }}&order_by={{ order_by }}&reverse={{ reverse }}&filter_status={{ filter_status }}&date_from={{ date_from }}&date_until={{ date_until }}&period={{ period }}">
+                <a class="page-link" href="{% if parametr %}{% url url_next parametr %}{% else %}{% url url_next %}{% endif %}?page={{ page }}&order_by={{ order_by }}&reverse={{ reverse }}&filter_status={{ filter_status }}&date_from={{ date_from }}&date_until={{ date_until }}&period={{ period }}">
                     {{ page }}
                 </a>
             </li>
         {% endfor %}
         {% if items.has_next %}
         <li class="page-item">
-            <a class="page-link" href="{% url url_next %}?page={{ items.next_page_number }}&order_by={{ order_by }}&reverse={{ reverse }}&filter_status={{ filter_status }}&date_from={{ date_from }}&date_until={{ date_until }}&period={{ period }}" aria-label="Next">
+            <a class="page-link" href="{% if parametr %}{% url url_next parametr %}{% else %}{% url url_next %}{% endif %}?page={{ items.next_page_number }}&order_by={{ order_by }}&reverse={{ reverse }}&filter_status={{ filter_status }}&date_from={{ date_from }}&date_until={{ date_until }}&period={{ period }}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">Next</span>
             </a>
         </li>
         {% endif %}
-        <a class="btn btn-outline-primary ml-2" href="{% url url_next %}?status={{ extra }}&order_by={{ order_by }}&reverse={{ reverse }}&filter_status={{ filter_status }}&date_from={{ date_from }}&date_until={{ date_until }}&period={{ period }}&all_pages=1">Показати всі</a>
+        <a class="btn btn-outline-primary ml-2" href="{% if parametr %}{% url url_next parametr %}{% else %}{% url url_next %}{% endif %}?status={{ extra }}&order_by={{ order_by }}&reverse={{ reverse }}&filter_status={{ filter_status }}&date_from={{ date_from }}&date_until={{ date_until }}&period={{ period }}&all_pages=1">Показати всі</a>
     </ul>
     
 </nav>

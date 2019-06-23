@@ -26,7 +26,7 @@ def tasks_list(request):
     if request.GET.get('status'):
         tasks = all_tasks.filter(execute=True).order_by('time').reverse()
         if request.GET.get('all_pages', '') == '':
-            paginator = Paginator(tasks, 10)
+            paginator = Paginator(tasks, 15)
             page = request.GET.get('page', '')
             try:
                 tasks = paginator.page(page)

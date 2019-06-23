@@ -25,6 +25,7 @@
             <th scope="col">Дата</th>
             <th scope="col">Тип транзакції</th>
             <th scope="col">Рахунок</th>
+            <th scope="col">Додаткова інформація</th>
             <th scope="col">Сума</th>
         </tr>
     </thead>
@@ -34,11 +35,18 @@
             <th scope="row">{{ transaction.date }}</th>
             <td>{{ transaction.model_name }}
             <td>{{ transaction.account.title }}</td>
+            <td>
+                {% if transaction.model_name == "Виконання" %}
+                {% firstof transaction.closed_tasks '-' %}
+                {% else %}
+                {% firstof transaction.payer '-' %}
+                {% endif %}
+            </td>
             <td>{{ transaction.amount }}</td>
         </tr>
         {% endfor %}
         <tr>
-            <td colspan="2"></td>
+            <td colspan="3"></td>
             <th scope="row" class="text-center table-info h5">Невиконаний залишок</th>
             <td class="{% if object.remainder >= 0 %}text-success{% else %}text-danger {% endif %} table-info h5">{{ object.remainder }}</td>
     </tbody>

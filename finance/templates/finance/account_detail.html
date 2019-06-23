@@ -35,7 +35,7 @@
         {% endfor %}
         <tr>
             <td colspan="2"></td>
-            <th scope="row" class="text-center table-info h5">Залишок по рахунку</th>
+            <th scope="row" class="text-center table-info h5">Невиконаний залишок по рахунку</th>
             <td class="{% if object.remainder >= 0 %}text-success{% else %}text-danger {% endif %} table-info h5">{{ object.remainder }}</td>
     </tbody>
 </table>
