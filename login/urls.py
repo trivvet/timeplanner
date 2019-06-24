@@ -11,4 +11,6 @@ urlpatterns = [
         name='out'),
     url(r'^attempts/$', views.login_attempts, 
         name='attempts'),
+    url(r'^attempts/delete$', views.delete_old_attempts, 
+        name='attempts_delete'),
 ]

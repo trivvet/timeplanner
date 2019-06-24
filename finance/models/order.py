@@ -42,7 +42,7 @@ class Order(models.Model):
         null=False,
         default=0)
 
-    tasks_number = models.IntegerField(
+    tasks_number = models.FloatField(
         verbose_name=u"Кількість необхідних тасків",
         blank=True,
         null=True)
@@ -60,3 +60,8 @@ class Order(models.Model):
                 self.name, self.report)
         else:
             return u"Замовлення {}".format(self.name)
+
+    @property
+    def remainder(self):
+        return self.paid_sum - self.done_sum
+    

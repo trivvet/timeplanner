@@ -1,0 +1,59 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список транзакцій по замовленню {{ object.name }}</span> <span class="badge badge-info">Alpha</span>
+</div>
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+<a type="button" class="btn btn-light mb-3"
+    href="{% url 'finance:orders_list' %}">Повернутись до списку замовлень</a>
+{% if object.report %}
+<a class="btn btn-outline-info mb-3 ml-3" 
+    href="{% url 'freports:report_detail' object.report.id %}">Деталі провадження</a>
+{% endif %}
+
+{% if object_list %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Дата</th>
+            <th scope="col">Тип транзакції</th>
+            <th scope="col">Рахунок</th>
+            <th scope="col">Додаткова інформація</th>
+            <th scope="col">Сума</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in object_list %}
+        <tr class="{% if transaction.model_name == 'Виконання' %}text-danger{% else %}text-success{% endif %}">
+            <th scope="row">{{ transaction.date }}</th>
+            <td>{{ transaction.model_name }}
+            <td>{{ transaction.account.title }}</td>
+            <td>
+                {% if transaction.model_name == "Виконання" %}
+                {% firstof transaction.closed_tasks '-' %}
+                {% else %}
+                {% firstof transaction.payer '-' %}
+                {% endif %}
+            </td>
+            <td>{{ transaction.amount }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3"></td>
+            <th scope="row" class="text-center table-info h5">Невиконаний залишок</th>
+            <td class="{% if object.remainder >= 0 %}text-success{% else %}text-danger {% endif %} table-info h5">{{ object.remainder }}</td>
+    </tbody>
+</table>
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}

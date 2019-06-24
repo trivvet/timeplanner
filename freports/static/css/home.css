@@ -29,9 +29,17 @@
   font-size: 1.5em;
 }
 
+#mapContainer {
+  height: 30rem;
+}
+
 .horizontal-line {
   width: 100%;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+hr {
+  margin-top: 7rem;
 }
 
 #map-icon {
@@ -52,7 +60,7 @@
 
 #map {
     margin: 1rem auto 1rem auto;
-    height: 30%;  /* The height is 400 pixels */
+    height: 100%;  /* The height is 400 pixels */
     width: 80%;  /* The width is the width of the web page */
 }
 

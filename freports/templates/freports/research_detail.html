@@ -1,0 +1,75 @@
+{% extends "freports/base.html" %}
+{% load get_item %}
+
+{% block title %}
+    <div class="col-3"></div>
+    <div class="col-9">
+        <h2 id="report-detail-header">Детальна інформація про експертне дослідження №{{ object.full_number }}</h2>
+    </div>
+
+{% endblock title %}
+
+{% block content %}
+
+<div class="row" id="main-participants">
+    <div class="col-sm-6 offset-sm-3">
+
+        <a type="button" class="btn btn-light mb-3"
+            href="{% url 'freports:researches_list' %}">Повернутись до списку досліджень</a>
+
+        <table class="table table-md table-hover">
+            <tbody>
+                <tr>
+                    <th scope="row">Заявник</th>
+                    <td>
+                        {{ object.applicant }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Адреса</th>
+                    <td>
+                        {{ object.address }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Об'єкт дослідження</th>
+                    <td>
+                        {{ object.object_name }}
+                    </td>
+                </tr>
+                {% if object.cost %}
+                <tr>
+                    <th scope="row">Вартість</th>
+                    <td>{{ object.cost }}грн</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th scope="row">Днів у виконанні</th>
+                    <td>
+                        {{ object.active_days_amount|add:object.time_after_update }}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Статус дослідження</th>
+                    <td>
+                        {% if object.executed %}<span class="text-primary">Закрите</span>
+                        {% elif object.active %}<span class="text-success">Активне</span>
+                        {% else %}<span class="text-secondary">Призупинене</span>{% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"></th>
+                    <td>
+                        <a type="button" class="btn btn-info modal-button"
+                            href="{% url 'freports:edit_research' object.id %}?next=freports:research_detail">Редагувати основну інформацію</a>
+                        <a type="button" class="btn btn-danger modal-button"
+                            href="{% url 'freports:delete_research' object.id %}?next=freports:researches_list">Видалити дослідження</a>
+                    </td>
+                </tr> 
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% endblock content %}

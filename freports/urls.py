@@ -1,13 +1,18 @@
 from django.conf.urls import url
 
 from . import views
+from .views import (
+    ResearchListView,
+    ResearchDetailView, 
+    ResearchCreate, 
+    ResearchEdit,
+    ResearchDelete
+    )
 
 urlpatterns = [
     # report urls
     url(r'^$', views.reports_list, 
         name='reports_list'),
-    url(r'^add/new_report/first/$', views.add_new_report_first, 
-        name='add_new_report_first'),
     url(r'^add/new_report/$', views.add_new_report, 
         name='add_new_report'),
     url(r'^(?P<rid>\d+)/edit/$', views.edit_report, 
@@ -16,6 +21,20 @@ urlpatterns = [
         name='delete_report'),
     url(r'^update_info/$', views.update_info, 
         name='reports_update'),
+
+    # research urls
+    url(r'^researches/$', ResearchListView.as_view(), 
+        name='researches_list'),
+    url(r'^researches/(?P<pk>\d+)/$', ResearchDetailView.as_view(), 
+        name='research_detail'),
+    url(r'^add/new_research/$', views.add_new_research, 
+        name='add_new_research'),
+    url(r'^researches/add/$', ResearchCreate.as_view(), 
+        name="add_research"),
+    url(r'^researches/(?P<pk>\d+)/edit/$', ResearchEdit.as_view(), 
+        name='edit_research'),
+    url(r'^researches/(?P<pk>\d+)/delete/$', ResearchDelete.as_view(), 
+        name='delete_research'),
 
     # event urls
     url(r'^(?P<rid>\d+)/details/$', views.details_list, 
@@ -28,6 +47,8 @@ urlpatterns = [
         views.edit_detail, name='edit_detail'),
     url(r'^(?P<rid>\d+)/details/(?P<did>\d+)/delete/$', 
         views.delete_detail, name='delete_detail'),
+    url(r'^(?P<rid>\d+)/details/schedule/add/$',
+        views.add_schedule, name='add_schedule'),
 
     # participant urls
     url(r'^partisipants/$', views.participants_list, 
@@ -55,6 +76,8 @@ urlpatterns = [
 
     # contact urls
     url(r'^contacts/$', views.contacts_list, name='contacts_list'),
+    url(r'^contacts/update/$', views.update_contacts_status, 
+        name='contacts_update_status'),
     url(r'^contacts/(?P<cid>\d+)/detail/$', views.contact_detail, 
         name="contact_detail"),
     url(r'^contacts/add/$', views.add_contact, 

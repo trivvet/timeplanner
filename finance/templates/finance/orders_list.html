@@ -36,6 +36,9 @@
             <th scope="col">Кошторисна вартість</th>
             <th scope="col">Оплачено</th>
             <th scope="col">Виконано</th>
+            {% if not request.GET.status or request.GET.status == 'all' %}
+            <th scope="col">Невиконаний залишок</th>
+            {% endif %}
             <th scope="col">Кількість тасків</th>
             <th scope="col" class="group-buttons"></th>
         </tr>
@@ -43,7 +46,11 @@
     <tbody>
         {% for order in orders %}
         <tr>
-            <th scope="row" class="{% if order.status == 'active' %}text-success{% elif order.status == 'inactive' %}text-secondary{% elif order.status == 'done' %}text-info{% endif %}">{{ order.name }}</th>
+            <th scope="row">
+                <a class="{% if order.status == 'active' %}text-success{% elif order.status == 'inactive' %}text-secondary{% elif order.status == 'done' %}text-info{% endif %}" href="{% url 'finance:detail_order' order.id %}">
+                    {{ order.name }}
+                </a>
+            </th>
             <td>
                 {% if order.report %}
                 <a href="{% url 'freports:report_detail' order.report.id %}">
@@ -57,6 +64,9 @@
             <td>{{ order.total_sum }}</td>
             <td>{{ order.paid_sum }}</td>
             <td>{{ order.done_sum }}</td>
+            {% if not request.GET.status or request.GET.status == 'all' %}
+            <td>{{ order.remainder }}</td>
+            {% endif %}
             <td>
             {% if order.tasks_number %}
             {{ order.tasks_number }}
@@ -82,10 +92,12 @@
                 {% endif %}
 
             </th>
-            <td>{{ content.total_sum }}</td>
-            <td>{{ content.paid_sum }}</td>
-            <td>{{ content.done_sum }}</td>
-            <td colspan="2"></td>
+            <td><strong>{{ content.total_sum }}</strong></td>
+            <td><strong>{{ content.paid_sum }}</strong></td>
+            <td><strong>{{ content.done_sum }}</strong></td>
+            {% if not request.GET.status or request.GET.status == 'all' %}
+            <td colspan="2"><strong>{{ content.remainder_sum }}</strong></td>
+            {% endif %}
         </tr>
 
     </tbody>

@@ -4,7 +4,8 @@ from datetime import date, datetime
 from ..models import ReportEvents
 
 def check_active(report):
-    details = ReportEvents.objects.filter(report=report).order_by('date')
+    details = ReportEvents.objects.filter(report=report).order_by(
+        'date', 'id')
     last_detail = details[details.count() - 1]
     if last_detail.name == 'done':
         report.active = False
@@ -20,7 +21,8 @@ def check_active(report):
     return report
 
 def days_count(report, status):
-    events = ReportEvents.objects.filter(report=report).order_by('date')
+    events = ReportEvents.objects.filter(report=report).order_by(
+        'date', 'id')
     days_amount = 0
     if events.count() > 0:
         event_activate = False
@@ -28,7 +30,7 @@ def days_count(report, status):
         if status == 'active':
             event_activate = True
             before_event = events[0]
-            if events.count > 1:
+            if events.count() > 1:
                 for event in events:
                     if event.activate != True and before_event.activate == True:
                         time = event.date - before_event.date

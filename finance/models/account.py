@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+from .income import Income
+from .execution import Execution
+
 
 class Account(models.Model):
     STATUS_VARIANT = (
@@ -17,11 +20,6 @@ class Account(models.Model):
     title = models.CharField(
         verbose_name=u"Назва рахунку",
         max_length=256,
-        blank=False,
-        null=False)
-
-    total_sum = models.IntegerField(
-        verbose_name=u"Сума на рахунку",
         blank=False,
         null=False)
 
@@ -45,3 +43,15 @@ class Account(models.Model):
     def __unicode__(self):
         return u"Рахунок {} ({})".format(
             self.title, dict(self.STATUS_VARIANT)[self.status])
+
+    def remainder(self):
+        account = self
+        incomes = Income.objects.filter(account=account)
+        executions = Execution.objects.filter(account=account)
+        total_sum = 0
+        for income in incomes:
+            total_sum += income.amount
+        for execution in executions:
+            total_sum -= execution.amount
+        return total_sum
+

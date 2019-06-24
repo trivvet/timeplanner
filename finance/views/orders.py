@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from itertools import chain
+from operator import attrgetter
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.generic import ListView
 
-from ..models import Order
+from ..models import Order, Income, Execution
 
 @login_required(login_url='/login/')
 def orders_list(request):
@@ -19,6 +23,7 @@ def orders_list(request):
         'total_sum': 0,
         'paid_sum': 0,
         'done_sum': 0,
+        'remainder_sum': 0,
         'all_orders': orders.count(),
         'active_orders': orders_active.count(),
         'inactive_orders': orders_inactive.count(),
@@ -35,8 +40,28 @@ def orders_list(request):
         content['total_sum'] += order.total_sum
         content['paid_sum'] += order.paid_sum
         content['done_sum'] += order.done_sum
+        content['remainder_sum'] += order.remainder
     return render(request, 'finance/orders_list.html', 
         {'orders': orders, 'content': content})
+
+@method_decorator(login_required, name='dispatch')
+class OrderDetail(ListView):
+    model = Order
+    template_name = 'finance/order_detail.html'
+
+    def get_queryset(self):
+        order = self.kwargs['pk']
+        incomes = Income.objects.filter(order=order)
+        executions = Execution.objects.filter(order=order)
+        object_list = sorted(chain(incomes, executions),
+            key=attrgetter('date'), reverse=True)
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderDetail, self).get_context_data(**kwargs)
+        order = self.kwargs['pk']
+        context['object'] = Order.objects.get(pk=order)
+        return context
 
 @login_required(login_url='/login/')
 def add_order(request):
@@ -151,12 +176,29 @@ def valid_data(form_data):
     tasks_number = form_data.get('tasks_number')
     if tasks_number:
         try:
-            new_order['tasks_number'] = int(tasks_number)
+            new_order['tasks_number'] = float(tasks_number.replace(",", '.'))
         except ValueError:
             new_order['tasks_number'] = tasks_number
-            errors['tasks_number'] = u"Будь-ласка введіть ціле число"
+            errors['tasks_number'] = u"Будь-ласка введіть число"
 
     status = form_data.get('status')
     new_order['status'] = status
 
     return {'new_order': new_order, 'errors': errors}
+
+def order_auto_create(detail):
+    new_order = {
+        'name': u'Висновок №{}'.format(detail.report.full_number()),
+        'report': detail.report,
+        'total_sum': detail.cost,
+        'status': 'inactive'
+    }
+    return Order(**new_order)
+
+def order_auto_edit(detail):
+    try:
+        edit_order = Order.objects.get(report=detail.report)
+        edit_order.total_sum = detail.cost
+    except:
+        edit_order = order_auto_create(detail)
+    return edit_order

@@ -1,0 +1,116 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="row">
+    <div class="col text-center">
+        <h2>Призначення виїзду для провадження №{{ content.report_number }}</h2>
+    </div>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+
+    <!-- Дата події -->
+    <div class="form-group row">
+        <label for="inputDate" class="col-sm-5 col-form-label">Дата події <strong>*</strong></label>
+        <div class="col-sm-7 input-group date" id="inputDate" 
+            data-target-input="nearest">
+            <input type="text" class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#inputDate" placeholder="напр. 01.01.2018"
+            name="date" value="{{ new_content.date }}" />
+            <div class="input-group-append" data-target="#inputDate" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+        </div>
+    </div>
+    {% if errors.date %}
+    <div class="form-group row form-error">
+        <div class="col-sm-5"></div>
+        <div class="col">
+            {{ errors.date }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Дата та час огляду -->
+    <div class="form-group row">
+        <label for="inputTime" class="col-sm-5 col-form-label">Дата та час проведення огляду <strong>*</strong></label>
+        <div class="col-sm-7 input-group date" id="datetimepicker1" 
+            data-target-input="nearest">
+            <input type="text" class="form-control {% if errors.time %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#datetimepicker1" placeholder="напр. 10.08.2018 10:00"
+            name="time" value="{{ new_content.time }}" />
+            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+        </div>
+    </div>
+    {% if errors.time %}
+    <div class="form-group row form-error">
+        <div class="col-sm-5"></div>
+        <div class="col">
+            {{ errors.time }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Тип документу -->
+    <div class="form-group row">
+        <label for="inputType" class="col-sm-5 col-form-label">Тип повідомлення <strong>*</strong></label>
+        <div class="col-sm-7">
+            <select class="form-control {% if errors.subspecies %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputType" name="subspecies" value="">
+                <option value=''>-----------</option>
+                {% for item in content.message_type %}
+                <option {% if new_content.subspecies == item %}selected{% endif %}>{{ item }}</option>
+                {% endfor %}
+            </select>
+            <div class="invalid-feedback">
+                {{ errors.subspecies }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Повідомлення учасників справи -->
+    <div class="form-group row">
+        <label class="col-sm-5 col-form-label">Повідомлення учасників справи</label>
+        <div class="col-sm-7">
+            <div class="form-control {% if errors.person %}is-invalid{% elif errors %}is-valid{% endif %} person-checkboxes">
+                {% for person in content.participants %}
+                <div class="form-check">
+                    <input class="form-check-input person-сheckbox" type="checkbox" id="person{{ person.id }}" value="{{ person.id }}" name="person">
+                    <label class="form-check-label" for="person{{ person.id }}">
+                        {{ person.full_info }}
+                        <input type="text" class="form-control person-address" hidden placeholder="Введіть адресу учасника" name="address">
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="invalid-feedback">
+                {{ errors.person }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Додаткова інформація -->
+    <div class="form-group row">
+        <label for="inputInfo" class="col-sm-5 col-form-label">Додаткова інформація</label>
+        <div class="col-sm-7">
+            <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
+                id="inputInfo" name="info" rows="4"
+                placeholder="Введіть додаткову інформацію (у разі наявності)">{{ new_content.info }}</textarea>
+        </div>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="form-group row button-group">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-7">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" data-dismiss="modal" />
+        </div>
+    </div>
+</form>
+{% endblock content %}

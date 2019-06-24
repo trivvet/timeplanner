@@ -1,19 +1,32 @@
 from .accounts import (
-    accounts_list, 
+    AccountList,
+    AccountDetail, 
     add_account, 
     edit_account,
     delete_account
     )
 from .orders import (
     orders_list,
+    OrderDetail,
     add_order, 
     edit_order, 
-    delete_order
+    delete_order,
+    order_auto_create,
+    order_auto_edit
     )
 
 from .incomes import (
-    incomes_list,
+    IncomeList,
     IncomeCreate,
     IncomeEdit,
-    IncomeDelete
+    IncomeDelete,
+    income_auto_create,
+    income_auto_edit
+    )
+
+from .executions import (
+    ExecutionList,
+    ExecutionCreate,
+    ExecutionEdit,
+    ExecutionDelete
     )

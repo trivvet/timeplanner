@@ -15,7 +15,16 @@ contacts_status_list = {
     'member': u'Учасник справи',
     'participant': u'Представник',
     'lawyer': u"Адвокат",
-    'customer': u"Замовник"
+    'customer': u"Замовник",
+    'other': u"Інший"
+}
+
+status_translate = {
+    'plaintiff': 'member',
+    'defendant': 'member',
+    'plaintiff_agent': 'participant',
+    'defendant_agent': 'participant',
+    'other_participant': 'other'
 }
 
 @login_required(login_url='/login/')
@@ -24,10 +33,11 @@ def contacts_list(request):
     status = request.GET.get('status', '')
     if status == 'members':
         contacts = contacts.filter(status='member')
-    elif status == 'participants':
-        contacts = contacts.filter(status__in=['participant', 'lawyer'])
     elif status == 'customers':
         contacts = contacts.filter(status='customer')
+    elif status == 'other':
+        contacts = contacts.filter(status__in=[
+            'participant', 'lawyer', 'other'])
 
     if request.GET.get('all_pages', '') == '':
         paginator = Paginator(contacts, 10)
@@ -144,6 +154,16 @@ def delete_contact(request, cid):
         return render(request, 'freports/delete_form.html', 
             {'header': header, 'content': content})
 
+def update_contacts_status(request):
+    contacts = Contact.objects.all()
+    for contact in contacts:
+        if contact.status in status_translate.keys():
+            contact.status = status_translate[contact.status]
+            contact.save()
+    messages.success(request,
+                u"Статуси контактів успішно оновлено")
+    return HttpResponseRedirect(reverse('freports:contacts_list'))
+
 def valid_contact(data):
     errors = {}
     contact = {}
@@ -171,12 +191,7 @@ def valid_contact(data):
 
     address = data.get('address', '')
     contact['address'] = address
-
-    phone = data.get('phone', '')
-    if not phone:
-        errors['phone'] = u"Номер телефону є обов'язковим"
-    else:
-        contact['phone'] = phone
+    phone['phone'] = phone
 
     info = data.get('info')
     contact['info'] = info

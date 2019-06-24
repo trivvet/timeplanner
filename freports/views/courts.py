@@ -27,7 +27,7 @@ def courts_list(request):
 @login_required(login_url='/login/')
 def court_detail(request, cid):
     court = Court.objects.get(pk=cid)
-    judges = Judge.objects.filter(court_name=court)
+    judges = Judge.objects.filter(court_name=court).order_by('surname')
     cases_amount = 0
     for judge in judges:
         cases_amount += Report.objects.filter(judge_name=judge, executed=False).count()

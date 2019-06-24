@@ -45,11 +45,11 @@
     </tbody>
 </table>
 
-<a class="btn btn-outline-danger mt-2" href="#">Видалити давні спроби входу</a>
+<a class="btn btn-outline-danger mt-2" href="{% url 'login:attempts_delete' %}">Видалити давні спроби входу</a>
 
 
 {% else %}
-<p>Поки-що дані відсутні</p>.
+<p>На цей момент дані відсутні</p>
 {% endif %}
 
 {% endblock content %}

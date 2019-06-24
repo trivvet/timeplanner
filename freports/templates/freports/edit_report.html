@@ -36,9 +36,14 @@
                 id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
             <p id="dual-number">/</p>
             <select class="form-control col-sm-5" name="number_year">
+                <option {% if content.number_year == '012' %}selected{% endif %}>012</option>
+                <option {% if content.number_year == '013' %}selected{% endif %}>013</option>
+                <option {% if content.number_year == '014' %}selected{% endif %}>014</option>
+                <option {% if content.number_year == '015' %}selected{% endif %}>015</option>
                 <option {% if content.number_year == '016' %}selected{% endif %}>016</option>
-                <option {% if content.number_year == '017' or content.number_year is None %}selected{% endif %}>017</option>
+                <option {% if content.number_year == '017' %}selected{% endif %}>017</option>
                 <option {% if content.number_year == '018' %}selected{% endif %}>018</option>
+                <option {% if content.number_year == '019' %}selected{% endif %}>019</option>
             </select>
         </div>
     </div>

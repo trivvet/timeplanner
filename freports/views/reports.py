@@ -12,7 +12,15 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .days_counter import check_active, days_count, update_dates_info
-from ..models import Report, ReportEvents, Judge, Court, ReportParticipants, ReportSubject
+from ..models import (
+    Report, 
+    Research,
+    ReportEvents, 
+    Judge, 
+    Court, 
+    ReportParticipants, 
+    ReportSubject
+    )
 
 @login_required(login_url='/login/')
 def reports_list(request):
@@ -61,12 +69,15 @@ def reports_list(request):
     reverse_apply = request.GET.get('reverse', '')
     if order_by in ('research_kind', 'number', 'active_days_amount', 'waiting_days_amount', 'date_arrived',
         'date_executed'):
+        
         reports = reports.order_by(order_by)
         if reverse_apply:
             reports = reports.reverse()
+    elif status == 'executed':
+        reports = reports.reverse()
 
     if status in ['executed', 'all'] and all_pages == '':
-        paginator = Paginator(reports, 15)
+        paginator = Paginator(reports, 20)
         page = request.GET.get('page', '')
         try:
             reports = paginator.page(page)
@@ -78,14 +89,6 @@ def reports_list(request):
     return render(request, 'freports/reports_list.html', 
         {'reports': reports, 'content': content, 
          'sidebar': sidebar})
-
-@login_required(login_url='/login/')
-def add_new_report_first(request):
-    header = u'Спочатку виберіть замовника дослідження'
-    courts = Court.objects.all()
-    for court in courts:
-        court.judges = Judge.objects.filter(court_name=court)
-    return render(request, 'freports/add_new_report_first.html', {'header': header, 'courts': courts})
 
 @login_required(login_url='/login/')
 def add_new_report(request):
@@ -112,7 +115,8 @@ def add_new_report(request):
 
             if errors:
                 messages.error(request, "Виправте наступні недоліки")
-                return render(request, 'freports/add_new_report.html', {'header': header, 'errors': errors,
+                return render(request, 'freports/add_new_report.html', 
+                    {'header': header, 'errors': errors,
                     'content': new_data, 'judge_id': judge_id})
             else:
                 new_data['number_year'] = data['number_year']
@@ -136,8 +140,16 @@ def add_new_report(request):
     else:
         judge_id = request.GET.get('judge', '')
         next_url = request.GET.get('next', '')
-        return render(request, 'freports/add_new_report.html', {'header': header, 'judge_id': judge_id,
-            'cancel_url': next_url})
+        last_report = Report.objects.all().order_by('number').last()
+        last_research = Research.objects.all().order_by('number').last()
+        content = {}
+        if not last_research or last_report.number > last_research.number:
+            content['number'] = last_report.number + 1
+        elif last_report.number < last_research.number:
+            content['number'] = last_research.number + 1
+        return render(request, 'freports/add_new_report.html', 
+            {'header': header, 'judge_id': judge_id,
+            'cancel_url': next_url, 'content': content})
 
 @login_required(login_url='/login/')
 def edit_report(request, rid):
@@ -162,7 +174,7 @@ def edit_report(request, rid):
             if errors:
                 messages.error(request, "Виправте наступні недоліки")
                 new_report['judge_name'] = content.judge_name
-                return render(request, 'freports/add_report.html', {'header': header, 'content': new_report,
+                return render(request, 'freports/edit_report.html', {'header': header, 'content': new_report,
                     'errors': errors, 'courts': courts, 'judges': judges})
 
             else:
@@ -202,7 +214,7 @@ def edit_report(request, rid):
             if content.executed:
                 content.date_executed = content.date_executed.isoformat()
             next_url = request.GET.get('next', '')
-            return render(request, 'freports/add_report.html', {'header': header, 'content': content, 'courts': courts,
+            return render(request, 'freports/edit_report.html', {'header': header, 'content': content, 'courts': courts,
                 'judges': judges, 'next_url': next_url})
 
 @login_required(login_url='/login/')

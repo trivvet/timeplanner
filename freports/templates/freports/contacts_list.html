@@ -17,8 +17,8 @@
 <nav class="nav nav-pills nav-justified" id="navbar-list">
     <a class="nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'freports:contacts_list' %}">Усі</a>
     <a class=" nav-item nav-link {% if request.GET.status == 'members' %}active{% endif %}" href="{% url 'freports:contacts_list' %}?status=members">Учасники справи</a>
-    <a class="nav-link nav-item {% if request.GET.status == 'participants' %}active{% endif %}" href="{% url 'freports:contacts_list' %}?status=participants">Представники</a>
     <a class="nav-link nav-item {% if request.GET.status == 'customers' %}active{% endif %}" href="{% url 'freports:contacts_list' %}?status=customers">Замовники</a>
+    <a class="nav-link nav-item {% if request.GET.status == 'other' %}active{% endif %}" href="{% url 'freports:contacts_list' %}?status=other">Інші</a>
 </nav>
 
 {% if contacts %}
@@ -67,6 +67,10 @@
     </tbody>
 
 </table>
+
+<a class="btn btn-outline-secondary mb-3"
+    href="{% url 'freports:contacts_update_status' %}">Оновити статуси контактів</a>
+
 {% if contacts.has_other_pages %}
 {% include "freports/pagination.html" with items=contacts url_next="freports:contacts_list" %}
 {% endif %}

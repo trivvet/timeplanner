@@ -1,0 +1,50 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col">
+        <h2>{{ header }}</h2>
+    </div>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+    <div class="form-group row">
+        <label for="inputNumber" class="col-md-3 col-form-label"></label>
+        <div class="col-md-9 col-lg-5" id="divInputNumber">
+            <input type="text" class="form-control col-4 {% if errors.number %}is-invalid{% elif errors %}is-valid{% endif %}"
+                id="inputNumber" name="number" value="{{ content.number }}">
+            <p id="dual-number">ед /</p>
+            <select class="form-control col-sm-4" name="number_year">
+                <option {% if content.number_year == '013' %}selected{% endif %}>013</option>
+                <option {% if content.number_year == '014' %}selected{% endif %}>014</option>
+                <option {% if content.number_year == '015' %}selected{% endif %}>015</option>
+                <option {% if content.number_year == '016' %}selected{% endif %}>016</option>
+                <option {% if content.number_year == '017' %}selected{% endif %}>017</option>
+                <option {% if content.number_year == '018' %}selected{% endif %}>018</option>
+                <option {% if content.number_year == '019' or content.number_year is None %}selected{% endif %}>019</option>
+            </select>
+        </div>
+    </div>
+    {% if errors.number %}
+    <div class="form-group row form-error">
+        <div class="col-sm-3"></div>
+        <div class="col">
+            {{ errors.number }}
+        </div>
+    </div>
+    {% endif %}
+    <div class="form-group row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+          <input type="submit" class="btn btn-primary" value="Створити"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link" href=""
+                 name="cancel_button" value="Скасувати" />
+        </div>
+    </div>
+</form>
+{% endblock content %}

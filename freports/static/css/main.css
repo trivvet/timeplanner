@@ -15,12 +15,10 @@ body {
 .wrapper {
   display: flex;
   width: 100%;
-  align-items: stretch;
-  perspective: 1500px; 
 }
 
 #content {
-  margin-top: 70px;
+  margin-top: 110px;
 }
 
 #questionsHeader {
@@ -102,10 +100,6 @@ tbody>td {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
   float: right;
-}
-
-#filter-button {
-  margin-bottom: 10px;
 }
 
 .filter {
@@ -327,4 +321,8 @@ td.group-buttons {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+}
+
+.person-checkboxes {
+  max-width: 350px;
 }

@@ -18,6 +18,9 @@
             <li>
                 <a href="{{ url_subjects }}">Об'єкти проваджень</a>
             </li>
+            <li>
+                <a href="{{ url_researches }}">Список досліджень <span class="badge badge-info">Alpha</span></a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -53,7 +56,7 @@
 
         {% for participant in participants %}
         <tr>
-            <td>{{ participant.status }}</td>
+            <td>{{ participant.status_name }}</td>
             <td>{{ participant.surname }}</td>
             <td>{{ participant.name }}</td>
             <td>{{ participant.phone }}</td>

@@ -1,20 +1,68 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from itertools import chain
+from operator import attrgetter
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.generic.list import ListView
 
-from ..models import Account
+from ..models import Account, Income, Execution
 
-@login_required(login_url='/login/')
-def accounts_list(request):
-    accounts = Account.objects.all().order_by('title')
-    header = u'Список рахунків'
-    return render(request, 'finance/accounts_list.html', 
-        {'accounts': accounts, 'header': header})
+@method_decorator(login_required, name='dispatch')
+class AccountList(ListView):
+    model = Account
+    context_object_name = 'accounts'
+    template_name = "finance/accounts_list.html"
+    order_by = 'title'
+
+    def get_context_data(self, **kwargs):
+        context = super(AccountList, self).get_context_data(**kwargs)
+        context['header'] = u'Список рахунків'
+        return context
+
+@method_decorator(login_required, name='dispatch')
+class AccountDetail(ListView):
+    model = Account
+    template_name = 'finance/account_detail.html'
+    paginate_by = 10  # if pagination is desired
+
+    def get_queryset(self):
+        account = self.kwargs['pk']
+        incomes = Income.objects.filter(account=account)
+        executions = Execution.objects.filter(account=account)
+        object_list = sorted(chain(incomes, executions),
+            key=attrgetter('date'), reverse=True)
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super(AccountDetail, self).get_context_data(**kwargs)
+        all_pages = self.request.GET.get("all_pages", '')
+        account = self.kwargs['pk']
+
+        if all_pages:
+            order_by = self.request.GET.get("order_by", '')
+            reverse = self.request.GET.get("reverse", '')
+            incomes = Income.objects.filter(account=account)
+            executions = Execution.objects.filter(account=account)
+            if order_by:
+                object_list = sorted(chain(incomes, executions),
+                    key=attrgetter('date'))
+                if reverse:
+                    object_list = sorted(chain(incomes, executions),
+                        key=attrgetter('date'), reverse=True)
+            else:
+                object_list = sorted(chain(incomes, executions),
+                    key=attrgetter('date'), reverse=True)
+            context['object_list'] = object_list
+            context['is_paginated'] = False
+
+        context['object'] = Account.objects.get(pk=account)
+        return context
 
 @login_required(login_url='/login/')
 def add_account(request):

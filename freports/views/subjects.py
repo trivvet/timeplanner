@@ -12,9 +12,9 @@ from ..models import Report, ReportSubject
 
 @login_required(login_url='/login/')
 def subjects_list(request):
-    subjects = ReportSubject.objects.all()
+    subjects = ReportSubject.objects.all().order_by('settlement')
     if request.GET.get('all_pages', '') == '':
-        paginator = Paginator(subjects, 10)
+        paginator = Paginator(subjects, 15)
         page = request.GET.get('page', '')
         try:
             subjects = paginator.page(page)

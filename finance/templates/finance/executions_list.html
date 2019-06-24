@@ -1,0 +1,89 @@
+{% extends "freports/base.html" %}
+
+{% block sidebar %}
+{% include 'finance/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список виконань</span> <span class="badge badge-info">Alpha</span>
+    <a class="btn btn-outline-info modal-button" id="add-report"
+        href="{% url 'finance:add_execution' %}">Додати виконання</a>
+</div>
+{% endblock title %}
+
+{% block extra_messages %}
+{% endblock extra_messages %}
+
+{% block content %}
+
+<div id="executions_list_filters" class="mb-3">
+    <a class="btn btn-outline-primary" href="{% url 'finance:executions_list' %}?period=current_month">За поточний місяць</a>
+    <a class="btn btn-outline-info" href="{% url 'finance:executions_list' %}?period=previous_month">За минулий місяць</a>
+    <button class="btn btn-outline-secondary" id="filter-button" data-toggle="collapse" href="#filter" role="button" aria-expanded="{% if request.GET.filter_status %}true{% else %}false{% endif %}" aria-controls="collapseExample">Інший проміжок</button>
+</div>
+
+<div class="collapse {% if request.GET.filter_status %}show{% endif %}" id="filter">
+    <div class="card card-body">
+        {% if errors %}
+        <div class="alert alert-danger" role="alert">
+          Некоректно задано часовий проміжок!
+        </div>
+        {% endif %}
+        <div class="filter">
+            <form class="form-inline" action="{% url 'finance:executions_list' %}{% if request.GET.status %}?{{ request.GET.status }}{% endif %}" method="get" enctype="multipart/form-data" role="form">
+                <input type="hidden" name="filter_status" value="success" />
+                <div class="form-group mb-1 mt-1">
+                    <label for="inputDateArrived">Від</label>
+                    <input type="text" id="inputDate"
+                        class="date-input form-control mr-2 ml-2" data-target="#inputDate" autocomplete="off" name="date_from" data-toggle='datetimepicker'value="{{ request.GET.date_from }}" placeholder="2018-10-01" style="max-width:110px"/>
+                    до<input type="text" class="date-input form-control mr-2 ml-2" data-target="#inputDate2" autocomplete="off" name="date_until" id="inputDate2" placeholder="2018-10-30" data-toggle='datetimepicker' 
+                        value="{{ request.GET.date_until }}" style="max-width:110px"/>
+                </div>
+                <div class="form-group mb-1 mt-1" id="filter-button">
+                    <input type="submit" class="btn btn-outline-info" value="Застосувати" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% if executions %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">Дата</th>
+            <th scope="col">Замовлення</th>
+            <th scope="col">Рахунок</th>
+            <th scope="col">Сума</th>
+            <th scope="col">Закриті таски</th>
+            <th scope="col" class="group-buttons"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for execution in executions %}
+        <tr>
+            <th scope="row">{{ execution.date }}</th>
+            <td>{{ execution.order.name }}</td>
+            <td>{{ execution.account.title }}</td>
+            <td>{{ execution.amount }}</td>
+            <td>{{ execution.closed_tasks|default_if_none:"-" }}</td>
+            <td class="group-buttons">
+                <a href="{% url 'finance:delete_execution' execution.id %}" class="modal-button"><i class="fa fa-trash-o"></i></a>
+                <a href="{% url 'finance:edit_execution' execution.id %}" class="modal-button"><i class="fa fa-pencil"></i></a>
+            </td>       
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+    {% include 'finance/pagination.html' with items=page_obj url_next="finance:executions_list" order_by=request.GET.order_by reverse=request.GET.reverse filter_status=request.GET.filter_status date_from=request.GET.date_from date_until=request.GET.date_until period=request.GET.period %}
+{% endif %}
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}

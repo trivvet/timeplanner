@@ -15,6 +15,10 @@
             <li {% if request.path == url_incomes %}class="active"{% endif %}>
                 <a href="{{ url_incomes }}">Список надходжень <span class="badge badge-info">Alpha</span></a>
             </li>
+            <li {% if request.path == url_executions %}class="active"{% endif %}>
+                <a href="{{ url_executions }}">Список виконань <span class="badge badge-info">Alpha</span></a>
+            </li>
         </ul>
+
     </div>
 </nav>

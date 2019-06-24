@@ -1,14 +1,28 @@
 function initDateFields() {
-    var startDate = $('#inputDate input').val(), currentDate = new Date();
-    if (!startDate) {
+    $('#inputDate, #inputDate2').attr('autocomplete', 'off');
+    var startDate = $('#inputDate input').val(), 
+        currentDate = moment(),
+        startDateOne = $('#inputDate').val();
+    var maxDate = moment().millisecond(0).second(0).minute(0).hour(0);
+    maxDate.add(23, 'h');
+    if (!startDate && !startDateOne) {
         var startDate = currentDate;
+    } else if (startDateOne) {
+        var startDate =startDateOne;
     }
-    // $('#inputDateDecision').parent().hide();
-    $('#inputDate').datetimepicker({
+    var startDate2 = $('#inputDate2').val();
+    if (!startDate2) {
+        if (startDateOne) {
+            startDate2 = startDateOne;
+        } else {
+            startDate2 = startDate
+        }
+    }
+    $('#inputDate, #inputDate3').datetimepicker({
         format: 'YYYY-MM-DD',
         locale: 'uk',
         date: startDate,
-        maxDate: currentDate,
+        maxDate: maxDate,
         defaultDate: startDate,
         useCurrent: false,
         daysOfWeekDisabled: [0],
@@ -17,8 +31,35 @@ function initDateFields() {
             showClose: true
         }
     });
-    $('#inputDate').on("blur", function(e) {
-        $(this).datetimepicker("hide"); 
+    $('#inputDate2').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'uk',
+        date: startDate2,
+        maxDate: currentDate,
+        defaultDate: startDate2,
+        useCurrent: false,
+        daysOfWeekDisabled: [0],
+        buttons: {
+            showToday: true,
+            showClose: true
+        }
+    });
+    $('#inputDate, #inputDate2, #inputDate3').on("blur", function(e) {
+        $(this).off("focus").datetimepicker('hide');
+    });
+}
+
+function showExecutedDate() {
+    var status = $("#id_id_status_0_3").is(":checked");
+    if (!status) {
+        $("#div_id_date_executed").hide();
+    }
+    $('#div_id_status input:radio').on("click", function() {
+        if (this.value == "done") {
+            $("#div_id_date_executed").show();
+        } else {
+            $("#div_id_date_executed").hide();
+        }
     });
 }
 
@@ -57,14 +98,23 @@ function initDateTimeFields() {
 
 function initChangeDecisionDate() {
     $('#inputDate').focusout(function() {
-        // $('#inputDateDecision').parent().show();
         var inputDate = $('#inputDateDecision');
         if (inputDate) {
             var inputDateValue = new Date(inputDate.children('input').val());
             var eventDate = new Date($(this).children('input').val());
             var maxDate = new Date($(this).children('input').val());
+            eventDate.setDate(eventDate.getDate() - 10);
             if (inputDateValue > eventDate || maxDate > eventDate) {
-                eventDate.setDate(eventDate.getDate() - 10);
+                inputDate.datetimepicker('destroy');
+                $('#inputDateDecision').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    locale: 'uk',
+                    date: eventDate,
+                    maxDate: maxDate,
+                    useCurrent: false,
+                    daysOfWeekDisabled: [0,6]
+                });
+            } else if (!inputDateValue) {
                 inputDate.datetimepicker('destroy');
                 $('#inputDateDecision').datetimepicker({
                     format: 'YYYY-MM-DD',
@@ -75,7 +125,7 @@ function initChangeDecisionDate() {
                     daysOfWeekDisabled: [0,6]
                 });
             }
-        }
+        } 
         
     }).blur();
 }
@@ -174,11 +224,13 @@ function activateModalPage(link) {
 
 function initForm(form, modal, link) {
     initDateFields();
+    showExecutedDate()
     initDateTimeFields();
     initDateDecisionField();
     initSelectCourt(link);
     closeModalForm();
-    initGetOrderAmount(link);
+    initGetOrderValues(link);
+    showAddressInput();
 
     form.ajaxForm({
         url: link,
@@ -196,7 +248,9 @@ function initForm(form, modal, link) {
                 modal.find('.modal-body').prepend(html.find('#second-header h3'));
                 initForm(newform, modal, link);
             } else {
+                $('#navbarSupportedContent').html(html.find('#navbarSupportedContent'));
                 $('#message .col').html(html.find('.alert'));
+                $('#second-header').html(html.find('#second-header').html());
                 $('#main-content').html(html.find('#main-content').html());
                 $('#extra-content').html(html.find('#extra-content').html());
                 initFormPage();
@@ -247,7 +301,7 @@ function initSelectCourt(link) {
     }
 }
 
-function initGetOrderAmount(link) {
+function initGetOrderValues(link) {
     $('#id_order').change(function() {
         if ($(this).val()) {
             $.ajax('', {
@@ -261,6 +315,8 @@ function initGetOrderAmount(link) {
                 },
                 'success': function(data, status, xhr) {
                     $('#id_amount').val(data.total_sum);
+                    $('#id_account').val(data.account_id);
+                    $('#id_closed_tasks').val(data.tasks_number);
                 },
             });
         } else {
@@ -277,7 +333,7 @@ function inputNumberField() {
             end_of_array = current_value.indexOf('/', 5);
             $(this).get(0).setSelectionRange(4,end_of_array);
         } else {
-            $('#inputCase').val(current_value + ' /17');
+            $('#inputCase').val(current_value + ' /18');
             $(this).get(0).setSelectionRange(4,5);
         }
     });
@@ -285,9 +341,9 @@ function inputNumberField() {
 
 function addPlusButton() {
     $('.report-detail-item').parent().parent().mouseenter(function() {
-        $(this).find('.btn-outline-success').removeAttr('hidden');
+        $(this).find('.btn-outline-success, .btn-outline-info').removeAttr('hidden');
         $(this).mouseleave(function() {
-            $(this).find('.btn-outline-success').attr('hidden', '1');
+            $(this).find('.btn-outline-success, .btn-outline-info').attr('hidden', '1');
         });
     });
 }
@@ -302,11 +358,11 @@ function showButtons() {
 
 function clickExecuteTask() {
     $('.checkbox-container input, .try').click(function() {
-        var box = $(this);
+        var box = $(this), tackKey = "";
         if (box.val()) {
-            var taskKey = box.val();
+            taskKey = box.val();
         } else {
-            var taskKey = box.data('pk');
+            taskKey = box.data('pk');
         }
         $.ajax(box.data('url'), {
             'type': 'POST',
@@ -349,8 +405,25 @@ function showSidebar() {
     });
 }
 
+function clickFilterButton() {
+    if ($('#filter')) {
+        initDateFields();
+    }
+}
+
+function showAddressInput() {
+    $('input.person-сheckbox').on('change', function() {
+        inputAddress = $(this).next().children('input');
+        if($(this).is(':checked')) {
+            inputAddress.removeAttr('hidden');;
+        } else {
+            inputAddress.attr('hidden', true);
+        }
+    });
+}
+
 $(document).ready(function(){
-    initDateFields();
+    // initDateFields();
     initDateTimeFields();
     initRowMakeLink();
     initTodayTasksPage()
@@ -360,4 +433,5 @@ $(document).ready(function(){
     showButtons();
     clickExecuteTask();
     showSidebar();
+    clickFilterButton();
 })

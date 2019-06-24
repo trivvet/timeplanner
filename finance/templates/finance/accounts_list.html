@@ -25,7 +25,7 @@
             <th scope="col">Назва рахунку</th>
             <th scope="col">Вид рахунку</th>
             <th scope="col">Вид зберезення</th>
-            <th scope="col">Сума</th>
+            <th scope="col">Невиконаний залишок</th>
             <th scope="col">Надано в кредит</th>
             <th scope="col" class="group-buttons"></th>
 <!--             <th scope="col">Дії</th> -->
@@ -38,10 +38,10 @@
         {% for account in accounts %}
         <tr>
 
-            <th scope="row">{{ account.title }}</th>
+            <th scope="row"><a href="{% url 'finance:detail_account' account.id %}">{{ account.title }}</a></th>
             <td>{{ account.get_status_display }}</td>
             <td>{% if account.cash %}Готівка{% else %}Безнал{% endif %}</td>
-            <td>{{ account.total_sum }}</td>
+            <td>{{ account.remainder }}</td>
             <td>{% if account.credit_cash %}{{ account.credit_cash }}{% endif %}</td>
             <td class="group-buttons">
                 <a class="modal-button" href="{% url 'finance:delete_account' account.id %}"><i class="fa fa-trash-o"></i></a>

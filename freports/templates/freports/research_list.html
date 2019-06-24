@@ -1,0 +1,104 @@
+{% extends "freports/base.html" %}
+
+{% block sidebar %}
+<!-- Sidebar -->
+<nav id="sidebar" {% if request.COOKIES.sidebar == 'active' %}class="active"{% endif %}>
+    <div>
+        <div class="sidebar-header">
+            <h2 class="text-center">Провадження</h2>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li>
+                <a href="{{ url_reports }}">Список проваджень</a>
+            </li>
+            <li>
+                <a href="{{ url_participants }}">Учасники проваджень</a>
+            </li>
+            <li>
+                <a href="{{ url_subjects }}">Об'єкти проваджень</a>
+            </li>
+            <li class="active">
+                <a href="{{ url_researches }}">Список досліджень <span class="badge badge-info">Alpha</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock sidebar %}
+
+{% block title %}
+<div class="col">
+    <span class="h1">Список експертних досліджень</span> <span class="badge badge-info">Alpha</span>
+    <a class="btn btn-outline-info modal-button"
+        id="add-report" href="{% url 'freports:add_new_research' %}">Додати дослідження</a>
+</div>
+{% endblock title %}
+
+
+{% block content %}
+<!-- <nav class="nav nav-pills nav-justified" id="navbar-list">
+    <a class="nav-item nav-link {% if request.GET.status == 'all' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=all">Усі <span class="badge badge-info">{{ content.open_reports }}</span></a>
+    <a class=" nav-item nav-link {% if not request.GET.status %}active{% endif %}" href="{% url 'freports:reports_list' %}">Активні <span class="badge badge-success">{{ content.active_reports }}</span></a>
+    <a class="nav-link nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=deactivate">Призупинені <span class="badge badge-secondary">{{ content.deactivate_reports }}</span></a>
+    <a class="nav-link nav-item {% if request.GET.status == 'executed' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=executed">Закриті <span class="badge badge-light">{{ content.closed_reports }}</span></a>
+</nav> -->
+
+{% if object_list %}
+{% with order_by=request.GET.order_by reverse=request.GET.reverse status=request.GET.status all_pages=request.GET.all_pages %}
+
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">
+                <a href="{% url 'freports:researches_list' %}?status={{ status }}&order_by=number
+{% if order_by == '' or reverse != '1' and order_by == 'number' %}&reverse=1{% endif %}{% if all_pages %}&all_pages=1{% endif %}">
+                    № {% if order_by == '' or order_by == 'number' and reverse != '1' %}&uarr;
+                    {% elif order_by == 'number' and reverse == '1' %}&darr;{% endif %}
+                </a>
+            </th>
+            <th scope="col">Адреса{{ all_pages }}</th>
+            <th scope="col">Заявник</th>
+            <th scope="col">Тип Об'єкту</th>
+            <th scope="col">Вид Дослідження</th>
+            <th scope="col">Дата надходження</th>
+            <th scope="col">Дата виконання</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for report in object_list %}
+        <tr class="
+            {% if report.address == '-' or report.applicant == '-' or report.object_name == '-' or report.research_kind == '-' %}
+                table-warning
+            {% endif %}
+            "
+            data-href="{% url 'freports:research_detail' report.id %}">
+            <th class="td-link" scope="row"><p class="text-{% if report.executed == True %}info{% elif report.active == True %}success{% else %}secondary{% endif %}">{{ report.full_number }}</span></th>
+            <td class="td-link">{{ report.address|truncatechars:25 }}</td>
+            <td class="td-link">{{ report.applicant|truncatechars:30 }}</td>
+            <td class="td-link">{{ report.object_name|truncatechars:20 }}</td>
+            <td class="td-link">{{ report.research_kind|truncatechars:20 }}</td>
+            <td class="td-date td-link">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
+            <td class="td-date td-link">{{ report.date_executed|date:"d M Y"|truncatechars:12 }}</td> 
+        </tr>
+        {% endfor %}
+
+
+    </tbody>
+
+</table>
+
+
+{% endwith %}
+
+{% if is_paginated %}
+    {% include 'freports/pagination.html' with items=page_obj url_next="freports:researches_list" order_by=request.GET.order_by reverse=request.GET.reverse %}
+{% endif %}
+
+
+{% else %}
+<p>Ще немає даних</p>
+{% endif %}
+
+{% endblock content %}

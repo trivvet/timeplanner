@@ -6,6 +6,15 @@ from django.utils import timezone
 
 # Create your models here.
 
+status_list = {
+    'judge': 'Суддя',
+    'plaintiff': 'Позивач',
+    'defendant': 'Відповідач',
+    'plaintiff_agent': 'Представник позивача',
+    'defendant_agent': 'Представник відповідача',
+    'other_participant': 'Інший учасник'
+}
+
 class ReportEvents(models.Model):
 
     class Meta(object):
@@ -101,7 +110,10 @@ class ReportEvents(models.Model):
         elif self.name == 'schedule':
             pz = timezone.get_current_timezone()
             self.time = pz.normalize(self.time)
-            description = 'Призначено виїзд о %s на %s' % (self.time.strftime('%H:%M'), self.time.strftime('%d-%m-%Y'))
+            time_info = self.time.strftime('%H:%M')
+            date_info = self.time.strftime('%d-%m-%Y')
+            inspect_info = 'Призначено виїзд о %s на %s' % (time_info, date_info)
+            description = 'Тип повідомлення: {}. {}'.format(self.subspecies, inspect_info)
         elif self.name == 'inspected':
             description = self.subspecies
         elif self.name == 'done':
@@ -171,8 +183,24 @@ class ReportParticipants(models.Model):
     def __unicode__(self):
         return u"%s %s (report %s/%s)" % (self.status, self.surname, self.report.number, self.report.number_year)
 
+
+    def full_info(self):
+        return u"{} {} ({})".format(
+            self.surname, self.name, status_list[self.status])
+    
     @property
     def full_name(self):
-        return "{} {}".format(self.surname, self.name)
-    
+        return u"{} {}".format(
+            self.surname, self.name)
 
+    @property
+    def status_name(self):
+        status_list = {
+            'judge': 'Суддя',
+            'plaintiff': 'Позивач',
+            'defendant': 'Відповідач',
+            'plaintiff_agent': 'Представник позивача',
+            'defendant_agent': 'Представник відповідача',
+            'other_participant': 'Інший учасник'
+        }
+        return status_list[self.status]

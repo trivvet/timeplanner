@@ -18,6 +18,9 @@
             <li>
                 <a href="{{ url_subjects }}">Об'єкти проваджень</a>
             </li>
+            <li>
+                <a href="{{ url_researches }}">Список досліджень <span class="badge badge-info">Alpha</span></a>
+            </li>
         </ul>
     </div>
 </nav>
@@ -54,7 +57,7 @@
     <a class="nav-link nav-item {% if request.GET.status == 'deactivate' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=deactivate">Призупинені <span class="badge badge-secondary">{{ content.deactivate_reports }}</span></a>
     <a class="nav-link nav-item {% if request.GET.status == 'executed' %}active{% endif %}" href="{% url 'freports:reports_list' %}?status=executed">Закриті <span class="badge badge-light">{{ content.closed_reports }}</span></a>
 </nav>
-<button class="btn btn-outline-secondary" id="filter-button" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">Фільтр</button>
+<button class="btn btn-outline-secondary mb-2" id="filter-button" data-toggle="collapse" href="#filter" role="button" aria-expanded="false" aria-controls="collapseExample">Фільтр</button>
 <div class="collapse" id="filter">
     <div class="card card-body">
         <div class="filter">
@@ -106,6 +109,9 @@
                     {% elif order_by == 'date_executed' and reverse == '1' %}&darr;{% endif %}
                 </a>
             </th>
+            <th scope="col">
+                Заключний документ
+            </th>
             {% endif %}
             {% if not request.GET.status %}
             <th scope="col">
@@ -150,6 +156,7 @@
             <td class="td-link td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
             {% if request.GET.status == 'executed' %}
             <td class="td-link td-date">{{ report.date_executed|truncatechars:10 }}</td>
+            <td class="td-link">{{ report.final_document }}</td>
             {% endif %}
             {% if not request.GET.status %}
             <td class="td-link">
