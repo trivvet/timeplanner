@@ -19,6 +19,15 @@ status_translate = {
     'other_participant': 'member'
 }
 
+status_list = {
+    'judge': 'Суддя',
+    'plaintiff': 'Позивач',
+    'defendant': 'Відповідач',
+    'plaintiff_agent': 'Представник позивача',
+    'defendant_agent': 'Представник відповідача',
+    'other_participant': 'Інший учасник'
+}
+
 @login_required(login_url='/login/')
 def participants_list(request):
     participants = ReportParticipants.objects.all().order_by('name')
@@ -38,7 +47,7 @@ def participants_list(request):
 @login_required(login_url='/login/')
 def participant_detail(request, rid):
     participant = ReportParticipants.objects.get(pk=rid)
-    participant.status = status_list[participant.status]
+    participant.status = participant.status_name
     header = u'Детальна інформація про учасника провадження №%s/%s' % (participant.report.number, participant.report.number_year)
     return render(request, 'freports/participant_detail.html', 
         {'content': participant, 'header': header})
@@ -46,7 +55,9 @@ def participant_detail(request, rid):
 @login_required(login_url='/login/')
 def add_participant(request, rid, status):
     report = Report.objects.get(pk=rid)
-    header = u'Додавання учасника "%s" до провадження №%s/%s' % (status_list[status], report.number, report.number_year)
+    header = u'Додавання учасника "%s" до провадження №%s/%s' % (
+        status_list[status], report.number, report.number_year
+        )
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -69,7 +80,8 @@ def add_participant(request, rid, status):
                     updated_contact.save()
                 report = edit_report(new_participant, report)
                 report.save()
-                messages.success(request, u"%s '%s' успішно доданий" % (status_list[new_participant.status], new_participant.surname))
+                messages.success(request, 
+                    u"%s '%s' успішно доданий" % (new_participant.status_name, new_participant.surname))
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Додавання учасника провадження скасовано")
@@ -85,7 +97,7 @@ def edit_participant(request, rid, did):
     report = Report.objects.get(pk=rid)
     participant = ReportParticipants.objects.get(pk=did)
     header = u"Редагування учасника '%s %s' провадження №%s/%s" % (
-        status_list[participant.status], participant.surname, report.number, report.number_year)
+       participant.status_name, participant.surname, report.number, report.number_year)
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -108,13 +120,14 @@ def edit_participant(request, rid, did):
                 report = edit_report(edit_participant, report)
                 report.save()
                 messages.success(request, u"%s '%s' успішно змінений" % (
-                    status_list[edit_participant.status], edit_participant.surname))
+                    edit_participant.status_name, edit_participant.surname))
 
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Редагування учасника провадження №%s/%s '%s %s' скасоване" %
-                (report.number, report.number_year, status_list[participant.status], participant.surname))
+                (report.number, report.number_year, participant.status_name, participant.surname))
 
-        return HttpResponseRedirect(reverse('freports:report_detail', args=[rid]))
+        return HttpResponseRedirect(
+            reverse('freports:report_detail', args=[rid]))
 
     else:
         content = participant
@@ -126,9 +139,9 @@ def delete_participant(request, rid, did):
     report = Report.objects.get(pk=rid)
     participant = ReportParticipants.objects.get(pk=did)
     content = u"Ви дійсно бажаєте видалити '%s %s' провадження №%s/%s?" % (
-        status_list[participant.status], participant.surname, report.number, report.number_year)
+        participant.status_name, participant.surname, report.number, report.number_year)
     header = u"Видалення '%s %s' провадження №%s/%s" % (
-        status_list[participant.status], participant.surname, report.number, report.number_year)
+        participant.status_name, participant.surname, report.number, report.number_year)
 
     if request.method == 'GET':
         return render(request, 'freports/delete_form.html', 
@@ -141,10 +154,10 @@ def delete_participant(request, rid, did):
             report = edit_report(participant_delete, report, 'delete')
             report.save()
             messages.success(request, u"%s '%s' провадження №%s/%s успішно видалений" % (
-                status_list[participant.status], participant.surname, report.number, report.number_year))
+                participant.status_name, participant.surname, report.number, report.number_year))
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Видалення учасника провадження №%s/%s '%s %s' скасоване" % (
-                report.number, report.number_year, status_list[participant.status], participant.surname))
+                report.number, report.number_year, participant.status_name, participant.surname))
 
         return HttpResponseRedirect(reverse('freports:report_detail', 
             args=[rid]))
