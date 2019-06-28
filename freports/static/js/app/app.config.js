@@ -12,6 +12,7 @@ angular.module('reports').
                 enabled: true,
             });
             $resourceProvider.defaults.stripTrailingSlashes = false;
+
             $routeProvider.
                 when("/", {
                     template: "<all-list></all-list>"
@@ -21,6 +22,7 @@ angular.module('reports').
                 }).
                 otherwise({
                     template: "<h1>Not Found</h1>"
-                })
+                });
         }
     );
+

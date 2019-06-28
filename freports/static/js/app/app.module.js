@@ -10,5 +10,6 @@ angular.module('reports', [
     'reportList',
     'reportDetail',
     'navBar',
-    'sideBar'
+    'sideBar',
+    'modalForm'
     ]);

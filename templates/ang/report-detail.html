@@ -5,6 +5,9 @@
 	</div>
 </div>
 
+<a type="button" class="btn btn-light mb-3"
+    ng-click="backToList()">Повернутись до списку проваджень</a>
+
 <div class="row" id="main-content">
 	<div class="col-sm-12">
 		<!-- Головні учасники справи -->
@@ -51,6 +54,21 @@
 		                        <a class="no-style-link report-detail-item" href="">
 		                            {{ report.judge_name.description }}</a>
 		                    </td>
+		                </tr>
+		                <tr>
+		                	<th scope="row">Об'єкт<span ng-if="report.subjects.length > 1">и</span> дослідження</th>
+		                	<td ng-if="report.subjects.length">
+		                		<span ng-repeat="subject in report.subjects">
+	                        	    <a class="no-style-link report-detail-item" href="">
+		                                {{ subject.short_name }}</a>
+		                            <br ng-hide="$last">
+		                        </span>
+		                        <a class="btn btn-outline-success badge modal-button" href="">Додати об'єкт</a>
+		                	</td>
+		                	<td ng-if="!report.subjects.length">
+		                		<a class="no-style-link modal-button text-danger" href=""
+	                            >Дані відсутні</a>
+		                	</td>
 		                </tr>
 		                <tr ng-show="report.cost">
 		                    <th scope="row">Вартість</th>

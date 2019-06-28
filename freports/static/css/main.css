@@ -63,6 +63,8 @@ body {
 /* report pages */
 #divInputNumber {
   display: flex;
+  max-width: 15rem;
+  margin: auto;
 }
 
 #dual-number {
@@ -325,4 +327,8 @@ td.group-buttons {
 
 .person-checkboxes {
   max-width: 350px;
+}
+
+#spinner {
+    width: 10%;
 }

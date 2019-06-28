@@ -3,7 +3,13 @@ from rest_framework.serializers import (
     SerializerMethodField
 )
 
-from ..models import Report, Judge, ReportEvents, ReportParticipants
+from ..models import (
+    Report, 
+    Judge, 
+    ReportEvents, 
+    ReportParticipants,
+    ReportSubject
+    )
 
 class ReportListSerializer(ModelSerializer):
     last_event = SerializerMethodField()
@@ -35,6 +41,7 @@ class ReportDetailSerializer(ModelSerializer):
     events = SerializerMethodField()
     last_event = SerializerMethodField()
     participants = SerializerMethodField()
+    subjects = SerializerMethodField()
     class Meta:
         model = Report
         fields = (
@@ -49,7 +56,8 @@ class ReportDetailSerializer(ModelSerializer):
             'waiting_days',
             'events',
             'last_event',
-            'participants'
+            'participants',
+            'subjects'
         )
 
     def get_judge_name(self, obj):
@@ -62,7 +70,12 @@ class ReportDetailSerializer(ModelSerializer):
         return ReportEventsSerializer(obj.last_event, many=False).data
 
     def get_participants(self, obj):
-        return ReportParticipantSerializer(obj.participants, many=True).data
+        return ReportParticipantSerializer(
+            obj.participants, many=True).data
+
+    def get_subjects(self, obj):
+        return ReportSubjectSerializer(
+            obj.subjects, many=True).data
 
 class ReportEventsSerializer(ModelSerializer):
     class Meta:
@@ -88,4 +101,12 @@ class ReportParticipantSerializer(ModelSerializer):
         fields = (
             'status',
             'full_name'
+        )
+
+class ReportSubjectSerializer(ModelSerializer):
+    class Meta:
+        model = ReportSubject
+        fields = (
+            'subject_type',
+            'short_name'
         )

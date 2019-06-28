@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 
 from .fdetails import ReportEvents, ReportParticipants
+from .subjects import ReportSubject
 from finance.models import Order
 
 # Create your models here.
@@ -140,6 +141,13 @@ class Report(BaseReport):
         instance = self
         qs = ReportParticipants.objects.filter(report=instance)
         return qs
+
+    @property
+    def subjects(self):
+        instance = self
+        qs = ReportSubject.objects.filter(report=instance)
+        return qs
+    
     
     def is_paid(self):
         paid = ReportEvents.objects.filter(report=self, name='paid')

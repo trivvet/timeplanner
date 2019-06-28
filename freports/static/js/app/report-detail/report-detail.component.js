@@ -18,5 +18,9 @@ angular.module('reportDetail').
                     }
                 });
             });
+
+            $scope.backToList = function() {
+                 $location.path('/');
+            };
         }
     });

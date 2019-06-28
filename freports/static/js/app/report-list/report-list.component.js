@@ -9,6 +9,7 @@ angular.module('reportList').
             $scope.navButtonClass2 = "active";
             $scope.reportItems = 15;
             $scope.propertyName = 'number';
+            $scope.spinner = true;
 
             Report.query(function(data){
                 $scope.items = data;
@@ -27,6 +28,7 @@ angular.module('reportList').
                         return item
                     }
                 });
+                $scope.spinner = false;
             });
             
 
@@ -113,5 +115,9 @@ angular.module('reportList').
             $scope.showDetail = function(reportId) {
                  $location.path('/' + reportId);
             };
+
+            $scope.addReport = function() {
+                $scope.modalHeader = "Додати провадження"
+            }
         }
     });

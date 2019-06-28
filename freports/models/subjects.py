@@ -61,6 +61,14 @@ class ReportSubject(models.Model):
     def __unicode__(self):
         return u"Subject %s of the report %s/%s" % (self.subject_type, self.report.number, self.report.number_year)
 
+    @property
+    def short_name(self):
+        if len(self.full_address()) < 50:
+            address = self.full_address()
+        else:
+            address = self.short_address()
+        return "{}, {}".format(self.subject_type, address)
+
     def short_address(self):
         if self.settlement == 'м. Хмельницький' or 'с.т.' in self.street and self.region == 'Хмельницький':
             short_address = self.street
@@ -112,3 +120,4 @@ class ReportSubject(models.Model):
         else:
             name = self.street
         return name
+
