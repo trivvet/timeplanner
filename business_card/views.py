@@ -3,7 +3,10 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 
-from timeplanner.sensitive_data import GOOGLE_API
+try:
+    from timeplanner.sensitive_data import GOOGLE_API
+except ImportError:
+	GOOGLE_API = ""
 
 # Create your views here.
 
