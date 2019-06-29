@@ -1,9 +1,15 @@
 'use strict';
 
 angular.module('report').
-    factory('Report', function($resource){
+    factory('Report', function($resource, $cookies){
 
-        var url = '/api/freports/';
+        var url = '/api/freports/', token = $cookies.get("token");
+
+        if (token) {
+            var reportSaveToken = {authorization: "JWT " + token};
+        } else {
+            console.log("No token");
+        }
 
         return $resource(url, {}, {
             query: {
@@ -26,6 +32,12 @@ angular.module('report').
                     return angular.fromJson(data);
                 }
 
+            },
+            save: {
+                url: url + "create/",
+                method: "POST",
+                params: {},
+                headers: reportSaveToken,
             }
-        })
-    })
+        });
+    });

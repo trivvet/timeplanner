@@ -3,16 +3,21 @@
 angular.module('reportList').
     component('allList', {
         templateUrl: "/api/templates/report-list.html",
-        controller: function(Report, $location,
-            $routeParams, $rootScope, $scope, $filter){
+        controller: function(Report, $location, $http, $cookies,
+            $routeParams, $rootScope, $scope, $filter, $window){
             
+            var token = $cookies.get("token");
+
             $scope.navButtonClass2 = "active";
             $scope.reportItems = 15;
             $scope.propertyName = 'number';
             $scope.spinner = true;
+            $scope.newReportNumberYear = "019"
 
             Report.query(function(data){
                 $scope.items = data;
+                var orderedItems = $filter('orderBy')($scope.items)
+                $scope.newReportNumber = orderedItems[orderedItems.length - 1].number + 1
                 $scope.activeReports = $scope.items.filter(function(item) {
                     if (item.active != false) {
                         return item;
@@ -29,8 +34,13 @@ angular.module('reportList').
                     }
                 });
                 $scope.spinner = false;
+            }, function(error) {
+                if (error.statusText == "Unauthorized") {
+                    // $location.url('/');
+                }
             });
-            
+
+            $location.url('/login')
 
             $scope.filterStatus = function(item) {
                 if ($scope.status == "active" || !$scope.status) {
@@ -116,8 +126,17 @@ angular.module('reportList').
                  $location.path('/' + reportId);
             };
 
-            $scope.addReport = function() {
-                $scope.modalHeader = "Додати провадження"
+            $scope.createReportAward = function() {
+                Report.save(
+                    {
+                        number: $scope.newReportNumber,
+                        number_year: $scope.newReportNumberYear
+                    }, function(data) {
+                        console.log(data);
+                    }, function(e_data) {
+                        console.log(e_data);
+                    }
+                );
             }
         }
     });

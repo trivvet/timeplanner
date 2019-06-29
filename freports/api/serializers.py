@@ -1,6 +1,9 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework.serializers import (
     ModelSerializer,
-    SerializerMethodField
+    SerializerMethodField,
+    CharField
 )
 
 from ..models import (
@@ -10,6 +13,8 @@ from ..models import (
     ReportParticipants,
     ReportSubject
     )
+
+User = get_user_model()
 
 class ReportListSerializer(ModelSerializer):
     last_event = SerializerMethodField()
@@ -77,6 +82,12 @@ class ReportDetailSerializer(ModelSerializer):
         return ReportSubjectSerializer(
             obj.subjects, many=True).data
 
+class ReportCreateAwardSerializer(ModelSerializer):
+    class Meta:
+        model = Report
+        fields = ('number', 'number_year', 'plaintiff', 'defendant', 
+            'address', 'object_name', 'research_kind', 'active')
+
 class ReportEventsSerializer(ModelSerializer):
     class Meta:
         model = ReportEvents
@@ -109,4 +120,17 @@ class ReportSubjectSerializer(ModelSerializer):
         fields = (
             'subject_type',
             'short_name'
+        )
+
+
+class AccountLoginSerializer(ModelSerializer):
+    token = CharField(allow_blank=True, read_only=True)
+    username = CharField(required=False, allow_blank=True, 
+        label="Username")
+
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            'token'
         )

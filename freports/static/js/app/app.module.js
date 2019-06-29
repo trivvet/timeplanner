@@ -5,11 +5,12 @@ angular.module('reports', [
     'ngResource',
     'ngRoute',
     'angularUtils.directives.dirPagination',
+    'ngCookies',
     
     // internal
     'reportList',
     'reportDetail',
     'navBar',
     'sideBar',
-    'modalForm'
+    'loginDetail',
     ]);

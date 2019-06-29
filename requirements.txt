@@ -3,3 +3,4 @@ MySQL-python
 django-axes==2.3.3
 django-crispy-forms==1.7.2
 djangorestframework==3.9.0
+djangorestframework-jwt

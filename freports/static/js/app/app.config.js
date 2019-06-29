@@ -20,6 +20,9 @@ angular.module('reports').
                 when("/:id", {
                     template: "<report-detail></report-detail>"
                 }).
+                when("/login", {
+                    template: "<login-detail></login-detail>"
+                }).
                 otherwise({
                     template: "<h1>Not Found</h1>"
                 });

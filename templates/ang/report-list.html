@@ -12,24 +12,24 @@
             <div class="modal-body text-center">
                 <div id="divInputNumber">
                     <input type="text" class="form-control"
-                        id="inputNumber" placeholder="500" name="number" value="{{ content.number }}">
+                        id="inputNumber" name="number" value="{{ content.number }}" ng-model="newReportNumber">
                     <p id="dual-number">/</p>
-                    <select class="form-control" name="number_year">
-                        <option>013</option>
-                        <option>014</option>
-                        <option>015</option>
-                        <option>016</option>
-                        <option>017</option>
-                        <option>018</option>
-                        <option>019</option>
+                    <select class="form-control" name="number_year" ng-model="newReportNumberYear">
+                        <option value="013">013</option>
+                        <option value="014">014</option>
+                        <option value="015">015</option>
+                        <option value="016">016</option>
+                        <option value="017">017</option>
+                        <option value="018">018</option>
+                        <option value="019">019</option>
                     </select>
                 </div>
             </div>
             <div class="modal-footer text-center">
                   <input type="submit" class="btn btn-link" href=""
-                         name="cancel_button" value="Скасувати" />
+                         name="cancel_button" data-dismiss="modal" aria-label="Close" value="Скасувати" />
                   <input type="submit" class="btn btn-primary" value="Створити"
-                         name="save_button" />
+                         name="save_button" ng-click="createReportAward()"/>
                   
             </div>
         </div>
