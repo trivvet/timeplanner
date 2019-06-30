@@ -41,6 +41,7 @@
 <button type=button class="btn btn-outline-info"
     id="add-report" data-toggle="modal" data-target="#modalForm" ng-click="addReport()">Додати провадження</button>
 
+<div ng-show="message" class="alert" role="alert">{{ message }}</div>
 <nav class="nav nav-pills nav-justified" id="navbar-list">
     <a class="nav-item nav-link" href="" data="all" ng-click="setStatus($event)" ng-class="navButtonClass1">Усі <span class="badge badge-info">{{ items.length }}</span></a>
     <a class="nav-item nav-link" href="" data="active" ng-click="setStatus($event)" ng-class="navButtonClass2">Активні <span class="badge badge-success">{{ activeReports.length }}</span></a>

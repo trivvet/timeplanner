@@ -49,7 +49,7 @@
 
 <body>
 
-    <nav-bar></nav-bar>
+    <nav-bar ng-hide="hideNavBars"></nav-bar>
 
     <div class="wrapper">
         <side-bar ng-class="{ 'active': ! showSidebar }"></side-bar>
@@ -57,7 +57,7 @@
         <div id="content" class="container">
             <div class="row">
                 <div class="col">
-                    <button type="button" id="sidebarCollapse" class="navbar-btn" show-sidebar ng-click="showSidebar = ! showSidebar" ng-class="{ 'active': ! showSidebar }">
+                    <button type="button" id="sidebarCollapse" class="navbar-btn" show-sidebar ng-click="showSidebar = ! showSidebar" ng-class="{ 'active': ! showSidebar }" ng-hide="hideNavBars">
                         <span></span>
                         <span></span>
                         <span></span>
@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <div class="row" id="footer">
+            <div class="row" id="footer" ng-hide="hideNavBars">
                 <div class="col-12">
                     <hr />
                     <p>Time Planner, 2017-2019 &copy; <a href="#">Адмінка</a></p>

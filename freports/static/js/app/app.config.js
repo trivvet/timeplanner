@@ -17,11 +17,14 @@ angular.module('reports').
                 when("/", {
                     template: "<all-list></all-list>"
                 }).
-                when("/:id", {
+                when("/reports/:id", {
                     template: "<report-detail></report-detail>"
                 }).
                 when("/login", {
                     template: "<login-detail></login-detail>"
+                }).
+                when("/logout", {
+                    redirectTo: "/login"
                 }).
                 otherwise({
                     template: "<h1>Not Found</h1>"

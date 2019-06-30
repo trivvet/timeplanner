@@ -12,35 +12,31 @@ angular.module('reportList').
             $scope.reportItems = 15;
             $scope.propertyName = 'number';
             $scope.spinner = true;
-            $scope.newReportNumberYear = "019"
+            $scope.newReportNumberYear = "019";
 
             Report.query(function(data){
                 $scope.items = data;
                 var orderedItems = $filter('orderBy')($scope.items)
-                $scope.newReportNumber = orderedItems[orderedItems.length - 1].number + 1
-                $scope.activeReports = $scope.items.filter(function(item) {
-                    if (item.active != false) {
-                        return item;
-                    }
-                });
-                $scope.deactivatedReports = $scope.items.filter(function(item) {
-                    if (item.active == false && item.executed == false) {
-                        return item;
-                    }
-                });
-                $scope.executedReports = $scope.items.filter(function(item) {
-                    if (item.executed) {
-                        return item
-                    }
-                });
-                $scope.spinner = false;
-            }, function(error) {
-                if (error.statusText == "Unauthorized") {
-                    // $location.url('/');
+                if ($scope.items) {
+                    $scope.newReportNumber = orderedItems[orderedItems.length - 1].number + 1;
+                    $scope.activeReports = $scope.items.filter(function(item) {
+                        if (item.active != false) {
+                            return item;
+                        }
+                    });
+                    $scope.deactivatedReports = $scope.items.filter(function(item) {
+                        if (item.active == false && item.executed == false) {
+                            return item;
+                        }
+                    });
+                    $scope.executedReports = $scope.items.filter(function(item) {
+                        if (item.executed) {
+                            return item
+                        }
+                    });
                 }
+                $scope.spinner = false;
             });
-
-            $location.url('/login')
 
             $scope.filterStatus = function(item) {
                 if ($scope.status == "active" || !$scope.status) {
@@ -123,7 +119,7 @@ angular.module('reportList').
             }
 
             $scope.showDetail = function(reportId) {
-                 $location.path('/' + reportId);
+                 $location.path('/reports/' + reportId);
             };
 
             $scope.createReportAward = function() {
@@ -132,6 +128,8 @@ angular.module('reportList').
                         number: $scope.newReportNumber,
                         number_year: $scope.newReportNumberYear
                     }, function(data) {
+                        $scope.massage = "Провадження № успішно додане!"
+                        console.log($scope.modal)
                         console.log(data);
                     }, function(e_data) {
                         console.log(e_data);

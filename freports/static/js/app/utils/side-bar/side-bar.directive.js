@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sideBar').
-    directive('sideBar', function($location, $rootScope) {
+    directive('sideBar', function($location, $rootScope, $cookies) {
         return {
             restrict: "E",
             templateUrl: '/api/templates/side-bar.html',

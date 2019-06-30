@@ -120,10 +120,12 @@ class Report(BaseReport):
         return time_amount.days
 
     def active_days(self):
-        return self.active_days_amount + self.time_after_update()
+        active_days = self.active_days_amount or 0
+        return active_days + self.time_after_update()
 
     def waiting_days(self):
-        return self.waiting_days_amount + self.time_after_update()
+        waiting_days = self.waiting_days_amount or 0
+        return waiting_days + self.time_after_update()
 
     @property
     def events(self):

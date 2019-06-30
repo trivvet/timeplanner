@@ -85,8 +85,7 @@ class ReportDetailSerializer(ModelSerializer):
 class ReportCreateAwardSerializer(ModelSerializer):
     class Meta:
         model = Report
-        fields = ('number', 'number_year', 'plaintiff', 'defendant', 
-            'address', 'object_name', 'research_kind', 'active')
+        fields = ('number', 'number_year')
 
 class ReportEventsSerializer(ModelSerializer):
     class Meta:
@@ -120,17 +119,4 @@ class ReportSubjectSerializer(ModelSerializer):
         fields = (
             'subject_type',
             'short_name'
-        )
-
-
-class AccountLoginSerializer(ModelSerializer):
-    token = CharField(allow_blank=True, read_only=True)
-    username = CharField(required=False, allow_blank=True, 
-        label="Username")
-
-    class Meta:
-        model = User
-        fields = (
-            'username',
-            'token'
         )

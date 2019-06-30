@@ -3,8 +3,7 @@ from django.conf.urls import url
 from .views import (
     ReportListApiView, 
     ReportDetailApiView,
-    ReportCreateAwardApiView,
-    AccountLoginAPIView,
+    ReportCreateAwardApiView
     )
 
 urlpatterns = [
@@ -14,6 +13,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/$', ReportDetailApiView.as_view(),
         name='report_detail'),
     url(r'^create/$', ReportCreateAwardApiView.as_view(), 
-        name='report_create'),
-    url(r'^login/$', AccountLoginAPIView.as_view(), name='login')
+        name='report_create')
 ]
