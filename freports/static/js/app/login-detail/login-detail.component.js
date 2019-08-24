@@ -31,9 +31,10 @@ angular.module('loginDetail').
                 .then(function successCallback(response) {
                     $cookies.put("token", response.data.token); 
                     $cookies.put("username",user.username);
-                    console.log(response.data.token)
                     $location.path("/");
+                    
                 }, function errorCallback(response) {
+                    console.log('error')
                     console.log(response.data);
                     console.log(response.status);
                 });

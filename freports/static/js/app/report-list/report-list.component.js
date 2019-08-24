@@ -14,7 +14,7 @@ angular.module('reportList').
             $scope.spinner = true;
             $scope.newReportNumberYear = "019";
 
-            Report.query(function(data){
+            Report($cookies.get('token')).query(function(data){
                 $scope.items = data;
                 var orderedItems = $filter('orderBy')($scope.items)
                 if ($scope.items) {
@@ -123,7 +123,7 @@ angular.module('reportList').
             };
 
             $scope.createReportAward = function() {
-                Report.save(
+                Report($cookies.get('token')).save(
                     {
                         number: $scope.newReportNumber,
                         number_year: $scope.newReportNumberYear
@@ -131,6 +131,7 @@ angular.module('reportList').
                         $scope.massage = "Провадження № успішно додане!"
                         console.log($scope.modal)
                         console.log(data);
+                        window.location.reload();
                     }, function(e_data) {
                         console.log(e_data);
                     }
