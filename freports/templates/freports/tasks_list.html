@@ -41,7 +41,7 @@
     <tbody>
         {% csrf_token %}
         {% for task in tasks %}
-        <tr {% if not request.GET.status and task.time < today %}class="table-danger"{% endif %}>
+        <tr class="task-line {% if not request.GET.status and task.time < today %}table-danger{% endif %}">
             {% if not request.GET.status %}
             <td>
                 {% if task.time < today %}

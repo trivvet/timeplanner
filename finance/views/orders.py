@@ -15,7 +15,7 @@ from ..models import Order, Income, Execution
 
 @login_required(login_url='/login/')
 def orders_list(request):
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by('name')
     orders_active = orders.filter(status='active')
     orders_inactive = orders.filter(status='inactive')
     orders_done = orders.filter(status='done')

@@ -158,10 +158,10 @@ def edit_task(request, tid):
                 edit_item = Task(**edit_task)
                 edit_item.id = task.id
                 edit_item.save()
-                task = edit_item
                 messages.success(request, u"Завдання {} успішно змінене".format(edit_item.kind))
         elif request.POST.get('cancel_button'):
             messages.warning(request, u"Радагування завдання скасовано")
+        
         next_page = request.POST.get('next_url', '')
         if next_page:
             url = next_page

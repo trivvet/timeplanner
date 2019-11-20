@@ -191,7 +191,9 @@ def valid_contact(data):
 
     address = data.get('address', '')
     contact['address'] = address
-    phone['phone'] = phone
+
+    phone = data.get('phone', '')
+    contact['phone'] = phone
 
     info = data.get('info')
     contact['info'] = info

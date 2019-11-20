@@ -358,7 +358,7 @@ function showButtons() {
 
 function clickExecuteTask() {
     $('.checkbox-container input, .try').click(function() {
-        var box = $(this), tackKey = "";
+        var box = $(this), taskKey = "";
         if (box.val()) {
             taskKey = box.val();
         } else {
@@ -379,15 +379,30 @@ function clickExecuteTask() {
                 alert(error);
             },
             'success': function(data, status, xhr) {
-                taskLine = box.parents('tr');
-                content = "<td colspan='6'>Завдання виконане</td>";
+                var taskLine = box.parents('tr.task-line'),
+                    activeTasksList = box.parents('#active-tasks-list'),
+                    content = "<td colspan='6'>Завдання виконане</td>",
+                    taskSiblings = '';
+
+                if(!taskLine.length) {
+                    taskLine = box.parents('li.list-group-item');
+                    var taskSiblings = taskLine.siblings();
+                    content = "Завдання виконане";
+                }
+
                 if (data.next_url) {
                     activateModalPage(data.next_url);
                 }
-                taskLine.removeClass('table-danger').addClass('table-success text-center').html(content);
+                taskLine.removeClass('table-danger').
+                    addClass('table-success text-center').html(content);
                 taskLine.fadeOut(1500, function() {
                     $(this).remove();
                 });
+                if(taskSiblings.length == 1) {
+                    activeTasksList.fadeOut(1500, function() {
+                        $(this).remove();
+                    });
+                }
             }
         });
     });
