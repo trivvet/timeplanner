@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, signals
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -17,7 +17,7 @@ def login_auth(request):
     if attempts:
         login_attempts_last = attempts[0].failures
 
-    if login_attempts_last > 2:
+    if login_attempts_last > 3:
         messages.error(request, 
             "Кількість спроб перевищила допустиму, спробуйте пізніше")
         return render(request, 'login/form_locked.html', {})
@@ -38,7 +38,6 @@ def login_auth(request):
         else:
             messages.error(request, 
                 "Невірно введене ім'я користувача або пароль")
-            login_attempts_last += 1
 
     return render(request, 'login/form.html', {})
 
@@ -48,7 +47,13 @@ def logout_auth(request):
 
 @login_required(login_url='/login/')
 def login_attempts(request):
-    attempts = AccessAttempt.objects.all()
+    attempts_all = AccessAttempt.objects.all()
+    if request.GET.get('show'):
+        attempts = attempts_all
+    else:
+        attempts = attempts_all.filter(failures_since_start__gt = 0)
+    for attempt in attempts:
+        attempt.new_post_data = attempt.post_data.split('---------')
     return render(request, 'login/attempts.html', 
         {'attempts': attempts})
 

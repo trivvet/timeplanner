@@ -43,6 +43,7 @@
                     {% url "finance:incomes_list" as url_incomes %}
                     {% url "finance:executions_list" as url_executions %}
                     <ul class="navbar-nav mr-auto">
+                        {% if perms.admins %}
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects or request.path == url_researches %}active{% endif %}"
                                 href="{{ url_reports }}">Провадження</a>
@@ -63,9 +64,10 @@
                             <a class="nav-link {% if request.path == url_orders or request.path == url_accounts or request.path == url_incomes or request.path == url_executions %}active{% endif %}"
                                 href="{{ url_orders }}">Фінанси</a>
                         </li>
+                        {% endif %}
                     </ul>
                     <div class="btn-group" role="group">
-                        {% if TODAY_TASKS == True %}
+                        {% if TODAY_TASKS == True and perms.admins %}
                         <button id="btnGroupDrop1" type="button" class="btn btn-danger" href="{% url 'freports:tasks_today_list' %}"
                             aria-haspopup="true" aria-expanded="false">Сьогодні</button>
                         {% else %}
@@ -77,8 +79,10 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                            {% if perms.admins %}
                             <a class="dropdown-item" href="{% url 'freports:reports_update' %}">Оновлення даних</a>
                             <a class="dropdown-item" href="{% url 'login:attempts' %}">Записи логування</a>
+                            {% endif %}
                             <a class="dropdown-item" href="{% url 'login:out' %}">Вийти</a>
                         </div>
                     </div>
@@ -91,6 +95,7 @@
 
         <div class="wrapper">
             <!-- Sidbar -->
+            {% if perms.admins %}
             {% block sidebar %}{% endblock sidebar %}
 {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects or request.path == url_judges or request.path == url_courts or request.path == url_orders or request.path == url_accounts or request.path == url_incomes or request.path == url_researches or request.path == url_executions %}
                 <div class="row">
@@ -102,6 +107,7 @@
                         </button>
                     </div>
                 </div>
+                {% endif %}
                 {% endif %}
             <!-- Page Content -->
             <div id="content" class="container">
@@ -141,7 +147,7 @@
                 <div class="row" id="footer">
                     <div class="col-12">
                         <hr />
-                        <p>{% if user.is_authenticated %}Time Planner, version 1.4.9, 2017-2019 &copy; <a href="{% url 'admin:index' %}">Адмінка</a>{% endif %}</p>
+                        <p>{% if user.is_authenticated and perms.admins %}Time Planner, version 1.4.10, 2017-2019 &copy; <a href="{% url 'admin:index' %}">Адмінка</a>{% endif %}</p>
                     </div>
                 </div>
             </div>

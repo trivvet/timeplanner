@@ -26,9 +26,12 @@
 <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
-        {% if next_url %}
+        {% if request.GET.next == 'freports:court_detail' %}
         <a type="button" class="btn btn-light" id="back-button"
-            href="{% url next_url content.court_name.id %}">Повернутись до сторінки суду</a>
+            href="{% url 'freports:court_detail' content.court_name.id %}">Повернутись до сторінки суду</a>
+        {% elif request.GET.next %}
+        <a type="button" class="btn btn-light" id="back-button"
+            href="{% url 'freports:report_detail' request.GET.next %}">Повернутись до деталей провадження</a>
         {% endif %}
         <table class="table table-bordered table-hover">
             <thead></thead>
@@ -41,6 +44,7 @@
                     <th scope="row">Місце роботи</th>
                     <td><a class="no-style-link text-body" href="{% url 'freports:court_detail' content.court_name.id %}">{{ content.court_name }}</a></td>
                 </tr>
+                {% if perms.admins %}
                 {% if content.personal_phone %}
                 <tr>
                     <th scope="row">Особистий телефон</th>
@@ -101,11 +105,14 @@
                         {% endif %}
                     </td>
                 </tr>
+                {% endif %}
             </tbody>
 
         </table>
+        {% if perms.admins %}
         <a type="button" class="btn btn-info modal-button" href="{% url 'freports:edit_judge' content.id %}?next=freports:judge_detail">Редагувати</a>
         <a type="button" class="btn btn-danger modal-button" href="{% url 'freports:delete_judge' content.id %}?next=freports:judge_detail">Видалити</a>
+        {% endif %}
     </div>
 </div>
 {% endblock content %}

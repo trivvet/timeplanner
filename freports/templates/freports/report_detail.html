@@ -65,7 +65,7 @@
                 <tr>
                     <th scope="row">Суддя</th>
                     <td>
-                        <a class="no-style-link report-detail-item" href="{% url 'freports:judge_detail' report.judge_name.id %}">
+                        <a class="no-style-link report-detail-item" href="{% url 'freports:judge_detail' report.judge_name.id %}?next={{ report.id }}">
                             {{ report.judge_name }}</a>
                     </td>
                 </tr>
@@ -104,7 +104,7 @@
                     <td>
                         {% if report.is_cost and report.is_paid %}
                         <span class="report-detail-item">{{ report.is_cost }}грн</span>
-                            {% if report.order %}
+                            {% if report.order and perms.admins %}
                             <a class="btn btn-outline-info badge" href="{% url 'finance:detail_order' report.order.id %}"
                             hidden>Інформація по замовленню</a>
                             {% endif %}
@@ -142,7 +142,7 @@
                     </td>
                 </tr>
 
-                {% if tasks %}
+                {% if tasks and perms.admins %}
                 <tr id="active-tasks-list">
                     <th scope="row">Активні завдання</th>
                     <td>
@@ -165,7 +165,7 @@
                 <tr>
                     <th scope="row"></th>
                     <td>
-                        {% if report.address != '-' and report.plaintiff != '-' and  report.defendant != '-' and report.object_name != '-' and report.research_kind != '-' %}
+                        {% if report.address != '-' and report.plaintiff != '-' and  report.defendant != '-' and report.object_name != '-' and report.research_kind != '-' and perms.admins %}
                             <a type="button" class="btn btn-info modal-button"
                                 href="{% url 'freports:edit_report' report.id %}?next=freports:report_detail">Редагувати основну інформацію</a>
                         {% endif %}
@@ -211,8 +211,10 @@
                 </div>
             </div>
             {% endif %}
+            {% if perms.admins %}
             <a class="btn btn-outline-info align-top float-right modal-button dropdown"
                 href="{% url 'freports:add_task' %}?next_page={% url 'freports:report_detail' report.id %}&report={{ report.id }}">Додати завдання</a>
+            {% endif %}
         </div>
 
         <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne" data-parent="#accordion">
@@ -241,7 +243,7 @@
                                     </button>
                                     <div class="dropdown-menu" id="edit-event" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item modal-button" href="{% url 'freports:edit_detail' report.id detail.id %}">Редагувати</a>
-                                        {% if detail.name != 'first_arrived' %}
+                                        {% if detail.name != 'first_arrived' and perms.admins %}
                                         <a class="dropdown-item modal-button" href="{% url 'freports:delete_detail' report.id detail.id %}">Видалити</a>
                                         {% endif %}
                                     </div>

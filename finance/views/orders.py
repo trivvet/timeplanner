@@ -4,7 +4,10 @@ from itertools import chain
 from operator import attrgetter
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -14,6 +17,7 @@ from django.views.generic import ListView
 from ..models import Order, Income, Execution
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def orders_list(request):
     orders = Order.objects.all().order_by('name')
     orders_active = orders.filter(status='active')
