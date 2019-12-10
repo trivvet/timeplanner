@@ -52,12 +52,20 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
     form_class = IncomeForm
     success_url = reverse_lazy('finance:incomes_list')
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super(IncomeCreate, self).get_context_data(**kwargs)
         context['header'] = u"Додавання надходження"
+        order = self.request.GET.get('order')
         form = context['form']
-        form.fields['order'].queryset = Order.objects.filter(
-            status='inactive')
+        if order:
+            form.fields['order'].queryset = Order.objects.filter(
+                pk=order)
+            form.fields['order'].initial = order
+            form.fields['order'].empty_label = None
+            form.fields['order'].widget.attrs['disabled'] = 'disabled'
+        else:
+            form.fields['order'].queryset = Order.objects.filter(
+                status='inactive')
         return context
 
     def render_to_response(self, context):
@@ -80,11 +88,30 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
         order.save()
         return super(IncomeCreate, self).form_valid(form)
 
+    def post(self, request, *args, **kwargs):
+        order = request.GET.get('order')
+        if order:
+            request.POST = request.POST.copy()
+            request.POST['order'] = order
+        return super(IncomeCreate, self).post(request, *args, **kwargs)
+
     def get_success_message(self, cleaned_data):
         income = self.object
-        message = u"{} успішно додане!".format(
-            income)
+        order = self.request.GET.get('order')
+        if order:
+            message = u"Надходження успішно додане"
+        else:
+            message = u"{} успішно додане!".format(
+                income)
         return message
+
+    def get_success_url(self):
+        order = self.request.GET.get('order')
+        if order:
+            return reverse('finance:detail_order', 
+                kwargs={'pk': order})
+        else:
+            return super(IncomeCreate, self).get_success_url()
 
 @method_decorator(login_required, name='dispatch')
 class IncomeEdit(SuccessMessageMixin, UpdateView):
@@ -114,7 +141,6 @@ class IncomeEdit(SuccessMessageMixin, UpdateView):
             return super(IncomeEdit, self).render_to_response(context)
     
     def post(self, request, *args, **kwargs):
-        # import pdb;pdb.set_trace()
         income_id = kwargs['pk']
         income = Income.objects.get(pk=income_id)
         order_id = income.order.id

@@ -85,6 +85,7 @@ class ReportSubject(models.Model):
 
         return full_address
 
+    @property
     def settlement_type(self):
         s_type = self.settlement[0:4]
         if '.' not in s_type:

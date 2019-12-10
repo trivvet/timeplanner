@@ -52,6 +52,16 @@
     </tbody>
 </table>
 
+{% if object.paid_sum < object.total_sum %}
+<a class="btn btn-outline-success mb-3 ml-3 modal-button" 
+    href="{% url 'finance:add_income' %}?order={{ object.id }}">Додати надходження</a>
+{% endif %}
+
+{% if object.done_sum < object.total_sum %}
+<a class="btn btn-outline-danger mb-3 ml-3 modal-button" 
+    href="{% url 'finance:add_execution' %}">Додати виконання</a>
+{% endif %}
+
 {% else %}
 <p>Ще немає даних</p>
 {% endif %}
