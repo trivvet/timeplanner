@@ -5,12 +5,16 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Court, Judge, Report
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def judges_list(request):
     judges = Judge.objects.all().order_by('surname')
     for judge in judges:
@@ -33,6 +37,7 @@ def judge_detail(request, jid):
          'cases_executed': cases_executed})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def add_judge(request):
     header = u'Додавання судді'
     courts = Court.objects.all()
@@ -72,6 +77,7 @@ def add_judge(request):
             'cancel_url': next_url})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def edit_judge(request, jid):
     judge = Judge.objects.get(pk=jid)
     courts = Court.objects.all()
@@ -108,6 +114,7 @@ def edit_judge(request, jid):
              'cancel_url': next_url})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_judge(request, jid):
     judge = Judge.objects.get(pk=jid)
     header = u"Видалення інформації про суддю %s" % judge.short_name()

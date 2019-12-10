@@ -4,7 +4,10 @@ from itertools import chain
 from operator import attrgetter
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -65,6 +68,7 @@ class AccountDetail(ListView):
         return context
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def add_account(request):
     header = u'Додавання рахунку'
     if request.method == 'POST':
@@ -90,6 +94,7 @@ def add_account(request):
         {'header': header})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def edit_account(request, aid):
     header = u"Редагування рахунку"
     account = Account.objects.get(pk=aid)
@@ -118,6 +123,7 @@ def edit_account(request, aid):
             {'header': header, 'content': account})
     
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_account(request, aid):
     account = Account.objects.get(pk=aid)
     header = u"Видалення рахунку"

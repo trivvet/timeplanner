@@ -5,7 +5,10 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from ..models import Contact
@@ -28,6 +31,7 @@ status_translate = {
 }
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def contacts_list(request):
     contacts = Contact.objects.all().order_by('surname')
     status = request.GET.get('status', '')
@@ -63,6 +67,7 @@ def contacts_list(request):
         {'contacts': contacts, 'header': header})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def contact_detail(request, cid):
     contact = Contact.objects.get(pk=cid)
     header = u"Детальна інформація про контакт {}".format(contact.surname)
@@ -70,6 +75,7 @@ def contact_detail(request, cid):
         'header': header, 'content': contact, 'status_list': contacts_status_list.iteritems()})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def add_contact(request):
     header='Додавання контакту'
     content = {}
@@ -101,6 +107,7 @@ def add_contact(request):
         'content': content, 'errors': errors})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def edit_contact(request, cid):
     contact = Contact.objects.get(pk=cid)
     header = u"Редагування контакту {}".format(contact.surname)
@@ -137,6 +144,7 @@ def edit_contact(request, cid):
 
 
 login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_contact(request, cid):
     contact = Contact.objects.get(pk=cid)
     if request.method == 'POST':

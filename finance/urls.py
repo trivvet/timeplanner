@@ -1,5 +1,7 @@
 from django.conf.urls import url
 
+from django.contrib.auth.decorators import permission_required
+
 from . import views
 from .views import (
     AccountList,
@@ -17,9 +19,11 @@ from .views import (
 
 urlpatterns = [
     # account URLs
-    url(r'^accounts/$', AccountList.as_view(), 
+    url(r'^accounts/$', 
+        permission_required('admins')(AccountList.as_view()), 
         name='accounts_list'), 
-    url(r'^account/(?P<pk>\d+)/detail/$', AccountDetail.as_view(),
+    url(r'^account/(?P<pk>\d+)/detail/$', 
+        permission_required('admins')(AccountDetail.as_view()),
         name='detail_account'),
     url(r'^accounts/add/$', views.add_account, 
         name='add_account'),
@@ -31,7 +35,8 @@ urlpatterns = [
     # order URLs
     url(r'^orders/$', views.orders_list, 
         name='orders_list'),
-    url(r'^orders/(?P<pk>\d+)/detail/$', OrderDetail.as_view(),
+    url(r'^orders/(?P<pk>\d+)/detail/$', 
+        permission_required('admins')(OrderDetail.as_view()),
         name='detail_order'),   
     url(r'^orders/add/$', views.add_order,
         name='add_order'),
@@ -41,21 +46,30 @@ urlpatterns = [
         name='delete_order'),
 
     # income URLs
-    url(r'^incomes/$', IncomeList.as_view(), name="incomes_list"),
-    url(r'^incomes/add/$', IncomeCreate.as_view(),
+    url(r'^incomes/$', 
+        permission_required('admins')(IncomeList.as_view()), 
+        name="incomes_list"),
+    url(r'^incomes/add/$', 
+        permission_required('admins')(IncomeCreate.as_view()),
         name="add_income"),
-    url(r'^incomes/(?P<pk>\d+)/edit/$', IncomeEdit.as_view(),
+    url(r'^incomes/(?P<pk>\d+)/edit/$', 
+        permission_required('admins')(IncomeEdit.as_view()),
         name="edit_income"),
-    url(r'^incomes/(?P<pk>\d+)/delete/$', IncomeDelete.as_view(),
+    url(r'^incomes/(?P<pk>\d+)/delete/$', 
+        permission_required('admins')(IncomeDelete.as_view()),
         name="delete_income"),
 
     # execution URLs
-    url(r'^executions/$', ExecutionList.as_view(), 
+    url(r'^executions/$', 
+        permission_required('admins')(ExecutionList.as_view()), 
         name='executions_list'),
-    url(r'^executions/add/$', ExecutionCreate.as_view(),
+    url(r'^executions/add/$', 
+        permission_required('admins')(ExecutionCreate.as_view()),
         name="add_execution"),
-    url(r'^executions/(?P<pk>\d+)/edit/$', ExecutionEdit.as_view(),
+    url(r'^executions/(?P<pk>\d+)/edit/$', 
+        permission_required('admins')(ExecutionEdit.as_view()),
         name="edit_execution"),
-    url(r'^executions/(?P<pk>\d+)/delete/$', ExecutionDelete.as_view(),
+    url(r'^executions/(?P<pk>\d+)/delete/$', 
+        permission_required('admins')(ExecutionDelete.as_view()),
         name="delete_execution"),
 ]

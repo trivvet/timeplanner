@@ -5,7 +5,10 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from ..models import Report, ReportEvents, ReportParticipants, Contact
@@ -29,6 +32,7 @@ status_list = {
 }
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def participants_list(request):
     participants = ReportParticipants.objects.all().order_by('name')
     if request.GET.get('all_pages', '') == '':
@@ -135,6 +139,7 @@ def edit_participant(request, rid, did):
             {'content': content, 'header': header})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_participant(request, rid, did):
     report = Report.objects.get(pk=rid)
     participant = ReportParticipants.objects.get(pk=did)

@@ -6,7 +6,10 @@ from datetime import date, datetime, timedelta
 from calendar import day_abbr
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect,JsonResponse
 from django.shortcuts import render
@@ -18,6 +21,7 @@ from django.utils.formats import date_format
 from ..models import Task, Report, ReportEvents, ReportSubject
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def tasks_list(request):
     all_tasks = Task.objects.all()
     content = {}
@@ -43,6 +47,7 @@ def tasks_list(request):
         'content': content})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def change_status_task(request):
     if request.is_ajax():
         if request.method == "POST":
@@ -83,6 +88,7 @@ def change_status_task(request):
             })
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def tasks_today_list(request):
     today = date.today()
     tasks = Task.objects.filter(time__startswith=today)
@@ -93,6 +99,7 @@ def tasks_today_list(request):
         {'tasks': tasks, 'header': header})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def add_task(request):
     header = u'Додавання завдання'
     reports = Report.objects.filter(executed=False).order_by('number')
@@ -137,6 +144,7 @@ def add_detail_task(detail):
     return HttpResponseRedirect(reverse('freports:tasks_list'))
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def edit_task(request, tid):
     task = Task.objects.get(pk=tid)
     header = u'Редагування інформації про завдання {name} яке призначене на {date}'.format(
@@ -187,6 +195,7 @@ def edit_detail_task(detail):
     return HttpResponseRedirect(reverse('freports:tasks_list'))
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_task(request, tid):
     next_page= request.GET.get('next_page', reverse('freports:tasks_list'))
     task = Task.objects.get(pk=tid)
@@ -204,6 +213,8 @@ def delete_task(request, tid):
         return render(request, 'freports/delete_form.html', 
             {'content': content, 'header': header})
 
+@login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_old_tasks(request):
     tasks = Task.objects.filter(execute=True)
     for task in tasks:

@@ -5,12 +5,16 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.core.exceptions import ObjectDoesNotExist
 
 from ..models import Court, Judge, Report
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def courts_list(request):
     courts = Court.objects.all().order_by('name')
     for court in courts:
@@ -37,6 +41,7 @@ def court_detail(request, cid):
          'cases_amount': cases_amount})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def add_court(request):
     header = u'Додавання суду'
     if request.method == 'POST':
@@ -63,6 +68,7 @@ def add_court(request):
             {'header': header})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def edit_court(request, cid):
     court = Court.objects.get(pk=cid)
     header = u'Редагування інформації про {}'.format(court.name)
@@ -99,6 +105,7 @@ def edit_court(request, cid):
              'next_url':next_url})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_court(request, cid):
     court = Court.objects.get(pk=cid)
     header = u"Видалення інформації про %s" % court

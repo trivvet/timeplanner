@@ -7,7 +7,10 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
@@ -224,6 +227,7 @@ def edit_report(request, rid):
                 'judges': judges, 'next_url': next_url})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_report(request, rid):
     if request.method == 'GET':
         report = Report.objects.get(pk=rid)

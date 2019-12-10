@@ -3,7 +3,10 @@ from __future__ import unicode_literals
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, signals
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import (
+    login_required, 
+    permission_required
+    )
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -46,6 +49,7 @@ def logout_auth(request):
     return HttpResponseRedirect(reverse('login:form'))
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def login_attempts(request):
     attempts_all = AccessAttempt.objects.all()
     if request.GET.get('show'):
@@ -58,6 +62,7 @@ def login_attempts(request):
         {'attempts': attempts})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_old_attempts(request):
     attempts = AccessAttempt.objects.all()
     old_logs = 0

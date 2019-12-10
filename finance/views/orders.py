@@ -68,6 +68,7 @@ class OrderDetail(ListView):
         return context
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def add_order(request):
     header = u"Додавання замовлення"
     if request.method == 'POST':
@@ -96,6 +97,7 @@ def add_order(request):
             {'header': header})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def edit_order(request, oid):
     header = u"Редагування замовлення"
     order = Order.objects.get(pk=oid)
@@ -126,6 +128,7 @@ def edit_order(request, oid):
             {'header': header, 'item': order})
 
 @login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
 def delete_order(request, oid):
     order = Order.objects.get(pk=oid)
     header = u"Видалення замовлення"
