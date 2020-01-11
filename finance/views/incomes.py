@@ -225,7 +225,12 @@ def filter_by_date(self, items=None):
     errors = {}
     now = timezone.now()
     start_current_month = date(now.year, now.month, 1)
-    start_previous_month = date(now.year, now.month - 1, 1) - timedelta(days=1)
+    if now.month > 1:
+        start_previous_month = date(now.year, 
+            now.month - 1 or 1, 1) - timedelta(days=1)
+    else:
+        start_previous_month = date(
+            now.year - 1, 12, 1)- timedelta(days=1)
     start_current_year = date(now.year, 1, 1)
     start_previous_year = date(now.year - 1, 1, 1)
     date_from = self.request.GET.get('date_from')

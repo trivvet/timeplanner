@@ -36,7 +36,7 @@ def contacts_list(request):
     contacts = Contact.objects.all().order_by('surname')
     status = request.GET.get('status', '')
     if status == 'members':
-        contacts = contacts.filter(status='member')
+        contacts = contacts.silter(status='member')
     elif status == 'customers':
         contacts = contacts.filter(status='customer')
     elif status == 'other':

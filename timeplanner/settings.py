@@ -12,13 +12,27 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from .sensitive_data import DATABASES
-from .env_settings import SECRET_KEY, DEBUG, PORTAL_URL, ALLOWED_HOSTS, STATIC_ROOT
-
+from .env_settings import (
+    SECRET_KEY, 
+    DEBUG, 
+    PORTAL_URL, 
+    ALLOWED_HOSTS, 
+    STATIC_ROOT,
+    # ADMIN_EMAIL, 
+    # EMAIL_HOST, 
+    # EMAIL_PORT,
+    # EMAIL_HOST_USER, 
+    # EMAIL_HOST_PASSWORD,
+    # EMAIL_USE_TLS, 
+    # EMAIL_USE_SSL
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # Application definition
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 INSTALLED_APPS = [
     # DJANGO APPS
@@ -119,3 +133,55 @@ AXES_REVERSE_PROXY_HEADER = 'REMOTE_ADDR'
 AXES_NUM_PROXIES = 1
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+# Logging
+LOG_FILE = os.path.join(BASE_DIR, 'timeplanner.log')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters' : {
+        'verbose': {
+             'format': 
+                 '%(levelname)s %(asctime)s %(module)s : %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s: %(message)s'
+        }
+    },   
+    'filters': {
+       'debug_mod': {
+           '()': 'django.utils.log.RequireDebugTrue',
+       },
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['debug_mod'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': LOG_FILE,
+            'formatter': 'verbose'
+        },
+        # 'mail_admins': {
+        #     'level': 'ERROR',
+        #     'class': 'django.utils.log.AdminEmailHandler',
+        # }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
