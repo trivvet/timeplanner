@@ -16,6 +16,7 @@
         <title>Судова експертиза</title>
 
         <link rel="apple-touch-icon shortcut icon" sizes="58x45" href="{{ PORTAL_URL }}{% static 'estate-search.png' %}">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -39,14 +40,15 @@
             </div>
             <div class="row standart-row" id="mainInfo">
                 <div class="col">
-                    <ul class="mt-1">
-                        <li>Будівельно-технічні та земельно-технічні дослідження</li>
+                    <ul class="mt-1"><h3>Напрямки роботи:</h3>
+                        <li>Проведення судових експертиз ухвалою суду або за зверненням сторони провадження</li>
+                        <li>Проведення експертних досліджень за зверненням фізичних та юридичних осіб</li>
                         <li>Оцінка збитків, завданих пожежею або залиттям</li>
                         <li>Визначення можливості розподілу об'єктів нерухомості</li>
-                        <li>Оцінка відповідності вимогам ДБН</li>
+                        <li>Оцінка відповідності об'єктів будівництва вимогам ДБН</li>
                         <li>Встановлення факту порушення меж землекористування</li>
                     </ul>
-                    <ul><strong>Експертні спеціальності:</strong>
+                    <ul><h3>Експертні спеціальності:</h3>
                         <li>10.6 "Дослідження об'єктів нерухомості, будівельних матеріалів, конструкцій та відповідних документів"</li>
                         <li>10.7 "Розподіл земель та визначення порядку користування земельними ділянками"</li>
                         <li>10.10 "Визначення оціночної вартості будівельних об'єктів та споруд"</li>
@@ -55,14 +57,12 @@
                 </div>
             </div>
 
-            <div class="row standart-row">
-                <div class="col-12">
+            <div class="row standart-row" id="contactInfo">
+                <div class="col-12 text-center">
                     <div class="horizontal-line"></div>
-                    <div id="map-icon">
-                        <i class="fa fa-info-circle fa-3x" aria-hidden="true"></i>
-                    </div>
+                    <i class="fa fa-info-circle fa-3x info-icon" aria-hidden="true"></i>
                     <h4 class="map-header">Контакти</h4>
-                    <div class="row text-center">
+                    <div class="row">
                         <div class="col-lg-3 col-sm-12">
                             <i class="fa fa-address-card-o fa-2x mb-2" aria-hidden="true"></i>
                             <p>Адреса</p>
@@ -85,20 +85,13 @@
                             <p>Розклад роботи</p>
                             <p class="contact-info">Пн-Пт: з 10.00 до 17.00</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row standart-row" id="mapContainer">
-                <div class="col-12">
-                    <div class="horizontal-line"></div>
-                    <div id="map-icon">
-                        <i class="fa fa-map-marker fa-3x" aria-hidden="true"></i>
-                    </div>
-                    <h4 class="map-header">Карта проїзду</h4>
-                    <div id="map"></div>
-                    <div id="map-content">
-                        Судовий експерт Власюк В.В.</br>
-                        вул. Проскурівського підпілля, 25
+                        <div class="col-12">
+                            <i class="fa fa-map-marker fa-3x" aria-hidden="true"></i>
+                           <h4 class="map-header">Карта проїзду</h4>
+                           <div id="google-map">
+                               <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d648.8194823462868!2d26.980555088145366!3d49.42255937105826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473207fbc81008d7%3A0x88f5aeeefa03b3f7!2z0KHRg9C00L7QstC40Lkg0LXQutGB0L_QtdGA0YIg0JLQu9Cw0YHRjtC6INCSLtCSLg!5e0!3m2!1suk!2sua!4v1579330640649!5m2!1suk!2sua" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -123,17 +116,5 @@
             crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
             integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-        <script
-            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js">
-        </script>
-        <script
-          src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/locale/uk.js"></script>
-        <script src="{{ PORTAL_URL }}{% static 'js/home.js' %}" type="text/javascript"></script>
-        <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key={{ google_api }}&callback=initMap">
-        </script>
-
-
     </body>
 </html>
