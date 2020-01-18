@@ -6,7 +6,7 @@
 
 {% block title %}
 <div class="col">
-    <span class="h1">Список замовлень</span> <span class="badge badge-info">Alpha</span>
+    <span class="h1">Список замовлень</span> <span class="badge badge-danger">Beta</span>
     <a class="btn btn-outline-info modal-button" id="add-report"
         href="{% url 'finance:add_order' %}">Додати замовлення</a>
 </div>
@@ -30,6 +30,7 @@
         <tr>
             <th scope="col">Назва замовлення</th>
             <th scope="col">Провадження</th>
+            <th scope="col">Деталі</th>
             {% if request.GET.status == 'all' %}
             <th scope="col">Статус</th>
             {% endif %}
@@ -58,6 +59,11 @@
                 </a>
                 {% endif %}
             </td>
+            <td>
+                {% if order.report %}
+                {{ order.report.short_info }}
+                {% endif %}
+            </td>
             {% if request.GET.status == 'all' %}
             <td>{{ order.get_status_display }}</td>
             {% endif %}
@@ -81,7 +87,7 @@
         </tr>
         {% endfor %}
         <tr>
-            <th colspan="{% if request.GET.status == 'all' %}3{% else %}2{% endif %}" class="text-center">
+            <th colspan="{% if request.GET.status == 'all' %}4{% else %}3{% endif %}" class="text-center">
                 Всього
                 {% if request.GET.status == 'inactive' %}
                     по призупинених замовленнях

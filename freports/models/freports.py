@@ -130,11 +130,19 @@ class Report(BaseReport):
                 cost = bill.first().cost
         return cost
 
-
+    @property
     def final_document(self):
-        events = ReportEvents.objects.filter(report=self).order_by('date')
-        report_type = events.last().subspecies
+        events = ReportEvents.objects.filter(report=self).order_by('date', 'id')
+        if events.count() != 0:
+            report_type = events.last().short_info
+        else:
+            report_type = ''
         return report_type
+
+    @property
+    def short_info(self):
+        return u"{address}-{plaintiff}-{defendant}".format(address=self.address, 
+            plaintiff=self.plaintiff, defendant=self.defendant)
 
     @property
     def order(self):

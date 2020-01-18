@@ -1,22 +1,22 @@
 <!-- Sidebar -->
 <nav id="sidebar" {% if request.COOKIES.sidebar == 'active' %}class="active"{% endif %}>
     <div>
-        <div class="sidebar-header">
-            <h2 class="text-center">Фінанси <span class="badge badge-info">Alpha</span></h2>
+        <div class="sidebar-header text-center">
+            <span class="h2">Фінанси</span> <span class="badge badge-danger">Beta</span>
         </div>
 
         <ul class="list-unstyled components">
             <li {% if request.path == url_orders %}class="active"{% endif %}>
-                <a href="{{ url_orders }}">Список замовлень <span class="badge badge-info">Alpha</span></a>
+                <a href="{{ url_orders }}">Список замовлень <span class="badge badge-danger">Beta</span></a>
             </li>
             <li {% if request.path == url_accounts %}class="active"{% endif %}>
-                <a href="{{ url_accounts }}">Список рахунків <span class="badge badge-info">Alpha</span></a>
+                <a href="{{ url_accounts }}">Список рахунків <span class="badge badge-danger">Beta</span></a>
             </li>
             <li {% if request.path == url_incomes %}class="active"{% endif %}>
-                <a href="{{ url_incomes }}">Список надходжень <span class="badge badge-info">Alpha</span></a>
+                <a href="{{ url_incomes }}">Список надходжень <span class="badge badge-danger">Beta</span></a>
             </li>
             <li {% if request.path == url_executions %}class="active"{% endif %}>
-                <a href="{{ url_executions }}">Список виконань <span class="badge badge-info">Alpha</span></a>
+                <a href="{{ url_executions }}">Список виконань <span class="badge badge-danger">Beta</span></a>
             </li>
         </ul>
 

@@ -172,7 +172,7 @@
                 Відомості відсутні
                 {% endif %}
             </td>
-            <td class="td-link">{{ report.last_event.short_info }}</td>
+            <td class="td-link">{{ report.final_document }}</td>
             {% endif %}
             {% if request.GET.status == 'deactivate' %}
             <td class="td-link">
@@ -182,7 +182,7 @@
                 Відомості відсутні
                 {% endif %}
             </td>
-            <td class="td-link">{{ report.last_event.short_info }}</td>
+            <td class="td-link">{{ report.final_document }}</td>
             {% endif %}
         </tr>
         {% endfor %}

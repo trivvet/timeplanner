@@ -115,6 +115,7 @@ def edit_order(request, oid):
             else:
                 edit_order = Order(**checked_data)
                 edit_order.id = order.id
+                edit_order.report = order.report
                 edit_order.save()
                 messages.success(request, 
                     u"{} успішно змінене".format(
