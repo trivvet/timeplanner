@@ -63,6 +63,8 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
             form.fields['order'].initial = order
             form.fields['order'].empty_label = None
             form.fields['order'].widget.attrs['disabled'] = 'disabled'
+            form.fields['amount'].initial = Order.objects.get(
+                pk=order).unpaid_sum
         else:
             form.fields['order'].queryset = Order.objects.filter(
                 status='inactive')

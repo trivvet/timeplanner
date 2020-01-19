@@ -64,4 +64,9 @@ class Order(models.Model):
     @property
     def remainder(self):
         return self.paid_sum - self.done_sum
+
+    @property
+    def unpaid_sum(self):
+        return self.total_sum - self.paid_sum
+    
     

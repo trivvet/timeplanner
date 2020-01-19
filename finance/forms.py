@@ -9,13 +9,9 @@ from crispy_forms.layout import Submit, Layout, Button
 from .models import Income, Order, Account, Execution
 
 class IncomeForm(forms.ModelForm):
-    # order = forms.ModelChoiceField(
-    #     label=u"Замовлення",
-    #     queryset=Order.objects.filter(status="inactive"))
 
     date = forms.DateField(
         label=u"Дата отримання",
-        # input_formats='%Y-%m-%d',
         widget=forms.DateInput(
             format=('%Y-%m-%d'),
             attrs={
@@ -59,7 +55,6 @@ class IncomeForm(forms.ModelForm):
 class ExecutionForm(forms.ModelForm):
     date = forms.DateField(
         label=u"Дата виконання",
-        # input_formats='%Y-%m-%d',
         widget=forms.DateInput(
             format=('%Y-%m-%d'),
             attrs={

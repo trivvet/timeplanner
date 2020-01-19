@@ -61,7 +61,7 @@
             </td>
             <td>
                 {% if order.report %}
-                {{ order.report.short_info }}
+                {{ order.report.short_info|truncatechars:25 }}
                 {% endif %}
             </td>
             {% if request.GET.status == 'all' %}

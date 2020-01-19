@@ -52,9 +52,19 @@ class ExecutionCreate(SuccessMessageMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super(ExecutionCreate, self).get_context_data(**kwargs)
         context['header'] = u"Додавання виконання"
+        order = self.request.GET.get('order')
         form = context['form']
-        form.fields['order'].queryset = Order.objects.filter(
-            status='active')
+        if order:
+            form.fields['order'].queryset = Order.objects.filter(
+                pk=order)
+            form.fields['order'].initial = order
+            form.fields['order'].empty_label = None
+            form.fields['order'].widget.attrs['disabled'] = 'disabled'
+            form.fields['amount'].initial = Order.objects.get(
+                pk=order).remainder
+        else:
+            form.fields['order'].queryset = Order.objects.filter(
+                status='active')
         return context
 
     def render_to_response(self, context):
@@ -77,6 +87,13 @@ class ExecutionCreate(SuccessMessageMixin, CreateView):
         else:
             return super(ExecutionCreate, self).render_to_response(
                 context)
+
+    def post(self, request, *args, **kwargs):
+        order = request.GET.get('order')
+        if order:
+            request.POST = request.POST.copy()
+            request.POST['order'] = order
+        return super(ExecutionCreate, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
         data = form.cleaned_data

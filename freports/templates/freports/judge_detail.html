@@ -1,11 +1,9 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<div class="row">
-    <div class="col-sm-2"></div>
-    <div class="col">
-        <h2>{{ header }}</h2>
-    </div>
+<div class="col-sm-2"></div>
+<div class="col">
+    <h2>{{ header }}</h2>
 </div>
 {% endblock title %}
 
@@ -27,10 +25,10 @@
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
         {% if request.GET.next == 'freports:court_detail' %}
-        <a type="button" class="btn btn-light" id="back-button"
+        <a type="button" class="btn btn-outline-dark" id="back-button"
             href="{% url 'freports:court_detail' content.court_name.id %}">Повернутись до сторінки суду</a>
         {% elif request.GET.next %}
-        <a type="button" class="btn btn-light" id="back-button"
+        <a type="button" class="btn btn-outline-dark" id="back-button"
             href="{% url 'freports:report_detail' request.GET.next %}">Повернутись до деталей провадження</a>
         {% endif %}
         <table class="table table-bordered table-hover">

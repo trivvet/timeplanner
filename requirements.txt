@@ -1,4 +1,4 @@
-django>=1.11.19
+django>=1.11.27
 MySQL-python
 django-axes==3.0.3
 django-crispy-forms==1.7.2

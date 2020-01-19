@@ -1,14 +1,16 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<h2>{{ header }}</h2>
+<div class="offset-2 col">
+    <h2>{{ header }}</h2>
+</div>
 {% endblock title %}
 
 {% block content %}
 <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-8">
-        <a type="button" class="btn btn-light" id="back-button"
+        <a type="button" class="btn btn-outline-dark" id="back-button"
             href="{% url 'freports:report_detail' content.report.id %}">Повернутись до деталей провадження</a>
         <table class="table table-bordered table-hover">
             <thead></thead>

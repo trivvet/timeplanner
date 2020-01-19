@@ -8,12 +8,6 @@ h1, h2, h3, h4 {
   font-family: Noto Sans JP, sans-serif;
 }
 
-.standart-row {
-  padding: 1% 4%;
-  font-size: 2.5vh;
-  min-height: 100%;
-}
-
 #mainHeader {
   background-color: ghostwhite;
   color: black;
@@ -27,11 +21,31 @@ h1, h2, h3, h4 {
 
 .info-icon {
   background-color: white;
-  margin: -5rem 0 3rem 0;
+  margin: -5rem 0 1rem 0;
+}
+
+.horizontal-line {
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+hr {
+  margin-top: 5rem;
+}
+
+.contact-info {
+  width: 60%;
+  color: gray;
 }
 
 
 @media (max-width: 1000px) {
+
+  .standart-row {
+    padding: 1% 10%;
+    font-size: 2.5vh;
+    min-height: 100%;
+  }
   
   #mainHeader .col {
     margin: auto 0;
@@ -76,6 +90,10 @@ h1, h2, h3, h4 {
     font-size: 4.2vw;
   }
 
+  .fa-1x {
+    font-size: 3rem;
+  }
+
   .contact-info {
     width: 60%;
     margin: 3vw auto;
@@ -103,6 +121,10 @@ h1, h2, h3, h4 {
     margin-top: 5rem;
   }
 
+  #homeFooter {
+    margin: 0 10%;
+  }
+
   #homeFooter, #homeFooter p {
     font-size: 3.5vw;
   }
@@ -111,6 +133,12 @@ h1, h2, h3, h4 {
 
 @media (min-width: 1000px) {
   
+  .standart-row {
+    padding: 1% 15%;
+    font-size: 2.5vh;
+    min-height: 100%;
+  }
+
   #mainHeader {
     min-height: 100%;
   }
@@ -159,10 +187,19 @@ h1, h2, h3, h4 {
 
   h4.map-header {
     font-size: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  p.contact-header {
+    font-size: 1.7rem;
+  }
+
+  .fa-1x {
+    font-size: 2.8rem;
   }
 
   .contact-info {
-    font-size: 1.5vw;
+    font-size: 1.3rem;
     margin: 0 auto;
   }
 
@@ -175,25 +212,14 @@ h1, h2, h3, h4 {
 
   #google-map iframe {
     height: 100%;
-    width: 80%;
+    width: 100%;
+  }
+
+  #homeFooter {
+    margin: 0 15%;
   }
 
   #homeFooter p {
     font-size: 1.3rem;
   }
 } 
-
-
-.horizontal-line {
-  width: 100%;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-hr {
-  margin-top: 5rem;
-}
-
-.contact-info {
-  width: 60%;
-  color: gray;
-}

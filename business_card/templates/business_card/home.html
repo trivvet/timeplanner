@@ -60,33 +60,31 @@
             <div class="row standart-row" id="contactInfo">
                 <div class="col-12 text-center">
                     <div class="horizontal-line"></div>
-                    <i class="fa fa-info-circle fa-3x info-icon" aria-hidden="true"></i>
+                    <i class="fa fa-info-circle fa-2x info-icon" aria-hidden="true"></i>
                     <h4 class="map-header">Контакти</h4>
                     <div class="row">
-                        <div class="col-lg-3 col-sm-12">
-                            <i class="fa fa-address-card-o fa-2x mb-2" aria-hidden="true"></i>
-                            <p>Адреса</p>
+                        <div class="col-xl-3 col-lg-6 col-md-12">
+                            <i class="fa fa-address-card-o fa-1x mb-2" aria-hidden="true"></i>
+                            <p class="contact-header">Адреса</p>
                             <p class="contact-info">29007,</br> м. Хмельницький, вул. Соборна, 57, оф. 310</p>
                         </div>
-                        <div class="col-lg-3 col-sm-12">
-                            <i class="fa fa-phone fa-2x mb-2" aria-hidden="true"></i>
-                           <p>Телефон</p>
+                        <div class="col-xl-3 col-lg-6 col-md-12">
+                            <i class="fa fa-phone fa-1x mb-2" aria-hidden="true"></i>
+                           <p class="contact-header">Телефон</p>
                            <p class="contact-info">097-749-28-34</p>
                         </div>
-                        <div class="col-lg-3 col-sm-12">
-                            <i class="fa fa-envelope-o fa-2x mb-2" aria-hidden="true"></i>
-                            <p>E-mail</p>
-                            <p class="contact-info">
-                                <a href="mailto:vlasyuk@budexpert.pp.ua">vlasyuk@budexpert.pp.ua</a>
-                            </p>
+                        <div class="col-xl-3 col-lg-6 col-md-12">
+                            <i class="fa fa-envelope-o fa-1x mb-2" aria-hidden="true"></i>
+                            <p class="contact-header">E-mail</p>
+                             <a class="contact-info" href="mailto:vlasyuk@budexpert.pp.ua">vlasyuk@budexpert.pp.ua</a>
                         </div>
-                        <div class="col-lg-3 col-sm-12">
-                            <i class="fa fa-clock-o fa-2x mb-2" aria-hidden="true"></i>
-                            <p>Розклад роботи</p>
+                        <div class="col-xl-3 col-lg-6 col-md-12">
+                            <i class="fa fa-clock-o fa-1x mb-2" aria-hidden="true"></i>
+                            <p class="contact-header">Розклад роботи</p>
                             <p class="contact-info">Пн-Пт: з 10.00 до 17.00</p>
                         </div>
                         <div class="col-12">
-                            <i class="fa fa-map-marker fa-3x" aria-hidden="true"></i>
+                            <i class="fa fa-map-marker fa-1x" aria-hidden="true"></i>
                            <h4 class="map-header">Карта проїзду</h4>
                            <div id="google-map">
                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d648.8194823462868!2d26.980555088145366!3d49.42255937105826!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473207fbc81008d7%3A0x88f5aeeefa03b3f7!2z0KHRg9C00L7QstC40Lkg0LXQutGB0L_QtdGA0YIg0JLQu9Cw0YHRjtC6INCSLtCSLg!5e0!3m2!1suk!2sua!4v1579330640649!5m2!1suk!2sua" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
@@ -116,5 +114,16 @@
             crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"
             integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#mainHeader").on("click","a", function (event) {
+                    event.preventDefault();
+                    var id  = $(this).attr('href'),
+                    top = $(id).offset().top;
+                    $('body,html').animate({scrollTop: top}, 1000);
+                });
+            });
+        </script>
     </body>
 </html>
