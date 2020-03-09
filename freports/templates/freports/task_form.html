@@ -12,9 +12,6 @@
 
     <input type="hidden" name="next_url" value="{{ next_url }}">
     <input type="hidden" name="event" value="{% if content.event %}{{ content.event.id }}{% endif %}">
-    {% if report_number %}
-    <input type="hidden" name="report" value="{{ report_number }}" />
-    {% endif %}
 
     <!-- Task Kind -->
     <div class="form-group row">
@@ -79,12 +76,16 @@
         <label for="inputReport" class="col-sm-4 col-form-label">Номер провадження</label>
         <div class="col-sm-6">
             <select class="form-control {% if errors.report %}is-invalid{% elif errors %}is-valid{% endif %}"
-                id="inputReport" name="report" value="{% if report_number %}{{ report_number }}{% else %}{{ content.report.id }}{% endif %}" {% if content.event or report_number %}disabled{% endif %}>
+                id="inputReport" name="report" value="{% if report_instance %}{{ report_instance.id }}{% else %}{{ content.report.id }}{% endif %}" {% if content.event %}disabled{% endif %}>
+                {% if report_instance %}
+                <option value='{{ report_instance.id }}'>{{ report_instance }}</option>
+                {% else %}
                 <option value=''>-----------</option>
                 {% for report in reports %}
                 <option value='{{ report.id }}'
                     {% if content.report.id == report.id or report_number|add:0 == report.id %}selected{% endif %}>{{ report }}</option>
                 {% endfor %}
+                {% endif %}
             </select>
             <div class="invalid-feedback">
                 {{ errors.report }}

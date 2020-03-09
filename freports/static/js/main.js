@@ -428,11 +428,13 @@ function clickFilterButton() {
 
 function showAddressInput() {
     $('input.person-сheckbox').on('change', function() {
-        inputAddress = $(this).next().children('input');
+        inputAddress = $(this).next().children('input')
         if($(this).is(':checked')) {
-            inputAddress.removeAttr('hidden');;
+            inputAddress.removeClass('d-none');
+            inputAddress.removeAttr('disabled');
         } else {
-            inputAddress.attr('hidden', true);
+            inputAddress.addClass('d-none');
+            inputAddress.attr('disabled', true);
         }
     });
 }

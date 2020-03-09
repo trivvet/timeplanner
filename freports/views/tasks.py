@@ -131,10 +131,14 @@ def add_task(request):
 
     else:
         next_page = request.GET.get('next_page', '')
-        report = request.GET.get('report')
+        report_number = request.GET.get('report')
+        if report_number:
+            report = Report.objects.get(pk=report_number)
+        else: 
+            report = ''
         return render(request, 'freports/task_form.html', 
             {'header': header, 'reports': reports, 'next_url': next_page,
-            'report_number': report})
+            'report_instance': report})
 
 def add_detail_task(detail):
     new_task = valid_detail_task(detail)
@@ -150,6 +154,7 @@ def edit_task(request, tid):
     header = u'Редагування інформації про завдання {name} яке призначене на {date}'.format(
         name=task.kind, date=task.time.strftime("%Y-%m-%d"))
     reports = Report.objects.filter(executed=False).order_by('number')
+    report_instance = task.report
     if request.method == 'POST':
         if request.POST.get('save_button'):
             valid_data = valid_task(request.POST)
@@ -182,7 +187,7 @@ def edit_task(request, tid):
         next_page = request.GET.get('next_page', '')
         return render(request, 'freports/task_form.html', 
             {'header': header, 'content': task, 'reports': reports,
-                'next_url': next_page})
+                'next_url': next_page, 'report_instance': report_instance})
 
 def edit_detail_task(detail):
     edit_task = Task.objects.filter(event=detail)

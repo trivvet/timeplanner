@@ -41,6 +41,7 @@ def login_auth(request):
         else:
             messages.error(request, 
                 "Невірно введене ім'я користувача або пароль")
+            login_attempts_last += 1
 
     return render(request, 'login/form.html', {})
 

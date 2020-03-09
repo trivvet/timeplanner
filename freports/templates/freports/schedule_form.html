@@ -81,7 +81,7 @@
                     <input class="form-check-input person-сheckbox" type="checkbox" id="person{{ person.id }}" value="{{ person.id }}" name="person">
                     <label class="form-check-label" for="person{{ person.id }}">
                         {{ person.full_info }}
-                        <input type="text" class="form-control person-address" hidden placeholder="Введіть адресу учасника" name="address">
+                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть адресу учасника" name="address">
                     </label>
                 </div>
                 {% endfor %}

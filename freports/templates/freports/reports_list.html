@@ -162,7 +162,7 @@
             <td class="td-link td-date">{{ report.date_arrived|date:"d M Y"|truncatechars:12 }}</td>
             {% if request.GET.status == 'executed' %}
             <td class="td-link td-date">{{ report.date_executed|truncatechars:10 }}</td>
-            <td class="td-link">{{ report.final_document }}</td>
+            <td class="td-link">{{ report.final_document.subspecies }}</td>
             {% endif %}
             {% if not request.GET.status %}
             <td class="td-link">
@@ -172,7 +172,7 @@
                 Відомості відсутні
                 {% endif %}
             </td>
-            <td class="td-link">{{ report.final_document }}</td>
+            <td class="td-link">{{ report.final_document.short_info }}</td>
             {% endif %}
             {% if request.GET.status == 'deactivate' %}
             <td class="td-link">
@@ -182,7 +182,7 @@
                 Відомості відсутні
                 {% endif %}
             </td>
-            <td class="td-link">{{ report.final_document }}</td>
+            <td class="td-link">{{ report.final_document.short_info }}</td>
             {% endif %}
         </tr>
         {% endfor %}

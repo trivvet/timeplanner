@@ -134,7 +134,7 @@ class Report(BaseReport):
     def final_document(self):
         events = ReportEvents.objects.filter(report=self).order_by('date', 'id')
         if events.count() != 0:
-            report_type = events.last().short_info
+            report_type = events.last()
         else:
             report_type = ''
         return report_type
