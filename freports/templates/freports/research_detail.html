@@ -2,7 +2,10 @@
 {% load get_item %}
 
 {% block title %}
-    <div class="col-3"></div>
+    <div class="col-3">
+        <a type="button" class="btn btn-outline-dark mb-3"
+            href="{% url 'freports:researches_list' %}">Повернутись до списку досліджень</a>
+    </div>
     <div class="col-9">
         <h2 id="report-detail-header">Детальна інформація про експертне дослідження №{{ object.full_number }}</h2>
     </div>
@@ -12,12 +15,9 @@
 {% block content %}
 
 <div class="row" id="main-participants">
-    <div class="col-sm-6 offset-sm-3">
+    <div class="col-sm-12">
 
-        <a type="button" class="btn btn-light mb-3"
-            href="{% url 'freports:researches_list' %}">Повернутись до списку досліджень</a>
-
-        <table class="table table-md table-hover">
+        <table class="table table-sm table-lg-responsive table-hover">
             <tbody>
                 <tr>
                     <th scope="row">Заявник</th>
@@ -43,6 +43,16 @@
                     <td>{{ object.cost }}грн</td>
                 </tr>
                 {% endif %}
+
+                {% if object.addition_info %}
+                <tr>
+                    <th scope="row">Додаткова інформація</th>
+                    <td width="60%">
+                        {{ object.addition_info }}
+                    </td>
+                </tr>
+                {% endif %}
+
                 <tr>
                     <th scope="row">Днів у виконанні</th>
                     <td>
@@ -52,7 +62,7 @@
                 <tr>
                     <th scope="row">Статус дослідження</th>
                     <td>
-                        {% if object.executed %}<span class="text-primary">Закрите</span>
+                        {% if object.executed %}<span class="text-primary">Закрите {{ object.date_executed }}</span> 
                         {% elif object.active %}<span class="text-success">Активне</span>
                         {% else %}<span class="text-secondary">Призупинене</span>{% endif %}
                     </td>

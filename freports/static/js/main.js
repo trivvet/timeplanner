@@ -326,14 +326,24 @@ function initGetOrderValues(link) {
     });
 }
 
+
+// Спрацьовує на формі додавання провадження в полі номеру справи
+
 function inputNumberField() {
     $('#inputCase').focus(function() {
         current_value = $(this).val();
-        if (current_value.includes('/17') || current_value.includes('/16')) {
+        is_current = false;
+        for (i=12; i<20; i++) {
+            is_current = current_value.includes('/' + i);
+            if (is_current) {
+                break
+            }
+        }
+        if (is_current) {
             end_of_array = current_value.indexOf('/', 5);
             $(this).get(0).setSelectionRange(4,end_of_array);
         } else {
-            $('#inputCase').val(current_value + ' /18');
+            $('#inputCase').val(current_value + ' /19');
             $(this).get(0).setSelectionRange(4,5);
         }
     });
