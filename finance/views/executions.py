@@ -119,27 +119,16 @@ class ExecutionEdit(SuccessMessageMixin, UpdateView):
     model = Execution
     template_name = 'finance/form.html'
     form_class = ExecutionForm
-    success_url = reverse_lazy('finance:executions_list')
 
     def get_context_data(self, **kwargs):
         context = super(ExecutionEdit, self).get_context_data(**kwargs)
         context['header'] = u"Редагування виконання"
         form = context['form']
-        status = self.object.order.status
-        form.fields['order'].queryset = Order.objects.filter(
-            status=status)
-        form.fields['order'].widget.attrs['disabled'] = 'disabled'
+        initial = context['object']
+        form.fields['order'].queryset = Order.objects.filter(pk=initial.order.id)
+        form.fields['order'].empty_label = None
         
         return context
-    
-    def post(self, request, *args, **kwargs):
-        execution_id = kwargs['pk']
-        execution = Execution.objects.get(pk=execution_id)
-        order_id = execution.order.id
-        request.POST = request.POST.copy()
-        request.POST['order'] = order_id
-        return super(ExecutionEdit, 
-            self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
         data = form.cleaned_data
@@ -161,6 +150,13 @@ class ExecutionEdit(SuccessMessageMixin, UpdateView):
         message = u"{} успішно змінене!".format(
             execution)
         return message
+
+    def get_success_url(self):
+        if self.request.GET.get('next_url') == 'detail_order':
+            success_url = reverse_lazy('finance:detail_order', kwargs={'pk': self.object.order.id})
+        else:
+            success_url = reverse_lazy('finance:executions_list')
+        return success_url
 
 @method_decorator(login_required, name='dispatch')
 class ExecutionDelete(DeleteView):

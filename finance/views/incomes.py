@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
+from django.db.models import F
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.views.generic.detail import SingleObjectTemplateResponseMixin
@@ -66,8 +67,7 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
             form.fields['amount'].initial = Order.objects.get(
                 pk=order).unpaid_sum
         else:
-            form.fields['order'].queryset = Order.objects.filter(
-                status='inactive')
+            form.fields['order'].queryset = Order.objects.filter(paid_sum__lt=F('total_sum'))
         return context
 
     def render_to_response(self, context):
@@ -120,15 +120,14 @@ class IncomeEdit(SuccessMessageMixin, UpdateView):
     model = Income
     template_name = 'finance/form.html'
     form_class = IncomeForm
-    success_url = reverse_lazy('finance:incomes_list')
 
     def get_context_data(self, **kwargs):
         context = super(IncomeEdit, self).get_context_data(**kwargs)
         context['header'] = u"Редагування надходження"
+        initial = context['object']
         form = context['form']
-        form.fields['order'].queryset = Order.objects.filter(
-            status='active')
-        form.fields['order'].widget.attrs['disabled'] = 'disabled'
+        form.fields['order'].queryset = Order.objects.filter(pk=initial.order.id)
+        form.fields['order'].empty_label = None
         
         return context
 
@@ -141,20 +140,10 @@ class IncomeEdit(SuccessMessageMixin, UpdateView):
             )
         else:
             return super(IncomeEdit, self).render_to_response(context)
-    
-    def post(self, request, *args, **kwargs):
-        income_id = kwargs['pk']
-        income = Income.objects.get(pk=income_id)
-        order_id = income.order.id
-        request.POST = request.POST.copy()
-        request.POST['order'] = order_id
-        return super(IncomeEdit, self).post(request, *args, **kwargs)
 
     def form_valid(self, form):
         data = form.cleaned_data
         initial_data = form.initial
-        account_id = initial_data['account']
-        account = Account.objects.get(pk=account_id)
         if data['amount'] != initial_data['amount']:
             difference_sum = data['amount'] - initial_data['amount']
             data['order'].paid_sum += difference_sum
@@ -166,6 +155,13 @@ class IncomeEdit(SuccessMessageMixin, UpdateView):
         message = u"{} успішно змінене!".format(
             income)
         return message
+
+    def get_success_url(self):
+        if self.request.GET.get('next_url') == 'detail_order':
+            success_url = reverse_lazy('finance:detail_order', kwargs={'pk': self.object.order.id})
+        else:
+            success_url = reverse_lazy('finance:incomes_list')
+        return success_url
 
 @method_decorator(login_required, name='dispatch')
 class IncomeDelete(DeleteView):
@@ -181,12 +177,9 @@ class IncomeDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         income = self.get_object()
         order = income.order
-        account = income.account
         order.status = 'inactive'
         order.paid_sum -= income.amount
         order.save()
-        account.total_sum -= income.amount
-        account.save()
         success_message = u"{} успішно видалене!".format(
             income)
         messages.success(self.request, success_message)

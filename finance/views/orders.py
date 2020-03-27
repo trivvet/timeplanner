@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import (
     login_required, 
     permission_required
     )
+from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -20,9 +21,9 @@ from ..models import Order, Income, Execution
 @permission_required('admins', raise_exception=True)
 def orders_list(request):
     orders = Order.objects.all().order_by('name')
-    orders_active = orders.filter(status='active')
-    orders_inactive = orders.filter(status='inactive')
-    orders_done = orders.filter(status='done')
+    orders_active = orders.filter(paid_sum__gt=F('done_sum'))
+    orders_inactive = orders.filter(paid_sum=F('done_sum')).filter(done_sum__lt=F('total_sum'))
+    orders_done = orders.filter(done_sum=F('total_sum'))
     content = {
         'total_sum': 0,
         'paid_sum': 0,

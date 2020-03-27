@@ -68,7 +68,7 @@
         {% for income in incomes %}
         <tr>
             <th scope="row">{{ income.date }}</th>
-            <td>{{ income.order.name }}</td>
+            <td><a href="{% url 'finance:detail_order' income.order.id %}">{{ income.order.name }}</a></td>
             <td>{{ income.account.title }}</td>
             <td>{{ income.amount }}</td>
             <td>

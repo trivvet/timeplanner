@@ -1,9 +1,15 @@
 {% extends "freports/base.html" %}
 
 {% block title %}
-<div class="col">
-    <span class="h1">Список транзакцій по замовленню {{ object.name }}</span> <span class="badge badge-info">Alpha</span>
+
+<div class="col-3">
+    <a type="button" class="btn btn-outline-dark mb-3"
+    href="{% url 'finance:orders_list' %}">Повернутись до списку замовлень</a>
 </div>
+<div class="col-9">
+    <span class="h2">Список транзакцій по замовленню {{ object.name }}</span> <span class="badge badge-info">Alpha</span>
+</div>
+
 {% endblock title %}
 
 {% block extra_messages %}
@@ -11,59 +17,79 @@
 
 {% block content %}
 
-<a type="button" class="btn btn-outline-dark mb-3"
-    href="{% url 'finance:orders_list' %}">Повернутись до списку замовлень</a>
-{% if object.report %}
-<a class="btn btn-outline-info mb-3 ml-3" 
-    href="{% url 'freports:report_detail' object.report.id %}">Деталі провадження</a>
-{% endif %}
+<div class="row">
+    <div class="col">
+<!--     <h3>Статус замовлення</h3>  -->
+    {% if object.report %}
+    <a class="btn btn-outline-info mb-3 ml-3" 
+        href="{% url 'freports:report_detail' object.report.id %}">Деталі провадження</a>
+    {% endif %}
+    </div>
 
-<table class="table table-hover table-responsive-lg">
-    <thead class="thead-light">
-        <tr>
-            <th scope="col">Дата</th>
-            <th scope="col">Тип транзакції</th>
-            <th scope="col">Рахунок</th>
-            <th scope="col">Додаткова інформація</th>
-            <th scope="col">Сума</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% if object_list %}
-        {% for transaction in object_list %}
-        <tr class="{% if transaction.model_name == 'Виконання' %}text-danger{% else %}text-success{% endif %}">
-            <th scope="row">{{ transaction.date }}</th>
-            <td>{{ transaction.model_name }}
-            <td>{{ transaction.account.title }}</td>
-            <td>
-                {% if transaction.model_name == "Виконання" %}
-                {% firstof transaction.closed_tasks '-' %}
+</div>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-hover table-responsive-lg">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">Дата</th>
+                    <th scope="col">Тип транзакції</th>
+                    <th scope="col">Рахунок</th>
+                    <th scope="col">Додаткова інформація</th>
+                    <th scope="col">Сума</th>
+                    <th scope="col" class="group-buttons"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if object_list %}
+                {% for transaction in object_list %}
+                <tr class="{% if transaction.model_name == 'Виконання' %}text-danger{% else %}text-success{% endif %}">
+                    <th scope="row">{{ transaction.date }}</th>
+                    <td>{{ transaction.model_name }}</td>
+                    <td>{{ transaction.account.title }}</td>
+                    <td>
+                        {% if transaction.model_name == "Виконання" %}
+                        {% firstof transaction.closed_tasks '-' %}
+                        {% else %}
+                        {% firstof transaction.payer '-' %}
+                        {% endif %}
+                    </td>
+                    <td>{{ transaction.amount }}</td>
+                    <td class="group-buttons">
+                        {% if transaction.model_name == "Виконання" %}
+                            <a href="{% url 'finance:delete_execution' transaction.id %}?next_url=detail_order" class="modal-button"><i class="fa fa-trash-o"></i></a>
+                            <a href="{% url 'finance:edit_execution' transaction.id %}?next_url=detail_order" class="modal-button"><i class="fa fa-pencil"></i></a>
+                        {% else %}
+                            <a href="{% url 'finance:delete_income' transaction.id %}?next_url=detail_order" class="modal-button"><i class="fa fa-trash-o"></i></a>
+                            <a href="{% url 'finance:edit_income' transaction.id %}?next_url=detail_order" class="modal-button"><i class="fa fa-pencil"></i></a>
+                        {% endif %}
+                    </td> 
+                </tr>
+                {% endfor %}
                 {% else %}
-                {% firstof transaction.payer '-' %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <h4>Ще немає даних</h4>
+                        </td>
+                    </tr>
                 {% endif %}
-            </td>
-            <td>{{ transaction.amount }}</td>
-        </tr>
-        {% endfor %}
-        {% else %}
-            <tr>
-                <td colspan="5" class="text-center">
-                    <h4>Ще немає даних</h4>
-                </td>
-            </tr>
-        {% endif %}
-        <tr>
-            <td colspan="3"></td>
-            <th scope="row" class="text-center table-info h5">Невиконаний залишок</th>
-            <td class="{% if object.remainder >= 0 %}text-success{% else %}text-danger {% endif %} table-info h5">{{ object.remainder }}</td>
-        </tr>
-        <tr>
-            <td colspan="3"></td>
-            <th scope="row" class="text-center table-secondary h5">Загальна сума</th>
-            <td class="table-secondary h5">{{ object.total_sum }}</td>
-        </tr>
-    </tbody>
-</table>
+                {% if object.remainder %}
+                <tr>
+                    <td colspan="3"></td>
+                    <th scope="row" class="text-center table-info h5">Невиконаний залишок</th>
+                    <td class="{% if object.remainder >= 0 %}text-success{% else %}text-danger {% endif %} table-info h5">{{ object.remainder }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td colspan="3"></td>
+                    <th scope="row" class="text-center h5">Загальна сума</th>
+                    <td class="h5">{{ object.total_sum }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 {% if object.paid_sum < object.total_sum %}
 <a class="btn btn-outline-success mb-3 ml-3 modal-button" 

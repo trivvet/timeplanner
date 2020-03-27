@@ -47,8 +47,8 @@
     <tbody>
         {% for order in orders %}
         <tr>
-            <th scope="row">
-                <a class="{% if order.status == 'active' %}text-success{% elif order.status == 'inactive' %}text-secondary{% elif order.status == 'done' %}text-info{% endif %}" href="{% url 'finance:detail_order' order.id %}">
+            <th scope="row" width='15%'>
+                <a class="{% if order.remainder %}text-success{% elif order.total_sum > order.done_sum %}text-secondary{% else %}text-info{% endif %}" href="{% url 'finance:detail_order' order.id %}">
                     {{ order.name }}
                 </a>
             </th>
@@ -61,7 +61,7 @@
             </td>
             <td>
                 {% if order.report %}
-                {{ order.report.short_info|truncatechars:25 }}
+                {{ order.report.short_info|truncatechars:30 }}
                 {% endif %}
             </td>
             {% if request.GET.status == 'all' %}

@@ -2,7 +2,8 @@ function initDateFields() {
     $('#inputDate, #inputDate2').attr('autocomplete', 'off');
     var startDate = $('#inputDate input').val(), 
         currentDate = moment(),
-        startDateOne = $('#inputDate').val();
+        startDateOne = $('#inputDate').val(),
+        startDate3 = $('#inputDate3').val();
     var maxDate = moment().millisecond(0).second(0).minute(0).hour(0);
     maxDate.add(23, 'h');
     if (!startDate && !startDateOne) {
@@ -21,9 +22,9 @@ function initDateFields() {
     $('#inputDate, #inputDate3').datetimepicker({
         format: 'YYYY-MM-DD',
         locale: 'uk',
-        date: startDate,
+        date: startDate3,
         maxDate: maxDate,
-        defaultDate: startDate,
+        defaultDate: startDate3,
         useCurrent: false,
         daysOfWeekDisabled: [0],
         buttons: {
@@ -328,7 +329,6 @@ function initGetOrderValues(link) {
 
 
 // Спрацьовує на формі додавання провадження в полі номеру справи
-
 function inputNumberField() {
     $('#inputCase').focus(function() {
         current_value = $(this).val();

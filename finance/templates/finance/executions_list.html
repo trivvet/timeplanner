@@ -65,7 +65,7 @@
         {% for execution in executions %}
         <tr>
             <th scope="row">{{ execution.date }}</th>
-            <td>{{ execution.order.name }}</td>
+            <td><a href="{% url 'finance:detail_order' execution.order.id %}">{{ execution.order.name }}</a></td>
             <td>{{ execution.account.title }}</td>
             <td>{{ execution.amount }}</td>
             <td>{{ execution.closed_tasks|default_if_none:"-" }}</td>

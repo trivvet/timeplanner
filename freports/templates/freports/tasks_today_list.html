@@ -39,7 +39,7 @@
             <td>{{ task.kind }}</td>
             <td>
                 {% if task.report %}
-                    {{ task.report.full_number }}
+                    <a href="{% url 'freports:report_detail' task.report.id %}">{{ task.report.full_number }}</a>
                 {% else %}
                     Відсутні дані
                 {% endif %}
