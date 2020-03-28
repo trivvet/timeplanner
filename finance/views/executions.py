@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import F
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic.edit import (
@@ -47,7 +48,6 @@ class ExecutionList(SuccessMessageMixin, ListView):
 class ExecutionCreate(SuccessMessageMixin, CreateView):
     template_name = 'finance/form.html'
     form_class = ExecutionForm
-    success_url = reverse_lazy('finance:executions_list')
 
     def get_context_data(self, **kwargs):
         context = super(ExecutionCreate, self).get_context_data(**kwargs)
@@ -59,12 +59,11 @@ class ExecutionCreate(SuccessMessageMixin, CreateView):
                 pk=order)
             form.fields['order'].initial = order
             form.fields['order'].empty_label = None
-            form.fields['order'].widget.attrs['disabled'] = 'disabled'
             form.fields['amount'].initial = Order.objects.get(
                 pk=order).remainder
         else:
             form.fields['order'].queryset = Order.objects.filter(
-                status='active')
+                done_sum__lt=F('paid_sum')).order_by('name')
         return context
 
     def render_to_response(self, context):
@@ -88,23 +87,11 @@ class ExecutionCreate(SuccessMessageMixin, CreateView):
             return super(ExecutionCreate, self).render_to_response(
                 context)
 
-    def post(self, request, *args, **kwargs):
-        order = request.GET.get('order')
-        if order:
-            request.POST = request.POST.copy()
-            request.POST['order'] = order
-        return super(ExecutionCreate, self).post(request, *args, **kwargs)
-
     def form_valid(self, form):
         data = form.cleaned_data
         money = int(data['amount'])
         order = data['order']
-        account = data['account']
         order.done_sum += money
-        if order.done_sum == order.total_sum:
-            order.status = 'done'
-        elif order.done_sum >= order.paid_sum:
-            order.status = 'inactive'
         order.save()
         return super(ExecutionCreate, self).form_valid(form)
 
@@ -113,6 +100,14 @@ class ExecutionCreate(SuccessMessageMixin, CreateView):
         message = u"{} успішно додане!".format(
             execution)
         return message
+
+    def get_success_url(self):
+        if self.request.GET.get('order'):
+            success_url = reverse_lazy('finance:detail_order', kwargs={'pk': self.object.order.id})
+        else:
+            success_url = reverse_lazy('finance:executions_list')
+        return success_url
+
 
 @method_decorator(login_required, name='dispatch')
 class ExecutionEdit(SuccessMessageMixin, UpdateView):
@@ -127,7 +122,6 @@ class ExecutionEdit(SuccessMessageMixin, UpdateView):
         initial = context['object']
         form.fields['order'].queryset = Order.objects.filter(pk=initial.order.id)
         form.fields['order'].empty_label = None
-        
         return context
 
     def form_valid(self, form):
@@ -136,12 +130,6 @@ class ExecutionEdit(SuccessMessageMixin, UpdateView):
         order = data['order']
         change_done_sum = data['amount'] - initial_data['amount']
         order.done_sum += change_done_sum
-        if order.done_sum == order.total_sum:
-            order.status = 'done'
-        elif order.done_sum >= order.paid_sum:
-            order.status = 'inactive'
-        else:
-            order.status = 'active'
         order.save()
         return super(ExecutionEdit, self).form_valid(form)
 
@@ -162,7 +150,6 @@ class ExecutionEdit(SuccessMessageMixin, UpdateView):
 class ExecutionDelete(DeleteView):
     model = Execution
     template_name = 'finance/confirm_delete.html'
-    success_url = reverse_lazy('finance:executions_list')
 
     def get_context_data(self, **kwargs):
         context = super(ExecutionDelete, self).get_context_data(**kwargs)
@@ -172,7 +159,6 @@ class ExecutionDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         execution = self.get_object()
         order = execution.order
-        order.status = 'active'
         order.done_sum -= execution.amount
         order.save()
         success_message = u"{} успішно видалене!".format(
@@ -180,3 +166,10 @@ class ExecutionDelete(DeleteView):
         messages.success(self.request, success_message)
         return super(ExecutionDelete, self).delete(
             self, request, *args, **kwargs)
+
+    def get_success_url(self):
+        if self.request.GET.get('next_url') == 'detail_order':
+            success_url = reverse_lazy('finance:detail_order', kwargs={'pk': self.object.order.id})
+        else:
+            success_url = reverse_lazy('finance:executions_list')
+        return success_url

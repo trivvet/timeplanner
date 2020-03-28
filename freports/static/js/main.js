@@ -24,7 +24,7 @@ function initDateFields() {
         locale: 'uk',
         date: startDate3,
         maxDate: maxDate,
-        defaultDate: startDate3,
+        defaultDate: startDate,
         useCurrent: false,
         daysOfWeekDisabled: [0],
         buttons: {

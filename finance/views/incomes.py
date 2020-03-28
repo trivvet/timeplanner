@@ -63,11 +63,11 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
                 pk=order)
             form.fields['order'].initial = order
             form.fields['order'].empty_label = None
-            form.fields['order'].widget.attrs['disabled'] = 'disabled'
             form.fields['amount'].initial = Order.objects.get(
                 pk=order).unpaid_sum
         else:
-            form.fields['order'].queryset = Order.objects.filter(paid_sum__lt=F('total_sum'))
+            form.fields['order'].queryset = Order.objects.filter(
+                paid_sum__lt=F('total_sum'))
         return context
 
     def render_to_response(self, context):
@@ -85,17 +85,9 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
         data = form.cleaned_data
         money = int(data['amount'])
         order = data['order']
-        order.status = 'active'
         order.paid_sum += money
         order.save()
         return super(IncomeCreate, self).form_valid(form)
-
-    def post(self, request, *args, **kwargs):
-        order = request.GET.get('order')
-        if order:
-            request.POST = request.POST.copy()
-            request.POST['order'] = order
-        return super(IncomeCreate, self).post(request, *args, **kwargs)
 
     def get_success_message(self, cleaned_data):
         income = self.object
@@ -128,7 +120,6 @@ class IncomeEdit(SuccessMessageMixin, UpdateView):
         form = context['form']
         form.fields['order'].queryset = Order.objects.filter(pk=initial.order.id)
         form.fields['order'].empty_label = None
-        
         return context
 
     def render_to_response(self, context):
@@ -177,7 +168,6 @@ class IncomeDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         income = self.get_object()
         order = income.order
-        order.status = 'inactive'
         order.paid_sum -= income.amount
         order.save()
         success_message = u"{} успішно видалене!".format(
@@ -185,6 +175,13 @@ class IncomeDelete(DeleteView):
         messages.success(self.request, success_message)
         return super(IncomeDelete, self).delete(
             self, request, *args, **kwargs)
+
+    def get_success_url(self):
+        if self.request.GET.get('next_url') == 'detail_order':
+            success_url = reverse_lazy('finance:detail_order', kwargs={'pk': self.object.order.id})
+        else:
+            success_url = reverse_lazy('finance:incomes_list')
+        return success_url
 
 
 def income_auto_create(detail):

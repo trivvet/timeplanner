@@ -4,11 +4,6 @@ from __future__ import unicode_literals
 from django.db import models
 
 class Order(models.Model):
-    STATUS_VARIANT = (
-        ('active', u'Активне'),
-        ('inactive', u'Призупинене'),
-        ('done', u'Виконане'),
-    )
 
     class Meta(object):
         verbose_name=u"Замовлення"
@@ -46,13 +41,6 @@ class Order(models.Model):
         verbose_name=u"Кількість необхідних тасків",
         blank=True,
         null=True)
-
-    status = models.CharField(
-        verbose_name=u"Статус виконання",
-        max_length=256,
-        blank=False,
-        null=False,
-        choices=STATUS_VARIANT)
 
     def __unicode__(self):
         if self.report:

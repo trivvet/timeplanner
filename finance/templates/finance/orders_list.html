@@ -31,9 +31,6 @@
             <th scope="col">Назва замовлення</th>
             <th scope="col">Провадження</th>
             <th scope="col">Деталі</th>
-            {% if request.GET.status == 'all' %}
-            <th scope="col">Статус</th>
-            {% endif %}
             <th scope="col">Кошторисна вартість</th>
             <th scope="col">Оплачено</th>
             <th scope="col">Виконано</th>
@@ -59,21 +56,18 @@
                 </a>
                 {% endif %}
             </td>
-            <td>
+            <td width='20%'>
                 {% if order.report %}
                 {{ order.report.short_info|truncatechars:30 }}
                 {% endif %}
             </td>
-            {% if request.GET.status == 'all' %}
-            <td>{{ order.get_status_display }}</td>
-            {% endif %}
             <td>{{ order.total_sum }}</td>
             <td>{{ order.paid_sum }}</td>
             <td>{{ order.done_sum }}</td>
             {% if not request.GET.status or request.GET.status == 'all' %}
             <td>{{ order.remainder }}</td>
             {% endif %}
-            <td>
+            <td width='5%'>
             {% if order.tasks_number %}
             {{ order.tasks_number }}
             {% else %}
@@ -86,8 +80,8 @@
             </td>       
         </tr>
         {% endfor %}
-        <tr>
-            <th colspan="{% if request.GET.status == 'all' %}4{% else %}3{% endif %}" class="text-center">
+        <tr class="table-secondary">
+            <th colspan="3" class="text-center">
                 Всього
                 {% if request.GET.status == 'inactive' %}
                     по призупинених замовленнях

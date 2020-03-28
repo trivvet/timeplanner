@@ -124,10 +124,14 @@ def edit_order(request, oid):
         elif request.POST.get('cancel_button', ''):
             messages.warning(request,
                 u"Редагування замовлення скасовано")
-        return HttpResponseRedirect(reverse('finance:orders_list'))
+        if request.POST.get('next_url', '') == 'detail_order':
+            return HttpResponseRedirect(reverse('finance:detail_order', kwargs={'pk': order.id}))
+        else:
+            return HttpResponseRedirect(reverse('finance:orders_list'))
     else:
+        next_url = request.GET.get('next_url', '')
         return render(request, 'finance/order_form.html',
-            {'header': header, 'item': order})
+            {'header': header, 'item': order, 'next_url': next_url})
 
 @login_required(login_url='/login/')
 @permission_required('admins', raise_exception=True)
@@ -189,9 +193,6 @@ def valid_data(form_data):
         except ValueError:
             new_order['tasks_number'] = tasks_number
             errors['tasks_number'] = u"Будь-ласка введіть число"
-
-    status = form_data.get('status')
-    new_order['status'] = status
 
     return {'new_order': new_order, 'errors': errors}
 

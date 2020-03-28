@@ -77,33 +77,6 @@
         </div>
     </div>
 
-    <!-- Order Status -->
-    <div class="form-group">
-        <div class="row">
-            <label for="inputStatus" class="col-sm-4 col-form-label">Статус виконання</label>
-            <div class="col-sm-6">
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="status" id="inputStatus" value="active" {% if item.status == 'active' or not item.status %} checked{% endif %}>
-                    <label class="form-check-label" for="inputStatus">
-                      Активне
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="status" id="inputStatus2" value="inactive" {% if item.status == 'inactive' %} checked{% endif %}>
-                    <label class="form-check-label" for="inputStatus2">
-                      Призупинене
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="status" id="inputStatus3" value="done" {% if item.status == 'done' %} checked{% endif %}>
-                    <label class="form-check-label" for="inputStatus3">
-                      Виконане
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="form-group row">
         <div class="col-sm-4"></div>
         <div class="col-sm-6">

@@ -7,7 +7,7 @@
     href="{% url 'finance:orders_list' %}">Повернутись до списку замовлень</a>
 </div>
 <div class="col-9">
-    <span class="h2">Список транзакцій по замовленню {{ object.name }}</span> <span class="badge badge-info">Alpha</span>
+    <span class="h2">Список транзакцій по замовленню {{ object.name }}</span> <span class="badge badge-danger">Beta</span>
 </div>
 
 {% endblock title %}
@@ -21,8 +21,7 @@
     <div class="col">
 <!--     <h3>Статус замовлення</h3>  -->
     {% if object.report %}
-    <a class="btn btn-outline-info mb-3 ml-3" 
-        href="{% url 'freports:report_detail' object.report.id %}">Деталі провадження</a>
+    
     {% endif %}
     </div>
 
@@ -82,23 +81,32 @@
                 </tr>
                 {% endif %}
                 <tr>
-                    <td colspan="3"></td>
+                    <td colspan="3">
+                        {% if object.paid_sum < object.total_sum %}
+                        <a class="btn btn-outline-success mr-3 modal-button" 
+                            href="{% url 'finance:add_income' %}?order={{ object.id }}">Додати надходження</a>
+                        {% endif %}
+
+                        {% if object.done_sum < object.total_sum and object.paid_sum > object.done_sum %}
+                        <a class="btn btn-outline-danger modal-button" 
+                            href="{% url 'finance:add_execution' %}?order={{ object.id }}">Додати виконання</a>
+                        {% endif %}
+                    </td>
                     <th scope="row" class="text-center h5">Загальна сума</th>
                     <td class="h5">{{ object.total_sum }}</td>
+                    <td class="group-buttons">
+                        <a href="{% url 'finance:edit_order' object.id %}?next_url=detail_order" class="modal-button"><i class="fa fa-pencil mr-3"></i></a>
+                    </td>
                 </tr>
             </tbody>
         </table>
+
+        {% if object.report %}
+        <a class="btn btn-outline-info btn-sm" href="{% url 'freports:report_detail' object.report.id %}">&#x25c1 Інформація про провадженню №{{ object.report.full_number }}</a>
+        {% endif %}
     </div>
 </div>
 
-{% if object.paid_sum < object.total_sum %}
-<a class="btn btn-outline-success mb-3 ml-3 modal-button" 
-    href="{% url 'finance:add_income' %}?order={{ object.id }}">Додати надходження</a>
-{% endif %}
 
-{% if object.done_sum < object.total_sum and object.paid_sum > object.done_sum %}
-<a class="btn btn-outline-danger mb-3 ml-3 modal-button" 
-    href="{% url 'finance:add_execution' %}?order={{ object.id }}">Додати виконання</a>
-{% endif %}
 
 {% endblock content %}
