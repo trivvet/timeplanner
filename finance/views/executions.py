@@ -61,6 +61,8 @@ class ExecutionCreate(SuccessMessageMixin, CreateView):
             form.fields['order'].empty_label = None
             form.fields['amount'].initial = Order.objects.get(
                 pk=order).remainder
+            incomes = Income.objects.filter(order=order)
+            form.fields['account'].initial = incomes[0].account
         else:
             form.fields['order'].queryset = Order.objects.filter(
                 done_sum__lt=F('paid_sum')).order_by('name')
@@ -97,8 +99,12 @@ class ExecutionCreate(SuccessMessageMixin, CreateView):
 
     def get_success_message(self, cleaned_data):
         execution = self.object
-        message = u"{} успішно додане!".format(
-            execution)
+        order = self.request.GET.get('order')
+        if order:
+            message = u"Виконання успішно додане"
+        else:
+            message = u"{} успішно додане!".format(
+                execution)
         return message
 
     def get_success_url(self):
@@ -135,8 +141,12 @@ class ExecutionEdit(SuccessMessageMixin, UpdateView):
 
     def get_success_message(self, cleaned_data):
         execution = self.object
-        message = u"{} успішно змінене!".format(
-            execution)
+        next_url = self.request.GET.get('next_url')
+        if next_url:
+            message = u"Виконання успішно змінене"
+        else:
+            message = u"{} успішно змінене!".format(
+                execution)
         return message
 
     def get_success_url(self):
@@ -161,8 +171,12 @@ class ExecutionDelete(DeleteView):
         order = execution.order
         order.done_sum -= execution.amount
         order.save()
-        success_message = u"{} успішно видалене!".format(
-            execution)
+        next_url = request.GET.get('next_url')
+        if next_url:
+            success_message = u"Виконання успішно видалене!"
+        else:
+            success_message = u"{} успішно видалене!".format(
+                execution)
         messages.success(self.request, success_message)
         return super(ExecutionDelete, self).delete(
             self, request, *args, **kwargs)

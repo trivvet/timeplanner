@@ -22,7 +22,8 @@ from ..models import Order, Income, Execution
 def orders_list(request):
     orders = Order.objects.all().order_by('name')
     orders_active = orders.filter(paid_sum__gt=F('done_sum'))
-    orders_inactive = orders.filter(paid_sum=F('done_sum')).filter(done_sum__lt=F('total_sum'))
+    orders_inactive = orders.filter(paid_sum=F('done_sum')).filter(
+        done_sum__lt=F('total_sum'))
     orders_done = orders.filter(done_sum=F('total_sum'))
     content = {
         'total_sum': 0,

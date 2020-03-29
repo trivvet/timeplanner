@@ -67,7 +67,7 @@ class IncomeCreate(SuccessMessageMixin, CreateView):
                 pk=order).unpaid_sum
         else:
             form.fields['order'].queryset = Order.objects.filter(
-                paid_sum__lt=F('total_sum'))
+                paid_sum__lt=F('total_sum')).order_by('name')
         return context
 
     def render_to_response(self, context):
@@ -143,8 +143,12 @@ class IncomeEdit(SuccessMessageMixin, UpdateView):
 
     def get_success_message(self, cleaned_data):
         income = self.object
-        message = u"{} успішно змінене!".format(
-            income)
+        order = self.request.GET.get('next_url')
+        if order:
+            message = u"Надходження успішно змінене"
+        else:
+            message = u"{} успішно змінене!".format(
+                income)
         return message
 
     def get_success_url(self):
@@ -170,8 +174,12 @@ class IncomeDelete(DeleteView):
         order = income.order
         order.paid_sum -= income.amount
         order.save()
-        success_message = u"{} успішно видалене!".format(
-            income)
+        next_url = request.GET.get('next_url')
+        if next_url:
+            success_message = u"Надходження успішно видалене"
+        else:
+            success_message = u"{} успішно видалене!".format(
+                income)
         messages.success(self.request, success_message)
         return super(IncomeDelete, self).delete(
             self, request, *args, **kwargs)

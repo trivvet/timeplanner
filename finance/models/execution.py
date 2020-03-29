@@ -41,8 +41,8 @@ class Execution(models.Model):
         verbose_name=u"Закриті таски")
 
     def __unicode__(self):
-        return u"Виконання {}".format(
-            self.order)
+        return u"Виконання по замовленню {}".format(
+            self.order.name)
 
     def model_name(self):
         return 'Виконання'
