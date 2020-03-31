@@ -29,18 +29,23 @@ def login_auth(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         
-        user = authenticate(request, username=username, 
-            password=password)
+        try:
+            user = authenticate(request, username=username, 
+                password=password)
         
-        if user is not None:
-            login(request, user)
-            messages.success(request, 
-                "Ви успішно увійшли як %s" % username)
-            return HttpResponseRedirect(
-                reverse('freports:reports_list'))
-        else:
-            messages.error(request, 
-                "Невірно введене ім'я користувача або пароль")
+            if user is not None:
+                login(request, user)
+                messages.success(request, 
+                    "Ви успішно увійшли як %s" % username)
+                return HttpResponseRedirect(
+                    reverse('freports:reports_list'))
+            else:
+                messages.error(request, 
+                    u"Невірно введене ім'я користувача або пароль")
+                login_attempts_last += 1
+        except UnicodeEncodeError:
+            messages.error(request,
+                u"Некоректно введене ім'я користувача або пароль")
             login_attempts_last += 1
 
     return render(request, 'login/form.html', {})

@@ -45,7 +45,7 @@
         {% for order in orders %}
         <tr>
             <th scope="row" width='15%'>
-                <a class="{% if order.remainder %}text-success{% elif order.total_sum > order.done_sum %}text-secondary{% else %}text-info{% endif %}" href="{% url 'finance:detail_order' order.id %}">
+                <a class="{% if order.paid_sum > order.done_sum %}text-success{% elif order.paid_sum < order.total_sum %}text-secondary{% else %}text-info{% endif %}" href="{% url 'finance:detail_order' order.id %}">
                     {{ order.name }}
                 </a>
             </th>
