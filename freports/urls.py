@@ -124,3 +124,5 @@ urlpatterns = [
     url(r'^tasks/delete_old/$', views.delete_old_tasks, 
         name='delete_old_tasks'),
 ]
+
+app_name = 'freports'

@@ -31,8 +31,21 @@ from .env_settings import (
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # Application definition
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'axes.backends.AxesBackend'
+]
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'axes_cache': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
 
 INSTALLED_APPS = [
     # DJANGO APPS
@@ -60,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'axes.middleware.AxesMiddleware'
 ]
 
 ROOT_URLCONF = 'timeplanner.urls'
@@ -128,6 +142,7 @@ LOGIN_URL = '/login'
 # settings for Django Axes
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = 5
+AXES_CACHE = 'axes_cache'
 AXES_BEHIND_REVERSE_PROXY = True
 AXES_REVERSE_PROXY_HEADER = 'REMOTE_ADDR'
 AXES_NUM_PROXIES = 1

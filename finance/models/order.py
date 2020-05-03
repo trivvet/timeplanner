@@ -18,7 +18,8 @@ class Order(models.Model):
     report = models.ForeignKey('freports.Report',
         verbose_name=u"Провадження",
         blank=True,
-        null=True)
+        null=True,
+        on_delete=models.CASCADE)
 
     total_sum = models.IntegerField(
         verbose_name=u"Кошторисна вартість",

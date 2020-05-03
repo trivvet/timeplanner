@@ -15,7 +15,8 @@ class Income(models.Model):
         "Order",
         verbose_name=u"Замовлення",
         blank=False,
-        null=False)
+        null=False,
+        on_delete=models.PROTECT)
 
     date = models.DateField(
         verbose_name=u"Дата отримання",
@@ -27,7 +28,8 @@ class Income(models.Model):
         "Account",
         verbose_name=u"Цільовий рахунок",
         blank=False,
-        null=False)
+        null=False,
+        on_delete=models.PROTECT)
 
     amount = models.IntegerField(
         verbose_name=u"Сума",

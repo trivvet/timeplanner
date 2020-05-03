@@ -14,7 +14,8 @@ class ReportSubject(models.Model):
     report = models.ForeignKey('Report',
         verbose_name=u"Висновок",
         blank=False,
-        null=False)
+        null=False,
+        on_delete=models.CASCADE)
 
     subject_type = models.CharField(
         verbose_name = u"Вид об'єкту",

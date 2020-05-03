@@ -204,10 +204,8 @@ def income_auto_create(detail):
         order = order_auto_create(detail)
         order.save()
     if detail.subspecies == 'bank':
-        print 'bank'
         account = Account.objects.filter(status='work', cash=False)
     else:
-        print 'cash'
         account = Account.objects.filter(status='work', cash=True)
     new_income = {
         'order': order,

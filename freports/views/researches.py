@@ -141,7 +141,6 @@ class ResearchEdit(SuccessMessageMixin, UpdateView):
 
     def form_invalid(self, form):
         response = super(ResearchEdit, self).form_invalid(form)
-        print form.errors
         if self.request.is_ajax():
             return response
         else:

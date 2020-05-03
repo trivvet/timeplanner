@@ -14,12 +14,14 @@ class Task(models.Model):
     report = models.ForeignKey('Report',
         verbose_name=u"Провадження",
         blank=True,
-        null=True)
+        null=True,
+        on_delete=models.CASCADE)
 
     event = models.ForeignKey('ReportEvents',
         verbose_name=u"Подія",
         blank=True,
-        null=True)
+        null=True,
+        on_delete=models.CASCADE)
 
     time = models.DateTimeField(
         verbose_name=u"Дата та час завдання",

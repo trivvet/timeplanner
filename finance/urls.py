@@ -73,3 +73,5 @@ urlpatterns = [
         permission_required('admins')(ExecutionDelete.as_view()),
         name="delete_execution"),
 ]
+
+app_name = 'finance'

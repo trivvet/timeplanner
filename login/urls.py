@@ -12,3 +12,5 @@ urlpatterns = [
     url(r'^attempts/delete$', views.delete_old_attempts, 
         name='attempts_delete'),
 ]
+
+app_name = 'login'

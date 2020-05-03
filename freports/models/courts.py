@@ -55,7 +55,8 @@ class Judge(models.Model):
     court_name = models.ForeignKey('Court',
         verbose_name=u"Суд",
         blank=False,
-        null=False)
+        null=False,
+        on_delete=models.PROTECT)
 
     personal_phone = models.CharField(
         max_length=256,

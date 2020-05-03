@@ -79,7 +79,8 @@ class Report(BaseReport):
     judge_name = models.ForeignKey('Judge',
         verbose_name=u"Суддя",
         blank=True,
-        null=True)
+        null=True,
+        on_delete=models.SET_NULL)
 
     plaintiff = models.CharField(
         max_length=128,

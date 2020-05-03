@@ -24,7 +24,8 @@ class ReportEvents(models.Model):
     report = models.ForeignKey('Report',
         verbose_name=u"Висновок",
         blank=False,
-        null=False)
+        null=False,
+        on_delete=models.PROTECT)
 
     date = models.DateField(
         verbose_name = u"Дата події",
@@ -144,7 +145,8 @@ class ReportParticipants(models.Model):
     report = models.ForeignKey('Report',
         verbose_name=u"Висновок",
         blank=False,
-        null=False)
+        null=False,
+        on_delete=models.PROTECT)
 
     surname = models.CharField(
         verbose_name = u"Прізвище",
