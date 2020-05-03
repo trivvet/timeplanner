@@ -42,7 +42,7 @@ class Execution(models.Model):
         null=True,
         verbose_name=u"Закриті таски")
 
-    def __unicode__(self):
+    def __str__(self):
         return u"Виконання по замовленню {}".format(
             self.order.name)
 

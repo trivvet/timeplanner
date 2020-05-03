@@ -18,7 +18,7 @@ def login_auth(request):
     attempts = AccessAttempt.objects.all()
     login_attempts_last = 0
     if attempts:
-        login_attempts_last = attempts[0].failures
+        login_attempts_last = attempts[0].failures_since_start
 
     if login_attempts_last > 3:
         messages.error(request, 

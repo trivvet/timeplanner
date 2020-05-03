@@ -44,5 +44,5 @@ class Task(models.Model):
         null=False,
         verbose_name=u"Деталі")
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s %s" % (self.kind, self.time.strftime("%H-%M %d-%m-%Y"))

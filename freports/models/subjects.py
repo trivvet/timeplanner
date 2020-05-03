@@ -59,7 +59,7 @@ class ReportSubject(models.Model):
         blank=False,
         null=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"Subject %s of the report %s/%s" % (self.subject_type, self.report.number, self.report.number_year)
 
     def short_address(self):

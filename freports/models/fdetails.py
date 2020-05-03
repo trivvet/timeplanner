@@ -25,7 +25,7 @@ class ReportEvents(models.Model):
         verbose_name=u"Висновок",
         blank=False,
         null=False,
-        on_delete=models.PROTECT)
+        on_delete=models.CASCADE)
 
     date = models.DateField(
         verbose_name = u"Дата події",
@@ -84,7 +84,7 @@ class ReportEvents(models.Model):
         null=True,
         verbose_name=u"Направлені матеріали")
 
-    def __unicode__(self):
+    def __str__(self):
         return u"Report %s: %s" % (self.report.number, self.name)
 
     def detail_info(self):
@@ -182,7 +182,7 @@ class ReportParticipants(models.Model):
         blank=True,
         verbose_name=u"Додаткова інформація")
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s %s (report %s/%s)" % (self.status, self.surname, self.report.number, self.report.number_year)
 
     def full_info(self):

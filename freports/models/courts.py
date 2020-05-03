@@ -29,7 +29,7 @@ class Court(models.Model):
         null=True,
         on_delete=models.SET_NULL)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s" % self.name
 
 
@@ -76,7 +76,7 @@ class Judge(models.Model):
         null=True,
         verbose_name=u"Домашня адреса")
 
-    def __unicode__(self):
+    def __str__(self):
         return u"%s %s. %s. (%s)" %(self.surname, self.first_name[0], self.second_name[0], self.court_name)
 
     def short_name(self):

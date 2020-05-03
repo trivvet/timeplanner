@@ -96,7 +96,7 @@ class Report(BaseReport):
         blank=True,
         null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"{number}/{number_year} ({address}-{plaintiff}-{defendant})".format(number=self.number,
             number_year=self.number_year, address=self.address, plaintiff=self.plaintiff, defendant=self.defendant)
 
@@ -166,7 +166,7 @@ class Research(BaseReport):
         blank=True,
         verbose_name=u"Додаткова інформація")
 
-    def __unicode__(self):
+    def __str__(self):
         return u"Дослідження {number}ед/{number_year} ({applicant})".format(
             number=self.number, number_year=self.number_year, 
             address=self.address, applicant=self.applicant)

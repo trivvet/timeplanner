@@ -39,7 +39,7 @@ class Account(models.Model):
         blank=True,
         null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return u"Рахунок {} ({})".format(
             self.title, dict(self.STATUS_VARIANT)[self.status])
 

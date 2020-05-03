@@ -43,7 +43,7 @@ class Income(models.Model):
         null=True,
         verbose_name=u"Платник")
 
-    def __unicode__(self):
+    def __str__(self):
         return u"Надходження стосовно замовлення {} на {}".format(
             self.order.name, self.account)
 

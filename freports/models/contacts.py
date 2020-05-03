@@ -45,7 +45,7 @@ class Contact(models.Model):
         blank=True,
         verbose_name=u"Додаткова інформація")
 
-    def __unicode__(self):
+    def __str__(self):
         if self.name:
             return u"%s %s" % (self.surname, self.name, self.status)
         else:

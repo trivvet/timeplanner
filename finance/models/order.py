@@ -43,7 +43,7 @@ class Order(models.Model):
         blank=True,
         null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         if self.report:
             return u"Замовлення {} ({})".format(
                 self.name, self.report)

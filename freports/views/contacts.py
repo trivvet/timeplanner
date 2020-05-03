@@ -72,7 +72,7 @@ def contact_detail(request, cid):
     contact = Contact.objects.get(pk=cid)
     header = u"Детальна інформація про контакт {}".format(contact.surname)
     return render(request, 'freports/contact_detail.html', {
-        'header': header, 'content': contact, 'status_list': contacts_status_list.iteritems()})
+        'header': header, 'content': contact, 'status_list': contacts_status_list.items()})
 
 @login_required(login_url='/login/')
 @permission_required('admins', raise_exception=True)
@@ -103,7 +103,7 @@ def add_contact(request):
                 'freports:contacts_list'))
 
     return render(request, 'freports/contact_form.html', {
-        'header': header, 'status_list': contacts_status_list.iteritems(),
+        'header': header, 'status_list': contacts_status_list.items(),
         'content': content, 'errors': errors})
 
 @login_required(login_url='/login/')
@@ -139,7 +139,7 @@ def edit_contact(request, cid):
         next_url = request.GET.get('next_url', '')
 
     return render(request, 'freports/contact_form.html', {
-        'header': header, 'content': content, 'status_list': contacts_status_list.iteritems(),
+        'header': header, 'content': content, 'status_list': contacts_status_list.items(),
         'errors': errors, 'next_url': next_url})
 
 
