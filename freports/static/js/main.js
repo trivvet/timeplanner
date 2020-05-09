@@ -264,7 +264,7 @@ function initForm(form, modal, link) {
     initSelectCourt(link);
     closeModalForm();
     initGetOrderValues(link);
-    showAddressInput();
+    showParticipantMessageType()
     initChangeScheduleDate();
     initSelectPetitionType();
 
@@ -344,10 +344,10 @@ function initSelectPetitionType() {
             textArea.val('Необхідно надати матеріали справи для ознайомлення');
             textArea.attr('readonly', true);
         } else if ($(this).val() == "Про уточнення питань") {
-            textArea.val('Необхідно уточнити поставлені на вирішення експертизи питання, а саме:');
+            textArea.val('Необхідно уточнити поставлені на вирішення експертизи питання, а саме: ');
             textArea.attr('readonly', false);
         } else if ($(this).val() == "Про надання додаткових матеріалів") {
-            textArea.val('Необхідно надати додаткові матеріали, а саме:');
+            textArea.val('Необхідно надати додаткові матеріали, а саме: ');
             textArea.attr('readonly', false);
         }
     });
@@ -490,17 +490,47 @@ function clickFilterButton() {
     }
 }
 
-function showAddressInput() {
+// Show select when click checkbox on schedule add form
+function showParticipantMessageType() {
     $('input.person-сheckbox').on('change', function() {
-        inputAddress = $(this).next().children('input')
+        inputSelect = $(this).next().children('select')
         if($(this).is(':checked')) {
-            inputAddress.removeClass('d-none');
-            inputAddress.removeAttr('disabled');
+            inputSelect.removeClass('d-none').removeAttr('disabled');
+            initMessageSelect(inputSelect);
         } else {
-            inputAddress.addClass('d-none');
-            inputAddress.attr('disabled', true);
+            $(this).next().children().each(function() {
+                $(this).addClass('d-none').attr('disabled', true);
+            });
         }
     });
+}
+
+// Show inputs when choose type message on schedule add form
+function initMessageSelect(select) {
+    select.children().first().attr('disabled', true);
+    select.on('change', function() {
+        if ($(this).val() == 'letter') {
+            select.siblings().each(function(input) {
+                $(this).addClass('d-none').attr('disabled', true);
+            });
+            select.siblings("[name='address']").removeClass(
+                'd-none').removeAttr('disabled');
+            select.siblings("[name='letter']").removeClass(
+                'd-none').removeAttr('disabled');
+        } else if($(this).val() == 'call' || $(this).val() == 'viber') {
+            select.siblings().each(function() {
+                $(this).addClass('d-none').attr('disabled', true);
+            });
+            select.siblings("[name='phone']").removeClass(
+                'd-none').removeAttr('disabled');
+        } else if ($(this).val() == 'agent') {
+            select.siblings().each(function(input) {
+                $(this).addClass('d-none').attr('disabled', true);
+            });
+            select.siblings("[name='agent']").removeClass(
+                'd-none').removeAttr('disabled');
+        }
+    })
 }
 
 $(document).ready(function(){

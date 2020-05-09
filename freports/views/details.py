@@ -615,11 +615,7 @@ def valid_schedule(request_info, report_id):
         except ValueError:
             errors['time'] = u"Введіть коректний формат дати та часу"
 
-    subspecies = request_info.get('subspecies')
-    if not subspecies:
-        errors['subspecies'] = u"Інформація про повідомлення є обов'язковою"
-    else:
-        new_element['subspecies'] = subspecies
+    new_element['subspecies'] = u"Направлене клопотання"
 
     participants = request_info.getlist('person')
     addresses = request_info.getlist('address')
@@ -634,6 +630,8 @@ def valid_schedule(request_info, report_id):
                 if(addresses[idx]):
                     info += u"{} ({}); ".format(
                         person.full_name(), addresses[idx])
+                    person.address = addresses[idx]
+                    person.save()
                 else:
                     errors['person'] = u'Будь-ласка введдіть адреси повідомлених сторін'
             except ValueError:
@@ -646,4 +644,6 @@ def valid_schedule(request_info, report_id):
         new_element['time'] = time
 
     return {'errors': errors, 'data': new_element}
+
+
 
