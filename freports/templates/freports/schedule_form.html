@@ -38,7 +38,7 @@
         <label for="inputTime" class="col-sm-5 col-form-label">Дата та час проведення огляду <strong>*</strong></label>
         <div class="col-sm-7 input-group date" id="datetimepicker1" 
             data-target-input="nearest">
-            <input type="text" class="form-control {% if errors.time %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#datetimepicker1" placeholder="напр. 10.08.2018 10:00"
+            <input type="text" class="form-control {% if errors.time %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#datetimepicker1" id="inputDateSchedule" placeholder="напр. 10.08.2018 10:00"
             name="time" value="{{ new_content.time }}" />
             <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>

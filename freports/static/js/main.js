@@ -1,3 +1,4 @@
+// init datetimepicker for input with date format
 function initDateFields() {
     $('#inputDate, #inputDate2').attr('autocomplete', 'off');
     var startDate = $('#inputDate input').val(), 
@@ -80,9 +81,16 @@ function initDateDecisionField() {
 }
 
 function initDateTimeFields() {
-    var startDate = $('#datetimepicker1 input').val(), currentDate = new Date();
-    if (!startDate) {
-        var startDate = currentDate;
+    var startDate = $('#datetimepicker1 input').val(), 
+        inputDate = $('#inputDate input').val(),
+        minDate = new Date();
+    if (!startDate && inputDate) {
+        minDate = new Date(inputDate);
+        minDate.setHours(15);
+        startDate = minDate;
+    } else {
+        startDate = new Date();
+        startDate.setHours(startDate.getHours() + 1)
     }
     $('#datetimepicker1').datetimepicker({
         format: 'YYYY-MM-DD HH:mm',
@@ -92,7 +100,7 @@ function initDateTimeFields() {
         stepping: 30,
         useCurrent: false,
         daysOfWeekDisabled: [0,7],
-        minDate: startDate,
+        minDate: minDate,
         enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
     });
 }
@@ -104,7 +112,7 @@ function initChangeDecisionDate() {
             var inputDateValue = new Date(inputDate.children('input').val());
             var eventDate = new Date($(this).children('input').val());
             var maxDate = new Date($(this).children('input').val());
-            eventDate.setDate(eventDate.getDate() - 10);
+            eventDate.setDate(eventDate.getDate() - 21);
             if (inputDateValue > eventDate || maxDate > eventDate) {
                 inputDate.datetimepicker('destroy');
                 $('#inputDateDecision').datetimepicker({
@@ -129,6 +137,31 @@ function initChangeDecisionDate() {
         } 
         
     }).blur();
+}
+
+function initChangeScheduleDate() {
+    $('#inputDate').focusout(function() {
+        if ($('#inputDateSchedule').length) {
+            var inputDate = $('#inputDateSchedule');
+            if (inputDate) {
+                var eventDate = new Date($(this).children('input').val());
+                eventDate.setDate(eventDate.getDate() + 10);
+                eventDate.setHours(15);
+                inputDate.parent().datetimepicker('destroy');
+                $('#datetimepicker1').datetimepicker({
+                    format: 'YYYY-MM-DD HH:mm',
+                    sideBySide: true,
+                    locale: 'uk',
+                    date: eventDate,
+                    stepping: 30,
+                    useCurrent: false,
+                    daysOfWeekDisabled: [0,7],
+                    minDate: eventDate,
+                    enabledHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22]
+                });
+            }
+        }   
+    });
 }
 
 function initTodayTasksPage() {
@@ -232,6 +265,8 @@ function initForm(form, modal, link) {
     closeModalForm();
     initGetOrderValues(link);
     showAddressInput();
+    initChangeScheduleDate();
+    initSelectPetitionType();
 
     form.ajaxForm({
         url: link,
@@ -302,6 +337,22 @@ function initSelectCourt(link) {
     }
 }
 
+function initSelectPetitionType() {
+    $('#inputType').change(function() {
+        var textArea = $('#inputNecessary')
+        if ($(this).val() == "Про надання справи") {
+            textArea.val('Необхідно надати матеріали справи для ознайомлення');
+            textArea.attr('readonly', true);
+        } else if ($(this).val() == "Про уточнення питань") {
+            textArea.val('Необхідно уточнити поставлені на вирішення експертизи питання, а саме:');
+            textArea.attr('readonly', false);
+        } else if ($(this).val() == "Про надання додаткових матеріалів") {
+            textArea.val('Необхідно надати додаткові матеріали, а саме:');
+            textArea.attr('readonly', false);
+        }
+    });
+}
+
 function initGetOrderValues(link) {
     $('#id_order').change(function() {
         if ($(this).val()) {
@@ -349,6 +400,7 @@ function inputNumberField() {
     });
 }
 
+
 function addPlusButton() {
     $('.report-detail-item').parent().parent().mouseenter(function() {
         $(this).find('.btn-outline-success, .btn-outline-info').removeAttr('hidden');
@@ -358,6 +410,7 @@ function addPlusButton() {
     });
 }
 
+
 function showButtons() {
     $('tbody tr').hover(function() {
         $(this).find(".fa").fadeIn(100);
@@ -365,6 +418,7 @@ function showButtons() {
         $(this).find(".fa").fadeOut(100);
     });
 }
+
 
 function clickExecuteTask() {
     $('.checkbox-container input, .try').click(function() {

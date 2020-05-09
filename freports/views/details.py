@@ -531,7 +531,7 @@ def add_schedule(request, rid):
         report=report).order_by('date').reverse()
     participants = ReportParticipants.objects.filter(
         report=report)
-    content, new_content = {}, {}
+    content, new_content, start_data = {}, {}, {}
     header = {}
     header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
     header['second'] = u"Призначення виїзду"
@@ -543,6 +543,8 @@ def add_schedule(request, rid):
         u'Повідомлено особисто'
     ]
     content['participants'] = participants
+
+    start_data['date'] = details[0].date.isoformat()
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -578,7 +580,7 @@ def add_schedule(request, rid):
 
     else:
         return render(request, 'freports/schedule_form.html', {
-            'header': header, 'content': content})
+            'header': header, 'content': content, 'new_content': start_data})
 
 
 def valid_schedule(request_info, report_id):
