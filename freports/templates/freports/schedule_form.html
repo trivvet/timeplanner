@@ -71,13 +71,11 @@
                             <option value="viber">Viber</option>
                             <option value="agent">Представник</option>
                         </select>
-                        <input input type="text" class="form-control person-address d-none" disabled placeholder="Введіть адресу учасника" name="address">
-                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть номер листа" 
-                          name="letter">
-                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть номер телефону" 
-                          name="phone">
-                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть ПІБ представника" 
-                          name="agent">
+                        <input input type="text" class="form-control person-address d-none" disabled placeholder="Введіть адресу учасника" name="address" id="address-input" 
+                        value="{{ person.address }}">
+                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть номер листа" name="letter">
+                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть номер телефону" name="address" id="phone-input" value="{{ person.phone }}">
+                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть ПІБ представника" name="address" id="agent-input">
 
                     </label>
                 </div>

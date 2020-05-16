@@ -618,24 +618,50 @@ def valid_schedule(request_info, report_id):
     new_element['subspecies'] = u"Направлене клопотання"
 
     participants = request_info.getlist('person')
+    call_types = request_info.getlist('callType')
     addresses = request_info.getlist('address')
+    letters = request_info.getlist('letter')
 
     info = request_info.get('info')
+
     if participants:
-        if not info:
-            info = "Повідомлені учасники справи: "
+        letter_number = 0
         for idx, participant in enumerate(participants):
             try:
                 person = ReportParticipants.objects.get(pk=participant)
                 if(addresses[idx]):
-                    info += u"{} ({}); ".format(
-                        person.full_name(), addresses[idx])
-                    person.address = addresses[idx]
-                    person.save()
+                    if idx != 0:
+                        info += '; '
+                    if call_types[idx] == 'letter':
+                        if letters[letter_number]:
+                            info += u"{} (Направлено лист №{} на адресу {})".format(
+                                person.full_name(), letters[letter_number], addresses[idx])
+                        else:
+                            info += u"{} (Направлено лист на адресу {})".format(
+                                person.full_name(), addresses[idx])
+                        letter_number += 1
+                        person.address = addresses[idx]
+                        person.save()
+                    elif call_types[idx] == 'agent':
+                        info += u"{} (Вручено представнику {});".format(
+                            person.full_name(), addresses[idx])
+                    elif call_types[idx] == 'call':
+                        info += u"{} (Повідомлено дзвінком на номер {})".format(
+                            person.full_name(), addresses[idx])
+                        person.phone = addresses[idx]
+                        person.save()
+                    elif call_types[idx] == 'viber':
+                        info += u"{} (Наплавлено viber-повідомлення на номер {})".format(
+                            person.full_name(), addresses[idx])
+                        person.phone = addresses[idx]
+                        person.save()
+                    else:
+                        errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте ще раз'
                 else:
-                    errors['person'] = u'Будь-ласка введдіть адреси повідомлених сторін'
+                    errors['person'] = u'Будь-ласка введдіть додаткову інформацію'
             except ValueError:
-                errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте пізніше'
+                errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте ще раз'
+        info += '.'
     new_element['info'] = info
     
     new_element['activate'] = False

@@ -1,5 +1,4 @@
-django>=1.11.27
+django==3.0.6
 PyMySQL
-mysqlclient
 django-axes==5.3.1
 django-crispy-forms==1.9.0

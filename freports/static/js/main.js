@@ -513,7 +513,7 @@ function initMessageSelect(select) {
             select.siblings().each(function(input) {
                 $(this).addClass('d-none').attr('disabled', true);
             });
-            select.siblings("[name='address']").removeClass(
+            select.siblings("[id='address-input']").removeClass(
                 'd-none').removeAttr('disabled');
             select.siblings("[name='letter']").removeClass(
                 'd-none').removeAttr('disabled');
@@ -521,13 +521,13 @@ function initMessageSelect(select) {
             select.siblings().each(function() {
                 $(this).addClass('d-none').attr('disabled', true);
             });
-            select.siblings("[name='phone']").removeClass(
+            select.siblings("[id='phone-input']").removeClass(
                 'd-none').removeAttr('disabled');
         } else if ($(this).val() == 'agent') {
             select.siblings().each(function(input) {
                 $(this).addClass('d-none').attr('disabled', true);
             });
-            select.siblings("[name='agent']").removeClass(
+            select.siblings("[id='agent-input']").removeClass(
                 'd-none').removeAttr('disabled');
         }
     })
