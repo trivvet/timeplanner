@@ -61,10 +61,10 @@
             <div class="form-control {% if errors.person %}is-invalid{% elif errors %}is-valid{% endif %} person-checkboxes">
                 {% for person in content.participants %}
                 <div class="form-check">
-                    <input class="form-check-input person-сheckbox" type="checkbox" id="person{{ person.id }}" value="{{ person.id }}" name="person">
+                    <input class="form-check-input person-сheckbox" type="checkbox" id="person{{ person.id }}" value="{{ person.id }}" name="persons" {% if person.id in new_content.active_participants %}checked{% endif %}>
                     <label class="form-check-label" for="person{{ person.id }}">
-                        {{ person.full_info }}
-                        <select name="callType" class="form-control-sm d-none" disabled>
+                        {{ person.full_info }}{% if not new_content.active_parcitipants %}disabled{% endif %}
+                        <select name="callType" class="form-control-sm {% if not new_content.active_parcitipants or person.id not in new_content.active_participants %}d-none{% endif %}" {% if not new_content.active_parcitipants or person.id not in new_content.active_participants %}disabled{% endif %}>
                             <option value="">Оберіть... *</option>
                             <option value="letter">Рекомендований лист</option>
                             <option value="call">Телефонний дзвінок</option>

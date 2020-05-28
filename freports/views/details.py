@@ -536,12 +536,6 @@ def add_schedule(request, rid):
     header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
     header['second'] = u"Призначення виїзду"
     content['report_number'] = report.full_number
-    content['message_type'] = [
-        u'Направлене клопотання', 
-        u'Надіслані листи', 
-        u'Повідомлено телефоном', 
-        u'Повідомлено особисто'
-    ]
     content['participants'] = participants
 
     start_data['date'] = details[0].date.isoformat()
@@ -617,7 +611,7 @@ def valid_schedule(request_info, report_id):
 
     new_element['subspecies'] = u"Направлене клопотання"
 
-    participants = request_info.getlist('person')
+    participants = request_info.getlist('persons')
     call_types = request_info.getlist('callType')
     addresses = request_info.getlist('address')
     letters = request_info.getlist('letter')
@@ -659,9 +653,16 @@ def valid_schedule(request_info, report_id):
                         errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте ще раз'
                 else:
                     errors['person'] = u'Будь-ласка введдіть додаткову інформацію'
+            except IndexError:
+                errors['person'] = u'Будь ласка оберіть спосіб інформування'
             except ValueError:
-                errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте ще раз'
-        info += '.'
+                errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте ще раз'    
+        if not errors:
+            info += '.'
+        else:
+            if participants:
+                participants = list(map(int, participants))
+                new_element['active_participants'] = participants
     new_element['info'] = info
     
     new_element['activate'] = False

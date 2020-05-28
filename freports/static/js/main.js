@@ -497,10 +497,12 @@ function showParticipantMessageType() {
         if($(this).is(':checked')) {
             inputSelect.removeClass('d-none').removeAttr('disabled');
             initMessageSelect(inputSelect);
+            $('input[name=save_button]').attr('disabled', true);
         } else {
             $(this).next().children().each(function() {
                 $(this).addClass('d-none').attr('disabled', true);
             });
+            $('input[name=save_button]').removeAttr('disabled');
         }
     });
 }
@@ -530,7 +532,8 @@ function initMessageSelect(select) {
             select.siblings("[id='agent-input']").removeClass(
                 'd-none').removeAttr('disabled');
         }
-    })
+        $('input[name=save_button]').removeAttr('disabled');
+    });
 }
 
 $(document).ready(function(){
