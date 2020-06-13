@@ -18,7 +18,7 @@
         <div class="col-sm-7 input-group date" id="inputDate" 
             data-target-input="nearest">
             <input type="text" class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#inputDate" placeholder="напр. 01.01.2018"
-            name="date" value="{{ new_content.date }}" />
+            name="date" value="{% if new_element.date %}{{ new_element.date }}{% else %}{{ start_date }}{% endif %}" />
             <div class="input-group-append" data-target="#inputDate" data-toggle="datetimepicker">
                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
@@ -63,18 +63,19 @@
                 <div class="form-check">
                     <input class="form-check-input person-сheckbox" type="checkbox" id="person{{ person.id }}" value="{{ person.id }}" name="persons" {% if person.id in new_content.active_participants %}checked{% endif %}>
                     <label class="form-check-label" for="person{{ person.id }}">
-                        {{ person.full_info }}{% if not new_content.active_parcitipants %}disabled{% endif %}
-                        <select name="callType" class="form-control-sm {% if not new_content.active_parcitipants or person.id not in new_content.active_participants %}d-none{% endif %}" {% if not new_content.active_parcitipants or person.id not in new_content.active_participants %}disabled{% endif %}>
+                        {{ person.full_info }}
+                        <select name="callType" class="form-control-sm {% if not new_content.active_participants or person.id not in new_content.active_participants %}d-none" disabled{% else %}"{% endif %}>
                             <option value="">Оберіть... *</option>
                             <option value="letter">Рекомендований лист</option>
-                            <option value="call">Телефонний дзвінок</option>
+                            <option value="call" 
+                            {% if new_content.call_types|get_item_list:forloop.counter0 == 'call' %}selected{% endif %}>Телефонний дзвінок</option>
                             <option value="viber">Viber</option>
                             <option value="agent">Представник</option>
                         </select>
                         <input input type="text" class="form-control person-address d-none" disabled placeholder="Введіть адресу учасника" name="address" id="address-input" 
                         value="{{ person.address }}">
                         <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть номер листа" name="letter">
-                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть номер телефону" name="address" id="phone-input" value="{{ person.phone }}">
+                        <input type="text" class="form-control person-address {% if not new_content.call_types|get_item_list:forloop.counter0 == 'call' %}d-none" disabled{% else %}"{% endif %}  placeholder="Введіть номер телефону" name="address" id="phone-input" value="{{ person.phone }}">
                         <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть ПІБ представника" name="address" id="agent-input">
 
                     </label>

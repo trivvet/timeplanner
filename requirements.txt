@@ -1,4 +1,4 @@
-django==3.0.6
+django==3.0.7
 PyMySQL
 django-axes==5.3.1
 django-crispy-forms==1.9.0

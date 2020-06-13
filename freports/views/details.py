@@ -531,14 +531,14 @@ def add_schedule(request, rid):
         report=report).order_by('date').reverse()
     participants = ReportParticipants.objects.filter(
         report=report)
-    content, new_content, start_data = {}, {}, {}
+    content, start_data = {}, {}
     header = {}
     header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
     header['second'] = u"Призначення виїзду"
     content['report_number'] = report.full_number
     content['participants'] = participants
 
-    start_data['date'] = details[0].date.isoformat()
+    start_date = details[0].date.isoformat()
 
     if request.method == 'POST':
         if request.POST.get('save_button'):
@@ -574,7 +574,7 @@ def add_schedule(request, rid):
 
     else:
         return render(request, 'freports/schedule_form.html', {
-            'header': header, 'content': content, 'new_content': start_data})
+            'header': header, 'content': content, 'start_date': start_date})
 
 
 def valid_schedule(request_info, report_id):
@@ -659,11 +659,15 @@ def valid_schedule(request_info, report_id):
                 errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте ще раз'    
         if not errors:
             info += '.'
+            new_element['info'] = info
         else:
             if participants:
                 participants = list(map(int, participants))
                 new_element['active_participants'] = participants
-    new_element['info'] = info
+                print(call_types)
+                new_element['call_types'] = call_types
+            new_element['info'] = request_info.get('info')
+    
     
     new_element['activate'] = False
 

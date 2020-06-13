@@ -88,6 +88,10 @@ function initDateTimeFields() {
         minDate = new Date(inputDate);
         minDate.setHours(15);
         startDate = minDate;
+    } else if (startDate) {
+        startDate = new Date(startDate);
+        minDate = new Date(startDate);
+        minDate.setHours(8);
     } else {
         startDate = new Date();
         startDate.setHours(startDate.getHours() + 1)
