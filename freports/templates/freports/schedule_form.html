@@ -61,7 +61,8 @@
             <div class="form-control {% if errors.person %}is-invalid{% elif errors %}is-valid{% endif %} person-checkboxes">
                 {% for person in content.participants %}
                 <div class="form-check">
-                    <input class="form-check-input person-сheckbox" type="checkbox" id="person{{ person.id }}" value="{{ person.id }}" name="persons" {% if person.id in new_content.active_participants %}checked{% endif %}>
+                    <input class="form-check-input person-сheckbox" type="checkbox" id="person{{ person.id }}" 
+                        value="{{ person.id }}" name="persons" {% if person.id in new_content.active_participants %}checked{% endif %}>
                     <label class="form-check-label" for="person{{ person.id }}">
                         {{ person.full_info }}
                         <select name="callType" class="form-control-sm {% if not new_content.active_participants or person.id not in new_content.active_participants %}d-none" disabled{% else %}"{% endif %}>
@@ -72,11 +73,16 @@
                             <option value="viber">Viber</option>
                             <option value="agent">Представник</option>
                         </select>
-                        <input input type="text" class="form-control person-address d-none" disabled placeholder="Введіть адресу учасника" name="address" id="address-input" 
-                        value="{{ person.address }}">
-                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть номер листа" name="letter">
-                        <input type="text" class="form-control person-address {% if not new_content.call_types|get_item_list:forloop.counter0 == 'call' %}d-none" disabled{% else %}"{% endif %}  placeholder="Введіть номер телефону" name="address" id="phone-input" value="{{ person.phone }}">
-                        <input type="text" class="form-control person-address d-none" disabled placeholder="Введіть ПІБ представника" name="address" id="agent-input">
+                        <input input type="text" class="form-control person-address d-none mt-2 mb-2" 
+                            disabled placeholder="Введіть адресу учасника" name="address" id="address-input" 
+                            value="{{ person.address }}">
+                        <input type="text" class="form-control person-address d-none mt-2 mb-2" 
+                            disabled placeholder="Введіть номер листа" name="letter">
+                        <input type="text" class="form-control person-address mt-2 mb-2
+                            {% if not new_content.call_types|get_item_list:forloop.counter0 == 'call' %} d-none" disabled{% else %}"{% endif %}  
+                            placeholder="Введіть номер телефону" name="address" id="phone-input" value="{{ person.phone }}">
+                        <input type="text" class="form-control person-address d-none mt-2 mb-2" 
+                            disabled placeholder="Введіть ПІБ представника" name="address" id="agent-input">
 
                     </label>
                 </div>

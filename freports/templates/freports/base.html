@@ -94,7 +94,7 @@
         {% endif %}
 
         <div class="wrapper">
-            <!-- Sidbar -->
+            <!-- Sidebar -->
             {% if perms.admins %}
             {% block sidebar %}{% endblock sidebar %}
 {% if request.path == url_reports or request.path == url_participants or request.path == url_subjects or request.path == url_judges or request.path == url_courts or request.path == url_orders or request.path == url_accounts or request.path == url_incomes or request.path == url_researches or request.path == url_executions %}
@@ -147,7 +147,7 @@
                 <div class="row" id="footer">
                     <div class="col-12">
                         <hr />
-                        <p>{% if user.is_authenticated and perms.admins %}Time Planner, version 1.6, 2017-2020 &copy; <a href="{% url 'admin:index' %}">Адмінка</a>{% endif %}</p>
+                        <p>{% if user.is_authenticated and perms.admins %}Time Planner, version 2.0, 2017-2020 &copy; <a href="{% url 'admin:index' %}">Адмінка</a>{% endif %}</p>
                     </div>
                 </div>
             </div>

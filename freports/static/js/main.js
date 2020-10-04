@@ -268,7 +268,7 @@ function initForm(form, modal, link) {
     initSelectCourt(link);
     closeModalForm();
     initGetOrderValues(link);
-    showParticipantMessageType()
+    showParticipantMessageType();
     initChangeScheduleDate();
     initSelectPetitionType();
 
@@ -286,6 +286,7 @@ function initForm(form, modal, link) {
                 modal.find('.modal-body').html(newform);
                 modal.find('.modal-body').prepend(html.find('.alert'));
                 modal.find('.modal-body').prepend(html.find('#second-header h3'));
+                initMessageSelectsAfterUpdateForm();
                 initForm(newform, modal, link);
             } else {
                 $('#navbarSupportedContent').html(html.find('#navbarSupportedContent'));
@@ -497,7 +498,7 @@ function clickFilterButton() {
 // Show select when click checkbox on schedule add form
 function showParticipantMessageType() {
     $('input.person-сheckbox').on('change', function() {
-        inputSelect = $(this).next().children('select')
+        var inputSelect = $(this).next().children('select')
         if($(this).is(':checked')) {
             inputSelect.removeClass('d-none').removeAttr('disabled');
             initMessageSelect(inputSelect);
@@ -508,6 +509,16 @@ function showParticipantMessageType() {
             });
             $('input[name=save_button]').removeAttr('disabled');
         }
+    });
+}
+
+function initMessageSelectsAfterUpdateForm() {
+    var persons = $('input.person-сheckbox');
+    $.each(persons, function(index, person) {
+        if($(person).is(':checked')) {
+            var initSelect = $(person).next().children('select');
+            initMessageSelect(initSelect);
+        };
     });
 }
 

@@ -18,3 +18,11 @@ DATABASES = {
 }
 
 GOOGLE_API = 'GOOGLE JAVASCRIPT MAP API KEY'
+
+Відомості для env_settings.py:
+
+SECRET_KEY = 'generate on https://djecrety.ir/'
+DEBUG = True (or False for production)
+PORTAL_URL = 'http://localhost:8000'
+ALLOWED_HOSTS = [] (or your server address for production)
+STATIC_ROOT = '' (or ’/path/to/folder/with/static/files/’ for production)
