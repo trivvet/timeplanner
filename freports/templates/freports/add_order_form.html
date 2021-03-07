@@ -12,6 +12,7 @@
 <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
     {% csrf_token %}
     <input type="hidden" name="name" value="first_arrived" />
+    <input type="hidden" name="number_year" value="{{ content.number_year }}" />
     <!-- Дата події -->
     <div class="form-group row">
         <label for="inputDate" class="col-sm-4 col-form-label">Дата події <strong>*</strong></label>

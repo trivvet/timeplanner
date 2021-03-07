@@ -147,6 +147,7 @@ def add_order(request, rid):
     header = u'Провадження №%s/%s' % (report.number, report.number_year)
     content['obvious_fields'] = kind_specific[kind][1]
     content['kind'] = kind
+    content['number_year'] = report.number_year
 
     if request.method == 'POST':
         if request.POST.get('save_button'):

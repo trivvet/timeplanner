@@ -388,8 +388,9 @@ function initGetOrderValues(link) {
 function inputNumberField() {
     $('#inputCase').focus(function() {
         current_value = $(this).val();
+        case_number_year = $("input[name='number_year']").val()
         is_current = false;
-        for (i=12; i<20; i++) {
+        for (i=12; i<21; i++) {
             is_current = current_value.includes('/' + i);
             if (is_current) {
                 break
@@ -399,7 +400,9 @@ function inputNumberField() {
             end_of_array = current_value.indexOf('/', 5);
             $(this).get(0).setSelectionRange(4,end_of_array);
         } else {
-            $('#inputCase').val(current_value + ' /19');
+            number_year = parseInt(case_number_year.substring(1,3));
+            case_number = number_year - 1
+            $('#inputCase').val(current_value + ' /' + case_number);
             $(this).get(0).setSelectionRange(4,5);
         }
     });
