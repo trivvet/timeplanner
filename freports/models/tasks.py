@@ -28,7 +28,7 @@ class Task(models.Model):
         blank=False,
         default=timezone.now)
 
-    execute = models.NullBooleanField(
+    execute = models.BooleanField(
         verbose_name=u"Статус виконання",
         blank=True,
         null=True)

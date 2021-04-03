@@ -38,8 +38,9 @@ class BaseReport(models.Model):
         blank=False,
         null=False)
 
-    active = models.NullBooleanField(
+    active = models.BooleanField(
         verbose_name=u"Активний статус",
+        null=True,
         blank=False)
 
     cost = models.IntegerField(
@@ -76,6 +77,18 @@ class Report(BaseReport):
         blank=True,
         null=True)
 
+    repeater_report = models.BooleanField(
+        verbose_name=u"Повторна експертиза",
+        null=True,
+        blank=True
+    )
+
+    additional_report = models.BooleanField(
+        verbose_name=u"Додаткова експертиза",
+        null=True,
+        blank=True
+    )
+
     judge_name = models.ForeignKey('Judge',
         verbose_name=u"Суддя",
         blank=True,
@@ -99,6 +112,10 @@ class Report(BaseReport):
     def __str__(self):
         return u"{number}/{number_year} ({address}-{plaintiff}-{defendant})".format(number=self.number,
             number_year=self.number_year, address=self.address, plaintiff=self.plaintiff, defendant=self.defendant)
+
+    def clean(self):
+         if self.repeater_report and self.additional_report():
+             raise ValidationError("Both fields can't be choosed")
 
     def filled_info(self):
         if self.address == '-' or self.judge_name == '-' or self.plaintiff == '-' or self.defendant == '-' or self.object_name == '-' or self.research_kind == '-':
