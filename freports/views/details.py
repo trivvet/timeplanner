@@ -144,7 +144,7 @@ def add_order(request, rid):
     courts = Court.objects.all().order_by('name')
     kind = 'first_arrived'
     content, judges = {}, {}
-    header = u'Провадження №%s/%s' % (report.number, report.number_year)
+    header = u'по провадженню №%s' % (report.full_number())
     content['obvious_fields'] = kind_specific[kind][1]
     content['kind'] = kind
     content['number_year'] = report.number_year

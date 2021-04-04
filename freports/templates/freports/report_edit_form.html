@@ -62,8 +62,8 @@
     <div class="form-group row">
         <label class="col-sm-4 col-form-label"></label>
         <div class="col-md-6">
-            <input type="radio" name="report_type">   Повторна   
-            <input type="radio" name="report_type">   Додаткова
+            <input type="radio" name="report_type" value="repeater" {% if content.repeater_report %}checked{% endif %}>   Повторна   
+            <input type="radio" name="report_type" value="additional" {% if content.additional_report %}checked{% endif %}>   Додаткова
         </div>
     </div>
 

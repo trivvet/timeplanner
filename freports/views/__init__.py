@@ -1,7 +1,7 @@
 from .reports import (
     reports_list, 
     add_new_report, 
-    edit_report, 
+    report_edit, 
     delete_report, 
     update_info
     )

@@ -116,6 +116,12 @@ def add_new_report(request):
             else:
                 errors['number'] = u"Номер висновку є обов'язковим"
 
+            if 'report_type' in data.keys():
+                if data['report_type'] == 'repeater':
+                    new_data['repeater_report'] = True
+                elif data['report_type'] == 'additional':
+                    new_data['additional_report'] = True
+
             if errors:
                 messages.error(request, "Виправте наступні недоліки")
                 return render(request, 'freports/add_new_report.html', 
@@ -155,9 +161,9 @@ def add_new_report(request):
             'cancel_url': next_url, 'content': content})
 
 @login_required(login_url='/login/')
-def edit_report(request, rid):
-    header = 'Редагування провадження'
+def report_edit(request, rid):
     content = Report.objects.get(pk=rid)
+    header = u'Редагування провадження №{}'.format(content.full_number())
     courts = Court.objects.all()
     judges = Judge.objects.filter(
         court_name=content.judge_name.court_name)
@@ -177,7 +183,7 @@ def edit_report(request, rid):
             if errors:
                 messages.error(request, "Виправте наступні недоліки")
                 new_report['judge_name'] = content.judge_name
-                return render(request, 'freports/edit_report.html', {'header': header, 'content': new_report,
+                return render(request, 'freports/report_edit_form.html', {'header': header, 'content': new_report,
                     'errors': errors, 'courts': courts, 'judges': judges})
 
             else:
@@ -217,7 +223,7 @@ def edit_report(request, rid):
             if content.executed:
                 content.date_executed = content.date_executed.isoformat()
             next_url = request.GET.get('next', '')
-            return render(request, 'freports/edit_report.html', {'header': header, 'content': content, 'courts': courts,
+            return render(request, 'freports/report_edit_form.html', {'header': header, 'content': content, 'courts': courts,
                 'judges': judges, 'next_url': next_url})
 
 @login_required(login_url='/login/')
@@ -285,6 +291,12 @@ def valid_report(data_post):
         except ValueError:
             new_report['number'] = report_number
             errors['number'] = u"Будь-ласка введіть ціле число"
+
+    report_type = data_post.get('report_type')
+    if report_type == 'repeater':
+        new_report['repeater_report'] = True
+    elif report_type == 'additional':
+        new_report['additional_report'] = True
 
     new_report['number_year'] = data_post.get('number_year')
 

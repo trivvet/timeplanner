@@ -130,7 +130,13 @@ class Report(BaseReport):
             defendant=self.defendant, object_name=self.object_name, research_kind=self.research_kind)
 
     def full_number(self):
-        return u"{}/{}".format(self.number, self.number_year)
+        if self.repeater_report:
+            add_letter = u'п'
+        elif self.additional_report:
+            add_letter = u'д'
+        else:
+            add_letter = ''
+        return u"{}{}/{}".format(self.number, add_letter, self.number_year)
 
     def time_after_update(self):
         time_amount = date.today() - self.change_date
