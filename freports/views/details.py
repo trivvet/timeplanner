@@ -536,7 +536,7 @@ def add_schedule(request, rid):
         report=report).order_by('date').reverse()
     participants = ReportParticipants.objects.filter(
         report=report)
-    content, start_data = {}, {}
+    content, start_date = {}, {}
     header = {}
     header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
     header['second'] = u"Призначення виїзду"
