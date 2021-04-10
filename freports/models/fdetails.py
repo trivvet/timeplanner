@@ -7,12 +7,18 @@ from django.utils import timezone
 # Create your models here.
 
 status_list = {
-    'judge': 'Суддя',
-    'plaintiff': 'Позивач',
-    'defendant': 'Відповідач',
-    'plaintiff_agent': 'Представник позивача',
-    'defendant_agent': 'Представник відповідача',
-    'other_participant': 'Інший учасник'
+    'judge': u'Суддя',
+    'plaintiff': u'Позивач',
+    'defendant': u'Відповідач',
+    'plaintiff_agent': u'Представник позивача',
+    'defendant_agent': u'Представник відповідача',
+    'other_participant': u'Інший учасник'
+}
+
+way_forward_list = {
+    'post': u'поштою',
+    'personally': u'особисто в приміщенні суду',
+    'courier': u"від кур'єра"
 }
 
 class ReportEvents(models.Model):
@@ -50,6 +56,13 @@ class ReportEvents(models.Model):
         blank=True,
         null=True,
         verbose_name=u"Отримані матеріали")
+
+    way_forward = models.CharField(
+        verbose_name = u"Спосіб пересилання",
+        max_length=256,
+        blank=True,
+        null=True
+    )
 
     decision_date = models.DateField(
         verbose_name = u"Дата ухвали",
@@ -91,11 +104,14 @@ class ReportEvents(models.Model):
         description = ""
         if self.name == 'first_arrived':
             if self.received:
-                description = 'Надійшла ухвала суду від %s року. Разом з ухвалою надійшли: %s' % (self.decision_date.strftime('%d-%m-%Y'), self.received)
+                description = 'Надійшла ухвала суду від {} року. Разом з ухвалою надійшли: {}'.format(self.decision_date.strftime('%d-%m-%Y'), self.received)
             else:
                 description = 'Надійшла ухвала суду від %s року без додаткових матеріалів' % self.decision_date.strftime('%d-%m-%Y')
+            if self.way_forward:
+                description += ". Отримано {}".format(way_forward_list[self.way_forward])
         elif self.name == 'arrived':
             description = 'Надійшли матеріали: %s' % self.received
+            description += ". Отримано {}".format(way_forward_list[self.way_forward])
         elif self.name == 'petition':
             if self.sending:
                 description = 'Направлено клопотання %s, а саме: %s. Разом з клопотанням повернено: %s' % (self.subspecies, self.necessary, self.sending)

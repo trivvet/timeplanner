@@ -187,6 +187,18 @@
     </div>
     {% endif %}
 
+    <!-- Отримані матеріали -->
+    {% if 'way_forward' in content.obvious_fields %}
+    <div class="form-group row">
+        <label for="inputWayForward" class="col-sm-5 col-form-label">Спосіб отриання</label>
+        <div class="col-sm-7">
+            <input type="radio" name="way_forward" value="post" {% if new_content.way_forward == 'post' %}checked{% endif %}>   Поштою </br>
+            <input type="radio" name="way_forward" value="personally" {% if new_content.way_forward == 'personally' %}checked{% endif %}>   Особисто </br>
+            <input type="radio" name="way_forward" value="courier" {% if new_content.way_forward == 'courier' %}checked{% endif %}>    Кур'єром
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Адреса для рахунку -->
     {% if 'address' in content.obvious_fields %}
     <div class="form-group row">

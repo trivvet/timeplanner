@@ -60,7 +60,7 @@ message_type = [
 kind_specific = {
         'first_arrived': [
             u'Надходження ухвали', 
-            ['date', 'info', 'received', 'decision_date']
+            ['date', 'info', 'received', 'way_forward', 'decision_date']
             ],
         'petition': [
             u'Направлення клопотання', 
@@ -69,7 +69,7 @@ kind_specific = {
             ],
         'arrived': [
             u'Надходження з суду', 
-            ['date', 'info', 'received']
+            ['date', 'info', 'received', 'way_forward']
             ],
         'bill': [
             u'Направлення рахунку', 
@@ -467,6 +467,10 @@ def valid_detail(request_info, report_id):
             errors['received'] = u"Інформація про отримані матеріали є обов'язковою"
         else:
             new_element['received'] = received
+        
+        way_forward = request_info.get('way_forward')
+        if way_forward:
+            new_element['way_forward'] = way_forward
 
     if name in ['petition', 'bill', 'done', 'inspected', 'schedule']:
         subspecies = request_info.get('subspecies')
