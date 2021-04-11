@@ -431,7 +431,6 @@ def valid_detail(request_info, report_id):
         'petition', 
         'bill', 
         'paid', 
-        'schedule', 
         'inspected', 
         'done'
     )
@@ -472,24 +471,12 @@ def valid_detail(request_info, report_id):
         if way_forward:
             new_element['way_forward'] = way_forward
 
-    if name in ['petition', 'bill', 'done', 'inspected', 'schedule']:
+    if name in ['petition', 'bill', 'done', 'inspected']:
         subspecies = request_info.get('subspecies')
         if not subspecies:
             errors['subspecies'] = u"Інформація про підтип події є обов'язковою"
         else:
             new_element['subspecies'] = subspecies
-
-    if name in ['schedule']:
-        time = request_info.get('time')
-        pz = timezone.get_current_timezone()
-        if not time:
-            errors['time'] = u"Дата та час огляду є обов'язковими"
-        else:
-            try:
-                naive_time = datetime.strptime(time, '%Y-%m-%d %H:%M')
-                new_element['time'] = pz.localize(naive_time)
-            except ValueError:
-                errors['time'] = u"Введіть коректний формат дати та часу"
 
     if name == 'petition':
         necessary = request_info.get('necessary')
@@ -537,9 +524,6 @@ def add_schedule(request, rid):
     participants = ReportParticipants.objects.filter(
         report=report)
     content, start_date = {}, {}
-    header = {}
-    header['main'] = u'Додавання події до провадження №%s/%s' % (report.number, report.number_year)
-    header['second'] = u"Призначення виїзду"
     content['report_number'] = report.full_number
     content['participants'] = participants
 
@@ -555,8 +539,8 @@ def add_schedule(request, rid):
             if errors:
                 messages.error(request, u"Виправте наступні недоліки")
                 return render(request, 'freports/schedule_form.html',
-                    {'header': header, 'errors': errors, 
-                     'content': content, 'new_content': new_element})
+                    {'errors': errors, 'content': content, 
+                     'new_content': new_element})
 
             else:
                 new_schedule = ReportEvents(**new_element)
@@ -572,14 +556,14 @@ def add_schedule(request, rid):
                 messages.success(request, u"Виїзд успішно призначений")
 
         elif request.POST.get('cancel_button'):
-            messages.warning(request, u"Додавання деталей провадження скасовано")
+            messages.warning(request, u"Додавання призначення виїзду скасовано")
 
         return HttpResponseRedirect(reverse('freports:report_detail',
             args=[rid]))
 
     else:
         return render(request, 'freports/schedule_form.html', {
-            'header': header, 'content': content, 'start_date': start_date})
+            'content': content, 'start_date': start_date})
 
 
 def valid_schedule(request_info, report_id):
@@ -629,7 +613,7 @@ def valid_schedule(request_info, report_id):
             try:
                 person = ReportParticipants.objects.get(pk=participant)
                 if(addresses[idx]):
-                    if idx != 0:
+                    if idx != 0 or info:
                         info += '; '
                     if call_types[idx] == 'letter':
                         if letters[letter_number]:
@@ -669,7 +653,6 @@ def valid_schedule(request_info, report_id):
             if participants:
                 participants = list(map(int, participants))
                 new_element['active_participants'] = participants
-                print(call_types)
                 new_element['call_types'] = call_types
             new_element['info'] = request_info.get('info')
     
@@ -681,5 +664,141 @@ def valid_schedule(request_info, report_id):
 
     return {'errors': errors, 'data': new_element}
 
+
+@login_required(login_url='/login/')
+def add_bill(request, rid):
+    report = Report.objects.get(pk=rid)
+    details = ReportEvents.objects.filter(
+        report=report).order_by('date').reverse()
+    participants = ReportParticipants.objects.filter(
+        report=report)
+    content, start_date = {}, {}
+    content['report_number'] = report.full_number
+    content['participants'] = participants
+    start_date = details[0].date.isoformat()
+    if request.method == 'POST':
+        if request.POST.get('save_button'):
+
+            valid_data = valid_bill(request.POST, rid)
+            errors = valid_data['errors']
+            new_element = valid_data['data']
+
+            if errors:
+                messages.error(request, u"Виправте наступні недоліки")
+                return render(request, 'freports/report_bill_form.html',
+                    {'errors': errors, 'content': content, 
+                     'new_content': new_element})
+
+            else:
+                new_bill = ReportEvents(**new_element)
+                new_bill.save()
+                report.change_date = datetime.utcnow().date()
+                report = check_active(report)
+                report.active_days_amount = days_count(report, 'active')
+                report.waiting_days_amount = days_count(report, 'waiting')
+                reports = Report.objects.all()
+                update_dates_info(reports)
+                report.save()
+                add_detail_task(new_bill)
+                messages.success(request, u"Направлення рахунку успішно зареєстровано")
+
+        elif request.POST.get('cancel_button'):
+            messages.warning(request, u"Додавання направлення рахунку скасовано")
+
+        return HttpResponseRedirect(reverse('freports:report_detail',
+            args=[rid]))
+    else:
+        return render(request, 'freports/report_bill_form.html', {
+            'content': content, 'start_date': start_date})
+
+
+def valid_bill(request_info, report_id):
+    errors = {}
+    new_element = {}
+
+    report = Report.objects.filter(pk=report_id)
+    if len(report) != 1:
+        errors['report'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте пізніше'
+    else:
+        new_element['report'] = report[0]
+
+    new_element['name'] = 'bill'
+
+    date = request_info.get('date')
+    if not date:
+        errors['date'] = u"Дата події є обов'язковою"
+    else:
+        try:
+            new_element['date'] = date
+        except ValueError:
+            errors['date'] = u"Введіть коректний формат дати"
+
+    cost = request_info.get('cost')
+    if not cost:
+        errors['cost'] = u"Інформація про вартість роботи є обов'язковою"
+    else:
+        try:
+            new_element['cost'] = int(cost)
+        except ValueError:
+            errors['cost'] = u"Введіть вартість в числовому вигляді"
+            new_element['cost'] = cost
+
+    participants = request_info.getlist('persons')
+    call_types = request_info.getlist('callType')
+    addresses = request_info.getlist('address')
+    letters = request_info.getlist('letter')
+
+    info = request_info.get('info')
+
+    if participants:
+        letter_number = 0
+        for idx, participant in enumerate(participants):
+            try:
+                person = ReportParticipants.objects.get(pk=participant)
+                if(addresses[idx]):
+                    if idx != 0:
+                        info += '; '
+                    if call_types[idx] == 'letter':
+                        if letters[letter_number]:
+                            info += u"{} (Направлено лист №{} на адресу {})".format(
+                                person.full_name(), letters[letter_number], addresses[idx])
+                        else:
+                            info += u"{} (Направлено лист на адресу {})".format(
+                                person.full_name(), addresses[idx])
+                        letter_number += 1
+                        person.address = addresses[idx]
+                        person.save()
+                    elif call_types[idx] == 'agent':
+                        info += u"{} (Вручено представнику {});".format(
+                            person.full_name(), addresses[idx])
+                    elif call_types[idx] == 'personally':
+                        info += u"{} (Вручено особисто)".format(
+                            person.full_name())
+                    elif call_types[idx] == 'viber':
+                        info += u"{} (Наплавлено viber-повідомлення на номер {})".format(
+                            person.full_name(), addresses[idx])
+                        person.phone = addresses[idx]
+                        person.save()
+                    else:
+                        errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте ще раз'
+                else:
+                    errors['person'] = u'Будь-ласка введдіть додаткову інформацію'
+            except IndexError:
+                errors['person'] = u'Будь ласка оберіть спосіб інформування'
+            except ValueError:
+                errors['person'] = u'На сервер відправлені неправельні дані. Будь-ласка спробуйте ще раз'    
+        if not errors:
+            info += '.'
+            new_element['info'] = info
+        else:
+            if participants:
+                participants = list(map(int, participants))
+                new_element['active_participants'] = participants
+                new_element['call_types'] = call_types
+            new_element['info'] = request_info.get('info')
+    
+    new_element['activate'] = False
+
+    return {'errors': errors, 'data': new_element}
 
 

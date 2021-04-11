@@ -11,7 +11,8 @@ from .details import (
     add_detail, 
     edit_detail, 
     delete_detail,
-    add_schedule
+    add_schedule,
+    add_bill
     )
 from .participants import (
     participants_list, 

@@ -120,12 +120,13 @@ class ReportEvents(models.Model):
         elif self.name == 'bill':
             if self.address:
                 description = '%s на адресу %s на суму %s грн' % (self.subspecies, self.address, self.cost)
-            else:
+            elif self.subspecies:
                 description = '%s на суму %s грн' % (self.subspecies, self.cost)
+            else:
+                description = 'На суму {} грн'.format(self.cost)
         elif self.name == 'paid':
             description = self.subspecies
         elif self.name == 'schedule':
-            # import pdb;pdb.set_trace()
             pz = timezone.get_current_timezone()
             self.time = pz.normalize(self.time)
             time_info = self.time.strftime('%H:%M')

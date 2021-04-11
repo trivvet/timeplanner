@@ -50,6 +50,8 @@ urlpatterns = [
         views.delete_detail, name='delete_detail'),
     url(r'^(?P<rid>\d+)/details/schedule/add/$',
         views.add_schedule, name='add_schedule'),
+    url(r'^(?P<rid>\d+)/details/bill/add/$',
+        views.add_bill, name='add_bill'),
 
     # participant urls
     url(r'^partisipants/$', views.participants_list, 

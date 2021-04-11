@@ -1,0 +1,110 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+<div class="row">
+    <div class="col text-center">
+        <h2>Направлення рахунку по провадженню №{{ content.report_number }}</h2>
+    </div>
+</div>
+{% endblock title %}
+
+{% block content %}
+<form class="form-horizontal" action="" method="post" enctype="multipart/form-data" role="form">
+    {% csrf_token %}
+
+    <!-- Дата події -->
+    <div class="form-group row">
+        <label for="inputDate" class="col-sm-5 col-form-label">Дата події <strong>*</strong></label>
+        <div class="col-sm-7 input-group date" id="inputDate" 
+            data-target-input="nearest">
+            <input type="text" class="form-control {% if errors.date %}is-invalid{% elif errors %}is-valid{% endif %} datetimepicker-input" data-target="#inputDate" placeholder="напр. 01.01.2018"
+            name="date" value="{% if new_element.date %}{{ new_element.date }}{% else %}{{ start_date }}{% endif %}" />
+            <div class="input-group-append" data-target="#inputDate" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+            </div>
+        </div>
+    </div>
+    {% if errors.date %}
+    <div class="form-group row form-error">
+        <div class="col-sm-5"></div>
+        <div class="col">
+            {{ errors.date }}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Направлення рахунків сторонам -->
+    <div class="form-group row">
+        <label class="col-sm-5 col-form-label">Направлення рахунків сторонам</label>
+        <div class="col-sm-7">
+            <div class="form-control {% if errors.person %}is-invalid{% elif errors %}is-valid{% endif %} person-checkboxes">
+                {% for person in content.participants %}
+                <div class="form-check">
+                    <input class="form-check-input person-сheckbox" type="checkbox" id="person{{ person.id }}" 
+                        value="{{ person.id }}" name="persons" {% if person.id in new_content.active_participants %}checked{% endif %}>
+                    <label class="form-check-label" for="person{{ person.id }}">
+                        {{ person.full_info }}
+                        <select name="callType" class="form-control-sm {% if not new_content.active_participants or person.id not in new_content.active_participants %}d-none" disabled{% else %}"{% endif %}>
+                            <option value="">Оберіть спосіб вручення *</option>
+                            <option value="letter">Рекомендований лист</option>
+                            <option value="personally" 
+                            {% if new_content.call_types|get_item_list:forloop.counter0 == 'personally' %}selected{% endif %}>Особисто</option>
+                            <option value="viber">Viber</option>
+                            <option value="agent">Через представника</option>
+                        </select>
+                        <input input type="text" class="form-control person-address d-none mt-2 mb-2" 
+                            disabled placeholder="Введіть адресу учасника" name="address" id="address-input" 
+                            value="{{ person.address }}">
+                        <input type="text" class="form-control person-address d-none mt-2 mb-2" 
+                            disabled placeholder="Введіть номер листа" name="letter">
+                        <input type="text" class="form-control person-address mt-2 mb-2
+                            {% if not new_content.call_types|get_item_list:forloop.counter0 == 'viber' %} d-none" disabled{% else %}"{% endif %}  
+                            placeholder="Введіть номер телефону" name="address" id="phone-input" value="{{ person.phone }}">
+                        <input type="text" class="form-control person-address d-none mt-2 mb-2" 
+                            disabled placeholder="Введіть ПІБ представника" name="address" id="agent-input">
+
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="invalid-feedback">
+                {{ errors.person }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Вартість -->
+    <div class="form-group row">
+        <label for="inputCost" class="col-sm-5 col-form-label">Вартість робіт <strong>*</strong></label>
+        <div class="col-sm-7">
+            <input type="text" id="inputCost" placeholder="Введіть вартість висновку" name="cost"
+                    class="form-control {% if errors.cost %}is-invalid{% elif errors %}is-valid{% endif %}"
+                    value="{{ new_content.cost }}">
+            <div class="invalid-feedback">
+                {{ errors.cost }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Додаткова інформація -->
+    <div class="form-group row">
+        <label for="inputInfo" class="col-sm-5 col-form-label">Додаткова інформація</label>
+        <div class="col-sm-7">
+            <textarea type="text" class="form-control {% if errors %}is-valid{% endif %}"
+                id="inputInfo" name="info" rows="4"
+                placeholder="Введіть додаткову інформацію (у разі наявності)">{{ new_content.info }}</textarea>
+        </div>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="form-group row button-group">
+        <div class="col-sm-5"></div>
+        <div class="col-sm-7">
+          <input type="submit" class="btn btn-primary" value="Зберегти"
+                 name="save_button" />
+          <input type="submit" class="btn btn-link"
+                 name="cancel_button" value="Скасувати" data-dismiss="modal" />
+        </div>
+    </div>
+</form>
+{% endblock content %}
