@@ -14,6 +14,19 @@ STATUS_CHOICES = (
     ('done', u'Виконаний'),
 )
 
+YEAR_CHOICES = (
+    ('012', '2012'),
+    ('013', '2013'),
+    ('014', '2014'), 
+    ('015', '2015'),
+    ('016', '2016'),
+    ('017', '2017'),
+    ('018', '2018'),
+    ('019', '2019'),
+    ('020', '2020'),
+    ('021', '2021'),
+)
+
 class ResearchForm(forms.ModelForm):
     status = forms.ChoiceField(
         label=u"Статус дослідження",
@@ -63,8 +76,8 @@ class ResearchForm(forms.ModelForm):
 
     class Meta:
         model = Research
-        fields = ['date_arrived', 'address', 'applicant', 'object_name', 
-        'research_kind', 'addition_info']
+        fields = ['number', 'number_year', 'date_arrived', 'address', 'applicant', 'object_name', 'research_kind', 'addition_info']
         widgets = {
+            'number_year': forms.Select(choices=YEAR_CHOICES),
             'addition_info': forms.Textarea(attrs={'rows': 4}),
         }

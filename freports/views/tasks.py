@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect,JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import translation, timezone
-from django.utils.timezone import get_current_timezone, localtime
+from django.utils.timezone import get_current_timezone, localtime, make_aware
 from django.utils.formats import date_format
 
 from ..models import Task, Report, ReportEvents, ReportSubject
@@ -300,7 +300,8 @@ def valid_detail_task(detail):
 
     elif detail.name == 'bill':
         new_task['kind'] = u'Відправлення без виконання (без оплати)'
-        new_task['time'] = date + timedelta(days=47, hours=10)
+        task_time = date + timedelta(days=47, hours=10)
+        new_task['time'] = make_aware(task_time)
         new_task['detail'] = u"{} від {}".format(detail.detail_info(), date.strftime("%d-%m-%Y"))
         new_task['report'] = detail.report
         new_task['event'] = detail

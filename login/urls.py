@@ -9,6 +9,8 @@ urlpatterns = [
         name='out'),
     url(r'^attempts/$', views.login_attempts, 
         name='attempts'),
+    url(r'^logs/$', views.login_logs, 
+        name='logs'),
     url(r'^attempts/delete$', views.delete_old_attempts, 
         name='attempts_delete'),
 ]

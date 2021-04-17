@@ -7,12 +7,13 @@ from django.contrib.auth.decorators import (
     login_required, 
     permission_required
     )
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 
-from axes.models import AccessAttempt
+from axes.models import AccessAttempt, AccessLog
 
 def login_auth(request):
     attempts = AccessAttempt.objects.all()
@@ -51,6 +52,8 @@ def login_auth(request):
     return render(request, 'login/form.html', {})
 
 def logout_auth(request):
+    logs = AccessLog.objects.all()
+    logs.last().logout_time = timezone.now()
     logout(request)
     return HttpResponseRedirect(reverse('login:form'))
 
@@ -58,14 +61,27 @@ def logout_auth(request):
 @permission_required('admins', raise_exception=True)
 def login_attempts(request):
     attempts_all = AccessAttempt.objects.all()
-    if request.GET.get('show'):
-        attempts = attempts_all
-    else:
-        attempts = attempts_all.filter(failures_since_start__gt = 0)
+    attempts = attempts_all
     for attempt in attempts:
         attempt.new_post_data = attempt.post_data.split('---------')
     return render(request, 'login/attempts.html', 
         {'attempts': attempts})
+
+@login_required(login_url='/login/')
+@permission_required('admins', raise_exception=True)
+def login_logs(request):
+    logs = AccessLog.objects.all()
+    if request.GET.get('all_pages', '') == '':
+        paginator = Paginator(logs, 8)
+        page = request.GET.get('page', '')
+        try:
+            logs = paginator.page(page)
+        except PageNotAnInteger:
+            logs = paginator.page(1)
+        except EmptyPage:
+            logs = paginator.page(paginator.num_page)
+    return render(request, 'login/logs.html', 
+        {'logs': logs})
 
 @login_required(login_url='/login/')
 @permission_required('admins', raise_exception=True)

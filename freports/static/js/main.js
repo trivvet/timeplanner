@@ -549,6 +549,11 @@ function initMessageSelect(select) {
             });
             select.siblings("[id='agent-input']").removeClass(
                 'd-none').removeAttr('disabled');
+        } else if ($(this).val() == 'personally') {
+            select.siblings().each(function(input) {
+                $(this).addClass('d-none').attr('disabled', true);
+            });
+            select.siblings("[id='personally-input']").removeAttr('disabled');
         }
         $('input[name=save_button]').removeAttr('disabled');
     });

@@ -12,10 +12,12 @@ from finance.models import Order
 
 class BaseReport(models.Model):
     number = models.IntegerField(
+        verbose_name=u"Номер провадження",
         blank=False,
         null=False)
 
     number_year = models.CharField(
+        verbose_name=u"Рік реєстрації",
         max_length=128,
         blank=False,
         null=True)

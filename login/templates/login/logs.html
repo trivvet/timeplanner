@@ -1,0 +1,59 @@
+{% extends "freports/base.html" %}
+
+{% block title %}
+
+<div class="col">
+    <span class="h1">Записи входів</span>
+</div>
+
+{% endblock title %}
+
+{% block content %}
+
+<a class="btn btn-outline-warning mb-3" href="{% url 'login:attempts' %}">Показати невдалі спроби</a>
+{% if logs %}
+<table class="table table-hover table-responsive-lg">
+    <thead class="thead-light">
+        <tr>
+            <th>Використане ім'я користувача</th>
+            <th>Час входу</th>
+            <th>Час виходу</th>
+            <th>IP адреса</th>
+            <th>Детальні дані</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log.username }}</td>
+            <td>{{ log.attempt_time }}</td>
+            <td>{% if log.logout_time %} {{ log.logout_time }}{% endif %}</td>
+            <td>{{ log.ip_address }}</td>
+            <td>
+                <a class="btn btn-info" data-toggle="collapse" href="#collapse{{ log.id }}" role="button" aria-expanded="false" aria-controls="collapse{{ log.id }}">
+                Дивитись
+                </a>
+            </td>
+        </tr>
+        <tr class="collapse" id="collapse{{ log.id }}">
+            <td colspan="5">
+                <p>Браузер користувача - {{ log.user_agent }}</p>
+                <p>Адреса запиту - {{ log.path_info }}</p>
+                <p>Інші дані - {{ log.http_accept }}</p>
+
+            </td>
+        </tr>
+        {% endfor %}  
+    </tbody>
+</table>
+
+{% if logs.has_other_pages %}
+{% include "freports/pagination.html" with items=logs url_next="login:logs" %}
+{% endif %}
+
+{% else %}
+<p>На цей момент дані відсутні</p>
+{% endif %}
+
+{% endblock content %}

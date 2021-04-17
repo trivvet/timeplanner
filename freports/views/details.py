@@ -626,7 +626,7 @@ def valid_schedule(request_info, report_id):
                         person.address = addresses[idx]
                         person.save()
                     elif call_types[idx] == 'agent':
-                        info += u"{} (Вручено представнику {});".format(
+                        info += u"{} (Вручено представнику {})".format(
                             person.full_name(), addresses[idx])
                     elif call_types[idx] == 'call':
                         info += u"{} (Повідомлено дзвінком на номер {})".format(
@@ -749,13 +749,23 @@ def valid_bill(request_info, report_id):
     letters = request_info.getlist('letter')
 
     info = request_info.get('info')
+    if info:
+        if info[-1] != '.':
+            info += '. '
+        else:
+            info += ' '
 
     if participants:
         letter_number = 0
         for idx, participant in enumerate(participants):
             try:
                 person = ReportParticipants.objects.get(pk=participant)
-                if(addresses[idx]):
+                if call_types[idx] == 'personally':
+                    if idx != 0:
+                        info += '; '
+                    info += u"{} (Вручено особисто)".format(
+                            person.full_name())
+                elif addresses[idx]:
                     if idx != 0:
                         info += '; '
                     if call_types[idx] == 'letter':
@@ -769,11 +779,8 @@ def valid_bill(request_info, report_id):
                         person.address = addresses[idx]
                         person.save()
                     elif call_types[idx] == 'agent':
-                        info += u"{} (Вручено представнику {});".format(
+                        info += u"{} (Вручено представнику {})".format(
                             person.full_name(), addresses[idx])
-                    elif call_types[idx] == 'personally':
-                        info += u"{} (Вручено особисто)".format(
-                            person.full_name())
                     elif call_types[idx] == 'viber':
                         info += u"{} (Наплавлено viber-повідомлення на номер {})".format(
                             person.full_name(), addresses[idx])

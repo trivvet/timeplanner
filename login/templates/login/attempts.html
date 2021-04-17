@@ -10,11 +10,7 @@
 
 {% block content %}
 
-{% if not request.GET.show %}
-<a class="btn btn-outline-info mb-3" href="{% url 'login:attempts' %}?show=all">Показати усі</a>
-{% else %}
-<a class="btn btn-outline-warning mb-3" href="{% url 'login:attempts' %}">Показати тільки невдалі</a>
-{% endif %}
+<a class="btn btn-outline-info mb-3" href="{% url 'login:logs' %}">Показати усі логування</a>
 
 {% if attempts %}
 <table class="table table-hover table-responsive-lg">
