@@ -73,7 +73,7 @@ kind_specific = {
             ],
         'bill': [
             u'Направлення рахунку', 
-            ['date', 'info', 'cost', 'address', 'type'], 
+            ['date', 'info', 'cost'], 
             bill_type
             ],
         'paid': [
@@ -315,7 +315,7 @@ def edit_detail(request, rid, did):
         'main': u'Редагування події провадження №%s/%s' % (report.number, report.number_year),
         'second': kind_specific[detail.name][0].capitalize()}
     content = {'obvious_fields': kind_specific[detail.name][1], 'kind': detail.name}
-    if 'type' in content['obvious_fields']:
+    if 'type' in content['obvious_fields'] or detail.name == 'bill':
         content['select_type'] = kind_specific[detail.name][2]
     if 'account' in content['obvious_fields']:
         content['accounts'] = Account.objects.filter(status='work')
@@ -471,12 +471,15 @@ def valid_detail(request_info, report_id):
         if way_forward:
             new_element['way_forward'] = way_forward
 
-    if name in ['petition', 'bill', 'done', 'inspected']:
+    if name in ['petition', 'done', 'inspected']:
         subspecies = request_info.get('subspecies')
         if not subspecies:
             errors['subspecies'] = u"Інформація про підтип події є обов'язковою"
         else:
             new_element['subspecies'] = subspecies
+
+    if name == 'bill':
+        new_element['subspecies'] = request_info.get('subspecies')
 
     if name == 'petition':
         necessary = request_info.get('necessary')

@@ -67,7 +67,7 @@
     {% endif %}
 
     <!-- Тип документу -->
-    {% if 'type' in content.obvious_fields %}
+    {% if 'type' in content.obvious_fields or new_content.subspecies %}
     <div class="form-group row">
         <label for="inputType" class="col-sm-5 col-form-label">{% if content.kind == 'schedule' %}Тип повідомлення{% elif content.kind == 'paid' %}Тип оплати{% else %}Підтип події{% endif %} <strong>*</strong></label>
         <div class="col-sm-7">
@@ -84,6 +84,19 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Вартість -->
+    <div class="form-group row">
+        <label for="inputCost" class="col-sm-5 col-form-label">Вартість робіт <strong>*</strong></label>
+        <div class="col-sm-7">
+            <input type="text" id="inputCost" placeholder="Введіть вартість висновку" name="cost"
+                    class="form-control {% if errors.cost %}is-invalid{% elif errors %}is-valid{% endif %}"
+                    value="{{ new_content.cost }}">
+            <div class="invalid-feedback">
+                {{ errors.cost }}
+            </div>
+        </div>
+    </div>
 
      <!-- Тип оплати -->
     {% if 'account' in content.obvious_fields %}
@@ -159,7 +172,7 @@
     {% endif %}
 
     <!-- Адреса для рахунку -->
-    {% if 'address' in content.obvious_fields %}
+    {% if new_content.address %}
     <div class="form-group row">
         <label for="inputAddress" class="col-sm-5 col-form-label">Адреса</label>
         <div class="col-sm-7">

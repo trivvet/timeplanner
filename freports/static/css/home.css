@@ -57,17 +57,16 @@ hr {
 
   #mainHeader h2 {
     margin-top: 2rem;
-    font-size: 5.5rem;
+    font-size: 10vw;
   }
 
   #mainHeader p, #mainHeader span {
-    font-size: 2.7rem;
+    font-size: 5vw;
     margin-bottom: 3rem;
     margin-top: 3rem;
   }
 
-  #infoButton {
-    margin-top: 3rem;
+  #infoButton, #contactButton {
     display: none;
   }
 
@@ -148,41 +147,68 @@ hr {
   }
 
   #mainHeader h3 {
-    font-size: 2.1rem;
+    font-size: 2.0rem;
   }
 
   #mainHeader h2 {
-    font-size: 3rem;
+    font-size: 2.8rem;
     margin-bottom: 3rem;
   }
 
   #mainHeader p {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     max-width: 80rem; 
-    margin: 0 5rem 1rem 0;
+    margin: 1rem 5rem 0.8rem 0;
   }
 
   #mainHeader span {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 
   #infoButton {
     margin-top: 3rem;
   }
 
+  #contactButton {
+    margin-top: 3rem;
+    margin-left: 1.5rem;
+    padding-right: 1.1rem;
+    padding-left: 1.1rem;
+  }
+
   #mainInfo li {
-    padding: 0.25rem 0;
+    padding: 0.2rem 0;
   }
 
   #mainInfo h3 {
-    margin-top: 1.6rem;
-    margin-bottom: 1rem;
-    font-size: 2.2rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.9rem;
+    font-size: 2.0rem;
     font-weight: bold;
   }
 
   ul, p {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
+  }
+
+  #workInfo ul {
+    list-style-type: '\261E';
+  }
+
+  #workInfo .collapse-info li {
+    padding-left: 1rem;
+  }
+
+  #workInfo .second-info {
+    font-size: 1rem;
+    font-family: Georgia, serif;
+    font-style: normal;
+    margin: 0;
+  }
+
+  #workInfo li {
+    margin-left: 1rem;
+    padding: 0;
   }
 
   h4.map-header {

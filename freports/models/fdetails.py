@@ -77,7 +77,8 @@ class ReportEvents(models.Model):
     subspecies = models.CharField(
         verbose_name = u"Підвид події",
         max_length=256,
-        blank=True)
+        blank=True,
+        null=True)
 
     necessary = models.TextField(
         blank=True,
