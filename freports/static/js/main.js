@@ -149,7 +149,7 @@ function initChangeScheduleDate() {
             var inputDate = $('#inputDateSchedule');
             if (inputDate) {
                 var eventDate = new Date($(this).children('input').val());
-                eventDate.setDate(eventDate.getDate() + 10);
+                eventDate.setDate(eventDate.getDate() + 8);
                 eventDate.setHours(15);
                 inputDate.parent().datetimepicker('destroy');
                 $('#datetimepicker1').datetimepicker({

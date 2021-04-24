@@ -86,6 +86,7 @@
     {% endif %}
 
     <!-- Вартість -->
+    {% if 'cost' in content.obvious_fields or 'cost' in new_content.subspecies %}
     <div class="form-group row">
         <label for="inputCost" class="col-sm-5 col-form-label">Вартість робіт <strong>*</strong></label>
         <div class="col-sm-7">
@@ -97,6 +98,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
      <!-- Тип оплати -->
     {% if 'account' in content.obvious_fields %}

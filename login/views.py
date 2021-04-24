@@ -70,7 +70,7 @@ def login_attempts(request):
 @login_required(login_url='/login/')
 @permission_required('admins', raise_exception=True)
 def login_logs(request):
-    logs = AccessLog.objects.all()
+    logs = AccessLog.objects.all().order_by('attempt_time').reverse()
     if request.GET.get('all_pages', '') == '':
         paginator = Paginator(logs, 8)
         page = request.GET.get('page', '')
